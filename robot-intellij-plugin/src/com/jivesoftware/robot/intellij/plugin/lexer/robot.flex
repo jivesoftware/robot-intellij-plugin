@@ -16,10 +16,8 @@
 
 package com.jivesoftware.robot.intellij.plugin.lexer;
 
-import static com.intellij.psi.xml.XmlTokenType.*;
 import static com.jivesoftware.robot.intellij.plugin.lexer.RobotToken.*;
 
-import java.util.regex.Matcher;
 import com.intellij.psi.tree.IElementType;
 
 @SuppressWarnings({ "ALL" })
@@ -37,13 +35,27 @@ import com.intellij.psi.tree.IElementType;
 %column
 
 %{
+  public RobotScanner() {
+    this((java.io.Reader)null);
+  }
+
   StringBuffer string = new StringBuffer();
 
-  private IElementType symbol(RobotToken.TYPE type, String text) {
-    return new RobotToken(type, text, yyline, yycolumn);
+  public final int getTokenStart() {
+    return zzStartRead;
   }
-  private IElementType symbol(RobotToken.TYPE type) {
-    return symbol(type, null, yyline, yycolumn);
+
+  public final int getTokenEnd(){
+    return getTokenStart() + yylength();
+  }
+
+  public void reset(CharSequence buffer, int start, int end,int initialState){
+      zzBuffer = buffer == null ? null : buffer.toString().toCharArray();
+      zzCurrentPos = zzMarkedPos = zzStartRead = start;
+      zzAtEOF  = false;
+      zzAtBOL = true;
+      zzEndRead = end;
+      yybegin(initialState);
   }
 %}
 
@@ -73,13 +85,14 @@ FloatLiteral = [0-9]+ \. [0-9]+ {Exponent}?
 
 %%
 
-<YYINITIAL> "*** Settings ***"              { return symbol(TYPE.SETTINGS_TABLE); }
-<YYINITIAL> "*** Test Cases ***"            { return symbol(TYPE.TEST_CASES_TABLE); }
+<YYINITIAL> "*** Settings ***"              { return RobotToken.create(TYPE.SETTINGS_TABLE); }
+<YYINITIAL> "*** Variables ***"             { return RobotToken.create(TYPE.VARIABLES_TABLE); }
+<YYINITIAL> "*** Test Cases ***"            { return RobotToken.create(TYPE.TEST_CASES_TABLE); }
 
 <YYINITIAL> {
     /* identifiers */
-    {Comment}           { return symbol(TYPE.COMMENT, yytext()); }
-    {RobotKeyword}      { return symbol(TYPE.ROBOT_KEYWORD, yytext()); }
+    {Comment}           { return RobotToken.create(TYPE.COMMENT); }
+    {RobotKeyword}      { return RobotToken.create(TYPE.ROBOT_KEYWORD); }
     {WhiteSpace}        { /* ignore */ }
 
     <<EOF>>                        { return null; }

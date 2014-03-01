@@ -33,7 +33,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class RobotToken extends IElementType {
 
-  private enum TYPE {SETTINGS_TABLE, VARIABLES_TABLE, TEST_CASES_TABLE, META_INFO, ROBOT_KEYWORD, VARIABLE, WHITESPACE, COMMENT}
+  public enum TYPE {SETTINGS_TABLE, VARIABLES_TABLE, TEST_CASES_TABLE, META_INFO, ROBOT_KEYWORD, VARIABLE, WHITESPACE, COMMENT}
 
   public static final RobotToken SETTINGS_TABLE_TOKEN = new RobotToken(TYPE.SETTINGS_TABLE);
   public static final RobotToken VARIABLES_TABLE_TOKEN = new RobotToken(TYPE.VARIABLES_TABLE);
@@ -43,44 +43,23 @@ public final class RobotToken extends IElementType {
   public static final RobotToken VARIABLE_TOKEN = new RobotToken(TYPE.VARIABLE);
 
   private final TYPE type;
-  private final String text;
-  private final int line;
-  private final int col;
+
+  public static RobotToken create(TYPE type) {
+    return new RobotToken(type);
+  }
 
   private RobotToken(@NotNull @NonNls TYPE type) {
-    this(type, null, -1, -1);
+    this(type, RobotLanguage.INSTANCE);
   }
 
   private RobotToken(@NotNull @NonNls TYPE type,
-                     @Nullable String text) {
-    this(type, text, -1, -1);
-  }
-
-  private RobotToken(@NotNull @NonNls TYPE type,
-                     @Nullable String text,
-                     int line,
-                     int col) {
-    this(type, text, line, col, RobotLanguage.INSTANCE);
-  }
-
-  private RobotToken(@NotNull @NonNls TYPE type,
-                     @Nullable String text,
-                     int line,
-                     int col,
                      Language l) {
     super(type.toString(), l, true);
     this.type = type;
-    this.text = text;
-    this.line = line;
-    this.col = col;
   }
 
-  public int getLine() {
-    return line;
-  }
-
-  public int getCol() {
-    return col;
+  public TYPE getType() {
+    return type;
   }
 
   @Override
@@ -97,7 +76,7 @@ public final class RobotToken extends IElementType {
 
   @Override
   public int hashCode() {
-    return type.hashCode() ^ hashCodeNullable(text);
+    return type.hashCode();
   }
 
   private static int hashCodeNullable(@Nullable Object o) {
@@ -106,7 +85,7 @@ public final class RobotToken extends IElementType {
 
   @Override
   public String toString() {
-    return type + "." + text;
+    return type.toString();
   }
 
 }
