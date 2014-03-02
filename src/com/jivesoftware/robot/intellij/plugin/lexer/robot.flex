@@ -56,7 +56,7 @@ InputCharacter = [^\r\n]
 KeywordArgumentChar = [^\r\n\t\$ ]
 
 ColumnSep = "\t"+ | [ \t] [ \t]+
-SingleWhiteSpace = " "
+SingleSpace = " "
 WhiteSpace = [ \t]
 
 /* comments */
@@ -66,20 +66,23 @@ Comment = "#" {InputCharacter}*
 Variable = "${" {Identifier} "}"
 Assignment = {Variable} "="
 
-RobotKeyword = {RobotWord} {NextWord}*
-RobotWord = [A-Z][a-zA-Z]*
-NextWord = {SingleWhiteSpace} {RobotWord}
+RobotKeyword = {RobotWord} ({SingleSpace} {RobotWord})*
+RobotWord = [A-Z][a-zA-Z0-9]*
+
 Identifier = [a-zA-Z_][a-zA-Z0-9_]*
 
+TestCaseHeader = {Identifier} ({SingleSpace} {Identifier})*
+
 KeywordArgumentWord = {KeywordArgumentChar}+
-KeywordArgumentNextWord = {SingleWhiteSpace} {KeywordArgumentWord}
-KeywordArgument = ({KeywordArgumentWord} {KeywordArgumentNextWord}*) | {Variable}
+KeywordArgument = ({KeywordArgumentWord} ({SingleSpace} {KeywordArgumentWord})*) | {Variable}
 
 /* Meta documentation for robot test cases */
 Meta = "[" {Identifier} "]"
 
 /* Table headings */
-TableHeading = "*"+ {WhiteSpace}* {Identifier} {WhiteSpace}* "*"*
+TableHeading = "*"+ {WhiteSpace}* {Identifier} ({SingleSpace} {Identifier})* {WhiteSpace}* "*"*
+SettingsTableHeading  = "*"+ {WhiteSpace}* [Ss] "ettings" {WhiteSpace}* "*"*
+TestCasesTableHeading = "*"+ {WhiteSpace}* [Tt] "est " [Cc] "ases" {WhiteSpace}* "*"*
 
 /* integer literals */
 DecIntegerLiteral = 0 | [1-9][0-9]*
@@ -89,25 +92,36 @@ FloatLiteral = [0-9]+ \. [0-9]+
 
 NumberLiteral = {DecIntegerLiteral} | {FloatLiteral}
 
+%state START_OF_LINE
+
 %%
 
 <YYINITIAL> {
     /* identifiers */
-    {TableHeading}      { debug(RobotToken.TABLE_HEADING_TOKEN); return RobotToken.TABLE_HEADING_TOKEN; }
+    {LineTerminator}    { yybegin(START_OF_LINE); return RobotToken.NEWLINE_TOKEN; }
+    {TableHeading}      { return RobotToken.TABLE_HEADING_TOKEN; }
     {Meta}              { return RobotToken.META_INFO_TOKEN; }
-    {Comment}           { debug(RobotToken.COMMENT_TOKEN); return RobotToken.COMMENT_TOKEN; }
-    {Variable}          { debug(RobotToken.VARIABLE_TOKEN); return RobotToken.VARIABLE_TOKEN; }
-    {RobotKeyword}      { debug(RobotToken.ROBOT_KEYWORD_TOKEN); return RobotToken.ROBOT_KEYWORD_TOKEN; }
-    {NumberLiteral}     { debug(RobotToken.NUMBER_LITERAL_TOKEN); return RobotToken.NUMBER_LITERAL_TOKEN; }
-    {KeywordArgument}   { debug(RobotToken.ROBOT_KEYWORD_ARG_TOKEN); return RobotToken.ROBOT_KEYWORD_ARG_TOKEN; }
-    {ColumnSep}         { /* ignore */ }
-    {SingleWhiteSpace}  { /* ignore */ }
 
-    {Assignment}        { debug(RobotToken.ASSIGNMENT_TOKEN); return RobotToken.ASSIGNMENT_TOKEN; }
-    {LineTerminator}    { /* ignore */ }
+    {Comment}           { return RobotToken.COMMENT_TOKEN; }
+    {Variable}          { return RobotToken.VARIABLE_TOKEN; }
+    {RobotKeyword}      { return RobotToken.ROBOT_KEYWORD_TOKEN; }
+    {NumberLiteral}     { return RobotToken.NUMBER_LITERAL_TOKEN; }
+    {KeywordArgument}   { return RobotToken.ROBOT_KEYWORD_ARG_TOKEN; }
+    {ColumnSep}         { return RobotToken.COLUMN_SEP_TOKEN; }
+    {SingleSpace}       { return RobotToken.SINGLE_SPACE_TOKEN; }
+
+    .                   { return RobotToken.BAD_CHAR_TOKEN; }
 
     <<EOF>>             { return null; }
+}
 
+<START_OF_LINE> {
+    {TestCaseHeader}    { yybegin(YYINITIAL); return RobotToken.TEST_CASE_HEADER_TOKEN; }
+    {Assignment}        { yybegin(YYINITIAL); return RobotToken.ASSIGNMENT_TOKEN; }
+
+    {LineTerminator}    {  /* Remain in START_OF_LINE and do nothing. */ }
+    .                   {  System.out.println("Matched . as: '" + yytext() + "'"); yybegin(YYINITIAL); yypushback(1);  }
+    <<EOF>>             {  yybegin(YYINITIAL); }
 }
 
 /* error fallback */

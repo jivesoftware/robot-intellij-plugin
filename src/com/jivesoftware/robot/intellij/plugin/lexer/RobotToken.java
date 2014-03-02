@@ -33,9 +33,11 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class RobotToken extends IElementType {
 
-  public enum TYPE {TABLE_HEADING, META_INFO, ROBOT_KEYWORD, ROBOT_KEYWORD_ARG, VARIABLE, ASSIGNMENT, COMMENT, NUMBER_LITERAL}
+  public enum TYPE {TABLE_HEADING, TEST_CASE_HEADER, META_INFO, ROBOT_KEYWORD, ROBOT_KEYWORD_ARG, VARIABLE, ASSIGNMENT, COMMENT, NUMBER_LITERAL,
+    COLUMN_SEPARATOR, SINGLE_SPACE, NEWLINE, WHITESPACE, BAD_CHAR}
 
   public static final RobotToken TABLE_HEADING_TOKEN = create(TYPE.TABLE_HEADING);
+  public static final RobotToken TEST_CASE_HEADER_TOKEN = create(TYPE.TEST_CASE_HEADER);
   public static final RobotToken ROBOT_KEYWORD_TOKEN = create(TYPE.ROBOT_KEYWORD);
   public static final RobotToken ROBOT_KEYWORD_ARG_TOKEN = create(TYPE.ROBOT_KEYWORD_ARG);
   public static final RobotToken COMMENT_TOKEN = create(TYPE.COMMENT);
@@ -43,6 +45,11 @@ public final class RobotToken extends IElementType {
   public static final RobotToken ASSIGNMENT_TOKEN = create(TYPE.ASSIGNMENT);
   public static final RobotToken META_INFO_TOKEN = create(TYPE.META_INFO);
   public static final RobotToken NUMBER_LITERAL_TOKEN = create(TYPE.NUMBER_LITERAL);
+  public static final RobotToken COLUMN_SEP_TOKEN = create(TYPE.COLUMN_SEPARATOR);
+  public static final RobotToken SINGLE_SPACE_TOKEN = create(TYPE.SINGLE_SPACE);
+  public static final RobotToken WHITESPACE_TOKEN = create(TYPE.WHITESPACE);
+  public static final RobotToken NEWLINE_TOKEN = create(TYPE.NEWLINE);
+  public static final RobotToken BAD_CHAR_TOKEN = create(TYPE.BAD_CHAR);
 
   private final TYPE type;
 
