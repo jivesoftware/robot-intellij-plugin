@@ -44,10 +44,8 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
     return new RobotLexer();
   }
 
-  static final TextAttributesKey ROBOT_SETTINGS_HEADER = TextAttributesKey.createTextAttributesKey("ROBOT.SETTINGS_TABLE",
+  static final TextAttributesKey ROBOT_TABLE_HEADER = TextAttributesKey.createTextAttributesKey("ROBOT.SETTINGS_TABLE",
                                                                                                DefaultLanguageHighlighterColors.KEYWORD);
-  static final TextAttributesKey ROBOT_TEST_CASES_HEADER = TextAttributesKey.createTextAttributesKey("ROBOT.TESTCASES_HEADER",
-                                                                                       DefaultLanguageHighlighterColors.KEYWORD);
   static final TextAttributesKey ROBOT_KEYWORD = TextAttributesKey.createTextAttributesKey("ROBOT.KEYWORD",
                                                                                      DefaultLanguageHighlighterColors.INSTANCE_METHOD);
   static final TextAttributesKey ROBOT_VARIABLE = TextAttributesKey.createTextAttributesKey("ROBOT.VARIABLE",
@@ -57,13 +55,11 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
   static {
     keys1 = new HashMap<IElementType, TextAttributesKey>();
 
-    fillMap(keys1, TokenSet.create(RobotToken.SETTINGS_TABLE_TOKEN), ROBOT_SETTINGS_HEADER);
-    fillMap(keys1, TokenSet.create(RobotToken.TEST_CASES_TABLE_TOKEN), ROBOT_TEST_CASES_HEADER);
+    fillMap(keys1, TokenSet.create(RobotToken.TABLE_HEADING_TOKEN), ROBOT_TABLE_HEADER);
     fillMap(keys1, TokenSet.create(RobotToken.ROBOT_KEYWORD_TOKEN), ROBOT_KEYWORD);
     fillMap(keys1, TokenSet.create(RobotToken.VARIABLE_TOKEN), ROBOT_VARIABLE);
 
-    keys1.put(RobotToken.SETTINGS_TABLE_TOKEN, ROBOT_SETTINGS_HEADER);
-    keys1.put(RobotToken.TEST_CASES_TABLE_TOKEN, ROBOT_TEST_CASES_HEADER);
+    keys1.put(RobotToken.TABLE_HEADING_TOKEN, ROBOT_TABLE_HEADER);
     keys1.put(RobotToken.ROBOT_KEYWORD_TOKEN, ROBOT_KEYWORD);
     keys1.put(RobotToken.VARIABLE_TOKEN, ROBOT_VARIABLE);
 

@@ -33,18 +33,20 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class RobotToken extends IElementType {
 
-  public enum TYPE {SETTINGS_TABLE, VARIABLES_TABLE, TEST_CASES_TABLE, META_INFO, ROBOT_KEYWORD, VARIABLE, WHITESPACE, COMMENT}
+  public enum TYPE {TABLE_HEADING, META_INFO, ROBOT_KEYWORD, ROBOT_KEYWORD_ARG, VARIABLE, ASSIGNMENT, COMMENT, NUMBER_LITERAL}
 
-  public static final RobotToken SETTINGS_TABLE_TOKEN = new RobotToken(TYPE.SETTINGS_TABLE);
-  public static final RobotToken VARIABLES_TABLE_TOKEN = new RobotToken(TYPE.VARIABLES_TABLE);
-  public static final RobotToken TEST_CASES_TABLE_TOKEN = new RobotToken(TYPE.TEST_CASES_TABLE);
-  public static final RobotToken ROBOT_KEYWORD_TOKEN = new RobotToken(TYPE.ROBOT_KEYWORD);
-  public static final RobotToken COMMENT_TOKEN = new RobotToken(TYPE.COMMENT);
-  public static final RobotToken VARIABLE_TOKEN = new RobotToken(TYPE.VARIABLE);
+  public static final RobotToken TABLE_HEADING_TOKEN = create(TYPE.TABLE_HEADING);
+  public static final RobotToken ROBOT_KEYWORD_TOKEN = create(TYPE.ROBOT_KEYWORD);
+  public static final RobotToken ROBOT_KEYWORD_ARG_TOKEN = create(TYPE.ROBOT_KEYWORD_ARG);
+  public static final RobotToken COMMENT_TOKEN = create(TYPE.COMMENT);
+  public static final RobotToken VARIABLE_TOKEN = create(TYPE.VARIABLE);
+  public static final RobotToken ASSIGNMENT_TOKEN = create(TYPE.ASSIGNMENT);
+  public static final RobotToken META_INFO_TOKEN = create(TYPE.META_INFO);
+  public static final RobotToken NUMBER_LITERAL_TOKEN = create(TYPE.NUMBER_LITERAL);
 
   private final TYPE type;
 
-  public static RobotToken create(TYPE type) {
+  private static RobotToken create(TYPE type) {
     return new RobotToken(type);
   }
 
