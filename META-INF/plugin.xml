@@ -27,7 +27,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <fileTypeFactory implementation="com.jivesoftware.robot.intellij.plugin.lang.RobotFileTypeFactory"/>
         <syntaxHighlighter key="soy" implementationClass="com.jivesoftware.robot.intellij.plugin.lang.RobotSyntaxHighlighter"/>
-        <!-- <colorSettingsPage implementation="net.venaglia.nondairy.soylang.SoyColorsAndFontsPage"/>
+        <colorSettingsPage implementation="com.jivesoftware.robot.intellij.plugin.lang.RobotColorsAndFontsPage"/> <!--
          <findUsagesHandlerFactory implementation="net.venaglia.nondairy.soylang.SoyFindUsagesHandlerFactory"/>
          <lang.foldingBuilder language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyFoldingBuilder"/>
          <lang.braceMatcher language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyBraceMatcher"/>

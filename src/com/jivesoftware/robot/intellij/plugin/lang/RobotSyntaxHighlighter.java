@@ -43,7 +43,7 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
     return new RobotLexer();
   }
 
-  static final TextAttributesKey ROBOT_TABLE_HEADER_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.SETTINGS_TABLE",
+  static final TextAttributesKey ROBOT_TABLE_HEADER_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.TABLE",
                                                                                                DefaultLanguageHighlighterColors.CONSTANT);
   static final TextAttributesKey ROBOT_TEST_CASE_HEADER_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.TEST_CASE_HEADER",
                                                                                                         DefaultLanguageHighlighterColors.INSTANCE_METHOD);
@@ -51,6 +51,8 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
                                                                                      DefaultLanguageHighlighterColors.KEYWORD);
   static final TextAttributesKey ROBOT_VARIABLE_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.VARIABLE",
                                                                                          DefaultLanguageHighlighterColors.LOCAL_VARIABLE);
+  static final TextAttributesKey ROBOT_ASSIGNMENT_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.ASSIGNMENT",
+                                                                                                DefaultLanguageHighlighterColors.CLASS_NAME);
   static final TextAttributesKey ROBOT_COMMENT_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.COMMENT",
                                                                                            DefaultLanguageHighlighterColors.LINE_COMMENT);
   static final TextAttributesKey ROBOT_NUMBER_LITERAL_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.NUMBER",
@@ -69,10 +71,11 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
     keys1 = new HashMap<IElementType, TextAttributesKey>();
 
     keys1.put(RobotToken.TABLE_HEADING_TOKEN, ROBOT_TABLE_HEADER_KEY);
+    keys1.put(RobotToken.TEST_CASES_TABLE_HEADING_TOKEN, ROBOT_TABLE_HEADER_KEY);
     keys1.put(RobotToken.TEST_CASE_HEADER_TOKEN, ROBOT_TEST_CASE_HEADER_KEY);
     keys1.put(RobotToken.ROBOT_KEYWORD_TOKEN, ROBOT_KEYWORD_KEY);
     keys1.put(RobotToken.VARIABLE_TOKEN, ROBOT_VARIABLE_KEY);
-    keys1.put(RobotToken.ASSIGNMENT_TOKEN, ROBOT_VARIABLE_KEY);
+    keys1.put(RobotToken.ASSIGNMENT_TOKEN, ROBOT_ASSIGNMENT_KEY);
     keys1.put(RobotToken.COMMENT_TOKEN, ROBOT_COMMENT_KEY);
     keys1.put(RobotToken.NUMBER_LITERAL_TOKEN, ROBOT_NUMBER_LITERAL_KEY);
     keys1.put(RobotToken.ROBOT_KEYWORD_ARG_TOKEN, ROBOT_KEYWORD_ARG_KEY);

@@ -82,7 +82,7 @@ Meta = "[" {Identifier} "]"
 /* Table headings */
 TableHeading = "*"+ {WhiteSpace}* {Identifier} ({SingleSpace} {Identifier})* {WhiteSpace}* "*"*
 SettingsTableHeading  = "*"+ {WhiteSpace}* [Ss] "ettings" {WhiteSpace}* "*"*
-TestCasesTableHeading = "*"+ {WhiteSpace}* [Tt] "est " [Cc] "ases" {WhiteSpace}* "*"*
+TestCasesTableHeading = "*"+ {WhiteSpace}* [Tt] "est" " "? [Cc] "ases" {WhiteSpace}* "*"*
 
 /* integer literals */
 DecIntegerLiteral = 0 | [1-9][0-9]*
@@ -93,12 +93,15 @@ FloatLiteral = [0-9]+ \. [0-9]+
 NumberLiteral = {DecIntegerLiteral} | {FloatLiteral}
 
 %state START_OF_LINE
+%state TEST_CASES
+%state TEST_CASES_START_OF_LINE
 
 %%
 
 <YYINITIAL> {
     /* identifiers */
-    {LineTerminator}    { yybegin(START_OF_LINE); return RobotToken.NEWLINE_TOKEN; }
+    {LineTerminator}             { yybegin(START_OF_LINE); return RobotToken.NEWLINE_TOKEN; }
+    {TestCasesTableHeading}      { yybegin(TEST_CASES); return RobotToken.TEST_CASES_TABLE_HEADING_TOKEN; }
     {TableHeading}      { return RobotToken.TABLE_HEADING_TOKEN; }
     {Meta}              { return RobotToken.META_INFO_TOKEN; }
 
@@ -116,12 +119,37 @@ NumberLiteral = {DecIntegerLiteral} | {FloatLiteral}
 }
 
 <START_OF_LINE> {
-    {TestCaseHeader}    { yybegin(YYINITIAL); return RobotToken.TEST_CASE_HEADER_TOKEN; }
     {Assignment}        { yybegin(YYINITIAL); return RobotToken.ASSIGNMENT_TOKEN; }
-
-    {LineTerminator}    {  /* Remain in START_OF_LINE and do nothing. */ }
-    .                   {  System.out.println("Matched . as: '" + yytext() + "'"); yybegin(YYINITIAL); yypushback(1);  }
+    {LineTerminator}    { return RobotToken.NEWLINE_TOKEN; }
+    .                   {  System.out.println("Matched . as: '" + yytext() + "'"); yypushback(1); yybegin(YYINITIAL); }
     <<EOF>>             {  yybegin(YYINITIAL); }
+}
+
+<TEST_CASES> {
+
+     /* identifiers */
+     {LineTerminator}    { yybegin(START_OF_LINE); return RobotToken.NEWLINE_TOKEN; }
+     {TableHeading}      { yybegin(YYINITIAL); return RobotToken.TABLE_HEADING_TOKEN; }
+     {Meta}              { return RobotToken.META_INFO_TOKEN; }
+     {Comment}           { return RobotToken.COMMENT_TOKEN; }
+     {Variable}          { return RobotToken.VARIABLE_TOKEN; }
+     {Assignment}        { return RobotToken.ASSIGNMENT_TOKEN; }
+     {RobotKeyword}      { return RobotToken.ROBOT_KEYWORD_TOKEN; }
+     {NumberLiteral}     { return RobotToken.NUMBER_LITERAL_TOKEN; }
+     {KeywordArgument}   { return RobotToken.ROBOT_KEYWORD_ARG_TOKEN; }
+     {ColumnSep}         { return RobotToken.COLUMN_SEP_TOKEN; }
+     {SingleSpace}       { return RobotToken.SINGLE_SPACE_TOKEN; }
+
+     .                   { return RobotToken.BAD_CHAR_TOKEN; }
+
+     <<EOF>>             { yybegin(YYINITIAL); }
+}
+
+<TEST_CASES_START_OF_LINE> {
+    {TestCaseHeader}    { yybegin(TEST_CASES); return RobotToken.TEST_CASE_HEADER_TOKEN; }
+    {LineTerminator}    { return RobotToken.NEWLINE_TOKEN; }
+    .                   { yypushback(1); yybegin(TEST_CASES); }
+    <<EOF>>             { yybegin(YYINITIAL); }
 }
 
 /* error fallback */
