@@ -52,7 +52,7 @@ public class RobotFileType extends LanguageFileType {
 
     @NotNull
     public String getDefaultExtension() {
-        return "txt";
+        return "robot";
     }
 
     public Icon getIcon() {

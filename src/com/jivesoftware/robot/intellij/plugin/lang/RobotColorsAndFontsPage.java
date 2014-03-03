@@ -38,50 +38,54 @@ import java.util.Map;
  * Color settings page used for customizing the syntax highlighting of soy files.
  */
 public class RobotColorsAndFontsPage implements ColorSettingsPage {
-    @NotNull
-    public String getDisplayName() {
-        return "Robot";
-    }
+  @NotNull
+  public String getDisplayName() {
+    return "Robot";
+  }
 
-    @Nullable
-    public Icon getIcon() {
-        return RobotIcons.FILE;
-    }
+  @Nullable
+  public Icon getIcon() {
+    return RobotIcons.FILE;
+  }
 
-    @NotNull
-    public AttributesDescriptor[] getAttributeDescriptors() {
-        return ATTRS;
-    }
+  @Override
+  @NotNull
+  public AttributesDescriptor[] getAttributeDescriptors() {
+    return ATTRS;
+  }
 
-    private static final AttributesDescriptor[] ATTRS =
-            new AttributesDescriptor[]{
-                    new AttributesDescriptor("Table Header", RobotSyntaxHighlighter.ROBOT_TABLE_HEADER_KEY),
-                    new AttributesDescriptor("Test Case Title", RobotSyntaxHighlighter.ROBOT_TEST_CASE_HEADER_KEY),
-                    new AttributesDescriptor("Robot Keyword", RobotSyntaxHighlighter.ROBOT_KEYWORD_KEY),
-                    new AttributesDescriptor("Robot Variable", RobotSyntaxHighlighter.ROBOT_VARIABLE_KEY),
-                    new AttributesDescriptor("Robot Variable Assignment", RobotSyntaxHighlighter.ROBOT_ASSIGNMENT_KEY),
-                    new AttributesDescriptor("Robot Comment", RobotSyntaxHighlighter.ROBOT_COMMENT_KEY),
-                    new AttributesDescriptor("Number literal", RobotSyntaxHighlighter.ROBOT_NUMBER_LITERAL_KEY),
-                    new AttributesDescriptor("Keyword argument", RobotSyntaxHighlighter.ROBOT_KEYWORD_ARG_KEY),
-                    new AttributesDescriptor("Tags & Documentation", RobotSyntaxHighlighter.ROBOT_META_INFO_KEY),
-                    new AttributesDescriptor("Column Separator", RobotSyntaxHighlighter.ROBOT_COL_SEP_KEY),
-                    new AttributesDescriptor("Error", RobotSyntaxHighlighter.ROBOT_BAD_CHAR_KEY)
-            };
+  private static final AttributesDescriptor[] ATTRS =
+      new AttributesDescriptor[] {
+          new AttributesDescriptor("Table Header", RobotSyntaxHighlighter.ROBOT_TABLE_HEADER_KEY),
+          new AttributesDescriptor("Test Case Title", RobotSyntaxHighlighter.ROBOT_TEST_CASE_HEADER_KEY),
+          new AttributesDescriptor("Robot Keyword", RobotSyntaxHighlighter.ROBOT_KEYWORD_KEY),
+          new AttributesDescriptor("Robot Variable", RobotSyntaxHighlighter.ROBOT_VARIABLE_KEY),
+          new AttributesDescriptor("Robot Variable Assignment", RobotSyntaxHighlighter.ROBOT_ASSIGNMENT_KEY),
+          new AttributesDescriptor("Robot Comment", RobotSyntaxHighlighter.ROBOT_COMMENT_KEY),
+          new AttributesDescriptor("Number literal", RobotSyntaxHighlighter.ROBOT_NUMBER_LITERAL_KEY),
+          new AttributesDescriptor("Keyword argument", RobotSyntaxHighlighter.ROBOT_KEYWORD_ARG_KEY),
+          new AttributesDescriptor("Tags & Documentation", RobotSyntaxHighlighter.ROBOT_META_INFO_KEY),
+          new AttributesDescriptor("Column Separator", RobotSyntaxHighlighter.ROBOT_COL_SEP_KEY),
+          new AttributesDescriptor("Error", RobotSyntaxHighlighter.ROBOT_BAD_CHAR_KEY)
+      };
 
-    @NotNull
-    public ColorDescriptor[] getColorDescriptors() {
-        return new ColorDescriptor[0];
-    }
+  @Override
+  @NotNull
+  public ColorDescriptor[] getColorDescriptors() {
+    return new ColorDescriptor[0];
+  }
 
-    @NotNull
-    public SyntaxHighlighter getHighlighter() {
-        return new RobotSyntaxHighlighter();
-    }
+  @Override
+  @NotNull
+  public SyntaxHighlighter getHighlighter() {
+    return new RobotSyntaxHighlighter();
+  }
 
-    @NonNls
-    @NotNull
-    public String getDemoText() {
-      return
+  @NonNls
+  @NotNull
+  @Override
+  public String getDemoText() {
+    return
         "***Settings***\n" +
             "Resource                                   ../CommonResource.txt\n" +
             "\n" +
@@ -89,20 +93,21 @@ public class RobotColorsAndFontsPage implements ColorSettingsPage {
             "${announcementDetails}=                    Super important announcement from Robot!\n" +
             "\n" +
             "***Test Cases***\n" +
-            "Create And Expire Announcement With Verification\n" +
-            "  [Documentation]                          Written by Karl Hiner\n" +
-            "  [tags]                                   createAndExpireAnnouncement    smoke     daily\n" +
+            "Create An Announcement\n" +
+            "  [Documentation]                          Written by Gandalf the Gray\n" +
+            "  [tags]                                   announcement    Pri0       \n" +
             "\n" +
             "# Create a user VIA the API \n" +
             "  ${userName}=                             Api Create Standard User\n" +
             "\n" +
             "  Login App As Admin\n" +
             "  ${announcementTitle}=                    Create Announcement           ${announcementDetails}";
-    }
+  }
 
-    @Nullable
-    public Map<String, TextAttributesKey> getAdditionalHighlightingTagToDescriptorMap() {
-        Map<String, TextAttributesKey> map = new HashMap<String, TextAttributesKey>();
-        return map;
-    }
+  @Override
+  @Nullable
+  public Map<String, TextAttributesKey> getAdditionalHighlightingTagToDescriptorMap() {
+    Map<String, TextAttributesKey> map = new HashMap<String, TextAttributesKey>();
+    return map;
+  }
 }
