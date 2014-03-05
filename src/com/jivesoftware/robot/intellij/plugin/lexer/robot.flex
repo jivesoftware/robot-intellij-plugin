@@ -42,6 +42,9 @@ import com.intellij.psi.tree.IElementType;
   }
 
   int yyline, yycolumn, yychar;
+  private boolean onTagsLine = false;
+  private boolean onDocsLine = false;
+  private boolean keywordToLeft = false;
 
   private static final void debug(RobotToken type) {
     System.out.println("Found token " + type.toString());
@@ -78,6 +81,8 @@ KeywordArgument = ({KeywordArgumentWord} ({SingleSpace} {KeywordArgumentWord})*)
 
 /* Meta documentation for robot test cases */
 Meta = "[" {Identifier} "]"
+TagsMeta = "[" [Tt] "ags]"
+DocsMeta = "[" [Dd] "ocumentation]"
 
 /* Table headings */
 TableHeading = "*"+ {WhiteSpace}* {Identifier} ({SingleSpace} {Identifier})* {WhiteSpace}* "*"*
@@ -100,16 +105,21 @@ NumberLiteral = {DecIntegerLiteral} | {FloatLiteral}
 
 <YYINITIAL> {
     /* identifiers */
-    {LineTerminator}             { yybegin(START_OF_LINE); return RobotToken.NEWLINE_TOKEN; }
+    {LineTerminator}             { onTagsLine = onDocsLine = keywordToLeft = false; yybegin(START_OF_LINE); return RobotToken.NEWLINE_TOKEN; }
     {TestCasesTableHeading}      { yybegin(TEST_CASES); return RobotToken.TEST_CASES_TABLE_HEADING_TOKEN; }
     {TableHeading}      { return RobotToken.TABLE_HEADING_TOKEN; }
+    {TagsMeta}          { onTagsLine = true; return RobotToken.META_INFO_TOKEN; }
+    {DocsMeta}          { onDocsLine = true; return RobotToken.META_INFO_TOKEN; }
     {Meta}              { return RobotToken.META_INFO_TOKEN; }
 
     {Comment}           { return RobotToken.COMMENT_TOKEN; }
     {Variable}          { return RobotToken.VARIABLE_TOKEN; }
-    {RobotKeyword}      { return RobotToken.ROBOT_KEYWORD_TOKEN; }
+    {RobotKeyword}      { if (onTagsLine) { return RobotToken.TAG_TOKEN; }
+                          if (onDocsLine) { return RobotToken.DOCUMENTATION_TOKEN;}
+                          if (keywordToLeft) { return RobotToken.ROBOT_KEYWORD_ARG_TOKEN; }
+                          keywordToLeft = true; return RobotToken.ROBOT_KEYWORD_TOKEN; }
     {NumberLiteral}     { return RobotToken.NUMBER_LITERAL_TOKEN; }
-    {KeywordArgument}   { return RobotToken.ROBOT_KEYWORD_ARG_TOKEN; }
+    {KeywordArgument}   { if (onTagsLine) { return RobotToken.TAG_TOKEN; } if (onDocsLine) { return RobotToken.DOCUMENTATION_TOKEN;} return RobotToken.ROBOT_KEYWORD_ARG_TOKEN; }
     {ColumnSep}         { return RobotToken.COLUMN_SEP_TOKEN; }
     {SingleSpace}       { return RobotToken.SINGLE_SPACE_TOKEN; }
 
@@ -121,20 +131,20 @@ NumberLiteral = {DecIntegerLiteral} | {FloatLiteral}
 <START_OF_LINE> {
     {Assignment}        { yybegin(YYINITIAL); return RobotToken.ASSIGNMENT_TOKEN; }
     {LineTerminator}    { return RobotToken.NEWLINE_TOKEN; }
-    .                   {  System.out.println("Matched . as: '" + yytext() + "'"); yypushback(1); yybegin(YYINITIAL); }
-    <<EOF>>             {  yybegin(YYINITIAL); }
+    .                   { System.out.println("Matched . as: '" + yytext() + "'"); yypushback(1); yybegin(YYINITIAL); }
+    <<EOF>>             { yybegin(YYINITIAL); }
 }
 
 <TEST_CASES> {
 
      /* identifiers */
-     {LineTerminator}    { yybegin(START_OF_LINE); return RobotToken.NEWLINE_TOKEN; }
+     {LineTerminator}    { yybegin(START_OF_LINE); keywordToLeft = false; return RobotToken.NEWLINE_TOKEN; }
      {TableHeading}      { yybegin(YYINITIAL); return RobotToken.TABLE_HEADING_TOKEN; }
      {Meta}              { return RobotToken.META_INFO_TOKEN; }
      {Comment}           { return RobotToken.COMMENT_TOKEN; }
      {Variable}          { return RobotToken.VARIABLE_TOKEN; }
      {Assignment}        { return RobotToken.ASSIGNMENT_TOKEN; }
-     {RobotKeyword}      { return RobotToken.ROBOT_KEYWORD_TOKEN; }
+     {RobotKeyword}      { if (keywordToLeft) { return RobotToken.ROBOT_KEYWORD_ARG_TOKEN; } keywordToLeft = true; return RobotToken.ROBOT_KEYWORD_TOKEN; }
      {NumberLiteral}     { return RobotToken.NUMBER_LITERAL_TOKEN; }
      {KeywordArgument}   { return RobotToken.ROBOT_KEYWORD_ARG_TOKEN; }
      {ColumnSep}         { return RobotToken.COLUMN_SEP_TOKEN; }

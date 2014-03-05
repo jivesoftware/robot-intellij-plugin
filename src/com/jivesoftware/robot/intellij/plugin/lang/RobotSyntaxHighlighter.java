@@ -47,6 +47,10 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
                                                                                                DefaultLanguageHighlighterColors.CONSTANT);
   static final TextAttributesKey ROBOT_TEST_CASE_HEADER_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.TEST_CASE_HEADER",
                                                                                                         DefaultLanguageHighlighterColors.INSTANCE_METHOD);
+  static final TextAttributesKey ROBOT_TAG_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.TAG",
+                                                                                                        DefaultLanguageHighlighterColors.VALID_STRING_ESCAPE);
+  static final TextAttributesKey ROBOT_DOCS_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.DOCS",
+                                                                                           DefaultLanguageHighlighterColors.BLOCK_COMMENT);
   static final TextAttributesKey ROBOT_KEYWORD_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.KEYWORD",
                                                                                      DefaultLanguageHighlighterColors.KEYWORD);
   static final TextAttributesKey ROBOT_VARIABLE_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.VARIABLE",
@@ -69,6 +73,7 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
 
   static {
     keys1 = new HashMap<IElementType, TextAttributesKey>();
+    keys2 = new HashMap<IElementType, TextAttributesKey>();
 
     keys1.put(RobotToken.TABLE_HEADING_TOKEN, ROBOT_TABLE_HEADER_KEY);
     keys1.put(RobotToken.TEST_CASES_TABLE_HEADING_TOKEN, ROBOT_TABLE_HEADER_KEY);
@@ -82,6 +87,8 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
     keys1.put(RobotToken.META_INFO_TOKEN, ROBOT_META_INFO_KEY);
     keys1.put(RobotToken.BAD_CHAR_TOKEN, ROBOT_BAD_CHAR_KEY);
     keys1.put(RobotToken.COLUMN_SEP_TOKEN, ROBOT_COL_SEP_KEY);
+    keys1.put(RobotToken.TAG_TOKEN, ROBOT_TAG_KEY);
+    keys1.put(RobotToken.DOCUMENTATION_TOKEN, ROBOT_DOCS_KEY);
 
   }
 

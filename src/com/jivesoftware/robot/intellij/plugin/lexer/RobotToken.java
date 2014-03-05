@@ -34,8 +34,7 @@ import org.jetbrains.annotations.Nullable;
 public final class RobotToken extends IElementType {
 
   public enum TYPE {TABLE_HEADING, TEST_CASES_TABLE_HEADING, TEST_CASE_HEADER, META_INFO, ROBOT_KEYWORD, ROBOT_KEYWORD_ARG, VARIABLE, ASSIGNMENT, COMMENT,
-    NUMBER_LITERAL,
-    COLUMN_SEPARATOR, SINGLE_SPACE, NEWLINE, WHITESPACE, BAD_CHAR}
+    NUMBER_LITERAL, COLUMN_SEPARATOR, SINGLE_SPACE, NEWLINE, BAD_CHAR, TAG, DOCUMENTATION}
 
   public static final RobotToken TABLE_HEADING_TOKEN = create(TYPE.TABLE_HEADING);
   public static final RobotToken TEST_CASES_TABLE_HEADING_TOKEN = create(TYPE.TEST_CASES_TABLE_HEADING);
@@ -49,9 +48,10 @@ public final class RobotToken extends IElementType {
   public static final RobotToken NUMBER_LITERAL_TOKEN = create(TYPE.NUMBER_LITERAL);
   public static final RobotToken COLUMN_SEP_TOKEN = create(TYPE.COLUMN_SEPARATOR);
   public static final RobotToken SINGLE_SPACE_TOKEN = create(TYPE.SINGLE_SPACE);
-  public static final RobotToken WHITESPACE_TOKEN = create(TYPE.WHITESPACE);
   public static final RobotToken NEWLINE_TOKEN = create(TYPE.NEWLINE);
   public static final RobotToken BAD_CHAR_TOKEN = create(TYPE.BAD_CHAR);
+  public static final RobotToken TAG_TOKEN = create(TYPE.TAG);
+  public static final RobotToken DOCUMENTATION_TOKEN = create(TYPE.DOCUMENTATION);
 
   private final TYPE type;
 

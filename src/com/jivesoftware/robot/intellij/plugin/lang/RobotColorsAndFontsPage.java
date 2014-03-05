@@ -64,7 +64,9 @@ public class RobotColorsAndFontsPage implements ColorSettingsPage {
           new AttributesDescriptor("Robot Comment", RobotSyntaxHighlighter.ROBOT_COMMENT_KEY),
           new AttributesDescriptor("Number literal", RobotSyntaxHighlighter.ROBOT_NUMBER_LITERAL_KEY),
           new AttributesDescriptor("Keyword argument", RobotSyntaxHighlighter.ROBOT_KEYWORD_ARG_KEY),
-          new AttributesDescriptor("Tags & Documentation", RobotSyntaxHighlighter.ROBOT_META_INFO_KEY),
+          new AttributesDescriptor("Tags & Documentation headers", RobotSyntaxHighlighter.ROBOT_META_INFO_KEY),
+          new AttributesDescriptor("Tags", RobotSyntaxHighlighter.ROBOT_TAG_KEY),
+          new AttributesDescriptor("Documentation", RobotSyntaxHighlighter.ROBOT_DOCS_KEY),
           new AttributesDescriptor("Column Separator", RobotSyntaxHighlighter.ROBOT_COL_SEP_KEY),
           new AttributesDescriptor("Error", RobotSyntaxHighlighter.ROBOT_BAD_CHAR_KEY)
       };
