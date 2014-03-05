@@ -6,7 +6,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.tree.TokenSet;
 import com.intellij.util.IncorrectOperationException;
-import com.jivesoftware.robot.intellij.plugin.parser.RobotElement;
+import com.jivesoftware.robot.intellij.plugin.parser.RobotElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,7 +17,7 @@ public class RobotRootElement extends BaseRobotPsiElement {
   public RobotRootElement(ASTNode node) {
     super(node);
     this.robotKeywords = Lists.newArrayList();
-    for (ASTNode child: node.getChildren(TokenSet.create(RobotElement.ROBOT_KEYWORD_EL))) {
+    for (ASTNode child: node.getChildren(TokenSet.create(RobotElementType.ROBOT_KEYWORD_EL))) {
       RobotKeywordElement keyword = PsiElementFactory.create(child);
       add(keyword);
     }

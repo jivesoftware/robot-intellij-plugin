@@ -11,21 +11,23 @@ public class RobotParser implements PsiParser {
   @NotNull
   @Override
   public ASTNode parse(IElementType root, PsiBuilder builder) {
+
     PsiBuilder.Marker robotRoot = builder.mark();
-    while (!builder.eof()) {
+
+    while (builder.getTokenType() != null) {
       IElementType type = builder.getTokenType();
       if (type.equals(RobotToken.ROBOT_KEYWORD_TOKEN)) {
         PsiBuilder.Marker keyword = builder.mark();
         builder.advanceLexer();
-        keyword.done(RobotElement.ROBOT_KEYWORD_EL);
+        keyword.done(RobotElementType.ROBOT_KEYWORD_EL);
       } else {
         PsiBuilder.Marker other = builder.mark();
         builder.advanceLexer();
-        other.done(RobotElement.ROBOT_OTHER_EL);
+        other.done(RobotElementType.ROBOT_OTHER_EL);
       }
     }
 
-    robotRoot.done(RobotElement.ROBOT_ROOT_EL);
+    robotRoot.done(RobotFileElementType.INSTANCE);
 
     return builder.getTreeBuilt();
   }
