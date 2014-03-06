@@ -12,6 +12,7 @@ public class RobotParser implements PsiParser {
   @Override
   public ASTNode parse(IElementType root, PsiBuilder builder) {
 
+    PsiBuilder.Marker file = builder.mark();
     PsiBuilder.Marker robotRoot = builder.mark();
 
     while (builder.getTokenType() != null) {
@@ -27,7 +28,8 @@ public class RobotParser implements PsiParser {
       }
     }
 
-    robotRoot.done(RobotFileElementType.INSTANCE);
+    robotRoot.done(RobotElementType.ROBOT_ROOT_EL);
+    file.done(root);
 
     return builder.getTreeBuilt();
   }

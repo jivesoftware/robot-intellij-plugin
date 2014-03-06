@@ -30,10 +30,12 @@
         <colorSettingsPage implementation="com.jivesoftware.robot.intellij.plugin.lang.RobotColorsAndFontsPage"/> <!--
          <findUsagesHandlerFactory implementation="net.venaglia.nondairy.soylang.SoyFindUsagesHandlerFactory"/>
          <lang.foldingBuilder language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyFoldingBuilder"/>
-         <lang.braceMatcher language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyBraceMatcher"/>
-         <lang.parserDefinition language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyParserDefinition"/>
-         <lang.commenter language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyCommenter"/>-->
-        <!--      <lang.psiStructureViewFactory language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyStructureViewFactory"/>
+         <lang.braceMatcher language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyBraceMatcher"/> -->
+
+         <lang.parserDefinition language="RobotTestFile" implementationClass="com.jivesoftware.robot.intellij.plugin.parser.RobotParserDefinition"/>
+
+        <!-- <lang.commenter language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyCommenter"/>
+              <lang.psiStructureViewFactory language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyStructureViewFactory"/>
               <lang.findUsagesProvider language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyFindUsagesProvider"/>
               <lang.namesValidator language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyNamesValidator"/>
               <gotoSymbolContributor implementation="net.venaglia.nondairy.soylang.SoyGoToSymbolProvider"/>

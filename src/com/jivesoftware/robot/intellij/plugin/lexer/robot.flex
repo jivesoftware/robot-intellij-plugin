@@ -131,15 +131,17 @@ NumberLiteral = {DecIntegerLiteral} | {FloatLiteral}
 <START_OF_LINE> {
     {Assignment}        { yybegin(YYINITIAL); return RobotToken.ASSIGNMENT_TOKEN; }
     {LineTerminator}    { return RobotToken.NEWLINE_TOKEN; }
-    .                   { System.out.println("Matched . as: '" + yytext() + "'"); yypushback(1); yybegin(YYINITIAL); }
+    .                   { yypushback(1); yybegin(YYINITIAL); }
     <<EOF>>             { yybegin(YYINITIAL); }
 }
 
 <TEST_CASES> {
 
      /* identifiers */
-     {LineTerminator}    { yybegin(START_OF_LINE); keywordToLeft = false; return RobotToken.NEWLINE_TOKEN; }
+     {LineTerminator}    { yybegin(TEST_CASES_START_OF_LINE); keywordToLeft = onTagsLine = onDocsLine = false; return RobotToken.NEWLINE_TOKEN; }
      {TableHeading}      { yybegin(YYINITIAL); return RobotToken.TABLE_HEADING_TOKEN; }
+     {TagsMeta}          { onTagsLine = true; return RobotToken.META_INFO_TOKEN; }
+     {DocsMeta}          { onDocsLine = true; return RobotToken.META_INFO_TOKEN; }
      {Meta}              { return RobotToken.META_INFO_TOKEN; }
      {Comment}           { return RobotToken.COMMENT_TOKEN; }
      {Variable}          { return RobotToken.VARIABLE_TOKEN; }

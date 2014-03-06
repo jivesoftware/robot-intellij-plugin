@@ -3,18 +3,17 @@ package com.jivesoftware.robot.intellij.plugin.elements;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.tree.IElementType;
 import com.jivesoftware.robot.intellij.plugin.parser.RobotElementType;
-import com.jivesoftware.robot.intellij.plugin.parser.RobotFileElementType;
 
 import java.lang.reflect.Constructor;
 
 public class PsiElementFactory {
   public static <T extends BaseRobotPsiElement> T create(ASTNode node) {
     IElementType elementType = node.getElementType();
-    if (!(elementType instanceof RobotElementType) && !(elementType instanceof RobotFileElementType)) {
+    if (!(elementType instanceof RobotElementType)) {
       System.err.println("Error: element of ASTNode is invalid. Type is: " + elementType.getClass().getSimpleName());
       return null;
     }
-    Class elementClass = getClassByElementType((RobotElementType)elementType);
+    Class elementClass = getClassByElementType(elementType);
     if (elementClass == null) {
       return null;
     }
@@ -27,8 +26,8 @@ public class PsiElementFactory {
     }
   }
 
-  private static Class<? extends BaseRobotPsiElement> getClassByElementType(RobotElementType elementType) {
-    if (elementType.equals(RobotFileElementType.INSTANCE)) {
+  private static Class<? extends BaseRobotPsiElement> getClassByElementType(IElementType elementType) {
+    if (elementType.equals(RobotElementType.ROBOT_ROOT_EL)) {
       return RobotRootElement.class;
     }
     if (elementType.equals(RobotElementType.ROBOT_KEYWORD_EL)) {
@@ -37,6 +36,7 @@ public class PsiElementFactory {
     if (elementType.equals(RobotElementType.ROBOT_OTHER_EL)) {
       return RobotOtherElement.class;
     }
-    return null;
+    //Can not reach this unless we didn't register all types, because we checked above that we have a RobotElementType
+    throw new RuntimeException("Invalid elementType: " + elementType);
   }
 }

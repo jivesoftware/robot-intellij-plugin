@@ -20,6 +20,7 @@ public class RobotRootElement extends BaseRobotPsiElement {
     for (ASTNode child: node.getChildren(TokenSet.create(RobotElementType.ROBOT_KEYWORD_EL))) {
       RobotKeywordElement keyword = PsiElementFactory.create(child);
       add(keyword);
+      keyword.setParent(this);
     }
   }
 
@@ -160,11 +161,6 @@ public class RobotRootElement extends BaseRobotPsiElement {
     return null;
   }
 
-  @Override
-  public boolean isValid() {
-    return false;
-  }
-
   @Nullable
   @Override
   public PsiReference getReference() {
@@ -175,19 +171,5 @@ public class RobotRootElement extends BaseRobotPsiElement {
   @Override
   public PsiReference[] getReferences() {
     return new PsiReference[0];
-  }
-
-  //Private
-  //Set siblings
-  private void setSiblingsAndParent() {
-    for (int i = 0; i < robotKeywords.size(); i++) {
-      robotKeywords.get(i).setParent(this);
-      if (i > 0) {
-        robotKeywords.get(i).setPrevSibling(robotKeywords.get(i - 1));
-      }
-      if (i < robotKeywords.size() - 1) {
-        robotKeywords.get(i).setNextSibling(robotKeywords.get(i + 1));
-      }
-    }
   }
 }

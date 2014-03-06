@@ -80,14 +80,6 @@ public abstract class BaseRobotPsiElement extends PsiElementBase {
     return node.getText().length();
   }
 
-  @Nullable
-  @Override
-  public abstract PsiElement findElementAt(int offset);
-
-  @Nullable
-  @Override
-  public abstract PsiReference findReferenceAt(int offset);
-
   @Override
   public int getTextOffset() {
     return node.getStartOffset();
@@ -120,30 +112,6 @@ public abstract class BaseRobotPsiElement extends PsiElementBase {
 
   @Override
   public abstract PsiElement addAfter(@NotNull PsiElement element, @Nullable PsiElement anchor) throws IncorrectOperationException;
-
-  @Override
-  public abstract void checkAdd(@NotNull PsiElement element) throws IncorrectOperationException;
-
-  @Override
-  public abstract PsiElement addRange(PsiElement first, PsiElement last) throws IncorrectOperationException;
-
-  @Override
-  public abstract PsiElement addRangeBefore(@NotNull PsiElement first, @NotNull PsiElement last, PsiElement anchor) throws IncorrectOperationException;
-
-  @Override
-  public abstract PsiElement addRangeAfter(PsiElement first, PsiElement last, PsiElement anchor) throws IncorrectOperationException;
-
-  @Override
-  public abstract void delete() throws IncorrectOperationException;
-
-  @Override
-  public abstract void checkDelete() throws IncorrectOperationException;
-
-  @Override
-  public abstract void deleteChildRange(PsiElement first, PsiElement last) throws IncorrectOperationException;
-
-  @Override
-  public abstract PsiElement replace(@NotNull PsiElement newElement) throws IncorrectOperationException;
 
   @Nullable
   @Override
