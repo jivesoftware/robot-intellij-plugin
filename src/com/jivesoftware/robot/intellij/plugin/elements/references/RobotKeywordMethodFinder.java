@@ -9,9 +9,9 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.jivesoftware.robot.intellij.plugin.elements.GeneralUtil;
+import com.jivesoftware.robot.intellij.plugin.elements.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotRobotKeywordDefEl;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDefEl;
 
 import java.util.Collection;
 import java.util.List;
@@ -127,10 +127,10 @@ public class RobotKeywordMethodFinder implements ContentIterator {
    */
   public boolean findKeywordDefInRobotFile(PsiFile file, List<PsiElement> resultsToAdd) {
     if (file instanceof RobotPsiFile) {
-      PsiElement[] keywordDefs = ((RobotPsiFile) file).findChildrenByClass(RobotRobotKeywordDefEl.class);
+      PsiElement[] keywordDefs = ((RobotPsiFile) file).findChildrenByClass(RobotKeywordDefEl.class);
       for (PsiElement el: keywordDefs) {
           String keywordName = el.getText();
-          String methodText = GeneralUtil.robotKeywordToMethodFast(keywordName);
+          String methodText = RobotPsiUtil.robotKeywordToMethodFast(keywordName);
           if (searchTerm.equalsIgnoreCase(methodText)) {
             resultsToAdd.add(el);
             return false;

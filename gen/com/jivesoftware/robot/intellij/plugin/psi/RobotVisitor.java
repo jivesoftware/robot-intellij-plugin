@@ -12,15 +12,15 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitRobotKeywordDefEl(@NotNull RobotRobotKeywordDefEl o) {
-    visitPsiElement(o);
-  }
-
-  public void visitRobotKeywordEl(@NotNull RobotRobotKeywordEl o) {
+  public void visitKeywordDefEl(@NotNull RobotKeywordDefEl o) {
     visitNamedElement(o);
   }
 
-  public void visitRobotOtherEl(@NotNull RobotRobotOtherEl o) {
+  public void visitKeywordEl(@NotNull RobotKeywordEl o) {
+    visitNamedElement(o);
+  }
+
+  public void visitOtherEl(@NotNull RobotOtherEl o) {
     visitPsiElement(o);
   }
 

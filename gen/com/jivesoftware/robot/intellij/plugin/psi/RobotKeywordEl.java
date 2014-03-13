@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement;
 import com.intellij.psi.PsiReference;
 
-public interface RobotRobotKeywordEl extends RobotNamedElement {
+public interface RobotKeywordEl extends RobotNamedElement {
 
   String getName();
 

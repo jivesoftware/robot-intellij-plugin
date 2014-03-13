@@ -10,9 +10,9 @@ import com.jivesoftware.robot.intellij.plugin.psi.impl.*;
 public interface RobotTypes {
 
   IElementType ERROR_EL = new RobotElementType("ERROR_EL");
-  IElementType ROBOT_KEYWORD_DEF_EL = new RobotElementType("ROBOT_KEYWORD_DEF_EL");
-  IElementType ROBOT_KEYWORD_EL = new RobotElementType("ROBOT_KEYWORD_EL");
-  IElementType ROBOT_OTHER_EL = new RobotElementType("ROBOT_OTHER_EL");
+  IElementType KEYWORD_DEF_EL = new RobotElementType("KEYWORD_DEF_EL");
+  IElementType KEYWORD_EL = new RobotElementType("KEYWORD_EL");
+  IElementType OTHER_EL = new RobotElementType("OTHER_EL");
 
   IElementType ASSIGNMENT_TOKEN = new RobotToken("ASSIGNMENT_TOKEN");
   IElementType BAD_CHAR_TOKEN = new RobotToken("BAD_CHAR_TOKEN");
@@ -39,14 +39,14 @@ public interface RobotTypes {
        if (type == ERROR_EL) {
         return new RobotErrorElImpl(node);
       }
-      else if (type == ROBOT_KEYWORD_DEF_EL) {
-        return new RobotRobotKeywordDefElImpl(node);
+      else if (type == KEYWORD_DEF_EL) {
+        return new RobotKeywordDefElImpl(node);
       }
-      else if (type == ROBOT_KEYWORD_EL) {
-        return new RobotRobotKeywordElImpl(node);
+      else if (type == KEYWORD_EL) {
+        return new RobotKeywordElImpl(node);
       }
-      else if (type == ROBOT_OTHER_EL) {
-        return new RobotRobotOtherElImpl(node);
+      else if (type == OTHER_EL) {
+        return new RobotOtherElImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

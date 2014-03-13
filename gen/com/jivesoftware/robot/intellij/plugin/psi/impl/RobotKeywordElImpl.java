@@ -13,14 +13,14 @@ import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 import com.intellij.psi.PsiReference;
 
-public class RobotRobotKeywordElImpl extends RobotNamedElementImpl implements RobotRobotKeywordEl {
+public class RobotKeywordElImpl extends RobotNamedElementImpl implements RobotKeywordEl {
 
-  public RobotRobotKeywordElImpl(ASTNode node) {
+  public RobotKeywordElImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitRobotKeywordEl(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitKeywordEl(this);
     else super.accept(visitor);
   }
 

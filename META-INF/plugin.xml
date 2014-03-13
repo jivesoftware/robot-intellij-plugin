@@ -1,17 +1,17 @@
 <idea-plugin version="2">
     <id>com.jivesoftware.robot.intellij.plugin</id>
     <name>Robot Plugin</name>
-    <version>1.0</version>
+    <version>1.0.1</version>
     <vendor email="charles.capps@jivesoftware.com" url="http://www.jiveosftware.com">Jive Software</vendor>
 
     <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
+      Robot Framework Plugin to provide integration with Robot keywords implemented in Java.<br>
+      <em>by Charles Capps</em>
     ]]></description>
 
     <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
+      Version 1.0.1.<br>
+      Added Go to Symbol Contributor, so that you can go to a robot keyword definition easily.
     ]]>
     </change-notes>
 
@@ -34,11 +34,11 @@
 
          <lang.parserDefinition language="RobotTestFile" implementationClass="com.jivesoftware.robot.intellij.plugin.parser.RobotParserDefinition"/>
          <psi.referenceContributor implementation="com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordReferenceContributor"/>
+         <gotoSymbolContributor implementation="com.jivesoftware.robot.intellij.plugin.elements.symbols.RobotKeywordDefinitionSymbolContributor"/>
         <!-- <lang.commenter language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyCommenter"/>
               <lang.psiStructureViewFactory language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyStructureViewFactory"/>
               <lang.findUsagesProvider language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyFindUsagesProvider"/>
               <lang.namesValidator language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyNamesValidator"/>
-              <gotoSymbolContributor implementation="net.venaglia.nondairy.soylang.SoyGoToSymbolProvider"/>
               <inspectionToolProvider implementation="net.venaglia.nondairy.soylang.inspection.SoyInspectionToolProvider"/>
               <spellchecker.support language="ClosureTemplate" implementationClass="net.venaglia.nondairy.spellchecker.SoySpellcheckingStrategy"/>-->
     </extensions>
