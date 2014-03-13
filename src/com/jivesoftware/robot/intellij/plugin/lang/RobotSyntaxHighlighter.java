@@ -48,6 +48,8 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
                                                                                                DefaultLanguageHighlighterColors.CONSTANT);
   static final TextAttributesKey ROBOT_TEST_CASE_HEADER_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.TEST_CASE_HEADER",
                                                                                                         DefaultLanguageHighlighterColors.INSTANCE_METHOD);
+  static final TextAttributesKey ROBOT_KEYWORD_DEF_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.KEYWORD_DEF",
+                                                                                                        DefaultLanguageHighlighterColors.INSTANCE_METHOD);
   static final TextAttributesKey ROBOT_TAG_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.TAG",
                                                                                                         DefaultLanguageHighlighterColors.VALID_STRING_ESCAPE);
   static final TextAttributesKey ROBOT_DOCS_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.DOCS",
@@ -78,6 +80,8 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
 
     keys1.put(RobotTypes.TABLE_HEADING_TOKEN, ROBOT_TABLE_HEADER_KEY);
     keys1.put(RobotTypes.TEST_CASES_TABLE_HEADING_TOKEN, ROBOT_TABLE_HEADER_KEY);
+    keys1.put(RobotTypes.KEYWORDS_TABLE_HEADING_TOKEN, ROBOT_TABLE_HEADER_KEY);
+    keys1.put(RobotTypes.ROBOT_KEYWORD_DEF_TOKEN, ROBOT_KEYWORD_DEF_KEY);
     keys1.put(RobotTypes.TEST_CASE_HEADER_TOKEN, ROBOT_TEST_CASE_HEADER_KEY);
     keys1.put(RobotTypes.ROBOT_KEYWORD_TOKEN, ROBOT_KEYWORD_KEY);
     keys1.put(RobotTypes.VARIABLE_TOKEN, ROBOT_VARIABLE_KEY);

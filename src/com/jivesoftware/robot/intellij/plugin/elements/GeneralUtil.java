@@ -17,4 +17,8 @@ public class GeneralUtil {
     }
     return buffer.toString();
   }
+
+  public static String robotKeywordToMethodFast(String keyword) {
+    return keyword.replace(" ", "");
+  }
 }

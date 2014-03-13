@@ -9,6 +9,8 @@ import com.jivesoftware.robot.intellij.plugin.psi.impl.*;
 
 public interface RobotTypes {
 
+  IElementType ERROR_EL = new RobotElementType("ERROR_EL");
+  IElementType ROBOT_KEYWORD_DEF_EL = new RobotElementType("ROBOT_KEYWORD_DEF_EL");
   IElementType ROBOT_KEYWORD_EL = new RobotElementType("ROBOT_KEYWORD_EL");
   IElementType ROBOT_OTHER_EL = new RobotElementType("ROBOT_OTHER_EL");
 
@@ -17,10 +19,12 @@ public interface RobotTypes {
   IElementType COLUMN_SEP_TOKEN = new RobotToken("COLUMN_SEP_TOKEN");
   IElementType COMMENT_TOKEN = new RobotToken("COMMENT_TOKEN");
   IElementType DOCUMENTATION_TOKEN = new RobotToken("DOCUMENTATION_TOKEN");
+  IElementType KEYWORDS_TABLE_HEADING_TOKEN = new RobotToken("KEYWORDS_TABLE_HEADING_TOKEN");
   IElementType META_INFO_TOKEN = new RobotToken("META_INFO_TOKEN");
   IElementType NEWLINE_TOKEN = new RobotToken("NEWLINE_TOKEN");
   IElementType NUMBER_LITERAL_TOKEN = new RobotToken("NUMBER_LITERAL_TOKEN");
   IElementType ROBOT_KEYWORD_ARG_TOKEN = new RobotToken("ROBOT_KEYWORD_ARG_TOKEN");
+  IElementType ROBOT_KEYWORD_DEF_TOKEN = new RobotToken("ROBOT_KEYWORD_DEF_TOKEN");
   IElementType ROBOT_KEYWORD_TOKEN = new RobotToken("ROBOT_KEYWORD_TOKEN");
   IElementType SINGLE_SPACE_TOKEN = new RobotToken("SINGLE_SPACE_TOKEN");
   IElementType TABLE_HEADING_TOKEN = new RobotToken("TABLE_HEADING_TOKEN");
@@ -32,7 +36,13 @@ public interface RobotTypes {
   class Factory {
     public static PsiElement createElement(ASTNode node) {
       IElementType type = node.getElementType();
-       if (type == ROBOT_KEYWORD_EL) {
+       if (type == ERROR_EL) {
+        return new RobotErrorElImpl(node);
+      }
+      else if (type == ROBOT_KEYWORD_DEF_EL) {
+        return new RobotRobotKeywordDefElImpl(node);
+      }
+      else if (type == ROBOT_KEYWORD_EL) {
         return new RobotRobotKeywordElImpl(node);
       }
       else if (type == ROBOT_OTHER_EL) {

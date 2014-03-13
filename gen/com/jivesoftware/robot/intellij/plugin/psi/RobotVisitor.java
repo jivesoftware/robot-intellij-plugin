@@ -8,6 +8,14 @@ import com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElem
 
 public class RobotVisitor extends PsiElementVisitor {
 
+  public void visitErrorEl(@NotNull RobotErrorEl o) {
+    visitPsiElement(o);
+  }
+
+  public void visitRobotKeywordDefEl(@NotNull RobotRobotKeywordDefEl o) {
+    visitPsiElement(o);
+  }
+
   public void visitRobotKeywordEl(@NotNull RobotRobotKeywordEl o) {
     visitNamedElement(o);
   }

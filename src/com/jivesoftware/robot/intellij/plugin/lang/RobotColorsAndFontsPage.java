@@ -62,12 +62,13 @@ public class RobotColorsAndFontsPage implements ColorSettingsPage {
           new AttributesDescriptor("Robot Variable", RobotSyntaxHighlighter.ROBOT_VARIABLE_KEY),
           new AttributesDescriptor("Robot Variable Assignment", RobotSyntaxHighlighter.ROBOT_ASSIGNMENT_KEY),
           new AttributesDescriptor("Robot Comment", RobotSyntaxHighlighter.ROBOT_COMMENT_KEY),
-          new AttributesDescriptor("Number literal", RobotSyntaxHighlighter.ROBOT_NUMBER_LITERAL_KEY),
+          new AttributesDescriptor("Number Literal", RobotSyntaxHighlighter.ROBOT_NUMBER_LITERAL_KEY),
           new AttributesDescriptor("Keyword argument", RobotSyntaxHighlighter.ROBOT_KEYWORD_ARG_KEY),
-          new AttributesDescriptor("Tags & Documentation headers", RobotSyntaxHighlighter.ROBOT_META_INFO_KEY),
+          new AttributesDescriptor("Table Settings", RobotSyntaxHighlighter.ROBOT_META_INFO_KEY),
           new AttributesDescriptor("Tags", RobotSyntaxHighlighter.ROBOT_TAG_KEY),
           new AttributesDescriptor("Documentation", RobotSyntaxHighlighter.ROBOT_DOCS_KEY),
           new AttributesDescriptor("Column Separator", RobotSyntaxHighlighter.ROBOT_COL_SEP_KEY),
+          new AttributesDescriptor("Robot Keyword Definition", RobotSyntaxHighlighter.ROBOT_KEYWORD_DEF_KEY),
           new AttributesDescriptor("Error", RobotSyntaxHighlighter.ROBOT_BAD_CHAR_KEY)
       };
 
@@ -103,7 +104,11 @@ public class RobotColorsAndFontsPage implements ColorSettingsPage {
             "  ${userName}=                             Api Create Standard User\n" +
             "\n" +
             "  Login App As Admin\n" +
-            "  ${announcementTitle}=                    Create Announcement           ${announcementDetails}";
+            "  ${announcementTitle}=                    Create Announcement           ${announcementDetails}\n" +
+        "*** Keywords ***\n" +
+        "My User Defined Keyword\n" +
+            "  [Documentation]                          Written by Robby Robot\n" +
+            "  Go To Home Page";
   }
 
   @Override
