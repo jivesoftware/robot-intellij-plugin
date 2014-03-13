@@ -1,6 +1,8 @@
 package com.jivesoftware.robot.intellij.plugin.elements.references;
 
 import com.google.common.collect.Lists;
+import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ContentIterator;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -11,7 +13,10 @@ import com.intellij.psi.PsiJavaFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifierList;
+import com.intellij.psi.search.FileTypeIndex;
+import com.intellij.psi.search.GlobalSearchScope;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -23,11 +28,13 @@ public class RobotKeywordMethodFinder implements ContentIterator {
   public static final String ROBOT_KEYWORD_ANNOTATION = "org.robotframework.javalib.annotation.RobotKeyword";
 
   private final Project project;
+  private final Module module;
   private final String searchTerm;
   private final List<PsiMethod> results;
 
-  public RobotKeywordMethodFinder(Project project, String searchTerm) {
-    this.project = project;
+  public RobotKeywordMethodFinder(Module module, String searchTerm) {
+    this.module = module;
+    this.project = module.getProject();
     this.searchTerm = searchTerm;
     results = Lists.newArrayList();
   }
@@ -35,22 +42,38 @@ public class RobotKeywordMethodFinder implements ContentIterator {
   @Override
   public boolean processFile(VirtualFile virtualFile) {
     PsiFile psiFile = PsiManager.getInstance(project).findFile(virtualFile);
+    addResultsForFile(psiFile, results);
+    if (results.size() > 0) {
+      return false;
+    }
+    return true;
+  }
+
+  public void process() {
+    Collection<VirtualFile> files = FileTypeIndex.getFiles(JavaFileType.INSTANCE, GlobalSearchScope.moduleWithDependenciesScope(module));
+    for (VirtualFile file : files) {
+      PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
+      addResultsForFile(psiFile, results);
+      if (results.size() > 0) {
+        return;
+      }
+    }
+  }
+
+  private void addResultsForFile(PsiFile psiFile, List<PsiMethod> resultsToAdd) {
     if (psiFile instanceof PsiJavaFile) {
       PsiClass[] classes = ((PsiClassOwner) psiFile).getClasses();
       for (PsiClass psiClass : classes) {
-
         for (PsiMethod psiMethod : psiClass.getMethods()) {
           if (searchTerm.equalsIgnoreCase(psiMethod.getName())) {
             PsiModifierList modifierList = psiMethod.getModifierList();
             if (modifierList.findAnnotation(ROBOT_KEYWORD_ANNOTATION) != null) {
-              results.add(psiMethod);
-              return false;
+              resultsToAdd.add(psiMethod);
             }
           }
         }
       }
     }
-    return true;
   }
 
   public List<PsiMethod> getResults() {

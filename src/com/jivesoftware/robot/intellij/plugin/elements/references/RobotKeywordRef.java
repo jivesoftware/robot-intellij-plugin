@@ -1,12 +1,17 @@
 package com.jivesoftware.robot.intellij.plugin.elements.references;
 
+import com.intellij.ide.highlighter.JavaFileType;
+import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiReferenceBase;
+import com.intellij.psi.search.FileTypeIndex;
+import com.intellij.psi.search.GlobalSearchScope;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,9 +28,11 @@ public class RobotKeywordRef extends PsiReferenceBase<PsiElement> {
   @Override
   public PsiElement resolve() {
     Project project = myElement.getProject();
-    ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(project).getFileIndex();
-    RobotKeywordMethodFinder robotKeywordMethodFinder = new RobotKeywordMethodFinder(project, getCanonicalText());
-    projectFileIndex.iterateContent(robotKeywordMethodFinder);
+    VirtualFile file = myElement.getContainingFile().getVirtualFile();
+    Module module = ProjectFileIndex.SERVICE.getInstance(project).getModuleForFile(file);
+
+    RobotKeywordMethodFinder robotKeywordMethodFinder = new RobotKeywordMethodFinder(module, getCanonicalText());
+    robotKeywordMethodFinder.process();
     List<PsiMethod> results = robotKeywordMethodFinder.getResults();
     if (results.size() <= 0) {
       return null;
