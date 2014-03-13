@@ -16,20 +16,22 @@
 
 package com.jivesoftware.robot.intellij.plugin.lexer;
 
-import static com.jivesoftware.robot.intellij.plugin.lexer.RobotToken.*;
-
+import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
+import com.jivesoftware.robot.intellij.plugin.parser.RobotTypes;
+
 
 //@SuppressWarnings({ "ALL" })
 
 %%
 
 %class RobotScanner
-%implements com.intellij.lexer.FlexLexer
-%function advance
-
+%implements FlexLexer
 %unicode
+%function advance
 %type IElementType
+%eof{ return;
+%eof}
 
 %line
 %column
@@ -37,18 +39,10 @@ import com.intellij.psi.tree.IElementType;
 %debug
 
 %{
-  public RobotScanner() {
-    this((java.io.Reader)null);
-  }
-
   int yyline, yycolumn, yychar;
   private boolean onTagsLine = false;
   private boolean onDocsLine = false;
   private boolean keywordToLeft = false;
-
-  private static final void debug(RobotToken type) {
-    System.out.println("Found token " + type.toString());
-  }
 
 %}
 
@@ -105,32 +99,32 @@ NumberLiteral = {DecIntegerLiteral} | {FloatLiteral}
 
 <YYINITIAL> {
     /* identifiers */
-    {LineTerminator}             { onTagsLine = onDocsLine = keywordToLeft = false; yybegin(START_OF_LINE); return RobotToken.NEWLINE_TOKEN; }
-    {TestCasesTableHeading}      { yybegin(TEST_CASES); return RobotToken.TEST_CASES_TABLE_HEADING_TOKEN; }
-    {TableHeading}      { return RobotToken.TABLE_HEADING_TOKEN; }
-    {TagsMeta}          { onTagsLine = true; return RobotToken.META_INFO_TOKEN; }
-    {DocsMeta}          { onDocsLine = true; return RobotToken.META_INFO_TOKEN; }
-    {Meta}              { return RobotToken.META_INFO_TOKEN; }
+    {LineTerminator}             { onTagsLine = onDocsLine = keywordToLeft = false; yybegin(START_OF_LINE); return RobotTypes.NEWLINE_TOKEN; }
+    {TestCasesTableHeading}      { yybegin(TEST_CASES); return RobotTypes.TEST_CASES_TABLE_HEADING_TOKEN; }
+    {TableHeading}      { return RobotTypes.TABLE_HEADING_TOKEN; }
+    {TagsMeta}          { onTagsLine = true; return RobotTypes.META_INFO_TOKEN; }
+    {DocsMeta}          { onDocsLine = true; return RobotTypes.META_INFO_TOKEN; }
+    {Meta}              { return RobotTypes.META_INFO_TOKEN; }
 
-    {Comment}           { return RobotToken.COMMENT_TOKEN; }
-    {Variable}          { return RobotToken.VARIABLE_TOKEN; }
-    {RobotKeyword}      { if (onTagsLine) { return RobotToken.TAG_TOKEN; }
-                          if (onDocsLine) { return RobotToken.DOCUMENTATION_TOKEN;}
-                          if (keywordToLeft) { return RobotToken.ROBOT_KEYWORD_ARG_TOKEN; }
-                          keywordToLeft = true; return RobotToken.ROBOT_KEYWORD_TOKEN; }
-    {NumberLiteral}     { return RobotToken.NUMBER_LITERAL_TOKEN; }
-    {KeywordArgument}   { if (onTagsLine) { return RobotToken.TAG_TOKEN; } if (onDocsLine) { return RobotToken.DOCUMENTATION_TOKEN;} return RobotToken.ROBOT_KEYWORD_ARG_TOKEN; }
-    {ColumnSep}         { return RobotToken.COLUMN_SEP_TOKEN; }
-    {SingleSpace}       { return RobotToken.SINGLE_SPACE_TOKEN; }
+    {Comment}           { return RobotTypes.COMMENT_TOKEN; }
+    {Variable}          { return RobotTypes.VARIABLE_TOKEN; }
+    {RobotKeyword}      { if (onTagsLine) { return RobotTypes.TAG_TOKEN; }
+                          if (onDocsLine) { return RobotTypes.DOCUMENTATION_TOKEN;}
+                          if (keywordToLeft) { return RobotTypes.ROBOT_KEYWORD_ARG_TOKEN; }
+                          keywordToLeft = true; return RobotTypes.ROBOT_KEYWORD_TOKEN; }
+    {NumberLiteral}     { return RobotTypes.NUMBER_LITERAL_TOKEN; }
+    {KeywordArgument}   { if (onTagsLine) { return RobotTypes.TAG_TOKEN; } if (onDocsLine) { return RobotTypes.DOCUMENTATION_TOKEN;} return RobotTypes.ROBOT_KEYWORD_ARG_TOKEN; }
+    {ColumnSep}         { return RobotTypes.COLUMN_SEP_TOKEN; }
+    {SingleSpace}       { return RobotTypes.SINGLE_SPACE_TOKEN; }
 
-    .                   { return RobotToken.BAD_CHAR_TOKEN; }
+    .                   { return RobotTypes.BAD_CHAR_TOKEN; }
 
     <<EOF>>             { return null; }
 }
 
 <START_OF_LINE> {
-    {Assignment}        { yybegin(YYINITIAL); return RobotToken.ASSIGNMENT_TOKEN; }
-    {LineTerminator}    { return RobotToken.NEWLINE_TOKEN; }
+    {Assignment}        { yybegin(YYINITIAL); return RobotTypes.ASSIGNMENT_TOKEN; }
+    {LineTerminator}    { return RobotTypes.NEWLINE_TOKEN; }
     .                   { yypushback(1); yybegin(YYINITIAL); }
     <<EOF>>             { yybegin(YYINITIAL); }
 }
@@ -138,28 +132,28 @@ NumberLiteral = {DecIntegerLiteral} | {FloatLiteral}
 <TEST_CASES> {
 
      /* identifiers */
-     {LineTerminator}    { yybegin(TEST_CASES_START_OF_LINE); keywordToLeft = onTagsLine = onDocsLine = false; return RobotToken.NEWLINE_TOKEN; }
-     {TableHeading}      { yybegin(YYINITIAL); return RobotToken.TABLE_HEADING_TOKEN; }
-     {TagsMeta}          { onTagsLine = true; return RobotToken.META_INFO_TOKEN; }
-     {DocsMeta}          { onDocsLine = true; return RobotToken.META_INFO_TOKEN; }
-     {Meta}              { return RobotToken.META_INFO_TOKEN; }
-     {Comment}           { return RobotToken.COMMENT_TOKEN; }
-     {Variable}          { return RobotToken.VARIABLE_TOKEN; }
-     {Assignment}        { return RobotToken.ASSIGNMENT_TOKEN; }
-     {RobotKeyword}      { if (keywordToLeft) { return RobotToken.ROBOT_KEYWORD_ARG_TOKEN; } keywordToLeft = true; return RobotToken.ROBOT_KEYWORD_TOKEN; }
-     {NumberLiteral}     { return RobotToken.NUMBER_LITERAL_TOKEN; }
-     {KeywordArgument}   { return RobotToken.ROBOT_KEYWORD_ARG_TOKEN; }
-     {ColumnSep}         { return RobotToken.COLUMN_SEP_TOKEN; }
-     {SingleSpace}       { return RobotToken.SINGLE_SPACE_TOKEN; }
+     {LineTerminator}    { yybegin(TEST_CASES_START_OF_LINE); keywordToLeft = onTagsLine = onDocsLine = false; return RobotTypes.NEWLINE_TOKEN; }
+     {TableHeading}      { yybegin(YYINITIAL); return RobotTypes.TABLE_HEADING_TOKEN; }
+     {TagsMeta}          { onTagsLine = true; return RobotTypes.META_INFO_TOKEN; }
+     {DocsMeta}          { onDocsLine = true; return RobotTypes.META_INFO_TOKEN; }
+     {Meta}              { return RobotTypes.META_INFO_TOKEN; }
+     {Comment}           { return RobotTypes.COMMENT_TOKEN; }
+     {Variable}          { return RobotTypes.VARIABLE_TOKEN; }
+     {Assignment}        { return RobotTypes.ASSIGNMENT_TOKEN; }
+     {RobotKeyword}      { if (keywordToLeft) { return RobotTypes.ROBOT_KEYWORD_ARG_TOKEN; } keywordToLeft = true; return RobotTypes.ROBOT_KEYWORD_TOKEN; }
+     {NumberLiteral}     { return RobotTypes.NUMBER_LITERAL_TOKEN; }
+     {KeywordArgument}   { return RobotTypes.ROBOT_KEYWORD_ARG_TOKEN; }
+     {ColumnSep}         { return RobotTypes.COLUMN_SEP_TOKEN; }
+     {SingleSpace}       { return RobotTypes.SINGLE_SPACE_TOKEN; }
 
-     .                   { return RobotToken.BAD_CHAR_TOKEN; }
+     .                   { return RobotTypes.BAD_CHAR_TOKEN; }
 
      <<EOF>>             { yybegin(YYINITIAL); }
 }
 
 <TEST_CASES_START_OF_LINE> {
-    {TestCaseHeader}    { yybegin(TEST_CASES); return RobotToken.TEST_CASE_HEADER_TOKEN; }
-    {LineTerminator}    { return RobotToken.NEWLINE_TOKEN; }
+    {TestCaseHeader}    { yybegin(TEST_CASES); return RobotTypes.TEST_CASE_HEADER_TOKEN; }
+    {LineTerminator}    { return RobotTypes.NEWLINE_TOKEN; }
     .                   { yypushback(1); yybegin(TEST_CASES); }
     <<EOF>>             { yybegin(YYINITIAL); }
 }

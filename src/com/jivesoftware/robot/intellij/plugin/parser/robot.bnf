@@ -1,0 +1,27 @@
+
+{
+  parserClass="com.jivesoftware.robot.intellij.plugin.parser.RobotParser"
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Robot"
+  psiImplClassSuffix="Impl"
+  psiPackage="com.jivesoftware.robot.intellij.plugin.psi"
+  psiImplPackage="com.jivesoftware.robot.intellij.plugin.psi.impl"
+
+  elementTypeHolderClass="com.jivesoftware.robot.intellij.plugin.parser.RobotTypes"
+  elementTypeClass="com.jivesoftware.robot.intellij.plugin.parser.RobotElementType"
+  tokenTypeClass="com.jivesoftware.robot.intellij.plugin.lexer.RobotToken"
+
+  psiImplUtilClass="com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil"
+}
+
+robotFile ::= item*
+
+private item ::= (ROBOT_KEYWORD_EL|ROBOT_OTHER_EL)
+
+ROBOT_KEYWORD_EL ::= ROBOT_KEYWORD_TOKEN {mixin="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElementImpl"
+                                          implements="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
+                                          methods=[getName setName getNameIdentifier getReference getReferences]}
+ROBOT_OTHER_EL ::= (TABLE_HEADING_TOKEN|TEST_CASES_TABLE_HEADING_TOKEN|TEST_CASE_HEADER_TOKEN|ROBOT_KEYWORD_ARG_TOKEN|COMMENT_TOKEN|VARIABLE_TOKEN
+                        |ASSIGNMENT_TOKEN|META_INFO_TOKEN|NUMBER_LITERAL_TOKEN|COLUMN_SEP_TOKEN|SINGLE_SPACE_TOKEN|NEWLINE_TOKEN|BAD_CHAR_TOKEN|TAG_TOKEN|DOCUMENTATION_TOKEN)

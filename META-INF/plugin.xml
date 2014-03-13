@@ -33,7 +33,7 @@
          <lang.braceMatcher language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyBraceMatcher"/> -->
 
          <lang.parserDefinition language="RobotTestFile" implementationClass="com.jivesoftware.robot.intellij.plugin.parser.RobotParserDefinition"/>
-
+         <psi.referenceContributor implementation="com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordReferenceContributor"/>
         <!-- <lang.commenter language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyCommenter"/>
               <lang.psiStructureViewFactory language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyStructureViewFactory"/>
               <lang.findUsagesProvider language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyFindUsagesProvider"/>

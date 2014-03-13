@@ -11,18 +11,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
-import com.jivesoftware.robot.intellij.plugin.elements.PsiElementFactory;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotLanguage;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
-import com.jivesoftware.robot.intellij.plugin.lexer.RobotLexer;
-import com.jivesoftware.robot.intellij.plugin.lexer.RobotToken;
+import com.jivesoftware.robot.intellij.plugin.lexer.RobotScannerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 public class RobotParserDefinition implements ParserDefinition {
 
-  public static final TokenSet WHITE_SPACES = TokenSet.create(RobotToken.SINGLE_SPACE_TOKEN, RobotToken.COLUMN_SEP_TOKEN);
-  public static final TokenSet COMMENTS = TokenSet.create(RobotToken.COMMENT_TOKEN);
-  public static final TokenSet STRING_LITERALS = TokenSet.create(RobotToken.ROBOT_KEYWORD_ARG_TOKEN);
+  public static final TokenSet WHITE_SPACES = TokenSet.create(RobotTypes.SINGLE_SPACE_TOKEN, RobotTypes.COLUMN_SEP_TOKEN);
+  public static final TokenSet COMMENTS = TokenSet.create(RobotTypes.COMMENT_TOKEN);
+  public static final TokenSet STRING_LITERALS = TokenSet.create(RobotTypes.ROBOT_KEYWORD_ARG_TOKEN);
 
   public static final IFileElementType FILE = new IFileElementType(Language.<RobotLanguage>findInstance(RobotLanguage.class));
 
@@ -30,7 +28,7 @@ public class RobotParserDefinition implements ParserDefinition {
   @NotNull
   @Override
   public Lexer createLexer(Project project) {
-    return new RobotLexer();
+    return new RobotScannerAdapter();
   }
 
   @Override
@@ -64,7 +62,7 @@ public class RobotParserDefinition implements ParserDefinition {
   @NotNull
   @Override
   public PsiElement createElement(ASTNode node) {
-    return PsiElementFactory.create(node);
+    return RobotTypes.Factory.createElement(node);
   }
 
   @Override

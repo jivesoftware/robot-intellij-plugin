@@ -22,8 +22,9 @@ import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase;
 import com.intellij.psi.tree.IElementType;
-import com.jivesoftware.robot.intellij.plugin.lexer.RobotLexer;
+import com.jivesoftware.robot.intellij.plugin.lexer.RobotScannerAdapter;
 import com.jivesoftware.robot.intellij.plugin.lexer.RobotToken;
+import com.jivesoftware.robot.intellij.plugin.parser.RobotTypes;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -40,7 +41,7 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
 
   @NotNull
   public Lexer getHighlightingLexer() {
-    return new RobotLexer();
+    return new RobotScannerAdapter();
   }
 
   static final TextAttributesKey ROBOT_TABLE_HEADER_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.TABLE",
@@ -75,20 +76,20 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
     keys1 = new HashMap<IElementType, TextAttributesKey>();
     keys2 = new HashMap<IElementType, TextAttributesKey>();
 
-    keys1.put(RobotToken.TABLE_HEADING_TOKEN, ROBOT_TABLE_HEADER_KEY);
-    keys1.put(RobotToken.TEST_CASES_TABLE_HEADING_TOKEN, ROBOT_TABLE_HEADER_KEY);
-    keys1.put(RobotToken.TEST_CASE_HEADER_TOKEN, ROBOT_TEST_CASE_HEADER_KEY);
-    keys1.put(RobotToken.ROBOT_KEYWORD_TOKEN, ROBOT_KEYWORD_KEY);
-    keys1.put(RobotToken.VARIABLE_TOKEN, ROBOT_VARIABLE_KEY);
-    keys1.put(RobotToken.ASSIGNMENT_TOKEN, ROBOT_ASSIGNMENT_KEY);
-    keys1.put(RobotToken.COMMENT_TOKEN, ROBOT_COMMENT_KEY);
-    keys1.put(RobotToken.NUMBER_LITERAL_TOKEN, ROBOT_NUMBER_LITERAL_KEY);
-    keys1.put(RobotToken.ROBOT_KEYWORD_ARG_TOKEN, ROBOT_KEYWORD_ARG_KEY);
-    keys1.put(RobotToken.META_INFO_TOKEN, ROBOT_META_INFO_KEY);
-    keys1.put(RobotToken.BAD_CHAR_TOKEN, ROBOT_BAD_CHAR_KEY);
-    keys1.put(RobotToken.COLUMN_SEP_TOKEN, ROBOT_COL_SEP_KEY);
-    keys1.put(RobotToken.TAG_TOKEN, ROBOT_TAG_KEY);
-    keys1.put(RobotToken.DOCUMENTATION_TOKEN, ROBOT_DOCS_KEY);
+    keys1.put(RobotTypes.TABLE_HEADING_TOKEN, ROBOT_TABLE_HEADER_KEY);
+    keys1.put(RobotTypes.TEST_CASES_TABLE_HEADING_TOKEN, ROBOT_TABLE_HEADER_KEY);
+    keys1.put(RobotTypes.TEST_CASE_HEADER_TOKEN, ROBOT_TEST_CASE_HEADER_KEY);
+    keys1.put(RobotTypes.ROBOT_KEYWORD_TOKEN, ROBOT_KEYWORD_KEY);
+    keys1.put(RobotTypes.VARIABLE_TOKEN, ROBOT_VARIABLE_KEY);
+    keys1.put(RobotTypes.ASSIGNMENT_TOKEN, ROBOT_ASSIGNMENT_KEY);
+    keys1.put(RobotTypes.COMMENT_TOKEN, ROBOT_COMMENT_KEY);
+    keys1.put(RobotTypes.NUMBER_LITERAL_TOKEN, ROBOT_NUMBER_LITERAL_KEY);
+    keys1.put(RobotTypes.ROBOT_KEYWORD_ARG_TOKEN, ROBOT_KEYWORD_ARG_KEY);
+    keys1.put(RobotTypes.META_INFO_TOKEN, ROBOT_META_INFO_KEY);
+    keys1.put(RobotTypes.BAD_CHAR_TOKEN, ROBOT_BAD_CHAR_KEY);
+    keys1.put(RobotTypes.COLUMN_SEP_TOKEN, ROBOT_COL_SEP_KEY);
+    keys1.put(RobotTypes.TAG_TOKEN, ROBOT_TAG_KEY);
+    keys1.put(RobotTypes.DOCUMENTATION_TOKEN, ROBOT_DOCS_KEY);
 
   }
 

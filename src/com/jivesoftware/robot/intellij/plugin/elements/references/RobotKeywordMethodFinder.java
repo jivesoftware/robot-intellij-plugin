@@ -40,7 +40,7 @@ public class RobotKeywordMethodFinder implements ContentIterator {
       for (PsiClass psiClass : classes) {
 
         for (PsiMethod psiMethod : psiClass.getMethods()) {
-          if (searchTerm.equals(psiMethod.getName())) {
+          if (searchTerm.equalsIgnoreCase(psiMethod.getName())) {
             PsiModifierList modifierList = psiMethod.getModifierList();
             if (modifierList.findAnnotation(ROBOT_KEYWORD_ANNOTATION) != null) {
               results.add(psiMethod);

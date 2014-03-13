@@ -1,35 +1,28 @@
 package com.jivesoftware.robot.intellij.plugin.elements.references;
 
-import com.intellij.ide.DataManager;
-import com.intellij.openapi.actionSystem.DataContext;
-import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ProjectFileIndex;
 import com.intellij.openapi.roots.ProjectRootManager;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiReferenceBase;
-import com.jivesoftware.robot.intellij.plugin.elements.RobotKeywordElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class RobotKeywordRef extends PsiReferenceBase<RobotKeywordElement> {
+public class RobotKeywordRef extends PsiReferenceBase<PsiElement> {
 
-  public RobotKeywordRef(RobotKeywordElement element) {
+  public RobotKeywordRef(PsiElement element) {
     super(element);
   }
 
-  public RobotKeywordRef(RobotKeywordElement element, boolean soft) {
-    super(element, soft);
-  }
 
   @Nullable
   @Override
   public PsiElement resolve() {
-    DataContext dataContext = DataManager.getInstance().getDataContextFromFocus().getResultSync();
-    Project project = DataKeys.PROJECT.getData(dataContext);
+    Project project = myElement.getProject();
     ProjectFileIndex projectFileIndex = ProjectRootManager.getInstance(project).getFileIndex();
     RobotKeywordMethodFinder robotKeywordMethodFinder = new RobotKeywordMethodFinder(project, getCanonicalText());
     projectFileIndex.iterateContent(robotKeywordMethodFinder);
@@ -50,10 +43,14 @@ public class RobotKeywordRef extends PsiReferenceBase<RobotKeywordElement> {
     String[] tokens = keywordText.split(" ");
     StringBuffer sb = new StringBuffer();
     for (int i = 0; i < tokens.length; i++) {
+      String token = tokens[i].trim();
+      if (token.length() <= 0) {
+        continue;
+      }
       if (i == 0) {
-        sb.append(tokens[i].trim().toLowerCase());
+        sb.append(token.substring(0, 1).toLowerCase() + token.substring(1));
       } else {
-        sb.append(tokens[i].trim());
+        sb.append(token.substring(0, 1).toUpperCase() + token.substring(1));
       }
     }
     return sb.toString();
@@ -63,6 +60,11 @@ public class RobotKeywordRef extends PsiReferenceBase<RobotKeywordElement> {
   @Override
   public Object[] getVariants() {
     return new Object[0];
+  }
+
+  @Override
+  public TextRange calculateDefaultRangeInElement() {
+    return new TextRange(0, myElement.getText().length());
   }
 
 }
