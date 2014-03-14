@@ -69,4 +69,9 @@ public class RobotKeywordRef extends PsiReferenceBase<PsiElement> {
     return new TextRange(0, myElement.getText().length());
   }
 
+  @Override
+  public boolean isReferenceTo(PsiElement element) {
+    return super.isReferenceTo(element);
+  }
+
 }

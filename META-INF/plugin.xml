@@ -36,6 +36,11 @@
          <psi.referenceContributor implementation="com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordReferenceContributor"/>
          <gotoSymbolContributor implementation="com.jivesoftware.robot.intellij.plugin.elements.symbols.RobotKeywordDefinitionSymbolContributor"/>
          <lang.commenter language="RobotTestFile" implementationClass="com.jivesoftware.robot.intellij.plugin.lang.RobotCommenter"/>
+
+         <lang.findUsagesProvider language="RobotTestFile"
+                                  implementationClass="com.jivesoftware.robot.intellij.plugin.elements.usages.RobotKeywordUsagesProvider"/>
+
+
         <!-- <lang.commenter language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyCommenter"/>
               <lang.psiStructureViewFactory language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyStructureViewFactory"/>
               <lang.findUsagesProvider language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyFindUsagesProvider"/>
