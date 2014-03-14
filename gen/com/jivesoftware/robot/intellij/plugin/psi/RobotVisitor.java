@@ -24,6 +24,10 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitTag(@NotNull RobotTag o) {
+    visitPsiElement(o);
+  }
+
   public void visitNamedElement(@NotNull RobotNamedElement o) {
     visitPsiElement(o);
   }

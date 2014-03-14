@@ -32,6 +32,9 @@ public class RobotParser implements PsiParser {
     else if (root_ == OTHER_EL) {
       result_ = OTHER_EL(builder_, 0);
     }
+    else if (root_ == TAG) {
+      result_ = TAG(builder_, 0);
+    }
     else {
       result_ = parse_root_(root_, builder_, 0);
     }
@@ -82,7 +85,7 @@ public class RobotParser implements PsiParser {
   /* ********************************************************** */
   // TEST_CASES_TABLE_HEADING_TOKEN|KEYWORDS_TABLE_HEADING_TOKEN|TABLE_HEADING_TOKEN|TEST_CASE_HEADER_TOKEN|ROBOT_KEYWORD_ARG_TOKEN
   //                         |COMMENT_TOKEN|VARIABLE_TOKEN|ASSIGNMENT_TOKEN|META_INFO_TOKEN|NUMBER_LITERAL_TOKEN|COLUMN_SEP_TOKEN|SINGLE_SPACE_TOKEN|NEWLINE_TOKEN
-  //                         |TAG_TOKEN|DOCUMENTATION_TOKEN
+  //                         |DOCUMENTATION_TOKEN
   public static boolean OTHER_EL(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "OTHER_EL")) return false;
     boolean result_ = false;
@@ -100,19 +103,31 @@ public class RobotParser implements PsiParser {
     if (!result_) result_ = consumeToken(builder_, COLUMN_SEP_TOKEN);
     if (!result_) result_ = consumeToken(builder_, SINGLE_SPACE_TOKEN);
     if (!result_) result_ = consumeToken(builder_, NEWLINE_TOKEN);
-    if (!result_) result_ = consumeToken(builder_, TAG_TOKEN);
     if (!result_) result_ = consumeToken(builder_, DOCUMENTATION_TOKEN);
     exit_section_(builder_, level_, marker_, OTHER_EL, result_, false, null);
     return result_;
   }
 
   /* ********************************************************** */
-  // KEYWORD_EL|KEYWORD_DEF_EL|OTHER_EL
+  // TAG_TOKEN
+  public static boolean TAG(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "TAG")) return false;
+    if (!nextTokenIs(builder_, TAG_TOKEN)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, TAG_TOKEN);
+    exit_section_(builder_, marker_, TAG, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // KEYWORD_EL|TAG|KEYWORD_DEF_EL|OTHER_EL
   static boolean item(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "item")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = KEYWORD_EL(builder_, level_ + 1);
+    if (!result_) result_ = TAG(builder_, level_ + 1);
     if (!result_) result_ = KEYWORD_DEF_EL(builder_, level_ + 1);
     if (!result_) result_ = OTHER_EL(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);

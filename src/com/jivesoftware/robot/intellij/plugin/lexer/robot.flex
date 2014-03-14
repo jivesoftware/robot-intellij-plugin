@@ -1,5 +1,5 @@
 /*
-   Copyright 2010 - 2013 Ed Venaglia
+   Copyright 2014 Charles Capps
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -45,6 +45,7 @@ import static com.jivesoftware.robot.intellij.plugin.parser.RobotTypes.*;
   private boolean onDocsLine = false;
   private boolean keywordToLeft = false;
   private boolean startLine = true;
+  private boolean forceTags = false;
 
   private IElementType next(IElementType toReturn) {
     startLine = false;
@@ -52,7 +53,7 @@ import static com.jivesoftware.robot.intellij.plugin.parser.RobotTypes.*;
   }
   private IElementType newLine() {
     startLine = true;
-    keywordToLeft = onTagsLine = onDocsLine = false;
+    keywordToLeft = onTagsLine = forceTags = onDocsLine = false;
     return RobotTypes.NEWLINE_TOKEN;
   }
 
@@ -85,6 +86,7 @@ TestCaseHeader = {Identifier} ({SingleSpace} {Identifier})*
 
 KeywordArgumentWord = {KeywordArgumentChar}+
 KeywordArgument = ({KeywordArgumentWord} ({SingleSpace} {KeywordArgumentWord})*) | {Variable}
+ForceTags = [Ff] "orce" " "? [Tt] "ags"
 
 /* Meta documentation for robot test cases */
 Meta = "[" {Identifier} "]"
@@ -123,12 +125,13 @@ NumberLiteral = {DecIntegerLiteral} | {FloatLiteral}
     {Comment}           { return next(COMMENT_TOKEN); }
     {Assignment}        { return next(ASSIGNMENT_TOKEN); }
     {Variable}          { return next(VARIABLE_TOKEN); }
-    {RobotKeyword}      { if (onTagsLine) { return next(TAG_TOKEN); }
+    {ForceTags}         { forceTags = true; keywordToLeft = true; return next(ROBOT_KEYWORD_TOKEN);}
+    {RobotKeyword}      { if (onTagsLine || forceTags) { return next(TAG_TOKEN); }
                           if (onDocsLine) { return next(DOCUMENTATION_TOKEN);}
                           if (keywordToLeft) { return next(ROBOT_KEYWORD_ARG_TOKEN); }
                           keywordToLeft = true; return next(ROBOT_KEYWORD_TOKEN); }
     {NumberLiteral}     { return next(NUMBER_LITERAL_TOKEN); }
-    {KeywordArgument}   { if (onTagsLine) { return next(TAG_TOKEN); }
+    {KeywordArgument}   { if (onTagsLine || forceTags) { return next(TAG_TOKEN); }
                           if (onDocsLine) { return next(DOCUMENTATION_TOKEN);}
                             return next(ROBOT_KEYWORD_ARG_TOKEN); }
     {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }

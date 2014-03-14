@@ -1,7 +1,7 @@
 package com.jivesoftware.robot.intellij.plugin.lang;
 
 /*
- * Copyright 2010 - 2013 Ed Venaglia
+ * Copyright 2014
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * IntelliJ syntax highlighter implementation for soy files.
+ * IntelliJ syntax highlighter implementation for Robot Test Case Files
  */
 public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
 

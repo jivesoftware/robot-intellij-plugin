@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 - 2012 Ed Venaglia
+ * Copyright 2014 Charles Capps
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -21,10 +21,6 @@ import com.intellij.openapi.fileTypes.FileTypeFactory;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * User: ed
- * Date: Jul 31, 2010
- * Time: 12:48:20 PM
- *
  * Factory class to create RobotFileType objects in IntelliJ.
  */
 public class RobotFileTypeFactory extends FileTypeFactory {

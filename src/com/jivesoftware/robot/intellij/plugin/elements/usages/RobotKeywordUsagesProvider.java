@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class RobotKeywordUsagesProvider implements FindUsagesProvider {
   private static final DefaultWordsScanner WORDS_SCANNER = new DefaultWordsScanner(new RobotScannerAdapter(),
-                                                                                   TokenSet.create(RobotTypes.ROBOT_KEYWORD_DEF_TOKEN),
+                                                                                   TokenSet.create(RobotTypes.ROBOT_KEYWORD_DEF_TOKEN, RobotTypes.TAG_TOKEN),
                                                                                    TokenSet.create(RobotTypes.COMMENT_TOKEN, RobotTypes.DOCUMENTATION_TOKEN),
                                                                                    TokenSet.create(RobotTypes.NUMBER_LITERAL_TOKEN,
                                                                                                    RobotTypes.ROBOT_KEYWORD_ARG_TOKEN));

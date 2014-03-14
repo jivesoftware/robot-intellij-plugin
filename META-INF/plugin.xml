@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.jivesoftware.robot.intellij.plugin</id>
     <name>Robot Plugin</name>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <vendor email="charles.capps@jivesoftware.com" url="http://www.jiveosftware.com">Jive Software</vendor>
 
     <description><![CDATA[
@@ -10,8 +10,18 @@
     ]]></description>
 
     <change-notes><![CDATA[
-      Version 1.0.1.<br>
+      <h3>Version 1.0.1.</h3>
       Added Go to Symbol Contributor, so that you can go to a robot keyword definition easily.
+      <h3>Version 1.0.2</h3>
+      <ul>
+      <li>You can find usages of Robot keywords defined in Robot files.</li>
+      <li>Autocomplete works to suggest Robot keywords as you type---and it includes robot keywords from Java methods or Robot files</li>
+      <li>Reworked how searching is done in RobotKeywordDefinitionFinder. Searches by the method name against the word index when possible.
+          When not possible, searches by the term "RobotKeyword" in java files, since we're are only dealing with robot keywords defined in Java
+          with the @RobotKeyword annotation.
+      </li>
+      </ul>
+
     ]]>
     </change-notes>
 
@@ -27,26 +37,21 @@
     <extensions defaultExtensionNs="com.intellij">
         <fileTypeFactory implementation="com.jivesoftware.robot.intellij.plugin.lang.RobotFileTypeFactory"/>
         <syntaxHighlighter key="soy" implementationClass="com.jivesoftware.robot.intellij.plugin.lang.RobotSyntaxHighlighter"/>
-        <colorSettingsPage implementation="com.jivesoftware.robot.intellij.plugin.lang.RobotColorsAndFontsPage"/> <!--
-         <findUsagesHandlerFactory implementation="net.venaglia.nondairy.soylang.SoyFindUsagesHandlerFactory"/>
-         <lang.foldingBuilder language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyFoldingBuilder"/>
-         <lang.braceMatcher language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyBraceMatcher"/> -->
+        <colorSettingsPage implementation="com.jivesoftware.robot.intellij.plugin.lang.RobotColorsAndFontsPage"/>
 
-         <lang.parserDefinition language="RobotTestFile" implementationClass="com.jivesoftware.robot.intellij.plugin.parser.RobotParserDefinition"/>
-         <psi.referenceContributor implementation="com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordReferenceContributor"/>
-         <gotoSymbolContributor implementation="com.jivesoftware.robot.intellij.plugin.elements.symbols.RobotKeywordDefinitionSymbolContributor"/>
-         <lang.commenter language="RobotTestFile" implementationClass="com.jivesoftware.robot.intellij.plugin.lang.RobotCommenter"/>
+        <lang.parserDefinition language="RobotTestFile" implementationClass="com.jivesoftware.robot.intellij.plugin.parser.RobotParserDefinition"/>
+        <psi.referenceContributor implementation="com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordReferenceContributor"/>
+        <gotoSymbolContributor implementation="com.jivesoftware.robot.intellij.plugin.elements.symbols.RobotKeywordDefinitionSymbolContributor"/>
+        <lang.commenter language="RobotTestFile" implementationClass="com.jivesoftware.robot.intellij.plugin.lang.RobotCommenter"/>
 
-         <lang.findUsagesProvider language="RobotTestFile"
-                                  implementationClass="com.jivesoftware.robot.intellij.plugin.elements.usages.RobotKeywordUsagesProvider"/>
-
-
-        <!-- <lang.commenter language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyCommenter"/>
-              <lang.psiStructureViewFactory language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyStructureViewFactory"/>
-              <lang.findUsagesProvider language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyFindUsagesProvider"/>
-              <lang.namesValidator language="ClosureTemplate" implementationClass="net.venaglia.nondairy.soylang.SoyNamesValidator"/>
-              <inspectionToolProvider implementation="net.venaglia.nondairy.soylang.inspection.SoyInspectionToolProvider"/>
-              <spellchecker.support language="ClosureTemplate" implementationClass="net.venaglia.nondairy.spellchecker.SoySpellcheckingStrategy"/>-->
+        <lang.findUsagesProvider language="RobotTestFile"
+                                 implementationClass="com.jivesoftware.robot.intellij.plugin.elements.usages.RobotKeywordUsagesProvider"/>
+        <lang.findUsagesProvider language="JAVA"
+                                 implementationClass="com.jivesoftware.robot.intellij.plugin.elements.usages.JavaRobotKeywordUsagesProvider"/>
+        <!-- Still working on getting Find usages to work on Java methods. This doesn't seem to fix it, so commenting out for now. -->
+       <!-- <findUsagesHandlerFactory implementation="com.jivesoftware.robot.intellij.plugin.elements.usages.RobotFindUsagesHandlerFactory"/>-->
+        <completion.contributor language="RobotTestFile"
+                                implementationClass="com.jivesoftware.robot.intellij.plugin.elements.completion.RobotCompletionContributor"/>
     </extensions>
 
     <application-components>

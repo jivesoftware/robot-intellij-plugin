@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 - 2013 Ed Venaglia
+ * Copyright 2014 Charles Capps
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -21,11 +21,7 @@ import com.intellij.openapi.util.IconLoader;
 import javax.swing.*;
 
 /**
- * User: ed
- * Date: 2/15/12
- * Time: 6:30 PM
- *
- * Holder class for icons used by the plugin
+ * Holder class for icons used by robot-intellij-plugin
  */
 public interface RobotIcons {
 

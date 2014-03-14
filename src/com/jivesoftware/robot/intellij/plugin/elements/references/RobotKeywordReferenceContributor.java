@@ -20,6 +20,7 @@ public class RobotKeywordReferenceContributor extends PsiReferenceContributor {
                                           public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
                                             return new PsiReference[] {new RobotKeywordRef(element)};
                                           }
-                                        });
+                                        },
+                                        PsiReferenceRegistrar.HIGHER_PRIORITY);
   }
 }

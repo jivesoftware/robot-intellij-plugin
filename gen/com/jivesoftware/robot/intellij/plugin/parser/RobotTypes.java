@@ -13,6 +13,7 @@ public interface RobotTypes {
   IElementType KEYWORD_DEF_EL = new RobotElementType("KEYWORD_DEF_EL");
   IElementType KEYWORD_EL = new RobotElementType("KEYWORD_EL");
   IElementType OTHER_EL = new RobotElementType("OTHER_EL");
+  IElementType TAG = new RobotElementType("TAG");
 
   IElementType ASSIGNMENT_TOKEN = new RobotToken("ASSIGNMENT_TOKEN");
   IElementType BAD_CHAR_TOKEN = new RobotToken("BAD_CHAR_TOKEN");
@@ -47,6 +48,9 @@ public interface RobotTypes {
       }
       else if (type == OTHER_EL) {
         return new RobotOtherElImpl(node);
+      }
+      else if (type == TAG) {
+        return new RobotTagImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }

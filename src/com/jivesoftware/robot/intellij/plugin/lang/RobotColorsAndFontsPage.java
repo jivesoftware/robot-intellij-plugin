@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 - 2012 Ed Venaglia
+ * Copyright 2014 Charles Capps
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -31,11 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * User: ed
- * Date: Jul 31, 2010
- * Time: 2:48:16 PM
- *
- * Color settings page used for customizing the syntax highlighting of soy files.
+ * Color settings page used for customizing the syntax highlighting of Robot files
  */
 public class RobotColorsAndFontsPage implements ColorSettingsPage {
   @NotNull

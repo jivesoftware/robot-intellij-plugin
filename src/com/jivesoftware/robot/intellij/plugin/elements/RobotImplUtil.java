@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 public class RobotImplUtil {
+
   public static String getName(RobotKeywordEl element) {
     return element.getText();
   }

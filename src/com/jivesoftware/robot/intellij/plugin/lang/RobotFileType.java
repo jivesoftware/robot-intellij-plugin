@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 - 2012 Ed Venaglia
+ * Copyright 2014 Charles Capps
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -24,12 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 
 /**
- * User: ed
- * Date: Jul 31, 2010
- * Time: 9:50:44 AM
- *
- * IntelliJ file type to represent the closure template language used in soy
- * files.
+ * IntelliJ file type to represent Robot test case files (.robot extension).
  */
 public class RobotFileType extends LanguageFileType {
 
