@@ -1,11 +1,7 @@
 package com.jivesoftware.robot.intellij.plugin.elements.usages;
 
 import com.intellij.find.findUsages.FindUsagesHandler;
-import com.intellij.find.findUsages.FindUsagesOptions;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.usageView.UsageInfo;
-import com.intellij.util.Processor;
 import org.jetbrains.annotations.NotNull;
 
 public class JavaRobotFindUsagesHandler extends FindUsagesHandler {
@@ -14,13 +10,19 @@ public class JavaRobotFindUsagesHandler extends FindUsagesHandler {
     super(psiElement);
   }
 
-  @Override
-  public boolean processElementUsages(@NotNull final PsiElement element,
-                                      @NotNull final Processor<UsageInfo> processor,
-                                      @NotNull final FindUsagesOptions options) {
-    options.searchScope = GlobalSearchScope.projectScope(element.getProject());
-    return super.processElementUsages(element, processor, options);
-  }
-
+  //Highlighting is not working currently, not sure why. A weird selection of text is highlighted. Want to add this back when I figure it out.
+/*  @Override
+  public Collection<PsiReference> findReferencesToHighlight(@NotNull PsiElement target, @NotNull SearchScope searchScope) {
+    Collection<PsiReference> defaultUsages = super.findReferencesToHighlight(target, searchScope);
+    if (target instanceof PsiMethod) {
+      PsiMethod method = (PsiMethod) target;
+      String name = method.getName();
+      List<RobotKeywordEl> robotKeywordEls = RobotPsiUtil.findKeywordUsagesByName(name, method.getProject());
+      for (RobotKeywordEl keyword: robotKeywordEls) {
+        defaultUsages.add(new RobotKeywordRef(keyword));
+      }
+    }
+    return defaultUsages;
+  }*/
 
 }

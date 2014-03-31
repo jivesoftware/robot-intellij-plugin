@@ -31,7 +31,8 @@ import static com.jivesoftware.robot.intellij.plugin.parser.RobotTypes.*;
 %unicode
 %function advance
 %type IElementType
-%eof{ return;
+%eof{
+return;
 %eof}
 
 %line
@@ -64,7 +65,9 @@ import static com.jivesoftware.robot.intellij.plugin.parser.RobotTypes.*;
 /* main character classes */
 LineTerminator = \r|\n|\r\n
 InputCharacter = [^\r\n]
-KeywordArgumentChar = [^\r\n\t\$ ]
+/* Keyword arguments and test case headers use the same chars.*/
+KeywordArgumentChar = [^\r\n\t\# ]
+TestCaseHeaderChar = [^\r\n\t\# ]
 
 ColumnSep = "\t"+ | [ \t] [ \t]+
 SingleSpace = " "
@@ -82,7 +85,8 @@ RobotWord = [a-zA-Z][a-zA-Z0-9]*
 
 Identifier = [a-zA-Z_][a-zA-Z0-9_]*
 
-TestCaseHeader = {Identifier} ({SingleSpace} {Identifier})*
+TestCaseHeaderWord = {TestCaseHeaderChar}+
+TestCaseHeader = {TestCaseHeaderWord} ({SingleSpace} {TestCaseHeaderWord})*
 
 KeywordArgumentWord = {KeywordArgumentChar}+
 KeywordArgument = ({KeywordArgumentWord} ({SingleSpace} {KeywordArgumentWord})*) | {Variable}
@@ -137,8 +141,6 @@ NumberLiteral = {DecIntegerLiteral} | {FloatLiteral}
     {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }
     {SingleSpace}       { return next(SINGLE_SPACE_TOKEN); }
 
-    .                   { return next(BAD_CHAR_TOKEN); }
-
     <<EOF>>             { return null; }
 }
 
@@ -167,8 +169,6 @@ NumberLiteral = {DecIntegerLiteral} | {FloatLiteral}
      {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }
      {SingleSpace}       { return next(SINGLE_SPACE_TOKEN); }
 
-     .                   { return next(BAD_CHAR_TOKEN); }
-
      <<EOF>>             { yybegin(YYINITIAL); }
 }
 
@@ -190,8 +190,6 @@ NumberLiteral = {DecIntegerLiteral} | {FloatLiteral}
      {KeywordArgument}   { return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }
      {SingleSpace}       { return next(SINGLE_SPACE_TOKEN); }
-
-     .                   { return next(BAD_CHAR_TOKEN); }
 
      <<EOF>>             { yybegin(YYINITIAL); }
 }

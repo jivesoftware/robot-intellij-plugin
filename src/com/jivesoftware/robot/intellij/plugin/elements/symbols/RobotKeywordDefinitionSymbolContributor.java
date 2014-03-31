@@ -25,7 +25,7 @@ public class RobotKeywordDefinitionSymbolContributor implements ChooseByNameCont
   @NotNull
   @Override
   public NavigationItem[] getItemsByName(String name, String pattern, Project project, boolean includeNonProjectItems) {
-    List<RobotKeywordDefEl> keywordDefs = RobotPsiUtil.getKeywordDefsByName(name, pattern, project);
+    List<RobotKeywordDefEl> keywordDefs = RobotPsiUtil.findKeywordDefsByName(name, project);
     return keywordDefs.toArray(new NavigationItem[keywordDefs.size()]);
   }
 }

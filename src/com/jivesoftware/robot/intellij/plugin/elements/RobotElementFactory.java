@@ -25,11 +25,9 @@ public class RobotElementFactory {
   public static RobotKeywordDefEl createKeywordDef(Project project, String text) {
     String start = "*** Keywords ***\n";
     RobotPsiFile file = createFile(project, start + text);
-    PsiElement[] children = file.getChildren();
-    for (PsiElement el: children) {
-      if (el instanceof RobotKeywordDefEl) {
-        return (RobotKeywordDefEl) el;
-      }
+    PsiElement child = file.getLastChild();
+      if (child instanceof RobotKeywordDefEl) {
+        return (RobotKeywordDefEl) child;
     }
     return null;
   }

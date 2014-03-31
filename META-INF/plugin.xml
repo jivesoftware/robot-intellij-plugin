@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.jivesoftware.robot.intellij.plugin</id>
     <name>Robot Plugin</name>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <vendor email="charles.capps@jivesoftware.com" url="http://www.jiveosftware.com">Jive Software</vendor>
 
     <description><![CDATA[
@@ -44,12 +44,17 @@
         <gotoSymbolContributor implementation="com.jivesoftware.robot.intellij.plugin.elements.symbols.RobotKeywordDefinitionSymbolContributor"/>
         <lang.commenter language="RobotTestFile" implementationClass="com.jivesoftware.robot.intellij.plugin.lang.RobotCommenter"/>
 
+        <!-- This enables Find Usages of Robot Keywords defined in Robot -->
         <lang.findUsagesProvider language="RobotTestFile"
                                  implementationClass="com.jivesoftware.robot.intellij.plugin.elements.usages.RobotKeywordUsagesProvider"/>
-        <lang.findUsagesProvider language="JAVA"
-                                 implementationClass="com.jivesoftware.robot.intellij.plugin.elements.usages.JavaRobotKeywordUsagesProvider"/>
-        <!-- Still working on getting Find usages to work on Java methods. This doesn't seem to fix it, so commenting out for now. -->
-       <!-- <findUsagesHandlerFactory implementation="com.jivesoftware.robot.intellij.plugin.elements.usages.RobotFindUsagesHandlerFactory"/>-->
+
+        <!-- This enables Find Usages of a Java method that is a Robot Keyword definition -->
+        <customUsageSearcher implementation="com.jivesoftware.robot.intellij.plugin.elements.usages.RobotCustomUsagesSearcher" />
+
+        <!-- This doesn't do much yet, but will provide find usages highlighting, etc. -->
+        <findUsagesHandlerFactory implementation="com.jivesoftware.robot.intellij.plugin.elements.usages.RobotFindUsagesHandlerFactory"/>
+
+        <!-- Enables auto-completion of robot keywords -->
         <completion.contributor language="RobotTestFile"
                                 implementationClass="com.jivesoftware.robot.intellij.plugin.elements.completion.RobotCompletionContributor"/>
     </extensions>

@@ -4,8 +4,7 @@ import com.intellij.find.findUsages.FindUsagesHandler;
 import com.intellij.find.findUsages.FindUsagesHandlerFactory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifierList;
-import com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordDefinitionFinder;
+import com.jivesoftware.robot.intellij.plugin.elements.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDefEl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,11 +15,7 @@ public class RobotFindUsagesHandlerFactory extends FindUsagesHandlerFactory {
     if (element instanceof RobotKeywordDefEl) {
       return true;
     }
-    if (!(element instanceof PsiMethod)) {
-      return false;
-    }
-    PsiModifierList psiModifierList = ((PsiMethod) element).getModifierList();
-    return psiModifierList.findAnnotation(RobotKeywordDefinitionFinder.ROBOT_KEYWORD_ANNOTATION) != null;
+    return RobotPsiUtil.isJavaRobotKeyword(element);
   }
 
   @Nullable
@@ -33,4 +28,5 @@ public class RobotFindUsagesHandlerFactory extends FindUsagesHandlerFactory {
     }
     return null;
   }
+
 }

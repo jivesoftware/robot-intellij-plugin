@@ -3,11 +3,15 @@ package com.jivesoftware.robot.intellij.plugin.elements;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.indexing.FileBasedIndex;
+import com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordDefinitionFinder;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotFileType;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDefEl;
@@ -17,6 +21,15 @@ import java.util.Collection;
 import java.util.List;
 
 public class RobotPsiUtil {
+
+  public static boolean isJavaRobotKeyword(PsiElement element) {
+    if (!(element instanceof PsiMethod)) {
+      return false;
+    }
+    PsiModifierList psiModifierList = ((PsiMethod)element).getModifierList();
+    return psiModifierList.findAnnotation(RobotKeywordDefinitionFinder.ROBOT_KEYWORD_ANNOTATION) != null;
+  }
+
   public static String robotKeywordToMethodFast(String keyword) {
     String noSpaces = keyword.replace(" ", "");
     if (noSpaces.isEmpty()) {
@@ -29,7 +42,7 @@ public class RobotPsiUtil {
     StringBuilder sb = new StringBuilder();
     int prev = 0;
     int current;
-    for (int i = 0; i <= method.length(); i++) {
+    for (int i = 1; i <= method.length(); i++) {
       Character c;
       if (i < method.length()) {
         c = method.charAt(i);
@@ -64,7 +77,7 @@ public class RobotPsiUtil {
     return results;
   }
 
-  public static List<RobotKeywordEl> getKeywordUsagesByName(String name, Project project) {
+  public static List<RobotKeywordEl> findKeywordUsagesByName(String name, Project project) {
     Collection<VirtualFile> robotFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, RobotFileType.INSTANCE,
                                                                                          GlobalSearchScope.projectScope(project));
     List<RobotKeywordEl> results = Lists.newArrayList();
@@ -75,7 +88,7 @@ public class RobotPsiUtil {
     return results;
   }
 
-  public static List<RobotKeywordDefEl> getKeywordDefsByName(String name, String pattern, Project project) {
+  public static List<RobotKeywordDefEl> findKeywordDefsByName(String name, Project project) {
     Collection<VirtualFile> robotFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, RobotFileType.INSTANCE,
                                                                                          GlobalSearchScope.projectScope(project));
     List<RobotKeywordDefEl> results = Lists.newArrayList();
