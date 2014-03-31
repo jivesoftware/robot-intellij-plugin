@@ -11,18 +11,14 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See bin/robot-intellij-plugin for the newest version if you just want to try it out!
 </p>
 
-Version 1.0.1
--------------
+<h3>Version 1.0.3</h3>
 <ul>
-    <li>Added ability to go to definition of a Robot keyword that's defined in Java or a robot file.</li>
-    <li>Fixed some bugs in tokenizing. Robot keyword definitions are now parsed separately from robot keywords.</li>
-    <li>Refactored to use a BNF file and generate the parser automatically. Trivial language at the moment, don't require much of a tree.</li>
-    <li>Improved performance by only searching for java keywords in the current module. </li>
+    <li>You can find usages of Java-defined Robot Keywords. It will find all usages in Robot files + Java</li>
+    <li>(Hopefully) fixed a bug where not all tokens were parsed in a Robot file by the words scanner for indexing.</li>
+    <li>Added plugin JAR to the bin folder for easy download if you don't want to setup your environment for plugin development and compile it.</li>
 </ul>
 
-
-Version 1.0.2
--------------
+<h3>Version 1.0.2</h3>
 <ul>
     <li>You can find usages of Robot keywords defined in Robot files.</li>
     <li>Autocomplete works to suggest Robot keywords as you type---and it includes robot keywords from Java methods or Robot files</li>
@@ -33,12 +29,17 @@ Version 1.0.2
     <li>Autocomplete robot tags as well.</li>
 </ul>
 
-Version 1.0.3
--------------
+<h3>Version 1.0.1</h3>
 <ul>
-    <li>You can find usages of Java-defined Robot Keywords. It will find all usages in Robot files + Java</li>
-    <li>(Hopefully) fixed a bug where not all tokens were parsed in a Robot file by the words scanner for indexing.</li>
-    <li>Added plugin JAR to the bin folder for easy download if you don't want to setup your environment for plugin development and compile it.</li>
+    <li>Added ability to go to definition of a Robot keyword that's defined in Java or a robot file.</li>
+    <li>Fixed some bugs in tokenizing. Robot keyword definitions are now parsed separately from robot keywords.</li>
+    <li>Refactored to use a BNF file and generate the parser automatically. Trivial language at the moment, don't require much of a tree.</li>
+    <li>Improved performance by only searching for java keywords in the current module. </li>
 </ul>
+
+
+
+
+
 
 
