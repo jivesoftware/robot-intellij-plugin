@@ -8,6 +8,7 @@ robot-intellij-plugin
 
 <p>
 IntelliJ Plugin to enable syntax highlighting and other features in Robot text files. Specifically designed with Java integration in mind.
+See bin/robot-intellij-plugin for the newest version if you just want to try it out!
 </p>
 
 Version 1.0.1
@@ -37,6 +38,7 @@ Version 1.0.3
 <ul>
     <li>You can find usages of Java-defined Robot Keywords. It will find all usages in Robot files + Java</li>
     <li>(Hopefully) fixed a bug where not all tokens were parsed in a Robot file by the words scanner for indexing.</li>
+    <li>Added plugin JAR to the bin folder for easy download if you don't want to setup your environment for plugin development and compile it.</li>
 </ul>
 
 
