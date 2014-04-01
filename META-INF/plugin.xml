@@ -66,7 +66,7 @@
         <customUsageSearcher implementation="com.jivesoftware.robot.intellij.plugin.elements.usages.RobotCustomUsagesSearcher" />
 
         <!-- This doesn't do much yet, but will provide find usages highlighting, etc. -->
-        <findUsagesHandlerFactory implementation="com.jivesoftware.robot.intellij.plugin.elements.usages.RobotFindUsagesHandlerFactory"/>
+       <!-- <findUsagesHandlerFactory implementation="com.jivesoftware.robot.intellij.plugin.elements.usages.RobotFindUsagesHandlerFactory"/>-->
 
         <!-- Enables auto-completion of robot keywords -->
         <completion.contributor language="RobotTestFile"

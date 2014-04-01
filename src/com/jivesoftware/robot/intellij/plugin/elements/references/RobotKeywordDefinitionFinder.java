@@ -68,14 +68,19 @@ public class RobotKeywordDefinitionFinder implements Processor<PsiFile> {
         searchWord = methodText;
       }
       GlobalSearchScope javaFilesInProject = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.projectScope(project), JavaFileType.INSTANCE);
-      PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWord(searchWord, javaFilesInProject,
-                                                                           this,
-                                                                           false);
+      PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWord(searchWord, javaFilesInProject, this, false);
     }
 
     //Find Robot keyword definitions from robot files
     if (scope == SCOPE.ALL || scope == SCOPE.ROBOT_FILES) {
-      findKeywordDefInRobotFiles(startPsiFile, results);
+      List<RobotKeywordDefEl> robotKeywordDefEls;
+      if (StringUtils.isEmpty(searchTerm)) {
+        robotKeywordDefEls = RobotPsiUtil.findRobotKeywordDefs(project);
+      } else {
+        robotKeywordDefEls = RobotPsiUtil.findKeywordDefsByName(searchTerm, project);
+      }
+      results.addAll(robotKeywordDefEls);
+     // findKeywordDefInRobotFiles(startPsiFile, results);
     }
   }
 
