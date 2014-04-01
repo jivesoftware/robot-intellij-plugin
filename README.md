@@ -11,6 +11,11 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See bin/robot-intellij-plugin for the newest version if you just want to try it out!
 </p>
 
+<h3>Version 1.0.4</h3>
+    <ul>
+        <li>Fixed a bug where keywords defined within Robot would appear twice in autocomplete.</li>
+    </ul>
+
 <h3>Version 1.0.3</h3>
 <ul>
     <li>You can find usages of Java-defined Robot Keywords. It will find all usages in Robot files + Java</li>

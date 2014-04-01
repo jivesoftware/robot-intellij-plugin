@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.jivesoftware.robot.intellij.plugin</id>
     <name>Robot Plugin</name>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <vendor email="charles.capps@jivesoftware.com" url="http://www.jiveosftware.com">Jive Software</vendor>
 
     <description><![CDATA[
@@ -10,6 +10,10 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <h3>Version 1.0.4</h3>
+    <ul>
+        <li>Fixed a bug where keywords defined within Robot would appear twice in autocomplete.</li>
+    </ul>
     <h3>Version 1.0.3</h3>
     <ul>
         <li>You can find usages of Java-defined Robot Keywords. It will find all usages in Robot files + Java</li>
