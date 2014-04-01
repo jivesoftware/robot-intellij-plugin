@@ -5,7 +5,8 @@
     <vendor email="charles.capps@jivesoftware.com" url="http://www.jiveosftware.com">Jive Software</vendor>
 
     <description><![CDATA[
-      Robot Framework Plugin to provide integration with Robot keywords implemented in Java.<br>
+      Robot Framework Plugin to provide integration with Robot Test Case Files. Specifically focues on providing integration with
+      Robot keywords implemented in Java that are in the same IntelliJ project as your Robot test case files (can be in a different module).<br>
       <em>by Charles Capps</em>
     ]]></description>
 
