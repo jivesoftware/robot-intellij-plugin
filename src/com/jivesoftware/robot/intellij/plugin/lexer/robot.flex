@@ -31,14 +31,12 @@ import static com.jivesoftware.robot.intellij.plugin.parser.RobotTypes.*;
 %unicode
 %function advance
 %type IElementType
-%eof{
-return;
+%eof{ return;
 %eof}
 
 %line
 %column
 %char
-%debug
 
 %{
   int yyline, yycolumn, yychar;
@@ -50,6 +48,9 @@ return;
 
   private IElementType next(IElementType toReturn) {
     startLine = false;
+    if (toReturn == BAD_CHAR_TOKEN) {
+        System.out.println(String.format("Bad char %s at line %d col %d", yytext(), yyline, yycolumn));
+    }
     return toReturn;
   }
   private IElementType newLine() {
@@ -140,8 +141,8 @@ NumberLiteral = {DecIntegerLiteral} | {FloatLiteral}
                             return next(ROBOT_KEYWORD_ARG_TOKEN); }
     {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }
     {SingleSpace}       { return next(SINGLE_SPACE_TOKEN); }
+    .                   { return next(BAD_CHAR_TOKEN);}
 
-    <<EOF>>             { return null; }
 }
 
 
@@ -169,7 +170,8 @@ NumberLiteral = {DecIntegerLiteral} | {FloatLiteral}
      {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }
      {SingleSpace}       { return next(SINGLE_SPACE_TOKEN); }
 
-     <<EOF>>             { yybegin(YYINITIAL); }
+     .                   { return next(BAD_CHAR_TOKEN);}
+
 }
 
 <KEYWORDS> {
@@ -191,8 +193,8 @@ NumberLiteral = {DecIntegerLiteral} | {FloatLiteral}
      {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }
      {SingleSpace}       { return next(SINGLE_SPACE_TOKEN); }
 
-     <<EOF>>             { yybegin(YYINITIAL); }
+     .                   { return next(BAD_CHAR_TOKEN);}
+
 }
 
-/* error fallback */
-[^]                              { throw new Error("Illegal text: <" + yytext() + ">"); }
+.                   { return next(BAD_CHAR_TOKEN);}

@@ -9,33 +9,34 @@ import com.intellij.psi.tree.TokenSet;
 import com.jivesoftware.robot.intellij.plugin.lexer.RobotScannerAdapter;
 import com.jivesoftware.robot.intellij.plugin.parser.RobotTypes;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDefEl;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordEl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class RobotKeywordUsagesProvider implements FindUsagesProvider {
-  private static final DefaultWordsScanner WORDS_SCANNER = new DefaultWordsScanner(new RobotScannerAdapter(),
-                                                                                   TokenSet.create(RobotTypes.ROBOT_KEYWORD_DEF_TOKEN,
-                                                                                                   RobotTypes.ROBOT_KEYWORD_TOKEN,
-                                                                                                   RobotTypes.ASSIGNMENT_TOKEN,
-                                                                                                   RobotTypes.VARIABLE_TOKEN,
-                                                                                                   RobotTypes.KEYWORDS_TABLE_HEADING_TOKEN,
-                                                                                                   RobotTypes.TEST_CASES_TABLE_HEADING_TOKEN,
-                                                                                                   RobotTypes.TABLE_HEADING_TOKEN,
-                                                                                                   RobotTypes.META_INFO_TOKEN,
-                                                                                                   RobotTypes.TEST_CASE_HEADER_TOKEN,
-                                                                                                   RobotTypes.TAG_TOKEN),
-                                                                                   TokenSet.create(RobotTypes.COMMENT_TOKEN,
-                                                                                                   RobotTypes.DOCUMENTATION_TOKEN),
-                                                                                   TokenSet.create(RobotTypes.NUMBER_LITERAL_TOKEN,
-                                                                                                   RobotTypes.ROBOT_KEYWORD_ARG_TOKEN),
-                                                                                   TokenSet.create(RobotTypes.COLUMN_SEP_TOKEN,
-                                                                                                   RobotTypes.BAD_CHAR_TOKEN,
-                                                                                                   RobotTypes.SINGLE_SPACE_TOKEN,
-                                                                                                   RobotTypes.NEWLINE_TOKEN));
+  public static final TokenSet IDENTIFIERS = TokenSet.create(RobotTypes.ROBOT_KEYWORD_DEF_TOKEN,
+                                                             RobotTypes.ROBOT_KEYWORD_TOKEN,
+                                                             RobotTypes.ASSIGNMENT_TOKEN,
+                                                             RobotTypes.VARIABLE_TOKEN,
+                                                             RobotTypes.KEYWORDS_TABLE_HEADING_TOKEN,
+                                                             RobotTypes.TEST_CASES_TABLE_HEADING_TOKEN,
+                                                             RobotTypes.TABLE_HEADING_TOKEN,
+                                                             RobotTypes.META_INFO_TOKEN,
+                                                             RobotTypes.TEST_CASE_HEADER_TOKEN,
+                                                             RobotTypes.TAG_TOKEN);
+  public static final TokenSet COMMENTS = TokenSet.create(RobotTypes.COMMENT_TOKEN,
+                                                          RobotTypes.DOCUMENTATION_TOKEN);
+  public static final TokenSet LITERALS = TokenSet.create(RobotTypes.NUMBER_LITERAL_TOKEN,
+                                                          RobotTypes.ROBOT_KEYWORD_ARG_TOKEN);
+  public static final TokenSet IGNORED = TokenSet.create(RobotTypes.COLUMN_SEP_TOKEN,
+                                                         RobotTypes.BAD_CHAR_TOKEN,
+                                                         RobotTypes.SINGLE_SPACE_TOKEN,
+                                                         RobotTypes.NEWLINE_TOKEN);
+
   @Nullable
   @Override
   public WordsScanner getWordsScanner() {
-    return WORDS_SCANNER;
+    return new DefaultWordsScanner(new RobotScannerAdapter(), IDENTIFIERS, COMMENTS, LITERALS, IGNORED);
   }
 
   @Override
@@ -54,6 +55,8 @@ public class RobotKeywordUsagesProvider implements FindUsagesProvider {
   public String getType(@NotNull PsiElement element) {
     if (element instanceof RobotKeywordDefEl) {
       return "Robot Keyword Definition";
+    } else if (element instanceof RobotKeywordEl) {
+      return "Robot Keyword Usage";
     }
     return "";
   }

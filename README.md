@@ -11,6 +11,15 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See bin/robot-intellij-plugin for the newest version if you just want to try it out!
 </p>
 
+<h3>Version 1.0.5</h3>
+    <ul>
+	<li>Fixed a major bug that apparently was causing many features to not work for Mac, because Robot files were never indexed. In Ubuntu, I didn't notice any
+            problems. The RobotKeywordUsagesProvider has to return a new WordsScanner each time getWordsScanner() is invoked, unless
+            the given scanner is thread-safe.
+        </li>
+        <li>Yay, no more error messages in the event log!</li>
+        <li>Added the .iml file to git, so it's easier to start working on the project.</li>
+    </ul>
 <h3>Version 1.0.4</h3>
     <ul>
         <li>Fixed a bug where keywords defined within Robot would appear twice in autocomplete.</li>
