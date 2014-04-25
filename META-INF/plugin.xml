@@ -1,16 +1,33 @@
 <idea-plugin version="2">
     <id>com.jivesoftware.robot.intellij.plugin</id>
     <name>Robot Plugin</name>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <vendor email="charles.capps@jivesoftware.com" url="http://www.jiveosftware.com">Jive Software</vendor>
 
     <description><![CDATA[
-      Robot Framework Plugin to provide integration with Robot Test Case Files. Specifically focues on providing integration with
+      Robot Framework Plugin to provide integration with Robot Test Case Files. Specifically focuses on providing integration with
       Robot keywords implemented in Java that are in the same IntelliJ project as your Robot test case files (can be in a different module).<br>
+      Provides support for:
+      <ul>
+          <li>Syntax Highlighting</li>
+          <li>Go to declaration of a Keyword from the point of use. Jumps to Java or Robot file keyword definition.</li>
+          <li>Find usages of Keywords defined in Java or Robot files</li>
+          <li>Autocomplete keywords and test case tags</li>
+          <li>Find keywords by symbol name (ctrl+shift+alt+n) </li>
+          <li>Create a Robot test case file from a template</li>
+          <li>...and much more</li>
+      </ul>
       <em>by Charles Capps</em>
     ]]></description>
 
     <change-notes><![CDATA[
+    <h3>Version 1.0.6</h3>
+    <ul>
+    <li>Added templates so you can create a Robot Test Case File or Robot Keywords File from the New menu in the project explorer.</li>
+    <li>Explicitly declaring dependencies on "lang" and "java" modules.</li>
+    <li>Hoping above change will cause this plugin to be suggested when you open a Robot file and it says "Plugins supporting files with *.robot extension are found".</li>
+    </ul>
+
     <h3>Version 1.0.5</h3>
     <ul>
 	<li>Fixed a major bug that apparently was causing many features to not work for Mac, because Robot files were never indexed. In Ubuntu, I didn't notice any
@@ -58,9 +75,8 @@
 
     <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
          on how to target different products -->
-    <!-- uncomment to enable plugin in all products
     <depends>com.intellij.modules.lang</depends>
-    -->
+    <depends>com.intellij.modules.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <fileTypeFactory implementation="com.jivesoftware.robot.intellij.plugin.lang.RobotFileTypeFactory"/>
@@ -85,6 +101,10 @@
         <!-- Enables auto-completion of robot keywords -->
         <completion.contributor language="RobotTestFile"
                                 implementationClass="com.jivesoftware.robot.intellij.plugin.elements.completion.RobotCompletionContributor"/>
+
+        <internalFileTemplate name="fileTemplates.internal.RobotTestCaseFile"/>
+        <internalFileTemplate name="fileTemplates.internal.RobotKeywordsFile"/>
+
     </extensions>
 
     <application-components>
@@ -96,7 +116,11 @@
     </project-components>
 
     <actions>
-        <!-- Add your actions here -->
+        <action id="RobotPlugin.NewFile" class="com.jivesoftware.robot.intellij.plugin.actions.NewRobotFileAction" text="Robot File"
+                description="Create a new Robot File">
+            <add-to-group group-id="NewXml" anchor="last"/>
+        </action>
+
     </actions>
 
 </idea-plugin>
