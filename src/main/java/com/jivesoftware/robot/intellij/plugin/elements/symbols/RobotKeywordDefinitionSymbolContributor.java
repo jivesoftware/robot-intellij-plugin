@@ -5,7 +5,7 @@ import com.intellij.navigation.ChooseByNameContributor;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.project.Project;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotPsiUtil;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDefEl;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDef;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -15,8 +15,8 @@ public class RobotKeywordDefinitionSymbolContributor implements ChooseByNameCont
   @Override
   public String[] getNames(Project project, boolean includeNonProjectItems) {
     List<String> names = Lists.newArrayList();
-    List<RobotKeywordDefEl> keywordDefs = RobotPsiUtil.findRobotKeywordDefs(project);
-    for (RobotKeywordDefEl keywordDef: keywordDefs) {
+    List<RobotKeywordDef> keywordDefs = RobotPsiUtil.findRobotKeywordDefs(project);
+    for (RobotKeywordDef keywordDef: keywordDefs) {
       names.add(keywordDef.getText());
     }
     return names.toArray(new String[names.size()]);
@@ -25,7 +25,7 @@ public class RobotKeywordDefinitionSymbolContributor implements ChooseByNameCont
   @NotNull
   @Override
   public NavigationItem[] getItemsByName(String name, String pattern, Project project, boolean includeNonProjectItems) {
-    List<RobotKeywordDefEl> keywordDefs = RobotPsiUtil.findKeywordDefsByName(name, project);
+    List<RobotKeywordDef> keywordDefs = RobotPsiUtil.findKeywordDefsByName(name, project);
     return keywordDefs.toArray(new NavigationItem[keywordDefs.size()]);
   }
 }

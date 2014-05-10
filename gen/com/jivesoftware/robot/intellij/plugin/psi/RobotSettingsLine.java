@@ -7,10 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface RobotSettingsLine extends PsiElement {
 
-  @NotNull
-  RobotSetting getSetting();
+  @Nullable
+  RobotEmptyLine getEmptyLine();
 
-  @NotNull
-  List<RobotSettingArg> getSettingArgList();
+  @Nullable
+  RobotSetting getSetting();
 
 }

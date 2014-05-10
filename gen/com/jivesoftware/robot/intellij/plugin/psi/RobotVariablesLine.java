@@ -7,4 +7,13 @@ import com.intellij.psi.PsiElement;
 
 public interface RobotVariablesLine extends PsiElement {
 
+  @Nullable
+  RobotArrayAssignable getArrayAssignable();
+
+  @Nullable
+  RobotAssignable getAssignable();
+
+  @Nullable
+  RobotEmptyLine getEmptyLine();
+
 }

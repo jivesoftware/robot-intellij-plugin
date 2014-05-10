@@ -5,12 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotTestSettingLine extends PsiElement {
+public interface RobotAssignable extends PsiElement {
 
   @Nullable
-  RobotEmptyLine getEmptyLine();
+  RobotKeywordArg getKeywordArg();
 
   @Nullable
-  RobotTestSetting getTestSetting();
+  RobotKeywordInvocation getKeywordInvocation();
 
 }

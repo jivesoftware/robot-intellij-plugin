@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class RobotParserDefinition implements ParserDefinition {
 
-  public static final TokenSet WHITE_SPACES = TokenSet.create(RobotTypes.SINGLE_SPACE_TOKEN, RobotTypes.COLUMN_SEP_TOKEN, RobotTypes.NEWLINE_TOKEN);
+  public static final TokenSet WHITE_SPACES = TokenSet.create(RobotTypes.WHITESPACE_TOKEN);
   public static final TokenSet COMMENTS = TokenSet.create(RobotTypes.COMMENT_TOKEN, RobotTypes.DOCUMENTATION_TOKEN);
   public static final TokenSet STRING_LITERALS = TokenSet.create(RobotTypes.ROBOT_KEYWORD_ARG_TOKEN);
 

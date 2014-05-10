@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface RobotKeywordsTable extends PsiElement {
 
   @NotNull
+  List<RobotEmptyLine> getEmptyLineList();
+
+  @NotNull
   RobotKeywordsTableHeading getKeywordsTableHeading();
 
   @NotNull

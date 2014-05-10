@@ -25,6 +25,12 @@ public class RobotKeywordsTableImpl extends ASTWrapperPsiElement implements Robo
 
   @Override
   @NotNull
+  public List<RobotEmptyLine> getEmptyLineList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotEmptyLine.class);
+  }
+
+  @Override
+  @NotNull
   public RobotKeywordsTableHeading getKeywordsTableHeading() {
     return findNotNullChildByClass(RobotKeywordsTableHeading.class);
   }

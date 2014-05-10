@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface RobotKeywordLine extends PsiElement {
 
   @Nullable
+  RobotEmptyLine getEmptyLine();
+
+  @Nullable
   RobotKeywordInvocation getKeywordInvocation();
 
   @Nullable

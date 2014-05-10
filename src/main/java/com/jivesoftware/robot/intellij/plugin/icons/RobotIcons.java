@@ -23,7 +23,7 @@ import javax.swing.*;
 /**
  * Holder class for icons used by robot-intellij-plugin
  */
-public interface RobotIcons {
+public class RobotIcons {
 
     public static final Icon FILE = IconLoader.getIcon("/com/jivesoftware/robot/intellij/plugin/icons/robot-small.png");
 

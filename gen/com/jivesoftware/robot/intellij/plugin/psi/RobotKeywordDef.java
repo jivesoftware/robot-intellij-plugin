@@ -9,10 +9,13 @@ import com.intellij.navigation.ItemPresentation;
 
 public interface RobotKeywordDef extends RobotNamedElement {
 
+  @Nullable
+  @NonNls
   String getName();
 
   PsiElement setName(String newName);
 
+  @Nullable
   PsiElement getNameIdentifier();
 
   ItemPresentation getPresentation();

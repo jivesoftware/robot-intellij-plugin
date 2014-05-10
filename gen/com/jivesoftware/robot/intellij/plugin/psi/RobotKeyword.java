@@ -9,14 +9,19 @@ import com.intellij.psi.PsiReference;
 
 public interface RobotKeyword extends RobotNamedElement {
 
+  @Nullable
+  @NonNls
   String getName();
 
   PsiElement setName(String newName);
 
+  @Nullable
   PsiElement getNameIdentifier();
 
+  @Nullable
   PsiReference getReference();
 
+  @NotNull
   PsiReference[] getReferences();
 
 }

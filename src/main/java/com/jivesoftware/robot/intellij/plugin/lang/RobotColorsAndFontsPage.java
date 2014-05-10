@@ -58,14 +58,13 @@ public class RobotColorsAndFontsPage implements ColorSettingsPage {
           new AttributesDescriptor("Robot Variable", RobotSyntaxHighlighter.ROBOT_VARIABLE_KEY),
           new AttributesDescriptor("Robot Variable Assignment", RobotSyntaxHighlighter.ROBOT_ASSIGNMENT_KEY),
           new AttributesDescriptor("Robot Comment", RobotSyntaxHighlighter.ROBOT_COMMENT_KEY),
-          new AttributesDescriptor("Number Literal", RobotSyntaxHighlighter.ROBOT_NUMBER_LITERAL_KEY),
           new AttributesDescriptor("Keyword argument", RobotSyntaxHighlighter.ROBOT_KEYWORD_ARG_KEY),
-          new AttributesDescriptor("Table Settings", RobotSyntaxHighlighter.ROBOT_META_INFO_KEY),
+          new AttributesDescriptor("Table Settings", RobotSyntaxHighlighter.ROBOT_TABLE_SETTING_KEY),
           new AttributesDescriptor("Tags", RobotSyntaxHighlighter.ROBOT_TAG_KEY),
           new AttributesDescriptor("Documentation", RobotSyntaxHighlighter.ROBOT_DOCS_KEY),
           new AttributesDescriptor("Column Separator", RobotSyntaxHighlighter.ROBOT_COL_SEP_KEY),
           new AttributesDescriptor("Robot Keyword Definition", RobotSyntaxHighlighter.ROBOT_KEYWORD_DEF_KEY),
-          new AttributesDescriptor("Error", RobotSyntaxHighlighter.ROBOT_BAD_CHAR_KEY)
+          new AttributesDescriptor("Error", RobotSyntaxHighlighter.ROBOT_BAD_SYNTAX_KEY)
       };
 
   @Override
@@ -88,10 +87,10 @@ public class RobotColorsAndFontsPage implements ColorSettingsPage {
         "***Settings***\n" +
             "Resource                                   ../CommonResource.txt\n" +
             "\n" +
-            "***Variables***\n" +
+        "***Variables***\n" +
             "${announcementDetails}=                    Super important announcement from Robot!\n" +
             "\n" +
-            "***Test Cases***\n" +
+        "***Test Cases***\n" +
             "Create An Announcement\n" +
             "  [Documentation]                          Written by Gandalf the Gray\n" +
             "  [tags]                                   announcement    Pri0       \n" +

@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface RobotTestCase extends PsiElement {
 
   @NotNull
+  List<RobotTestcaseLine> getTestcaseLineList();
+
+  @NotNull
   RobotTestCaseHeader getTestCaseHeader();
 
   @NotNull

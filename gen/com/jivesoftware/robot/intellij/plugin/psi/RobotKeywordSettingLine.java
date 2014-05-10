@@ -7,7 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface RobotKeywordSettingLine extends PsiElement {
 
-  @NotNull
+  @Nullable
+  RobotEmptyLine getEmptyLine();
+
+  @Nullable
   RobotKeywordSetting getKeywordSetting();
 
 }

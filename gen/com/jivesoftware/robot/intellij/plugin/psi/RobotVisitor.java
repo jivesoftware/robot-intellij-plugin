@@ -16,7 +16,23 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitArrayAssignable(@NotNull RobotArrayAssignable o) {
+    visitPsiElement(o);
+  }
+
+  public void visitAssignable(@NotNull RobotAssignable o) {
+    visitPsiElement(o);
+  }
+
+  public void visitComment(@NotNull RobotComment o) {
+    visitPsiElement(o);
+  }
+
   public void visitDocumentationSetting(@NotNull RobotDocumentationSetting o) {
+    visitPsiElement(o);
+  }
+
+  public void visitEmptyLine(@NotNull RobotEmptyLine o) {
     visitPsiElement(o);
   }
 
@@ -72,6 +88,10 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitOther(@NotNull RobotOther o) {
+    visitPsiElement(o);
+  }
+
   public void visitReturnLine(@NotNull RobotReturnLine o) {
     visitPsiElement(o);
   }
@@ -100,10 +120,6 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitSettingArg(@NotNull RobotSettingArg o) {
-    visitPsiElement(o);
-  }
-
   public void visitSetupSetting(@NotNull RobotSetupSetting o) {
     visitPsiElement(o);
   }
@@ -121,6 +137,10 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitTemplateSetting(@NotNull RobotTemplateSetting o) {
+    visitPsiElement(o);
+  }
+
+  public void visitTestcaseLine(@NotNull RobotTestcaseLine o) {
     visitPsiElement(o);
   }
 

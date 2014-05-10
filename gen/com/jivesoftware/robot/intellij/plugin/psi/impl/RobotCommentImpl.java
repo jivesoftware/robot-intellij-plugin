@@ -12,14 +12,14 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotErrorElImpl extends ASTWrapperPsiElement implements RobotErrorEl {
+public class RobotCommentImpl extends ASTWrapperPsiElement implements RobotComment {
 
-  public RobotErrorElImpl(ASTNode node) {
+  public RobotCommentImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitErrorEl(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitComment(this);
     else super.accept(visitor);
   }
 

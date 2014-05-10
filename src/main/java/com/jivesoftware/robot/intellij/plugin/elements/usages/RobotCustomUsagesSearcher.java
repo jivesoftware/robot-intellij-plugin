@@ -16,7 +16,7 @@ import com.intellij.util.CollectionQuery;
 import com.intellij.util.Processor;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordRef;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordEl;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -52,11 +52,11 @@ public class RobotCustomUsagesSearcher extends CustomUsageSearcher {
         return;
       }
       String name = methodToFindUsages.getName();
-      List<RobotKeywordEl> robotKeywords = RobotPsiUtil.findKeywordUsagesByName(name, methodToFindUsages.getProject());
-      for (RobotKeywordEl keywordEl: robotKeywords) {
-        PsiReference ref = new RobotKeywordRef(keywordEl);
+      List<RobotKeyword> robotKeywords = RobotPsiUtil.findKeywordUsagesByName(name, methodToFindUsages.getProject());
+      for (RobotKeyword keyword: robotKeywords) {
+        PsiReference ref = new RobotKeywordRef(keyword);
         TextRange rangeInElement = ref.getRangeInElement();
-        UsageInfo usageInfo = new UsageInfo(keywordEl, rangeInElement.getStartOffset(), rangeInElement.getEndOffset());
+        UsageInfo usageInfo = new UsageInfo(keyword, rangeInElement.getStartOffset(), rangeInElement.getEndOffset());
         usages.add(new UsageInfo2UsageAdapter(usageInfo));
       }
     }

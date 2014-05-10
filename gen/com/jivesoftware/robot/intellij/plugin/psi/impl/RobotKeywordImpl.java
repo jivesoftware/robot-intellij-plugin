@@ -8,12 +8,12 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.jivesoftware.robot.intellij.plugin.parser.RobotTypes.*;
-import com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElementImpl;
+import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 import com.intellij.psi.PsiReference;
 
-public class RobotKeywordImpl extends RobotNamedElementImpl implements RobotKeyword {
+public class RobotKeywordImpl extends ASTWrapperPsiElement implements RobotKeyword {
 
   public RobotKeywordImpl(ASTNode node) {
     super(node);
@@ -24,6 +24,8 @@ public class RobotKeywordImpl extends RobotNamedElementImpl implements RobotKeyw
     else super.accept(visitor);
   }
 
+  @Nullable
+  @NonNls
   public String getName() {
     return RobotImplUtil.getName(this);
   }
@@ -32,14 +34,17 @@ public class RobotKeywordImpl extends RobotNamedElementImpl implements RobotKeyw
     return RobotImplUtil.setName(this, newName);
   }
 
+  @Nullable
   public PsiElement getNameIdentifier() {
     return RobotImplUtil.getNameIdentifier(this);
   }
 
+  @Nullable
   public PsiReference getReference() {
     return RobotImplUtil.getReference(this);
   }
 
+  @NotNull
   public PsiReference[] getReferences() {
     return RobotImplUtil.getReferences(this);
   }

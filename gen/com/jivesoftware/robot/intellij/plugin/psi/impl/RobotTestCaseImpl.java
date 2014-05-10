@@ -25,6 +25,12 @@ public class RobotTestCaseImpl extends ASTWrapperPsiElement implements RobotTest
 
   @Override
   @NotNull
+  public List<RobotTestcaseLine> getTestcaseLineList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotTestcaseLine.class);
+  }
+
+  @Override
+  @NotNull
   public RobotTestCaseHeader getTestCaseHeader() {
     return findNotNullChildByClass(RobotTestCaseHeader.class);
   }

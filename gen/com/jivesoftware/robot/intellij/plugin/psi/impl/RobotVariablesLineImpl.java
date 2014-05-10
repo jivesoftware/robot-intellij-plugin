@@ -23,4 +23,22 @@ public class RobotVariablesLineImpl extends ASTWrapperPsiElement implements Robo
     else super.accept(visitor);
   }
 
+  @Override
+  @Nullable
+  public RobotArrayAssignable getArrayAssignable() {
+    return findChildByClass(RobotArrayAssignable.class);
+  }
+
+  @Override
+  @Nullable
+  public RobotAssignable getAssignable() {
+    return findChildByClass(RobotAssignable.class);
+  }
+
+  @Override
+  @Nullable
+  public RobotEmptyLine getEmptyLine() {
+    return findChildByClass(RobotEmptyLine.class);
+  }
+
 }

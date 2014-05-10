@@ -14,8 +14,8 @@ import com.intellij.util.indexing.FileBasedIndex;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordDefinitionFinder;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotFileType;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDefEl;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordEl;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDef;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
 
 import java.util.Collection;
 import java.util.List;
@@ -66,10 +66,10 @@ public class RobotPsiUtil {
     return sb.toString();
   }
 
-  public static List<RobotKeywordDefEl> findRobotKeywordDefs(Project project) {
+  public static List<RobotKeywordDef> findRobotKeywordDefs(Project project) {
     Collection<VirtualFile> robotFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, RobotFileType.INSTANCE,
                                                                            GlobalSearchScope.projectScope(project));
-    List<RobotKeywordDefEl> results = Lists.newArrayList();
+    List<RobotKeywordDef> results = Lists.newArrayList();
     for (VirtualFile f: robotFiles) {
       PsiFile psiFile = PsiManager.getInstance(project).findFile(f);
       findKeywordDefsInFile(psiFile, results);
@@ -77,10 +77,10 @@ public class RobotPsiUtil {
     return results;
   }
 
-  public static List<RobotKeywordEl> findKeywordUsagesByName(String name, Project project) {
+  public static List<RobotKeyword> findKeywordUsagesByName(String name, Project project) {
     Collection<VirtualFile> robotFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, RobotFileType.INSTANCE,
                                                                                          GlobalSearchScope.projectScope(project));
-    List<RobotKeywordEl> results = Lists.newArrayList();
+    List<RobotKeyword> results = Lists.newArrayList();
     for (VirtualFile f: robotFiles) {
       PsiFile psiFile = PsiManager.getInstance(project).findFile(f);
       findKeywordUsagesInFileByName(psiFile, name, results);
@@ -88,10 +88,10 @@ public class RobotPsiUtil {
     return results;
   }
 
-  public static List<RobotKeywordDefEl> findKeywordDefsByName(String name, Project project) {
+  public static List<RobotKeywordDef> findKeywordDefsByName(String name, Project project) {
     Collection<VirtualFile> robotFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, RobotFileType.INSTANCE,
                                                                                          GlobalSearchScope.projectScope(project));
-    List<RobotKeywordDefEl> results = Lists.newArrayList();
+    List<RobotKeywordDef> results = Lists.newArrayList();
     for (VirtualFile f: robotFiles) {
       PsiFile psiFile = PsiManager.getInstance(project).findFile(f);
       findKeywordDefsInFileByName(psiFile, name, results);
@@ -99,34 +99,34 @@ public class RobotPsiUtil {
     return results;
   }
 
-  public static void findKeywordDefsInFile(PsiFile psiFile, List<RobotKeywordDefEl> keywordDefList) {
+  public static void findKeywordDefsInFile(PsiFile psiFile, List<RobotKeywordDef> keywordDefList) {
     if (! (psiFile instanceof RobotPsiFile) ) {
       return;
     }
-    RobotKeywordDefEl[] results = ((RobotPsiFile) psiFile).findChildrenByClass(RobotKeywordDefEl.class);
-    for (RobotKeywordDefEl robotKeywordDefEl: results) {
-      keywordDefList.add(robotKeywordDefEl);
+    RobotKeywordDef[] results = ((RobotPsiFile) psiFile).findChildrenByClass(RobotKeywordDef.class);
+    for (RobotKeywordDef RobotKeywordDef: results) {
+      keywordDefList.add(RobotKeywordDef);
     }
   }
 
-  public static void findKeywordDefsInFileByName(PsiFile psiFile, String name, List<RobotKeywordDefEl> keywordDefList) {
+  public static void findKeywordDefsInFileByName(PsiFile psiFile, String name, List<RobotKeywordDef> keywordDefList) {
     if (! (psiFile instanceof RobotPsiFile) ) {
       return;
     }
-    RobotKeywordDefEl[] results = ((RobotPsiFile) psiFile).findChildrenByClass(RobotKeywordDefEl.class);
-    for (RobotKeywordDefEl robotKeywordDefEl: results) {
+    RobotKeywordDef[] results = ((RobotPsiFile) psiFile).findChildrenByClass(RobotKeywordDef.class);
+    for (RobotKeywordDef RobotKeywordDef: results) {
       String nameAsMethod = robotKeywordToMethodFast(name);
-      String keywordAsMethod = robotKeywordToMethodFast(robotKeywordDefEl.getText());
+      String keywordAsMethod = robotKeywordToMethodFast(RobotKeywordDef.getText());
       if (nameAsMethod.equalsIgnoreCase(keywordAsMethod)) {
-        keywordDefList.add(robotKeywordDefEl);
+        keywordDefList.add(RobotKeywordDef);
       }
     }
   }
 
-  public static List<RobotKeywordDefEl> getKeywordDefsInRobotFilesStartingWith(String startText, Project project) {
+  public static List<RobotKeywordDef> getKeywordDefsInRobotFilesStartingWith(String startText, Project project) {
     Collection<VirtualFile> robotFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, RobotFileType.INSTANCE,
                                                                                          GlobalSearchScope.projectScope(project));
-    List<RobotKeywordDefEl> results = Lists.newArrayList();
+    List<RobotKeywordDef> results = Lists.newArrayList();
     for (VirtualFile f: robotFiles) {
       PsiFile psiFile = PsiManager.getInstance(project).findFile(f);
       findKeywordDefsInFileByName(psiFile, startText, results);
@@ -134,30 +134,30 @@ public class RobotPsiUtil {
     return results;
   }
 
-  public static void findKeywordDefsInFileStartingWith(PsiFile psiFile, String startText, List<RobotKeywordDefEl> keywordDefList) {
+  public static void findKeywordDefsInFileStartingWith(PsiFile psiFile, String startText, List<RobotKeywordDef> keywordDefList) {
     if (! (psiFile instanceof RobotPsiFile) ) {
       return;
     }
-    RobotKeywordDefEl[] results = ((RobotPsiFile) psiFile).findChildrenByClass(RobotKeywordDefEl.class);
-    for (RobotKeywordDefEl robotKeywordDefEl: results) {
+    RobotKeywordDef[] results = ((RobotPsiFile) psiFile).findChildrenByClass(RobotKeywordDef.class);
+    for (RobotKeywordDef RobotKeywordDef: results) {
       String startTextNoSpaces = robotKeywordToMethodFast(startText);
-      String keywordAsMethod = robotKeywordToMethodFast(robotKeywordDefEl.getText());
+      String keywordAsMethod = robotKeywordToMethodFast(RobotKeywordDef.getText());
       if (keywordAsMethod.toLowerCase().startsWith(startTextNoSpaces.toLowerCase())) {
-        keywordDefList.add(robotKeywordDefEl);
+        keywordDefList.add(RobotKeywordDef);
       }
     }
   }
 
-  public static void findKeywordUsagesInFileByName(PsiFile psiFile, String name, List<RobotKeywordEl> keywordList) {
+  public static void findKeywordUsagesInFileByName(PsiFile psiFile, String name, List<RobotKeyword> keywordList) {
     if (! (psiFile instanceof RobotPsiFile) ) {
       return;
     }
-    RobotKeywordEl[] results = ((RobotPsiFile) psiFile).findChildrenByClass(RobotKeywordEl.class);
-    for (RobotKeywordEl robotKeywordEl: results) {
+    RobotKeyword[] results = ((RobotPsiFile) psiFile).findChildrenByClass(RobotKeyword.class);
+    for (RobotKeyword RobotKeyword: results) {
       String nameAsMethod = robotKeywordToMethodFast(name);
-      String keywordAsMethod = robotKeywordToMethodFast(robotKeywordEl.getText());
+      String keywordAsMethod = robotKeywordToMethodFast(RobotKeyword.getText());
       if (nameAsMethod.equalsIgnoreCase(keywordAsMethod)) {
-        keywordList.add(robotKeywordEl);
+        keywordList.add(RobotKeyword);
       }
     }
   }

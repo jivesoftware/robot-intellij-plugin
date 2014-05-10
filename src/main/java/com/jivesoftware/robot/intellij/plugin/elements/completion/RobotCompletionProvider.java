@@ -15,7 +15,7 @@ import com.jivesoftware.robot.intellij.plugin.elements.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.references.PsiMethodWithRobotName;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotTagFinder;
 import com.jivesoftware.robot.intellij.plugin.parser.RobotTypes;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordEl;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -52,7 +52,10 @@ public class RobotCompletionProvider extends CompletionProvider<CompletionParame
 
   private void handleKeywordTokens(LeafPsiElement leaf, @NotNull CompletionParameters parameters, ProcessingContext context,
                                    @NotNull CompletionResultSet result) {
-    RobotKeywordEl parent = (RobotKeywordEl) leaf.getParent();
+    if (!(leaf.getParent() instanceof RobotKeyword)) {
+        return;
+    }
+    RobotKeyword parent = (RobotKeyword) leaf.getParent();
     PsiReference ref = parent.getReference();
     if (ref == null) {
       return;

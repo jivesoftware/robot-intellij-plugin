@@ -7,13 +7,13 @@ import com.intellij.psi.PsiReferenceContributor;
 import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.psi.PsiReferenceRegistrar;
 import com.intellij.util.ProcessingContext;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordEl;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
 import org.jetbrains.annotations.NotNull;
 
 public class RobotKeywordReferenceContributor extends PsiReferenceContributor {
   @Override
   public void registerReferenceProviders(PsiReferenceRegistrar registrar) {
-    registrar.registerReferenceProvider(PlatformPatterns.psiElement(RobotKeywordEl.class),
+    registrar.registerReferenceProvider(PlatformPatterns.psiElement(RobotKeyword.class),
                                         new PsiReferenceProvider() {
                                           @NotNull
                                           @Override
