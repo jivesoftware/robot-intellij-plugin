@@ -23,4 +23,10 @@ public class RobotKeywordsTableHeadingImpl extends ASTWrapperPsiElement implemen
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public RobotEndOfLine getEndOfLine() {
+    return findNotNullChildByClass(RobotEndOfLine.class);
+  }
+
 }

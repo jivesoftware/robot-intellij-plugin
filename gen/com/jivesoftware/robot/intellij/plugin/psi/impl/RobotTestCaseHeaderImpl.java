@@ -23,4 +23,10 @@ public class RobotTestCaseHeaderImpl extends ASTWrapperPsiElement implements Rob
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public RobotEndOfLine getEndOfLine() {
+    return findNotNullChildByClass(RobotEndOfLine.class);
+  }
+
 }

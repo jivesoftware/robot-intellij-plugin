@@ -36,6 +36,10 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitEndOfLine(@NotNull RobotEndOfLine o) {
+    visitPsiElement(o);
+  }
+
   public void visitError(@NotNull RobotError o) {
     visitPsiElement(o);
   }

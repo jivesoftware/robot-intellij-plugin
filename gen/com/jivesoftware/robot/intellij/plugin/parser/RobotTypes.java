@@ -16,6 +16,7 @@ public interface RobotTypes {
   IElementType COMMENT = new RobotElementType("COMMENT");
   IElementType DOCUMENTATION_SETTING = new RobotElementType("DOCUMENTATION_SETTING");
   IElementType EMPTY_LINE = new RobotElementType("EMPTY_LINE");
+  IElementType END_OF_LINE = new RobotElementType("END_OF_LINE");
   IElementType ERROR = new RobotElementType("ERROR");
   IElementType KEYWORD = new RobotElementType("KEYWORD");
   IElementType KEYWORDS_TABLE = new RobotElementType("KEYWORDS_TABLE");
@@ -111,6 +112,9 @@ public interface RobotTypes {
       }
       else if (type == EMPTY_LINE) {
         return new RobotEmptyLineImpl(node);
+      }
+      else if (type == END_OF_LINE) {
+        return new RobotEndOfLineImpl(node);
       }
       else if (type == ERROR) {
         return new RobotErrorImpl(node);

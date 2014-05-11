@@ -41,4 +41,10 @@ public class RobotVariablesLineImpl extends ASTWrapperPsiElement implements Robo
     return findChildByClass(RobotEmptyLine.class);
   }
 
+  @Override
+  @Nullable
+  public RobotEndOfLine getEndOfLine() {
+    return findChildByClass(RobotEndOfLine.class);
+  }
+
 }

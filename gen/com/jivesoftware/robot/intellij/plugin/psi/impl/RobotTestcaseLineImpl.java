@@ -31,6 +31,12 @@ public class RobotTestcaseLineImpl extends ASTWrapperPsiElement implements Robot
 
   @Override
   @Nullable
+  public RobotEndOfLine getEndOfLine() {
+    return findChildByClass(RobotEndOfLine.class);
+  }
+
+  @Override
+  @Nullable
   public RobotKeywordInvocation getKeywordInvocation() {
     return findChildByClass(RobotKeywordInvocation.class);
   }

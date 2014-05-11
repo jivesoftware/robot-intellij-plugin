@@ -11,6 +11,9 @@ public interface RobotTestSettingLine extends PsiElement {
   RobotEmptyLine getEmptyLine();
 
   @Nullable
+  RobotEndOfLine getEndOfLine();
+
+  @Nullable
   RobotTestSetting getTestSetting();
 
 }

@@ -25,6 +25,12 @@ public class RobotKeywordDefinitionHeaderImpl extends ASTWrapperPsiElement imple
 
   @Override
   @NotNull
+  public RobotEndOfLine getEndOfLine() {
+    return findNotNullChildByClass(RobotEndOfLine.class);
+  }
+
+  @Override
+  @NotNull
   public RobotKeywordDef getKeywordDef() {
     return findNotNullChildByClass(RobotKeywordDef.class);
   }

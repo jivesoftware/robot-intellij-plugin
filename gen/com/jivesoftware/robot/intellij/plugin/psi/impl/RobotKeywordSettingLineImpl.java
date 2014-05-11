@@ -31,6 +31,12 @@ public class RobotKeywordSettingLineImpl extends ASTWrapperPsiElement implements
 
   @Override
   @Nullable
+  public RobotEndOfLine getEndOfLine() {
+    return findChildByClass(RobotEndOfLine.class);
+  }
+
+  @Override
+  @Nullable
   public RobotKeywordSetting getKeywordSetting() {
     return findChildByClass(RobotKeywordSetting.class);
   }

@@ -5,12 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotKeywordDefinitionHeader extends PsiElement {
-
-  @NotNull
-  RobotEndOfLine getEndOfLine();
-
-  @NotNull
-  RobotKeywordDef getKeywordDef();
+public interface RobotEndOfLine extends PsiElement {
 
 }

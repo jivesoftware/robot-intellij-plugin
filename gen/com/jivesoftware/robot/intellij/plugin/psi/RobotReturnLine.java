@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface RobotReturnLine extends PsiElement {
 
   @NotNull
+  RobotEndOfLine getEndOfLine();
+
+  @NotNull
   RobotReturnSetting getReturnSetting();
 
 }

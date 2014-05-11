@@ -12,21 +12,15 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotEmptyLineImpl extends ASTWrapperPsiElement implements RobotEmptyLine {
+public class RobotEndOfLineImpl extends ASTWrapperPsiElement implements RobotEndOfLine {
 
-  public RobotEmptyLineImpl(ASTNode node) {
+  public RobotEndOfLineImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitEmptyLine(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitEndOfLine(this);
     else super.accept(visitor);
-  }
-
-  @Override
-  @NotNull
-  public RobotEndOfLine getEndOfLine() {
-    return findNotNullChildByClass(RobotEndOfLine.class);
   }
 
 }
