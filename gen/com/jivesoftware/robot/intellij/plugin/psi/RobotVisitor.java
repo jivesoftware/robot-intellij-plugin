@@ -52,6 +52,14 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitForceTagsSetting(@NotNull RobotForceTagsSetting o) {
+    visitPsiElement(o);
+  }
+
+  public void visitGenericSetting(@NotNull RobotGenericSetting o) {
+    visitPsiElement(o);
+  }
+
   public void visitKeyword(@NotNull RobotKeyword o) {
     visitNamedElement(o);
   }

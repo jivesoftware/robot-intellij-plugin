@@ -5,12 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotSetting extends PsiElement {
-
-  @Nullable
-  RobotForceTagsSetting getForceTagsSetting();
-
-  @Nullable
-  RobotGenericSetting getGenericSetting();
+public interface RobotGenericSetting extends PsiElement {
 
 }

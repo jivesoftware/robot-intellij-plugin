@@ -3,13 +3,15 @@ package com.jivesoftware.robot.intellij.plugin.elements.references;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.impl.PsiElementBase;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiSearchHelper;
 import com.intellij.util.Processor;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotFileType;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotTag;
+import com.jivesoftware.robot.intellij.plugin.psi.*;
 
 import java.util.Collections;
 import java.util.List;
@@ -45,6 +47,15 @@ public class RobotTagFinder implements Processor<PsiFile> {
 
   private boolean addResultsForRobotFile(PsiFile psiFile, Set<String> resultsToAdd) {
     if (psiFile instanceof RobotPsiFile) {
+      RobotRobotTable[] tables = ((RobotPsiFile) psiFile).findChildrenByClass(RobotRobotTable.class);
+      for (RobotRobotTable table: tables) {
+          if (table.getTestCasesTable() != null) {
+              addResultsForTestCaseTable(table.getTestCasesTable(), resultsToAdd);
+          }
+          if (table.getSettingsTable() != null) {
+              addResultsForSettingsTable(table.getSettingsTable(), resultsToAdd);
+          }
+      }
       RobotTag[] tags = ((RobotPsiFile) psiFile).findChildrenByClass(RobotTag.class);
       for (RobotTag tag : tags) {
         resultsToAdd.add(tag.getText());
@@ -52,6 +63,50 @@ public class RobotTagFinder implements Processor<PsiFile> {
     }
     return true;
   }
+
+    private void addResultsForSettingsTable(RobotSettingsTable settingsTable, Set<String> resultsToAdd) {
+        List<RobotSettingsLine> lines = settingsTable.getSettingsLineList();
+        for (RobotSettingsLine line: lines) {
+            RobotSetting setting = line.getSetting();
+            if (setting == null) {
+                continue;
+            }
+            RobotForceTagsSetting tagsSetting = setting.getForceTagsSetting();
+            if (tagsSetting == null) {
+                continue;
+            }
+            List<RobotTag> tags = tagsSetting.getTagList();
+            for (RobotTag tag: tags) {
+                resultsToAdd.add(tag.getText());
+            }
+        }
+    }
+
+    private void addResultsForTestCaseTable(RobotTestCasesTable testCasesTable, Set<String> resultsToAdd) {
+        for (RobotTestCase testCase: testCasesTable.getTestCaseList()) {
+            addResultsForTestCase(testCase, resultsToAdd);
+        }
+    }
+
+    private void addResultsForTestCase(RobotTestCase testCase, Set<String> resultsToAdd) {
+        RobotTestCaseSettings robotTestCaseSettings = testCase.getTestCaseSettings();
+        List<RobotTestSettingLine> lines = robotTestCaseSettings.getTestSettingLineList();
+        for (RobotTestSettingLine line: lines) {
+            RobotTestSetting setting = line.getTestSetting();
+            if (setting == null) {
+                continue;
+            }
+            RobotTagsSetting tagsSetting = setting.getTagsSetting();
+            if (tagsSetting == null) {
+                continue;
+            }
+            List<RobotTag> tags = tagsSetting.getTagList();
+            for (RobotTag tag: tags) {
+                String tagString = tag.getText();
+                resultsToAdd.add(tagString);
+            }
+        }
+    }
 
 
 

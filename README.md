@@ -11,6 +11,12 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See bin/robot-intellij-plugin for the newest version if you just want to try it out!
 </p>
 
+<h3>Version 1.1.1</h3>
+
+<ul>
+    <li>Fixed a bug with tag auto-completion from version 1.1.0.</li>
+</ul>
+
 <h3>Version 1.1.0</h3>
 
 <ul>

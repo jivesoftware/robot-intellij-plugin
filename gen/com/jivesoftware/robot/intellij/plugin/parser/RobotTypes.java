@@ -20,6 +20,8 @@ public interface RobotTypes {
   IElementType EMPTY_LINE = new RobotElementType("EMPTY_LINE");
   IElementType END_OF_LINE = new RobotElementType("END_OF_LINE");
   IElementType ERROR = new RobotElementType("ERROR");
+  IElementType FORCE_TAGS_SETTING = new RobotElementType("FORCE_TAGS_SETTING");
+  IElementType GENERIC_SETTING = new RobotElementType("GENERIC_SETTING");
   IElementType KEYWORD = new RobotElementType("KEYWORD");
   IElementType KEYWORDS_TABLE = new RobotElementType("KEYWORDS_TABLE");
   IElementType KEYWORDS_TABLE_HEADING = new RobotElementType("KEYWORDS_TABLE_HEADING");
@@ -128,6 +130,12 @@ public interface RobotTypes {
       }
       else if (type == ERROR) {
         return new RobotErrorImpl(node);
+      }
+      else if (type == FORCE_TAGS_SETTING) {
+        return new RobotForceTagsSettingImpl(node);
+      }
+      else if (type == GENERIC_SETTING) {
+        return new RobotGenericSettingImpl(node);
       }
       else if (type == KEYWORD) {
         return new RobotKeywordImpl(node);
