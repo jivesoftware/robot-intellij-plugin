@@ -8,8 +8,13 @@ robot-intellij-plugin
 
 <p>
 IntelliJ Plugin to enable syntax highlighting and other features in Robot text files. Specifically designed with Java integration in mind.
-See bin/robot-intellij-plugin for the newest version if you just want to try it out!
+See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
+
+<h3>Version 1.1.2</h3>
+<ul>
+    <li>Added the ability to find Test Cases with Go To Symbol, i.e. with the hotkey Ctrl+shift+alt+n.</li>
+</ul>
 
 <h3>Version 1.1.1</h3>
 

@@ -17,6 +17,7 @@
   psiImplUtilClass="com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil"
   implements("KEYWORD")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
   implements("KEYWORD_DEF")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
+  implements("TEST_CASE")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
 }
 
 robotFile ::= !<<eof>> (ROBOT_TABLE|EMPTY_LINE)*
@@ -49,7 +50,7 @@ TEST_CASES_TABLE ::= TEST_CASES_TABLE_HEADING EMPTY_LINE* TEST_CASE*
 
 TEST_CASES_TABLE_HEADING ::= TEST_CASES_TABLE_HEADING_TOKEN END_OF_LINE (NEWLINE_TOKEN | <<eof>>)
 
-TEST_CASE ::= TEST_CASE_HEADER TEST_CASE_SETTINGS TESTCASE_LINE+
+TEST_CASE ::= TEST_CASE_HEADER TEST_CASE_SETTINGS TESTCASE_LINE+  { methods=[getName setName getNameIdentifier getPresentation]}
 
 TEST_CASE_HEADER ::= TEST_CASE_HEADER_TOKEN END_OF_LINE (NEWLINE_TOKEN | <<eof>>)
 

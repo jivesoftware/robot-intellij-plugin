@@ -11,6 +11,7 @@ import static com.jivesoftware.robot.intellij.plugin.parser.RobotTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
+import com.intellij.navigation.ItemPresentation;
 
 public class RobotTestCaseImpl extends ASTWrapperPsiElement implements RobotTestCase {
 
@@ -39,6 +40,25 @@ public class RobotTestCaseImpl extends ASTWrapperPsiElement implements RobotTest
   @NotNull
   public RobotTestCaseSettings getTestCaseSettings() {
     return findNotNullChildByClass(RobotTestCaseSettings.class);
+  }
+
+  @Nullable
+  @NonNls
+  public String getName() {
+    return RobotImplUtil.getName(this);
+  }
+
+  public PsiElement setName(String newName) {
+    return RobotImplUtil.setName(this, newName);
+  }
+
+  @Nullable
+  public PsiElement getNameIdentifier() {
+    return RobotImplUtil.getNameIdentifier(this);
+  }
+
+  public ItemPresentation getPresentation() {
+    return RobotImplUtil.getPresentation(this);
   }
 
 }

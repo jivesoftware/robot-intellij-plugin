@@ -4,9 +4,12 @@ import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
+import com.intellij.util.IncorrectOperationException;
 import com.jivesoftware.robot.intellij.plugin.icons.RobotIcons;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDef;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotTestCase;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotTestCaseHeader;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,13 +18,66 @@ import javax.swing.*;
 
 public class RobotImplUtil {
 
+
+
+
+    /* Methods for RobotTestCase type */
+
+    @Nullable
+    @NonNls
+    public static String getName(RobotTestCase element) {
+        PsiElement header = getNameIdentifier(element);
+        if (header == null) {
+            return null;
+        }
+        return header.getText();
+    }
+
+    public static PsiElement setName(RobotTestCase element, @NonNls @NotNull String newName) throws IncorrectOperationException {
+        return element;
+    }
+
+    @Nullable
+    public static PsiElement getNameIdentifier(RobotTestCase element) {
+        if (element == null) {
+            return null;
+        }
+        RobotTestCaseHeader header = element.getTestCaseHeader();
+        return header;
+    }
+
+
+    public static ItemPresentation getPresentation(final RobotTestCase element) {
+        return new ItemPresentation() {
+            @Nullable
+            @Override
+            public String getPresentableText() {
+                return String.format("Robot Test Case: %s", getNameIdentifier(element).getText());
+            }
+
+            @Nullable
+            @Override
+            public String getLocationString() {
+                return element.getContainingFile().getName();
+            }
+
+            @Nullable
+            @Override
+            public Icon getIcon(boolean unused) {
+                return RobotIcons.FILE;
+            }
+        };
+    }
+
+    /* Methods for RobotKeyword type */
+
     @Nullable
     @NonNls
     public static String getName(RobotKeyword element) {
         return element.getText();
     }
 
-    public static PsiElement setName(RobotKeyword element, @NonNls @NotNull String newName) throws com.intellij.util.IncorrectOperationException {
+    public static PsiElement setName(RobotKeyword element, @NonNls @NotNull String newName) throws IncorrectOperationException {
         RobotKeyword replacement = RobotElementFactory.createKeyword(element.getProject(), newName);
         element.getParent().getNode().replaceChild(element.getNode(), replacement.getNode());
         return replacement;
@@ -46,7 +102,8 @@ public class RobotImplUtil {
         return refs[0];
     }
 
-    // Robot Keyword Definition methods
+    /* Methods for RobotKeywordDef type */
+
     public static ItemPresentation getPresentation(final RobotKeywordDef element) {
         return new ItemPresentation() {
             @Nullable

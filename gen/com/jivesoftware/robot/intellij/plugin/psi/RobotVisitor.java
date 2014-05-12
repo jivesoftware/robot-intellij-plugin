@@ -173,7 +173,7 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitTestCase(@NotNull RobotTestCase o) {
-    visitPsiElement(o);
+    visitNamedElement(o);
   }
 
   public void visitTestCasesTable(@NotNull RobotTestCasesTable o) {

@@ -6,6 +6,7 @@ import com.intellij.navigation.NavigationItem;
 import com.intellij.openapi.project.Project;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDef;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotTestCase;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -19,6 +20,12 @@ public class RobotKeywordDefinitionSymbolContributor implements ChooseByNameCont
     for (RobotKeywordDef keywordDef: keywordDefs) {
       names.add(keywordDef.getText());
     }
+
+    List<RobotTestCase> testCases = RobotPsiUtil.findAllRobotTestCases(project);
+    for (RobotTestCase testCase: testCases) {
+        names.add(testCase.getName());
+    }
+
     return names.toArray(new String[names.size()]);
   }
 
@@ -26,6 +33,15 @@ public class RobotKeywordDefinitionSymbolContributor implements ChooseByNameCont
   @Override
   public NavigationItem[] getItemsByName(String name, String pattern, Project project, boolean includeNonProjectItems) {
     List<RobotKeywordDef> keywordDefs = RobotPsiUtil.findKeywordDefsByName(name, project);
-    return keywordDefs.toArray(new NavigationItem[keywordDefs.size()]);
+    List<RobotTestCase> testCases = RobotPsiUtil.findTestCasesByName(name, project);
+    List<NavigationItem> items = Lists.newArrayList();
+    for (RobotKeywordDef keywordDef: keywordDefs) {
+        items.add((NavigationItem)keywordDef);
+    }
+    for (RobotTestCase testCase: testCases) {
+        items.add((NavigationItem)testCase);
+    }
+
+    return items.toArray(new NavigationItem[items.size()]);
   }
 }
