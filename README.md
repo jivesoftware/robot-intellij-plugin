@@ -11,6 +11,22 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See bin/robot-intellij-plugin for the newest version if you just want to try it out!
 </p>
 
+<h3>Version 1.1.0</h3>
+
+<ul>
+    <li>Added full syntax error highlighting support! The Robot language is now fully parsed!</li>
+    <li>Common Robot errors will be caught before runtime, such as assigning a variable to a String instead of a Keyword.</li>
+    <li>Fixed a minor bug where Autocomplete would suggest lowercase Java methods.</li>
+    <li>Fixed a minor bug where Autocomplete suggestions would not have spaces between words where appropriate.</li>
+</ul>
+
+<h3>Version 1.0.6</h3>
+<ul>
+    <li>Added templates so you can create a Robot Test Case File or Robot Keywords File from the New menu in the project explorer.</li>
+    <li>Explicitly declaring dependencies on "lang" and "java" modules.</li>
+    <li>Hoping above change will cause this plugin to be suggested when you open a Robot file and it says "Plugins supporting files with *.robot extension are found".</li>
+</ul>
+
 <h3>Version 1.0.5</h3>
 <ul>
 	<li>Fixed a major bug that apparently was causing many features to not work for Mac, because Robot files were never indexed. In Ubuntu, I didn't notice any

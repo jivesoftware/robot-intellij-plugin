@@ -33,22 +33,24 @@ public class RobotKeywordDefinitionFinder implements Processor<PsiFile> {
   private final List<PsiElement> results;
   private final KeywordPredicate keywordPredicate;
   private boolean findAll;
+  private final boolean wrapPsiMethods;
 
   public RobotKeywordDefinitionFinder(PsiFile startPsiFile, Project project, String searchTerm, SCOPE scope) {
     this(startPsiFile, project, searchTerm, scope, false);
   }
 
   public RobotKeywordDefinitionFinder(PsiFile startPsiFile, Project project, String searchTerm, SCOPE scope, boolean findAll) {
-    this(startPsiFile, project, searchTerm, scope, findAll, DEFAULT_PREDICATE);
+    this(startPsiFile, project, searchTerm, scope, findAll, false, DEFAULT_PREDICATE);
   }
 
-  public RobotKeywordDefinitionFinder(PsiFile startPsiFile, Project project, String searchTerm, SCOPE scope, boolean findAll, KeywordPredicate keywordPredicate) {
+  public RobotKeywordDefinitionFinder(PsiFile startPsiFile, Project project, String searchTerm, SCOPE scope, boolean findAll, boolean wrapPsiMethods, KeywordPredicate keywordPredicate) {
     this.startPsiFile = startPsiFile;
     this.project = project;
     this.searchTerm = searchTerm;
     this.scope = scope;
     this.findAll = findAll;
     this.keywordPredicate = keywordPredicate;
+    this.wrapPsiMethods = wrapPsiMethods;
     results = Lists.newArrayList();
   }
 
@@ -73,13 +75,13 @@ public class RobotKeywordDefinitionFinder implements Processor<PsiFile> {
 
     //Find Robot keyword definitions from robot files
     if (scope == SCOPE.ALL || scope == SCOPE.ROBOT_FILES) {
-      List<RobotKeywordDef> RobotKeywordDefs;
+      List<RobotKeywordDef> robotKeywordDefs;
       if (StringUtils.isEmpty(searchTerm)) {
-        RobotKeywordDefs = RobotPsiUtil.findRobotKeywordDefs(project);
+        robotKeywordDefs = RobotPsiUtil.findAllRobotKeywordDefs(project);
       } else {
-        RobotKeywordDefs = RobotPsiUtil.findKeywordDefsByName(searchTerm, project);
+        robotKeywordDefs = RobotPsiUtil.findKeywordDefsByName(searchTerm, project);
       }
-      results.addAll(RobotKeywordDefs);
+      results.addAll(robotKeywordDefs);
      // findKeywordDefInRobotFiles(startPsiFile, results);
     }
   }
@@ -90,7 +92,11 @@ public class RobotKeywordDefinitionFinder implements Processor<PsiFile> {
       for (PsiClass psiClass : classes) {
         for (PsiMethod psiMethod : psiClass.getMethods()) {
           if (keywordPredicate.includeJavaMethod(searchTerm, psiMethod)) {
-            resultsToAdd.add(psiMethod);
+            if (wrapPsiMethods) {
+                resultsToAdd.add(new PsiMethodWithRobotName(psiMethod.getNode()));
+            } else {
+                resultsToAdd.add(psiMethod);
+            }
             if (!findAll) {
               return false;
             }

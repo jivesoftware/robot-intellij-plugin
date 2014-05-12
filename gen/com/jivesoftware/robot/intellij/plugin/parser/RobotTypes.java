@@ -11,6 +11,7 @@ public interface RobotTypes {
 
   IElementType ARGUMENTS_SETTING = new RobotElementType("ARGUMENTS_SETTING");
   IElementType ARGUMENT_DEF = new RobotElementType("ARGUMENT_DEF");
+  IElementType ARGUMENT_LIST = new RobotElementType("ARGUMENT_LIST");
   IElementType ARRAY_ASSIGNABLE = new RobotElementType("ARRAY_ASSIGNABLE");
   IElementType ASSIGNABLE = new RobotElementType("ASSIGNABLE");
   IElementType ASSIGNMENT = new RobotElementType("ASSIGNMENT");
@@ -100,6 +101,9 @@ public interface RobotTypes {
       }
       else if (type == ARGUMENT_DEF) {
         return new RobotArgumentDefImpl(node);
+      }
+      else if (type == ARGUMENT_LIST) {
+        return new RobotArgumentListImpl(node);
       }
       else if (type == ARRAY_ASSIGNABLE) {
         return new RobotArrayAssignableImpl(node);

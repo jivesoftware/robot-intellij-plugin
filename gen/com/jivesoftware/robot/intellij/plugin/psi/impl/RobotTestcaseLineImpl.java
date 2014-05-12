@@ -25,6 +25,12 @@ public class RobotTestcaseLineImpl extends ASTWrapperPsiElement implements Robot
 
   @Override
   @Nullable
+  public RobotArgumentList getArgumentList() {
+    return findChildByClass(RobotArgumentList.class);
+  }
+
+  @Override
+  @Nullable
   public RobotEmptyLine getEmptyLine() {
     return findChildByClass(RobotEmptyLine.class);
   }

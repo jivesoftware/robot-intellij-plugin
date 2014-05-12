@@ -48,7 +48,9 @@ return;
   private int previous_state = YYINITIAL;
 
   private IElementType next(IElementType toReturn) {
-    startLine = false;
+    if (toReturn != WHITESPACE_TOKEN) {
+        startLine = false;
+    }
     if (toReturn == BAD_SYNTAX_TOKEN) {
         System.out.println(String.format("Bad syntax \"%s\" at line %d col %d", yytext(), yyline, yycolumn));
     }

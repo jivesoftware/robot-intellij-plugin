@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface RobotTestcaseLine extends PsiElement {
 
   @Nullable
+  RobotArgumentList getArgumentList();
+
+  @Nullable
   RobotEmptyLine getEmptyLine();
 
   @Nullable

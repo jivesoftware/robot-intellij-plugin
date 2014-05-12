@@ -10,6 +10,7 @@
       Provides support for:
       <ul>
           <li>Syntax Highlighting</li>
+          <li>Robot Syntax Error Highlighting</li>
           <li>Go to declaration of a Keyword from the point of use. Jumps to Java or Robot file keyword definition.</li>
           <li>Find usages of Keywords defined in Java or Robot files</li>
           <li>Autocomplete keywords and test case tags</li>
@@ -21,6 +22,16 @@
     ]]></description>
 
     <change-notes><![CDATA[
+
+    <h3>Version 1.1.0</h3>
+
+    <ul>
+    <li>Added full syntax error highlighting support! The Robot language is now fully parsed!</li>
+    <li>Common Robot errors will be caught before runtime, such as assigning a variable to a String instead of a Keyword.</li>
+    <li>Fixed a minor bug where Autocomplete would suggest lowercase Java methods.</li>
+    <li>Fixed a minor bug where Autocomplete suggestions would not have spaces between words where appropriate.</li>
+    </ul>
+
     <h3>Version 1.0.6</h3>
     <ul>
     <li>Added templates so you can create a Robot Test Case File or Robot Keywords File from the New menu in the project explorer.</li>

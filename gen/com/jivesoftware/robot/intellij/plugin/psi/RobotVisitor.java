@@ -16,6 +16,10 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitArgumentList(@NotNull RobotArgumentList o) {
+    visitPsiElement(o);
+  }
+
   public void visitArrayAssignable(@NotNull RobotArrayAssignable o) {
     visitPsiElement(o);
   }
