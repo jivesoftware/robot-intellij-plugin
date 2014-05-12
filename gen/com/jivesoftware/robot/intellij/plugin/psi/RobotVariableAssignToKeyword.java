@@ -10,4 +10,10 @@ public interface RobotVariableAssignToKeyword extends PsiElement {
   @NotNull
   RobotKeywordInvocation getKeywordInvocation();
 
+  @Nullable
+  RobotMultiAssignment getMultiAssignment();
+
+  @Nullable
+  RobotSingleAssignment getSingleAssignment();
+
 }

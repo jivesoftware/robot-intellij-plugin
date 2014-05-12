@@ -12,21 +12,15 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotKeywordArgImpl extends ASTWrapperPsiElement implements RobotKeywordArg {
+public class RobotVariableImpl extends ASTWrapperPsiElement implements RobotVariable {
 
-  public RobotKeywordArgImpl(ASTNode node) {
+  public RobotVariableImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitKeywordArg(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitVariable(this);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public RobotVariable getVariable() {
-    return findChildByClass(RobotVariable.class);
   }
 
 }

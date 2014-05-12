@@ -7,4 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface RobotReturnSetting extends PsiElement {
 
+  @NotNull
+  List<RobotKeywordArg> getKeywordArgList();
+
 }

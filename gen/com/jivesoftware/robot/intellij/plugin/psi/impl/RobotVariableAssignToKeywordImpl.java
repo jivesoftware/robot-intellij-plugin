@@ -29,4 +29,16 @@ public class RobotVariableAssignToKeywordImpl extends ASTWrapperPsiElement imple
     return findNotNullChildByClass(RobotKeywordInvocation.class);
   }
 
+  @Override
+  @Nullable
+  public RobotMultiAssignment getMultiAssignment() {
+    return findChildByClass(RobotMultiAssignment.class);
+  }
+
+  @Override
+  @Nullable
+  public RobotSingleAssignment getSingleAssignment() {
+    return findChildByClass(RobotSingleAssignment.class);
+  }
+
 }

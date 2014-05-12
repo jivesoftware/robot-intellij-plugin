@@ -23,4 +23,10 @@ public class RobotReturnSettingImpl extends ASTWrapperPsiElement implements Robo
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public List<RobotKeywordArg> getKeywordArgList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotKeywordArg.class);
+  }
+
 }

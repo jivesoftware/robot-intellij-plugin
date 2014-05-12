@@ -29,7 +29,6 @@ import static com.jivesoftware.robot.intellij.plugin.parser.RobotTypes.*;
 %class RobotScanner
 %implements FlexLexer
 %unicode
-%debug
 %function advance
 %type IElementType
 %eof{
@@ -46,33 +45,48 @@ return;
   private boolean onTimeoutLine = false;
   private boolean keywordToLeft = false;
   private boolean startLine = true;
-  private boolean forceTags = false;
   private int previous_state = YYINITIAL;
 
   private IElementType next(IElementType toReturn) {
-    System.out.println("zzLexicalState == " + zzLexicalState);
     startLine = false;
     if (toReturn == BAD_SYNTAX_TOKEN) {
         System.out.println(String.format("Bad syntax \"%s\" at line %d col %d", yytext(), yyline, yycolumn));
     }
-    if (toReturn == ROBOT_KEYWORD_TOKEN) {
+    else if (toReturn == ROBOT_KEYWORD_TOKEN) {
         keywordToLeft = true;
     }
-    if (toReturn == TAGS_SETTING_TOKEN) {
+    else if (toReturn == TAGS_SETTING_TOKEN) {
         onTagsLine = true;
     }
-    if (toReturn == TIMEOUT_SETTING_TOKEN) {
+    else if (toReturn == TIMEOUT_SETTING_TOKEN) {
         onTimeoutLine = true;
     }
-    if (toReturn == FORCE_TAGS_SETTING_KEYWORD_TOKEN) {
-        forceTags = true;
+    else if (toReturn == FORCE_TAGS_SETTING_KEYWORD_TOKEN) {
+        onTagsLine = true;
     }
     return toReturn;
   }
   private IElementType newLine() {
     startLine = true;
-    keywordToLeft = onTagsLine = forceTags = onTimeoutLine = false;
+    keywordToLeft = onTagsLine = onTimeoutLine = false;
     return NEWLINE_TOKEN;
+  }
+
+  private IElementType keywordArgOrTag() {
+    if (onTagsLine) {
+        return next(TAG_TOKEN);
+    }
+    return next(ROBOT_KEYWORD_ARG_TOKEN);
+  }
+
+  private IElementType keywordOrTag() {
+    if (onTagsLine) {
+        return next(TAG_TOKEN);
+    }
+    if (keywordToLeft) {
+        return next(ROBOT_KEYWORD_ARG_TOKEN);
+    }
+    return next(ROBOT_KEYWORD_TOKEN);
   }
 
 
@@ -102,8 +116,8 @@ Comment = "#" {InputCharacter}*
 /* identifiers */
 Variable = "${" {Identifier} "}"
 ArrayVariable = "@{" {Identifier} "}"
-Assignment = {Variable} {WhiteSpace}* "="
-ArrayAssignment = {ArrayVariable} {WhiteSpace}* "="
+Assignment = {Variable} " "? "="
+ArrayAssignment = {ArrayVariable} " "? "="
 
 RobotKeyword = {RobotWord} ({SingleSpace} {RobotWord})*
 RobotWord = [a-zA-Z][a-zA-Z0-9]*
@@ -182,12 +196,8 @@ KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] "ser" " "?)? [Kk] "eyword" "s"? 
      {ArrayVariable}     { return next(ARRAY_VARIABLE_TOKEN); }
      {TimeoutValue}      { if (onTimeoutLine) { return next(TIMEOUT_VALUE_TOKEN); } return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {ForceTags}         { return next(FORCE_TAGS_SETTING_KEYWORD_TOKEN);}
-     {RobotKeyword}      { if (forceTags) {return next(TAG_TOKEN); }
-                           if (keywordToLeft) { return next(ROBOT_KEYWORD_ARG_TOKEN); }
-                           return next(ROBOT_KEYWORD_TOKEN);
-                         }
-     {KeywordArgument}   { if (forceTags) {return next(TAG_TOKEN);}
-                           return next(ROBOT_KEYWORD_ARG_TOKEN); }
+     {RobotKeyword}      { return keywordOrTag(); }
+     {KeywordArgument}   { return keywordArgOrTag(); }
      {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }
      {WhiteSpace}        { return next(WHITESPACE_TOKEN); }
 }
@@ -204,10 +214,8 @@ KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] "ser" " "?)? [Kk] "eyword" "s"? 
      {ArrayAssignment}   { return next(ARRAY_ASSIGNMENT_TOKEN); }
      {Variable}          { return next(VARIABLE_TOKEN); }
      {ArrayVariable}     { return next(ARRAY_VARIABLE_TOKEN); }
-     {RobotKeyword}      { if (keywordToLeft) { return next(ROBOT_KEYWORD_ARG_TOKEN); }
-                           return next(ROBOT_KEYWORD_TOKEN);
-                         }
-     {KeywordArgument}   { return next(ROBOT_KEYWORD_ARG_TOKEN); }
+     {RobotKeyword}      { return keywordOrTag(); }
+     {KeywordArgument}   { return keywordArgOrTag(); }
      {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }
      {WhiteSpace}        { return next(WHITESPACE_TOKEN); }
 }
@@ -232,15 +240,10 @@ KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] "ser" " "?)? [Kk] "eyword" "s"? 
      {ArrayAssignment}   { return ARRAY_ASSIGNMENT_TOKEN; }
      {Variable}          { return next(VARIABLE_TOKEN); }
      {ArrayVariable}     { return next(ARRAY_VARIABLE_TOKEN); }
-     {TimeoutValue}      { if (onTimeoutLine) { return next(TIMEOUT_VALUE_TOKEN);} return next(ROBOT_KEYWORD_ARG_TOKEN); }
-
-     {RobotKeyword}      { if (startLine)  { return next(TEST_CASE_HEADER_TOKEN); }
-                           if (onTagsLine) { return next(TAG_TOKEN); }
-                           if (keywordToLeft) { return next(ROBOT_KEYWORD_ARG_TOKEN); }
-                           keywordToLeft= true; return next(ROBOT_KEYWORD_TOKEN); }
-     {TestCaseHeader}    { if (startLine) { return next(TEST_CASE_HEADER_TOKEN);  } return next(ROBOT_KEYWORD_ARG_TOKEN); }
-
-     {KeywordArgument}   { return next(ROBOT_KEYWORD_ARG_TOKEN); }
+     {TimeoutValue}      { if (onTimeoutLine) { return next(TIMEOUT_VALUE_TOKEN);} return keywordArgOrTag(); }
+     {RobotKeyword}      { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return keywordOrTag(); }
+     {TestCaseHeader}    { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return keywordArgOrTag(); }
+     {KeywordArgument}   { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return keywordArgOrTag(); }
      {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }
      {WhiteSpace}        { return next(WHITESPACE_TOKEN); }
 }
@@ -271,11 +274,8 @@ KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] "ser" " "?)? [Kk] "eyword" "s"? 
      {ArrayAssignment}   { return ARRAY_ASSIGNMENT_TOKEN; }
      {Variable}          { return next(VARIABLE_TOKEN); }
      {ArrayVariable}     { return next(ARRAY_VARIABLE_TOKEN); }
-     {RobotKeyword}      { if (startLine) { return next(ROBOT_KEYWORD_DEF_TOKEN); }
-                           if (keywordToLeft) { return next(ROBOT_KEYWORD_ARG_TOKEN); }
-                           keywordToLeft= true; return next(ROBOT_KEYWORD_TOKEN);
-                         }
-     {KeywordArgument}   { return next(ROBOT_KEYWORD_ARG_TOKEN); }
+     {RobotKeyword}      { if (startLine) { return next(ROBOT_KEYWORD_DEF_TOKEN); } return keywordOrTag(); }
+     {KeywordArgument}   { if (startLine) { return next(BAD_SYNTAX_TOKEN); } return keywordArgOrTag(); }
      {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }
      {WhiteSpace}        { return next(WHITESPACE_TOKEN); }
 }

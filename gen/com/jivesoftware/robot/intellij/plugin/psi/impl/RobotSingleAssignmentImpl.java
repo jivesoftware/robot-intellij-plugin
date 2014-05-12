@@ -12,39 +12,27 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotTestcaseLineImpl extends ASTWrapperPsiElement implements RobotTestcaseLine {
+public class RobotSingleAssignmentImpl extends ASTWrapperPsiElement implements RobotSingleAssignment {
 
-  public RobotTestcaseLineImpl(ASTNode node) {
+  public RobotSingleAssignmentImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitTestcaseLine(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitSingleAssignment(this);
     else super.accept(visitor);
   }
 
   @Override
   @Nullable
-  public RobotEmptyLine getEmptyLine() {
-    return findChildByClass(RobotEmptyLine.class);
+  public RobotAssignment getAssignment() {
+    return findChildByClass(RobotAssignment.class);
   }
 
   @Override
   @Nullable
-  public RobotEndOfLine getEndOfLine() {
-    return findChildByClass(RobotEndOfLine.class);
-  }
-
-  @Override
-  @Nullable
-  public RobotKeywordInvocation getKeywordInvocation() {
-    return findChildByClass(RobotKeywordInvocation.class);
-  }
-
-  @Override
-  @Nullable
-  public RobotVariableAssignToKeyword getVariableAssignToKeyword() {
-    return findChildByClass(RobotVariableAssignToKeyword.class);
+  public RobotVariable getVariable() {
+    return findChildByClass(RobotVariable.class);
   }
 
 }

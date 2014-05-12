@@ -24,6 +24,10 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitAssignment(@NotNull RobotAssignment o) {
+    visitPsiElement(o);
+  }
+
   public void visitComment(@NotNull RobotComment o) {
     visitPsiElement(o);
   }
@@ -92,6 +96,10 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitMultiAssignment(@NotNull RobotMultiAssignment o) {
+    visitPsiElement(o);
+  }
+
   public void visitOther(@NotNull RobotOther o) {
     visitPsiElement(o);
   }
@@ -125,6 +133,10 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitSetupSetting(@NotNull RobotSetupSetting o) {
+    visitPsiElement(o);
+  }
+
+  public void visitSingleAssignment(@NotNull RobotSingleAssignment o) {
     visitPsiElement(o);
   }
 
@@ -177,6 +189,10 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitTimeoutSetting(@NotNull RobotTimeoutSetting o) {
+    visitPsiElement(o);
+  }
+
+  public void visitVariable(@NotNull RobotVariable o) {
     visitPsiElement(o);
   }
 

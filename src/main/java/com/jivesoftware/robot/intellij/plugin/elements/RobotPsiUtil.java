@@ -14,8 +14,7 @@ import com.intellij.util.indexing.FileBasedIndex;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordDefinitionFinder;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotFileType;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDef;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
+import com.jivesoftware.robot.intellij.plugin.psi.*;
 
 import java.util.Collection;
 import java.util.List;
@@ -152,13 +151,65 @@ public class RobotPsiUtil {
     if (! (psiFile instanceof RobotPsiFile) ) {
       return;
     }
-    RobotKeyword[] results = ((RobotPsiFile) psiFile).findChildrenByClass(RobotKeyword.class);
-    for (RobotKeyword RobotKeyword: results) {
-      String nameAsMethod = robotKeywordToMethodFast(name);
-      String keywordAsMethod = robotKeywordToMethodFast(RobotKeyword.getText());
-      if (nameAsMethod.equalsIgnoreCase(keywordAsMethod)) {
-        keywordList.add(RobotKeyword);
-      }
+    RobotRobotTable[] tables = ((RobotPsiFile) psiFile).findChildrenByClass(RobotRobotTable.class);
+    for (RobotRobotTable robotRobotTable: tables) {
+        RobotTestCasesTable testCasesTable = robotRobotTable.getTestCasesTable();
+        if (testCasesTable != null) {
+            findKeywordUsagesInTestCasesTable(testCasesTable, name, keywordList);
+        }
+        RobotKeywordsTable robotKeywordsTable = robotRobotTable.getKeywordsTable();
+        if (robotKeywordsTable != null) {
+            findKeywordUsagesInKeywordsTable(robotKeywordsTable, name, keywordList);
+        }
     }
   }
-}
+
+    public static void findKeywordUsagesInKeywordsTable(RobotKeywordsTable keywordsTable, String name, List<RobotKeyword> keywordList) {
+        List<RobotKeywordDefinition> robotKeywordDefinitionList = keywordsTable.getKeywordDefinitionList();
+        for (RobotKeywordDefinition robotKeywordDefinition: robotKeywordDefinitionList) {
+            List<RobotKeywordLine> lines = robotKeywordDefinition.getKeywordLineList();
+            for (RobotKeywordLine line: lines) {
+                RobotKeywordInvocation invocation = line.getKeywordInvocation();
+                RobotVariableAssignToKeyword assignToKeyword = line.getVariableAssignToKeyword();
+                if (invocation != null) {
+                    RobotKeyword keyword = invocation.getKeyword();
+                    addKeywordIfMatch(name, keyword, keywordList);
+                } else if (assignToKeyword != null) {
+                    RobotKeyword keyword = assignToKeyword.getKeywordInvocation().getKeyword();
+                    addKeywordIfMatch(name, keyword, keywordList);
+                }
+            }
+        }
+    }
+
+    public static void findKeywordUsagesInTestCasesTable(RobotTestCasesTable testCasesTable, String name, List<RobotKeyword> keywordList) {
+        List<RobotTestCase> testCases = testCasesTable.getTestCaseList();
+        for (RobotTestCase testCase: testCases) {
+            findKeywordUsagesInTestCase(testCase, name, keywordList);
+        }
+    }
+
+    public static void findKeywordUsagesInTestCase(RobotTestCase testCase, String name, List<RobotKeyword> keywordList) {
+        for (RobotTestcaseLine line: testCase.getTestcaseLineList()) {
+            RobotKeywordInvocation invocation = line.getKeywordInvocation();
+            RobotVariableAssignToKeyword assignToKeyword = line.getVariableAssignToKeyword();
+            if (invocation != null) {
+                RobotKeyword keyword = invocation.getKeyword();
+                addKeywordIfMatch(name, keyword, keywordList);
+            } else if (assignToKeyword != null) {
+                RobotKeywordInvocation assignInvocation = assignToKeyword.getKeywordInvocation();
+                RobotKeyword keyword = assignInvocation.getKeyword();
+                addKeywordIfMatch(name, keyword, keywordList);
+            }
+        }
+    }
+
+    private static void addKeywordIfMatch(String name, RobotKeyword keyword, List<RobotKeyword> keywordList) {
+        String nameAsMethod = robotKeywordToMethodFast(name);
+        String keywordAsMethod = robotKeywordToMethodFast(keyword.getName());
+        if (nameAsMethod.equalsIgnoreCase(keywordAsMethod)) {
+            keywordList.add(keyword);
+        }
+    }
+
+    }

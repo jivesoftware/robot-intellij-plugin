@@ -13,6 +13,7 @@ public interface RobotTypes {
   IElementType ARGUMENT_DEF = new RobotElementType("ARGUMENT_DEF");
   IElementType ARRAY_ASSIGNABLE = new RobotElementType("ARRAY_ASSIGNABLE");
   IElementType ASSIGNABLE = new RobotElementType("ASSIGNABLE");
+  IElementType ASSIGNMENT = new RobotElementType("ASSIGNMENT");
   IElementType COMMENT = new RobotElementType("COMMENT");
   IElementType DOCUMENTATION_SETTING = new RobotElementType("DOCUMENTATION_SETTING");
   IElementType EMPTY_LINE = new RobotElementType("EMPTY_LINE");
@@ -30,6 +31,7 @@ public interface RobotTypes {
   IElementType KEYWORD_SETTING = new RobotElementType("KEYWORD_SETTING");
   IElementType KEYWORD_SETTINGS = new RobotElementType("KEYWORD_SETTINGS");
   IElementType KEYWORD_SETTING_LINE = new RobotElementType("KEYWORD_SETTING_LINE");
+  IElementType MULTI_ASSIGNMENT = new RobotElementType("MULTI_ASSIGNMENT");
   IElementType OTHER = new RobotElementType("OTHER");
   IElementType RETURN_LINE = new RobotElementType("RETURN_LINE");
   IElementType RETURN_SETTING = new RobotElementType("RETURN_SETTING");
@@ -39,6 +41,7 @@ public interface RobotTypes {
   IElementType SETTINGS_TABLE = new RobotElementType("SETTINGS_TABLE");
   IElementType SETTINGS_TABLE_HEADING = new RobotElementType("SETTINGS_TABLE_HEADING");
   IElementType SETUP_SETTING = new RobotElementType("SETUP_SETTING");
+  IElementType SINGLE_ASSIGNMENT = new RobotElementType("SINGLE_ASSIGNMENT");
   IElementType TAG = new RobotElementType("TAG");
   IElementType TAGS_SETTING = new RobotElementType("TAGS_SETTING");
   IElementType TEARDOWN_SETTING = new RobotElementType("TEARDOWN_SETTING");
@@ -52,6 +55,7 @@ public interface RobotTypes {
   IElementType TEST_SETTING = new RobotElementType("TEST_SETTING");
   IElementType TEST_SETTING_LINE = new RobotElementType("TEST_SETTING_LINE");
   IElementType TIMEOUT_SETTING = new RobotElementType("TIMEOUT_SETTING");
+  IElementType VARIABLE = new RobotElementType("VARIABLE");
   IElementType VARIABLES_LINE = new RobotElementType("VARIABLES_LINE");
   IElementType VARIABLES_TABLE = new RobotElementType("VARIABLES_TABLE");
   IElementType VARIABLES_TABLE_HEADING = new RobotElementType("VARIABLES_TABLE_HEADING");
@@ -69,7 +73,6 @@ public interface RobotTypes {
   IElementType FORCE_TAGS_SETTING_KEYWORD_TOKEN = new RobotToken("FORCE_TAGS_SETTING_KEYWORD_TOKEN");
   IElementType KEYWORDS_TABLE_HEADING_TOKEN = new RobotToken("KEYWORDS_TABLE_HEADING_TOKEN");
   IElementType NEWLINE_TOKEN = new RobotToken("NEWLINE_TOKEN");
-  IElementType NUMBER_LITERAL_TOKEN = new RobotToken("NUMBER_LITERAL_TOKEN");
   IElementType RETURN_SETTING_TOKEN = new RobotToken("RETURN_SETTING_TOKEN");
   IElementType ROBOT_KEYWORD_ARG_TOKEN = new RobotToken("ROBOT_KEYWORD_ARG_TOKEN");
   IElementType ROBOT_KEYWORD_DEF_TOKEN = new RobotToken("ROBOT_KEYWORD_DEF_TOKEN");
@@ -103,6 +106,9 @@ public interface RobotTypes {
       }
       else if (type == ASSIGNABLE) {
         return new RobotAssignableImpl(node);
+      }
+      else if (type == ASSIGNMENT) {
+        return new RobotAssignmentImpl(node);
       }
       else if (type == COMMENT) {
         return new RobotCommentImpl(node);
@@ -155,6 +161,9 @@ public interface RobotTypes {
       else if (type == KEYWORD_SETTING_LINE) {
         return new RobotKeywordSettingLineImpl(node);
       }
+      else if (type == MULTI_ASSIGNMENT) {
+        return new RobotMultiAssignmentImpl(node);
+      }
       else if (type == OTHER) {
         return new RobotOtherImpl(node);
       }
@@ -181,6 +190,9 @@ public interface RobotTypes {
       }
       else if (type == SETUP_SETTING) {
         return new RobotSetupSettingImpl(node);
+      }
+      else if (type == SINGLE_ASSIGNMENT) {
+        return new RobotSingleAssignmentImpl(node);
       }
       else if (type == TAG) {
         return new RobotTagImpl(node);
@@ -220,6 +232,9 @@ public interface RobotTypes {
       }
       else if (type == TIMEOUT_SETTING) {
         return new RobotTimeoutSettingImpl(node);
+      }
+      else if (type == VARIABLE) {
+        return new RobotVariableImpl(node);
       }
       else if (type == VARIABLES_LINE) {
         return new RobotVariablesLineImpl(node);

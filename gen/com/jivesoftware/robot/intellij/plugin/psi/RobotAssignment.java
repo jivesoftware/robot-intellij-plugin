@@ -5,9 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotKeywordArg extends PsiElement {
-
-  @Nullable
-  RobotVariable getVariable();
+public interface RobotAssignment extends PsiElement {
 
 }
