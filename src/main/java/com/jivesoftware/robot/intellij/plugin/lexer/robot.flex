@@ -263,7 +263,7 @@ KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] "ser" " "?)? [Kk] "eyword" "s"? 
      {VariablesTableHeading}     { yybegin(VARIABLES); return next(VARIABLES_TABLE_HEADING_TOKEN); }
      {TestCasesTableHeading}     { yybegin(TEST_CASES); return next(TEST_CASES_TABLE_HEADING_TOKEN); }
      {KeywordsTableHeading}      { yybegin(BAD_SYNTAX); return next(BAD_SYNTAX_TOKEN); }
-     {DocsMeta}          { return next(DOCUMENTATION_SETTING_TOKEN); }
+     {DocsMeta}          { previous_state = yystate(); yybegin(DOCS_SETTING); return next(DOCUMENTATION_SETTING_TOKEN); }
      {ArgumentsMeta}     { return next(ARGUMENTS_SETTING_TOKEN); }
      {SetupMeta}         { return next(SETUP_SETTING_TOKEN); }
      {TeardownMeta}      { return next(TEARDOWN_SETTING_TOKEN); }

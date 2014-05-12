@@ -14,18 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class RobotKeywordUsagesProvider implements FindUsagesProvider {
-  public static final TokenSet IDENTIFIERS = TokenSet.create(RobotTypes.ROBOT_KEYWORD_DEF_TOKEN,
-                                                             RobotTypes.ROBOT_KEYWORD_TOKEN,
-                                                             RobotTypes.ASSIGNMENT_TOKEN,
-                                                             RobotTypes.ARRAY_ASSIGNMENT_TOKEN,
-                                                             RobotTypes.VARIABLE_TOKEN,
-                                                             RobotTypes.ARRAY_VARIABLE_TOKEN,
-                                                             RobotTypes.SETTINGS_TABLE_HEADING_TOKEN,
-                                                             RobotTypes.VARIABLES_TABLE_HEADING_TOKEN,
-                                                             RobotTypes.TEST_CASES_TABLE_HEADING_TOKEN,
-                                                             RobotTypes.KEYWORDS_TABLE_HEADING_TOKEN,
-                                                             RobotTypes.TEST_CASE_HEADER_TOKEN,
-                                                             RobotTypes.TAG_TOKEN);
+  public static final TokenSet IDENTIFIERS = TokenSet.create(RobotTypes.ROBOT_KEYWORD_TOKEN);
 
   public static final TokenSet COMMENTS = TokenSet.create(RobotTypes.COMMENT_TOKEN,
                                                           RobotTypes.DOCUMENTATION_TOKEN);
@@ -35,7 +24,14 @@ public class RobotKeywordUsagesProvider implements FindUsagesProvider {
   public static final TokenSet IGNORED = TokenSet.create(RobotTypes.WHITESPACE_TOKEN,
                                                          RobotTypes.COLUMN_SEP_TOKEN,
                                                          RobotTypes.BAD_SYNTAX_TOKEN,
-                                                         RobotTypes.NEWLINE_TOKEN);
+                                                         RobotTypes.NEWLINE_TOKEN,
+                                                         RobotTypes.ASSIGNMENT_TOKEN,
+                                                         RobotTypes.ARRAY_ASSIGNMENT_TOKEN,
+                                                         RobotTypes.ARGUMENTS_SETTING_TOKEN,
+                                                         RobotTypes.VARIABLE_TOKEN,
+                                                         RobotTypes.ARRAY_VARIABLE_TOKEN,
+                                                         RobotTypes.FORCE_TAGS_SETTING_KEYWORD_TOKEN,
+                                                         RobotTypes.KEYWORDS_TABLE_HEADING_TOKEN);
 
   @Nullable
   @Override
@@ -51,7 +47,7 @@ public class RobotKeywordUsagesProvider implements FindUsagesProvider {
   @Nullable
   @Override
   public String getHelpId(@NotNull PsiElement psiElement) {
-    return HelpID.FIND_METHOD_USAGES;
+    return HelpID.FIND_IN_PROJECT;
   }
 
   @NotNull
