@@ -1,16 +1,16 @@
 <idea-plugin version="2">
     <id>com.jivesoftware.robot.intellij.plugin</id>
     <name>Robot Plugin</name>
-    <version>1.0.6</version>
+    <version>1.1.0</version>
     <vendor email="charles.capps@jivesoftware.com" url="http://www.jiveosftware.com">Jive Software</vendor>
 
     <description><![CDATA[
-      Robot Framework Plugin to provide integration with Robot Test Case Files. Specifically focuses on providing integration with
-      Robot keywords implemented in Java that are in the same IntelliJ project as your Robot test case files (can be in a different module).<br>
+      The Robot Plugin provides integration with Robot Framework Test Case Files (http://www.robotframework.org). Specifically focuses on providing integration with
+      Robot keywords implemented in Java that are in the same IntelliJ project as your Robot test case files.<br>
       Provides support for:
       <ul>
           <li>Syntax Highlighting</li>
-          <li>Robot Syntax Error Highlighting</li>
+          <li>SyntaxError Highlighting</li>
           <li>Go to declaration of a Keyword from the point of use. Jumps to Java or Robot file keyword definition.</li>
           <li>Find usages of Keywords defined in Java or Robot files</li>
           <li>Autocomplete keywords and test case tags</li>
