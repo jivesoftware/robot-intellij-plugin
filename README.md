@@ -11,6 +11,12 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.1.3</h3>
+
+<ul>
+    <li>Fix a regression where the plugin didn't work in Ultimate edition.</li>
+</ul>
+
 <h3>Version 1.1.2</h3>
 <ul>
     <li>Added the ability to find Test Cases with Go To Symbol, i.e. with the hotkey Ctrl+shift+alt+n.</li>
