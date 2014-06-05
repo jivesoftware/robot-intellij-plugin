@@ -102,6 +102,10 @@ public class RobotImplUtil {
         return refs[0];
     }
 
+    public static PsiElement handleElementRename(RobotKeyword element, String name) {
+      return element.setName(name);
+    }
+
     /* Methods for RobotKeywordDef type */
 
     public static ItemPresentation getPresentation(final RobotKeywordDef element) {

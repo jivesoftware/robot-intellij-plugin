@@ -130,6 +130,14 @@
         <completion.contributor language="RobotTestFile"
                                 implementationClass="com.jivesoftware.robot.intellij.plugin.elements.completion.RobotCompletionContributor"/>
 
+        <!-- Enables renaming Java keywords to refactor all usages in Robot files.-->
+        <renamePsiElementProcessor implementation="com.jivesoftware.robot.intellij.plugin.elements.refactoring.RenameJavaRobotKeywordProcessor" />
+
+        <!-- Enables renaming things within Robot-->
+        <renamePsiElementProcessor implementation="com.jivesoftware.robot.intellij.plugin.elements.refactoring.RenameRobotRobotKeywordProcessor" />
+        <lang.namesValidator language="RobotTestFile"
+                             implementationClass="com.jivesoftware.robot.intellij.plugin.elements.refactoring.RobotKeywordDefNamesValidator" />
+
         <internalFileTemplate name="fileTemplates.internal.RobotTestCaseFile"/>
         <internalFileTemplate name="fileTemplates.internal.RobotKeywordsFile"/>
 

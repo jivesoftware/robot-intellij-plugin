@@ -108,7 +108,7 @@ TAG ::= TAG_TOKEN
 END_OF_LINE ::= WHITESPACE_TOKEN? COLUMN_SEP_TOKEN? COMMENT_TOKEN?
 EMPTY_LINE  ::= !<<eof>> END_OF_LINE (NEWLINE_TOKEN | <<eof>>)
 
-KEYWORD ::= ROBOT_KEYWORD_TOKEN { methods=[getName setName getNameIdentifier getReference getReferences]}
+KEYWORD ::= ROBOT_KEYWORD_TOKEN { methods=[getName setName getNameIdentifier getReference getReferences handleElementRename]}
 
 KEYWORD_DEF ::= ROBOT_KEYWORD_DEF_TOKEN { methods=[getName setName getNameIdentifier getPresentation]}
 

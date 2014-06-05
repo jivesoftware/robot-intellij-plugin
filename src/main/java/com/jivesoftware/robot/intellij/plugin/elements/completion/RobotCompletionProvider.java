@@ -5,17 +5,18 @@ import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiNamedElement;
-import com.intellij.psi.PsiReference;
+import com.intellij.openapi.project.Project;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.util.ProcessingContext;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.references.PsiMethodWithRobotName;
+import com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordDefinitionFinder;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotTagFinder;
+import com.jivesoftware.robot.intellij.plugin.icons.RobotIcons;
 import com.jivesoftware.robot.intellij.plugin.parser.RobotTypes;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDef;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -62,11 +63,13 @@ public class RobotCompletionProvider extends CompletionProvider<CompletionParame
     }
     final String text = leaf.getText();
     final String textMethodName = RobotPsiUtil.robotKeywordToMethodFast(text);
-    Object[] variants = ref.getVariants();
+    PsiFile file = leaf.getContainingFile();
+    Project project = file.getProject();
+    List<PsiElement> keywordDefinitions = getRobotKeywordDefinitions(file, project);
     Set<String> includedNames = Sets.newHashSet();
-    for (Object o: variants) {
-      if (o instanceof PsiNamedElement) {
-        PsiNamedElement named = (PsiNamedElement) o;
+    for (PsiElement el: keywordDefinitions) {
+      if (el instanceof PsiNamedElement) {
+        PsiNamedElement named = (PsiNamedElement) el;
         String name = named.getName();
         String methodName = RobotPsiUtil.robotKeywordToMethodFast(name);
         if (!methodName.toLowerCase().contains(textMethodName.toLowerCase())) {
@@ -76,11 +79,30 @@ public class RobotCompletionProvider extends CompletionProvider<CompletionParame
           named = new PsiMethodWithRobotName(named.getNode());
           String lowercaseName = methodName.toLowerCase();
           if (!includedNames.contains(lowercaseName)) {
-            result.addElement(LookupElementBuilder.create(named));
+            result.addElement(LookupElementBuilder.create(named)
+                    .withCaseSensitivity(false)
+                    .withTypeText("Java Keyword")
+                    .withIcon(RobotIcons.FILE));
+            includedNames.add(lowercaseName);
+          }
+        } else if (named instanceof RobotKeywordDef) {
+          String lowercaseName = methodName.toLowerCase();
+          if (!includedNames.contains(lowercaseName)) {
+            result.addElement(LookupElementBuilder.create(named)
+                    .withCaseSensitivity(false)
+                    .withTypeText("Robot Keyword")
+                    .withIcon(RobotIcons.FILE));
             includedNames.add(lowercaseName);
           }
         }
       }
     }
+  }
+
+  private List<PsiElement> getRobotKeywordDefinitions(PsiFile psiFile, Project project) {
+    RobotKeywordDefinitionFinder robotKeywordDefinitionFinder = new RobotKeywordDefinitionFinder(psiFile, project, "", RobotKeywordDefinitionFinder.SCOPE.ALL, true, true,
+            RobotKeywordDefinitionFinder.ALL_PREDICATE);
+    robotKeywordDefinitionFinder.process();
+    return robotKeywordDefinitionFinder.getResults();
   }
 }

@@ -24,4 +24,6 @@ public interface RobotKeyword extends RobotNamedElement {
   @NotNull
   PsiReference[] getReferences();
 
+  PsiElement handleElementRename(String name);
+
 }

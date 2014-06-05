@@ -49,4 +49,8 @@ public class RobotKeywordImpl extends ASTWrapperPsiElement implements RobotKeywo
     return RobotImplUtil.getReferences(this);
   }
 
+  public PsiElement handleElementRename(String name) {
+    return RobotImplUtil.handleElementRename(this, name);
+  }
+
 }
