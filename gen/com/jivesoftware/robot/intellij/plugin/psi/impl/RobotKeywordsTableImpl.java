@@ -11,6 +11,7 @@ import static com.jivesoftware.robot.intellij.plugin.parser.RobotTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
+import com.intellij.navigation.ItemPresentation;
 
 public class RobotKeywordsTableImpl extends ASTWrapperPsiElement implements RobotKeywordsTable {
 
@@ -39,6 +40,15 @@ public class RobotKeywordsTableImpl extends ASTWrapperPsiElement implements Robo
   @NotNull
   public List<RobotKeywordDefinition> getKeywordDefinitionList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotKeywordDefinition.class);
+  }
+
+  @Nullable
+  public PsiElement getNameIdentifier() {
+    return RobotImplUtil.getNameIdentifier(this);
+  }
+
+  public ItemPresentation getPresentation() {
+    return RobotImplUtil.getPresentation(this);
   }
 
 }

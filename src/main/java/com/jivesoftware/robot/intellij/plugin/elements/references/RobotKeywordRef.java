@@ -6,6 +6,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReferenceBase;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotPsiUtil;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,7 +19,6 @@ public class RobotKeywordRef extends PsiReferenceBase<PsiElement> {
   public RobotKeywordRef(PsiElement element) {
     super(element);
   }
-
 
   @Nullable
   @Override
@@ -42,7 +42,7 @@ public class RobotKeywordRef extends PsiReferenceBase<PsiElement> {
   @Override
   public String getCanonicalText() {
     String keywordText = myElement.getText();
-    return RobotPsiUtil.robotKeywordToMethodFast(keywordText);
+    return keywordText;
   }
 
   @NotNull
@@ -54,6 +54,14 @@ public class RobotKeywordRef extends PsiReferenceBase<PsiElement> {
   @Override
   public TextRange calculateDefaultRangeInElement() {
     return new TextRange(0, myElement.getText().length());
+  }
+
+  @Override
+  public PsiElement handleElementRename(String name) {
+      if (myElement instanceof RobotKeyword) {
+          return ((RobotKeyword)myElement).setName(RobotPsiUtil.methodToRobotKeyword(name));
+      }
+      return myElement;
   }
 
 }

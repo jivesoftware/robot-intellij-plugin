@@ -11,6 +11,17 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.1.4</h3>
+
+<ul>
+    <li>Add support for Rename Refactoring! You can rename Keywords defined in Java or Robot and the change will
+    propagate to all usages of the Keyword!</li>
+
+    <li>Fix bug with Autocomplete listing duplicate entries, and improved autocomplete.</li>
+
+    <li>Implemented Structure View to list all Test Cases and Keyword definitions in a Robot file.</li>
+</ul>
+
 <h3>Version 1.1.3</h3>
 
 <ul>

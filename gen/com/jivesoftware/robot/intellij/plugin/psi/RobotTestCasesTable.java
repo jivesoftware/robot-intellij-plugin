@@ -4,6 +4,7 @@ package com.jivesoftware.robot.intellij.plugin.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.navigation.ItemPresentation;
 
 public interface RobotTestCasesTable extends PsiElement {
 
@@ -15,5 +16,10 @@ public interface RobotTestCasesTable extends PsiElement {
 
   @NotNull
   RobotTestCasesTableHeading getTestCasesTableHeading();
+
+  @Nullable
+  PsiElement getNameIdentifier();
+
+  ItemPresentation getPresentation();
 
 }

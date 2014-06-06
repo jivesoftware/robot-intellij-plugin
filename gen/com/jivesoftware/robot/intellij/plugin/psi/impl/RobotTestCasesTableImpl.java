@@ -11,6 +11,7 @@ import static com.jivesoftware.robot.intellij.plugin.parser.RobotTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
+import com.intellij.navigation.ItemPresentation;
 
 public class RobotTestCasesTableImpl extends ASTWrapperPsiElement implements RobotTestCasesTable {
 
@@ -39,6 +40,15 @@ public class RobotTestCasesTableImpl extends ASTWrapperPsiElement implements Rob
   @NotNull
   public RobotTestCasesTableHeading getTestCasesTableHeading() {
     return findNotNullChildByClass(RobotTestCasesTableHeading.class);
+  }
+
+  @Nullable
+  public PsiElement getNameIdentifier() {
+    return RobotImplUtil.getNameIdentifier(this);
+  }
+
+  public ItemPresentation getPresentation() {
+    return RobotImplUtil.getPresentation(this);
   }
 
 }
