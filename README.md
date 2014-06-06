@@ -11,6 +11,15 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.1.5</h3>
+
+<ul>
+   <li>
+      Fix a regression--accidentally compiled on Linux with Java 1.7 targeting Java 1.6, which makes it not work
+      on Mac with IntelliJ Ultimate edition. Jetbrains--please fix this if possible? 
+   </li>
+</ul>
+
 <h3>Version 1.1.4</h3>
 
 <ul>

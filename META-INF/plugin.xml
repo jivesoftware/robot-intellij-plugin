@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.jivesoftware.robot.intellij.plugin</id>
     <name>Robot Plugin</name>
-    <version>1.1.4</version>
+    <version>1.1.5</version>
     <vendor email="charles.capps@jivesoftware.com" url="http://www.jiveosftware.com">Jive Software</vendor>
 
     <description><![CDATA[
@@ -27,8 +27,15 @@
     ]]></description>
 
     <change-notes><![CDATA[
-    <h3>Version 1.1.4</h3>
+    <h3>Version 1.1.5</h3>
+    <ul>
+       <li>
+          Fix a regression--accidentally compiled on Linux with Java 1.7 targeting Java 1.6, which makes it not work
+          on Mac with IntelliJ Ultimate edition. Jetbrains--please fix this if possible?
+       </li>
+    </ul>
 
+    <h3>Version 1.1.4</h3>
     <ul>
         <li>Add support for Rename Refactoring! You can rename Keywords defined in Java or Robot and the change will
     propagate to all usages of the Keyword!</li>
