@@ -151,8 +151,7 @@ public class RobotPsiUtil {
         GlobalSearchScope robotFileScope = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.projectScope(project), RobotFileType.INSTANCE);
 
         FindRobotRobotKeywordsByNameProcessor processor = new FindRobotRobotKeywordsByNameProcessor(name);
-        String[] tokens = name.trim().split(" ");
-        PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWord(tokens[0], robotFileScope, processor, false);
+        PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWord(name, robotFileScope, processor, false);
 
         return processor.getResults();
     }

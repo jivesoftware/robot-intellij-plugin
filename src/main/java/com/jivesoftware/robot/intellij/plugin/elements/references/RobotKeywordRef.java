@@ -3,7 +3,6 @@ package com.jivesoftware.robot.intellij.plugin.elements.references;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReferenceBase;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
@@ -11,8 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-
-import static com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordDefinitionFinder.SCOPE;
 
 public class RobotKeywordRef extends PsiReferenceBase<PsiElement> {
 
@@ -25,7 +22,7 @@ public class RobotKeywordRef extends PsiReferenceBase<PsiElement> {
   public PsiElement resolve() {
     Project project = myElement.getProject();
 
-    RobotKeywordDefinitionFinder robotKeywordDefinitionFinder = new RobotKeywordDefinitionFinder(project, getCanonicalText(), SCOPE.ALL, false);
+    RobotKeywordDefinitionFinder robotKeywordDefinitionFinder = new RobotKeywordDefinitionFinder(project, getCanonicalText(), RobotKeywordDefinitionFinder.KEYWORD_SCOPE.ROBOT_AND_JAVA_KEYWORDS, false);
     robotKeywordDefinitionFinder.process();
     List<PsiElement> results = robotKeywordDefinitionFinder.getResults();
     if (results.size() <= 0) {

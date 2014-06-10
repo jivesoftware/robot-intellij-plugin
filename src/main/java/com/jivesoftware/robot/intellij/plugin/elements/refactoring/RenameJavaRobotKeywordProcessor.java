@@ -40,7 +40,8 @@ public class RenameJavaRobotKeywordProcessor extends RenamePsiElementProcessor {
 
   @Override
   public void findExistingNameConflicts(PsiElement element, String newName, MultiMap<PsiElement, String> conflicts) {
-     List<RobotKeywordDef> defs = RobotPsiUtil.findKeywordDefsByName(newName, element.getProject());
+    String robotName = RobotPsiUtil.methodToRobotKeyword(newName);
+     List<RobotKeywordDef> defs = RobotPsiUtil.findKeywordDefsByName(robotName, element.getProject());
      for (RobotKeywordDef def: defs) {
          conflicts.put(def, Lists.newArrayList(newName));
      }

@@ -17,6 +17,7 @@ import com.intellij.util.Processor;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordRef;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDef;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -24,23 +25,38 @@ import java.util.List;
 public class RobotCustomUsagesSearcher extends CustomUsageSearcher {
   @Override
   public void processElementUsages(@NotNull PsiElement element, @NotNull Processor<Usage> processor, @NotNull FindUsagesOptions options) {
-    if (!(element instanceof PsiMethod)) {
+    if (!(element instanceof PsiMethod) && (!(element instanceof RobotKeywordDef))) {
       return;
     }
-    PsiMethod method = (PsiMethod) element;
+    if (element instanceof PsiMethod) {
+      processJavaUsages((PsiMethod)element, processor);
+    } else if (element instanceof RobotKeywordDef) {
+      processKeywordUsages((RobotKeywordDef)element, processor);
+    }
+  }
+
+  private void processJavaUsages(PsiMethod method, Processor<Usage> processor) {
     Application app = ApplicationManager.getApplication();
-    FindUsagesRunnable findUsagesRunnable = new FindUsagesRunnable(method);
-    app.runReadAction(findUsagesRunnable);
-    List<Usage> usages = findUsagesRunnable.getUsages();
+    FindJavaUsagesRunnable findJavaUsagesRunnable = new FindJavaUsagesRunnable(method);
+    app.runReadAction(findJavaUsagesRunnable);
+    List<Usage> usages = findJavaUsagesRunnable.getUsages();
     new CollectionQuery<Usage>(usages).forEach(processor);
   }
 
-  private static class FindUsagesRunnable implements Runnable {
+  private void processKeywordUsages(RobotKeywordDef keywordDef, Processor<Usage> processor) {
+    Application app = ApplicationManager.getApplication();
+    FindRobotUsagesRunnable findJavaUsagesRunnable = new FindRobotUsagesRunnable(keywordDef);
+    app.runReadAction(findJavaUsagesRunnable);
+    List<Usage> usages = findJavaUsagesRunnable.getUsages();
+    new CollectionQuery<Usage>(usages).forEach(processor);
+  }
+
+  private static class FindJavaUsagesRunnable implements Runnable {
 
     private List<Usage> usages;
     private final PsiMethod methodToFindUsages;
 
-    public FindUsagesRunnable(PsiMethod psiMethod) {
+    public FindJavaUsagesRunnable(PsiMethod psiMethod) {
       this.methodToFindUsages = psiMethod;
     }
 
@@ -53,6 +69,34 @@ public class RobotCustomUsagesSearcher extends CustomUsageSearcher {
       }
       String name = methodToFindUsages.getName();
       List<RobotKeyword> robotKeywords = RobotPsiUtil.findKeywordUsagesByName(name, methodToFindUsages.getProject());
+      for (RobotKeyword keyword: robotKeywords) {
+        PsiReference ref = new RobotKeywordRef(keyword);
+        TextRange rangeInElement = ref.getRangeInElement();
+        UsageInfo usageInfo = new UsageInfo(keyword, rangeInElement.getStartOffset(), rangeInElement.getEndOffset());
+        usages.add(new UsageInfo2UsageAdapter(usageInfo));
+      }
+    }
+
+    public List<Usage> getUsages() {
+      return usages;
+    }
+  }
+
+  private static class FindRobotUsagesRunnable implements Runnable {
+
+    private List<Usage> usages;
+    private final RobotKeywordDef keywordToFindUsages;
+
+    public FindRobotUsagesRunnable(RobotKeywordDef robotKeywordDef) {
+      this.keywordToFindUsages = robotKeywordDef;
+    }
+
+
+    @Override
+    public void run() {
+      usages = Lists.newArrayList();
+      String name = keywordToFindUsages.getName();
+      List<RobotKeyword> robotKeywords = RobotPsiUtil.findKeywordUsagesByName(name, keywordToFindUsages.getProject());
       for (RobotKeyword keyword: robotKeywords) {
         PsiReference ref = new RobotKeywordRef(keyword);
         TextRange rangeInElement = ref.getRangeInElement();

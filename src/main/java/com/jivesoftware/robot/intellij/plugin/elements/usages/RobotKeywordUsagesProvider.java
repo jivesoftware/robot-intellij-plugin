@@ -21,25 +21,11 @@ public class RobotKeywordUsagesProvider implements FindUsagesProvider {
 
   public static final TokenSet LITERALS = TokenSet.EMPTY;
 
-  public static final TokenSet IGNORED = TokenSet.create(RobotTypes.WHITESPACE_TOKEN,
-                                                         RobotTypes.COLUMN_SEP_TOKEN,
-                                                         RobotTypes.BAD_SYNTAX_TOKEN,
-                                                         RobotTypes.NEWLINE_TOKEN,
-                                                         RobotTypes.ASSIGNMENT_TOKEN,
-                                                         RobotTypes.ARRAY_ASSIGNMENT_TOKEN,
-                                                         RobotTypes.ARGUMENTS_SETTING_TOKEN,
-                                                         RobotTypes.VARIABLE_TOKEN,
-                                                         RobotTypes.ARRAY_VARIABLE_TOKEN,
-                                                         RobotTypes.FORCE_TAGS_SETTING_KEYWORD_TOKEN,
-                                                         RobotTypes.KEYWORDS_TABLE_HEADING_TOKEN,
-                                                         RobotTypes.COMMENT_TOKEN,
-                                                         RobotTypes.DOCUMENTATION_TOKEN,
-                                                         RobotTypes.ROBOT_KEYWORD_ARG_TOKEN);
 
   @Nullable
   @Override
   public WordsScanner getWordsScanner() {
-    return new DefaultWordsScanner(new RobotScannerAdapter(), IDENTIFIERS, COMMENTS, LITERALS, IGNORED);
+    return new RobotWordsScanner(new RobotScannerAdapter(), IDENTIFIERS, COMMENTS, LITERALS);
   }
 
   @Override
