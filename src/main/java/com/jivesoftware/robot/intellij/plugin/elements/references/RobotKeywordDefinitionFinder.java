@@ -4,14 +4,16 @@ import com.google.common.collect.Lists;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.java.stubs.index.JavaStubIndexKeys;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiSearchHelper;
+import com.intellij.psi.stubs.StubIndex;
 import com.intellij.util.Processor;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotPsiUtil;
-import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDef;
 import org.apache.commons.lang.StringUtils;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -24,32 +26,30 @@ public class RobotKeywordDefinitionFinder implements Processor<PsiFile> {
 
   public static enum SCOPE {ROBOT_FILES, JAVA_FILES, ALL}
 
-  ;
-
-  private final PsiFile startPsiFile;
   private final Project project;
   private final String searchTerm;
+  private final String methodText;
   private final SCOPE scope;
   private final List<PsiElement> results;
   private final KeywordPredicate keywordPredicate;
-  private boolean findAll;
+  private final boolean findAll;
   private final boolean wrapPsiMethods;
 
-  public RobotKeywordDefinitionFinder(PsiFile startPsiFile, Project project, String searchTerm, SCOPE scope) {
-    this(startPsiFile, project, searchTerm, scope, false);
+  public RobotKeywordDefinitionFinder(Project project, String searchTerm, SCOPE scope) {
+    this(project, searchTerm, scope, false);
   }
 
-  public RobotKeywordDefinitionFinder(PsiFile startPsiFile, Project project, String searchTerm, SCOPE scope, boolean findAll) {
-    this(startPsiFile, project, searchTerm, scope, findAll, false, DEFAULT_PREDICATE);
+  public RobotKeywordDefinitionFinder(Project project, String searchTerm, SCOPE scope, boolean findAll) {
+    this(project, searchTerm, scope, findAll, false);
   }
 
-  public RobotKeywordDefinitionFinder(PsiFile startPsiFile, Project project, String searchTerm, SCOPE scope, boolean findAll, boolean wrapPsiMethods, KeywordPredicate keywordPredicate) {
-    this.startPsiFile = startPsiFile;
+  public RobotKeywordDefinitionFinder(Project project, String searchTerm, SCOPE scope, boolean findAll, boolean wrapPsiMethods) {
     this.project = project;
     this.searchTerm = searchTerm;
+    this.methodText = RobotPsiUtil.robotKeywordToMethodFast(searchTerm);
     this.scope = scope;
     this.findAll = findAll;
-    this.keywordPredicate = keywordPredicate;
+    this.keywordPredicate = findAll ? CONTAINS_PREDICATE : EXACT_NAME_PREDICATE;
     this.wrapPsiMethods = wrapPsiMethods;
     results = Lists.newArrayList();
   }
@@ -62,15 +62,15 @@ public class RobotKeywordDefinitionFinder implements Processor<PsiFile> {
   public void process() {
     //Find Java methods for the keyword
     if (scope == SCOPE.ALL || scope == SCOPE.JAVA_FILES) {
-      String methodText = RobotPsiUtil.robotKeywordToMethodFast(searchTerm);
-      String searchWord;
-      if (StringUtils.isEmpty(methodText)) {
-        searchWord = "RobotKeyword";
+      if (findAll) {
+          addJavaMethodsContainingText();
       } else {
-        searchWord = methodText;
+          addJavaMethodsWithExactName(results);
       }
-      GlobalSearchScope javaFilesInProject = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.projectScope(project), JavaFileType.INSTANCE);
-      PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWord(searchWord, javaFilesInProject, this, false);
+    }
+
+    if (!findAll && results.size() > 0) {
+        return;
     }
 
     //Find Robot keyword definitions from robot files
@@ -82,8 +82,37 @@ public class RobotKeywordDefinitionFinder implements Processor<PsiFile> {
         robotKeywordDefs = RobotPsiUtil.findKeywordDefsByName(searchTerm, project);
       }
       results.addAll(robotKeywordDefs);
-     // findKeywordDefInRobotFiles(startPsiFile, results);
     }
+  }
+
+  private void addJavaMethodsWithExactName(List<PsiElement> resultsToAdd) {
+      Collection<PsiMethod> methods =  StubIndex.getElements(JavaStubIndexKeys.METHODS, methodText, project, GlobalSearchScope.projectScope(project), PsiMethod.class);
+      for (PsiMethod method: methods) {
+          if (!RobotPsiUtil.isJavaRobotKeyword(method)) {
+              continue;
+          }
+          if (keywordPredicate.includeJavaMethod(methodText, method)) {
+              if (wrapPsiMethods) {
+                  resultsToAdd.add(new PsiMethodWithRobotName(method.getNode()));
+              } else {
+                  resultsToAdd.add(method);
+              }
+              if (!findAll) {
+                  break;
+              }
+          }
+      }
+  }
+
+  private void addJavaMethodsContainingText() {
+      String searchWord;
+      if (StringUtils.isEmpty(methodText)) {
+          searchWord = "RobotKeyword";
+      } else {
+          searchWord = methodText;
+      }
+      GlobalSearchScope javaFilesInProject = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.projectScope(project), JavaFileType.INSTANCE);
+      PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWord(searchWord, javaFilesInProject, this, false);
   }
 
   private boolean addResultsForJavaFile(PsiFile psiFile, List<PsiElement> resultsToAdd) {
@@ -91,7 +120,7 @@ public class RobotKeywordDefinitionFinder implements Processor<PsiFile> {
       PsiClass[] classes = ((PsiClassOwner) psiFile).getClasses();
       for (PsiClass psiClass : classes) {
         for (PsiMethod psiMethod : psiClass.getMethods()) {
-          if (keywordPredicate.includeJavaMethod(searchTerm, psiMethod)) {
+          if (keywordPredicate.includeJavaMethod(methodText, psiMethod)) {
             if (wrapPsiMethods) {
                 resultsToAdd.add(new PsiMethodWithRobotName(psiMethod.getNode()));
             } else {
@@ -107,78 +136,20 @@ public class RobotKeywordDefinitionFinder implements Processor<PsiFile> {
     return true;
   }
 
-  /**
-   * Starting in startFile, search for the robot keyword definition in a robot file.
-   * Recursively search UP the tree, since we generally only include robot files from a parent directory.
-   * TODO: Can we filter by robot files without having to do so manually?
-   * TODO: Follow which files are included in Resources? (Or maybe we want to be more inclusive, anyway)
-   */
-  public void findKeywordDefInRobotFiles(PsiFile startFile, List<PsiElement> resultsToAdd) {
-    if (startFile == null) {
-      return;
-    }
-    boolean searchMore = findKeywordDefInRobotFile(startFile, resultsToAdd);
-    if (!searchMore) {
-      return;
-    }
-    PsiDirectory directory = startFile.getContainingDirectory();
-    if (directory == null) {
-      return;
-    }
-    PsiFile[] files = directory.getFiles();
-    for (PsiFile file : files) {
-      if (file.equals(startFile)) {
-        continue;
-      }
-      searchMore = findKeywordDefInRobotFile(file, resultsToAdd);
-      if (!searchMore) {
-        return;
-      }
-    }
-    PsiDirectory parentDir = directory.getParent();
-    if (parentDir == null) {
-      return;
-    }
-    PsiFile[] parentFiles = parentDir.getFiles();
-    if (parentFiles.length <= 0) {
-      return;
-    }
-    findKeywordDefInRobotFiles(parentFiles[0], resultsToAdd);
-  }
-
-  /**
-   * @return - true if search should continue, false if not
-   */
-  public boolean findKeywordDefInRobotFile(PsiFile file, List<PsiElement> resultsToAdd) {
-    if (file instanceof RobotPsiFile) {
-      RobotKeywordDef[] keywordDefs = ((RobotPsiFile) file).findChildrenByClass(RobotKeywordDef.class);
-      for (RobotKeywordDef el : keywordDefs) {
-        if (keywordPredicate.includeRobotKeywordDefinition(searchTerm, el)) {
-          resultsToAdd.add(el);
-          if (!findAll) {
-            return false;
-          }
-        }
-      }
-    }
-    return true;
-  }
-
   public List<PsiElement> getResults() {
     return results;
   }
 
   public static interface KeywordPredicate {
-    public boolean includeJavaMethod(String searchText, PsiMethod el);
+    public boolean includeJavaMethod(String searchTextAsMethod, PsiMethod el);
 
     public boolean includeRobotKeywordDefinition(String searchText, RobotKeywordDef el);
   }
 
-  public static final KeywordPredicate DEFAULT_PREDICATE = new KeywordPredicate() {
+  public static final KeywordPredicate EXACT_NAME_PREDICATE = new KeywordPredicate() {
     @Override
-    public boolean includeJavaMethod(String searchText, PsiMethod el) {
+    public boolean includeJavaMethod(String searchTextAsMethod, PsiMethod el) {
       String methodText = el.getName();
-      String searchTextAsMethod = RobotPsiUtil.robotKeywordToMethodFast(searchText);
       if (!methodText.equalsIgnoreCase(searchTextAsMethod)) {
         return false;
       }
@@ -187,43 +158,24 @@ public class RobotKeywordDefinitionFinder implements Processor<PsiFile> {
     }
 
     @Override
-    public boolean includeRobotKeywordDefinition(String searchText, RobotKeywordDef el) {
+    public boolean includeRobotKeywordDefinition(String searchTextAsMethod, RobotKeywordDef el) {
       String methodText = RobotPsiUtil.robotKeywordToMethodFast(el.getText());
-      String searchTextAsMethod = RobotPsiUtil.robotKeywordToMethodFast(searchText);
       return methodText.equalsIgnoreCase(searchTextAsMethod);
     }
   };
 
-  public static final KeywordPredicate STARTS_WITH_PREDICATE = new KeywordPredicate() {
+  public static final KeywordPredicate CONTAINS_PREDICATE = new KeywordPredicate() {
     @Override
-    public boolean includeJavaMethod(String searchText, PsiMethod el) {
-      String methodText = el.getName();
-      String searchTextAsMethod = RobotPsiUtil.robotKeywordToMethodFast(searchText);
-      if (!methodText.toLowerCase().startsWith(searchTextAsMethod.toLowerCase())) {
-        return false;
-      }
+    public boolean includeJavaMethod(String searchTextAsMethod, PsiMethod el) {
       PsiModifierList modifierList = el.getModifierList();
-      return modifierList.findAnnotation(ROBOT_KEYWORD_ANNOTATION) != null;
+      return el.getName().toLowerCase().contains(searchTextAsMethod.toLowerCase()) &&
+              modifierList.findAnnotation(ROBOT_KEYWORD_ANNOTATION) != null;
     }
 
     @Override
     public boolean includeRobotKeywordDefinition(String searchText, RobotKeywordDef el) {
-      String methodText = RobotPsiUtil.robotKeywordToMethodFast(el.getText());
-      String searchTextAsMethod = RobotPsiUtil.robotKeywordToMethodFast(searchText);
-      return methodText.toLowerCase().startsWith(searchTextAsMethod.toLowerCase());
-    }
-  };
-
-  public static final KeywordPredicate ALL_PREDICATE = new KeywordPredicate() {
-    @Override
-    public boolean includeJavaMethod(String searchText, PsiMethod el) {
-      PsiModifierList modifierList = el.getModifierList();
-      return modifierList.findAnnotation(ROBOT_KEYWORD_ANNOTATION) != null;
-    }
-
-    @Override
-    public boolean includeRobotKeywordDefinition(String searchText, RobotKeywordDef el) {
-      return true;
+      String methodText = RobotPsiUtil.robotKeywordToMethodFast(searchText);
+      return RobotPsiUtil.robotKeywordToMethodFast(el.getName()).toLowerCase().contains(methodText.toLowerCase());
     }
   };
 }

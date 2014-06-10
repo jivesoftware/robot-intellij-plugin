@@ -1,5 +1,7 @@
 package com.jivesoftware.robot.intellij.plugin.elements.completion;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
@@ -19,7 +21,9 @@ import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDef;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -65,9 +69,10 @@ public class RobotCompletionProvider extends CompletionProvider<CompletionParame
     final String textMethodName = RobotPsiUtil.robotKeywordToMethodFast(text);
     PsiFile file = leaf.getContainingFile();
     Project project = file.getProject();
-    List<PsiElement> keywordDefinitions = getRobotKeywordDefinitions(file, project);
-    Set<String> includedNames = Sets.newHashSet();
-    for (PsiElement el: keywordDefinitions) {
+    Map<String, PsiElement> keywordDefinitions = getRobotKeywordDefinitions(textMethodName, project);
+    Set<String> keys = keywordDefinitions.keySet();
+    for (String key: keys) {
+      PsiElement el = keywordDefinitions.get(key);
       if (el instanceof PsiNamedElement) {
         PsiNamedElement named = (PsiNamedElement) el;
         String name = named.getName();
@@ -77,32 +82,31 @@ public class RobotCompletionProvider extends CompletionProvider<CompletionParame
         }
         if (named instanceof PsiMethod) {
           named = new PsiMethodWithRobotName(named.getNode());
-          String lowercaseName = methodName.toLowerCase();
-          if (!includedNames.contains(lowercaseName)) {
             result.addElement(LookupElementBuilder.create(named)
                     .withCaseSensitivity(false)
                     .withTypeText("Java Keyword")
                     .withIcon(RobotIcons.FILE));
-            includedNames.add(lowercaseName);
-          }
         } else if (named instanceof RobotKeywordDef) {
-          String lowercaseName = methodName.toLowerCase();
-          if (!includedNames.contains(lowercaseName)) {
             result.addElement(LookupElementBuilder.create(named)
                     .withCaseSensitivity(false)
                     .withTypeText("Robot Keyword")
                     .withIcon(RobotIcons.FILE));
-            includedNames.add(lowercaseName);
-          }
         }
       }
     }
   }
 
-  private List<PsiElement> getRobotKeywordDefinitions(PsiFile psiFile, Project project) {
-    RobotKeywordDefinitionFinder robotKeywordDefinitionFinder = new RobotKeywordDefinitionFinder(psiFile, project, "", RobotKeywordDefinitionFinder.SCOPE.ALL, true, true,
-            RobotKeywordDefinitionFinder.ALL_PREDICATE);
+  private Map<String, PsiElement> getRobotKeywordDefinitions(String textMethodName, Project project) {
+    RobotKeywordDefinitionFinder robotKeywordDefinitionFinder = new RobotKeywordDefinitionFinder(project, "", RobotKeywordDefinitionFinder.SCOPE.ALL, true, true);
     robotKeywordDefinitionFinder.process();
-    return robotKeywordDefinitionFinder.getResults();
+    List<PsiElement> results = robotKeywordDefinitionFinder.getResults();
+    Map<String, PsiElement> defs = Maps.newHashMap();
+    for (PsiElement el: results) {
+        String elText = ((PsiNamedElement) el).getName();
+        if (elText.toLowerCase().contains(textMethodName.toLowerCase())) {
+            defs.put(elText.toLowerCase(), el);
+        }
+    }
+      return defs;
   }
 }

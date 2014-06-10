@@ -11,6 +11,17 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.1.6</h3>
+<ul>
+<li>
+Performance improvements - use the Java Stub Index to search for methods when we're searching by the exact name.
+Use the word index when searching for Robot keyword definitions in Robot files.
+Found one case where unnecessary work may have been done.
+This should improve performance for large projects that have many Robot files.
+Next improvement would be to implement a StubTree and StubIndex.
+</li>
+</ul>
+
 <h3>Version 1.1.5</h3>
 
 <ul>

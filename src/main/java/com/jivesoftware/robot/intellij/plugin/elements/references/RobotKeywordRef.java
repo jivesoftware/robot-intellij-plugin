@@ -24,9 +24,8 @@ public class RobotKeywordRef extends PsiReferenceBase<PsiElement> {
   @Override
   public PsiElement resolve() {
     Project project = myElement.getProject();
-    PsiFile psiFile = myElement.getContainingFile();
 
-    RobotKeywordDefinitionFinder robotKeywordDefinitionFinder = new RobotKeywordDefinitionFinder(psiFile, project, getCanonicalText(), SCOPE.ALL);
+    RobotKeywordDefinitionFinder robotKeywordDefinitionFinder = new RobotKeywordDefinitionFinder(project, getCanonicalText(), SCOPE.ALL, false);
     robotKeywordDefinitionFinder.process();
     List<PsiElement> results = robotKeywordDefinitionFinder.getResults();
     if (results.size() <= 0) {

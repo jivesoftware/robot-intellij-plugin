@@ -3,14 +3,12 @@ package com.jivesoftware.robot.intellij.plugin.elements;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifierList;
+import com.intellij.psi.*;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.search.PsiSearchHelper;
 import com.intellij.util.indexing.FileBasedIndex;
+import com.jivesoftware.robot.intellij.plugin.elements.references.FindRobotRobotKeywordsByNameProcessor;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordDefinitionFinder;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotFileType;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
@@ -150,14 +148,13 @@ public class RobotPsiUtil {
     }
 
     public static List<RobotKeywordDef> findKeywordDefsByName(String name, Project project) {
-        Collection<VirtualFile> robotFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, RobotFileType.INSTANCE,
-                GlobalSearchScope.projectScope(project));
-        List<RobotKeywordDef> results = Lists.newArrayList();
-        for (VirtualFile f : robotFiles) {
-            PsiFile psiFile = PsiManager.getInstance(project).findFile(f);
-            findKeywordDefsInFileByName(psiFile, name, results);
-        }
-        return results;
+        GlobalSearchScope robotFileScope = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.projectScope(project), RobotFileType.INSTANCE);
+
+        FindRobotRobotKeywordsByNameProcessor processor = new FindRobotRobotKeywordsByNameProcessor(name);
+        String[] tokens = name.trim().split(" ");
+        PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWord(tokens[0], robotFileScope, processor, false);
+
+        return processor.getResults();
     }
 
     public static void findKeywordDefsInFile(PsiFile psiFile, List<RobotKeywordDef> keywordDefList) {
