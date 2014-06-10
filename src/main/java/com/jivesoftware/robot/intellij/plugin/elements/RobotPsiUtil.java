@@ -212,31 +212,6 @@ public class RobotPsiUtil {
     }
   }
 
-  public static List<RobotKeywordDef> getKeywordDefsInRobotFilesStartingWith(String startText, Project project) {
-    Collection<VirtualFile> robotFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, RobotFileType.INSTANCE,
-            GlobalSearchScope.projectScope(project));
-    List<RobotKeywordDef> results = Lists.newArrayList();
-    for (VirtualFile f : robotFiles) {
-      PsiFile psiFile = PsiManager.getInstance(project).findFile(f);
-      findKeywordDefsInFileByName(psiFile, startText, results);
-    }
-    return results;
-  }
-
-  public static void findKeywordDefsInFileStartingWith(PsiFile psiFile, String startText, List<RobotKeywordDef> keywordDefList) {
-    if (!(psiFile instanceof RobotPsiFile)) {
-      return;
-    }
-    RobotKeywordDef[] results = ((RobotPsiFile) psiFile).findChildrenByClass(RobotKeywordDef.class);
-    for (RobotKeywordDef RobotKeywordDef : results) {
-      String startTextNoSpaces = robotKeywordToMethodFast(startText);
-      String keywordAsMethod = robotKeywordToMethodFast(RobotKeywordDef.getText());
-      if (keywordAsMethod.toLowerCase().startsWith(startTextNoSpaces.toLowerCase())) {
-        keywordDefList.add(RobotKeywordDef);
-      }
-    }
-  }
-
   public static void findKeywordUsagesInFileByName(PsiFile psiFile, String name, List<RobotKeyword> keywordList) {
     if (!(psiFile instanceof RobotPsiFile)) {
       return;

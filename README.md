@@ -11,6 +11,14 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.1.8</h3>
+<ul>
+   <li>
+    Fix to add back case-insensitivity of finding the Java Keyword definition from a Keyword usage that was broken
+    with performance improvements in version 1.1.6 and 1.1.7 improvements.
+   </li>
+</ul>
+
 <h3>Version 1.1.7</h3>
 <ul>
    <li>

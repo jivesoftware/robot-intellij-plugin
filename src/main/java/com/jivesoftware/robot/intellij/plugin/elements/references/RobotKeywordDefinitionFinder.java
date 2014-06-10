@@ -63,14 +63,14 @@ public class RobotKeywordDefinitionFinder implements Processor<PsiFile> {
     //Find Java methods for the keyword
     if (scope == KEYWORD_SCOPE.ROBOT_AND_JAVA_KEYWORDS || scope == KEYWORD_SCOPE.JAVA_KEYWORDS) {
       if (findAll) {
-          addJavaMethodsContainingText();
+        addJavaMethodsContainingText();
       } else {
-          addJavaMethodsWithExactName(results);
+        addJavaMethodsWithExactName(results);
       }
     }
 
     if (!findAll && results.size() > 0) {
-        return;
+      return;
     }
 
     //Find Robot keyword definitions from robot files
@@ -86,33 +86,36 @@ public class RobotKeywordDefinitionFinder implements Processor<PsiFile> {
   }
 
   private void addJavaMethodsWithExactName(List<PsiElement> resultsToAdd) {
-      Collection<PsiMethod> methods =  StubIndex.getElements(JavaStubIndexKeys.METHODS, methodText, project, GlobalSearchScope.projectScope(project), PsiMethod.class);
-      for (PsiMethod method: methods) {
-          if (!RobotPsiUtil.isJavaRobotKeyword(method)) {
-              continue;
-          }
-          if (keywordPredicate.includeJavaMethod(methodText, method)) {
-              if (wrapPsiMethods) {
-                  resultsToAdd.add(new PsiMethodWithRobotName(method.getNode()));
-              } else {
-                  resultsToAdd.add(method);
-              }
-              if (!findAll) {
-                  break;
-              }
-          }
+    Collection<PsiMethod> methods = StubIndex.getElements(JavaStubIndexKeys.METHODS, methodText, project, GlobalSearchScope.projectScope(project), PsiMethod.class);
+    for (PsiMethod method : methods) {
+      if (!RobotPsiUtil.isJavaRobotKeyword(method)) {
+        continue;
       }
+      if (keywordPredicate.includeJavaMethod(methodText, method)) {
+        if (wrapPsiMethods) {
+          resultsToAdd.add(new PsiMethodWithRobotName(method.getNode()));
+        } else {
+          resultsToAdd.add(method);
+        }
+        if (!findAll) {
+          return;
+        }
+      }
+    }
+    if (resultsToAdd.isEmpty()) {
+      addJavaMethodsContainingText();
+    }
   }
 
   private void addJavaMethodsContainingText() {
-      String searchWord;
-      if (StringUtils.isEmpty(methodText)) {
-          searchWord = "RobotKeyword";
-      } else {
-          searchWord = methodText;
-      }
-      GlobalSearchScope javaFilesInProject = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.projectScope(project), JavaFileType.INSTANCE);
-      PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWord(searchWord, javaFilesInProject, this, false);
+    String searchWord;
+    if (StringUtils.isEmpty(methodText)) {
+      searchWord = "RobotKeyword";
+    } else {
+      searchWord = methodText;
+    }
+    GlobalSearchScope javaFilesInProject = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.projectScope(project), JavaFileType.INSTANCE);
+    PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWord(searchWord, javaFilesInProject, this, false);
   }
 
   private boolean addResultsForJavaFile(PsiFile psiFile, List<PsiElement> resultsToAdd) {
@@ -122,9 +125,9 @@ public class RobotKeywordDefinitionFinder implements Processor<PsiFile> {
         for (PsiMethod psiMethod : psiClass.getMethods()) {
           if (keywordPredicate.includeJavaMethod(methodText, psiMethod)) {
             if (wrapPsiMethods) {
-                resultsToAdd.add(new PsiMethodWithRobotName(psiMethod.getNode()));
+              resultsToAdd.add(new PsiMethodWithRobotName(psiMethod.getNode()));
             } else {
-                resultsToAdd.add(psiMethod);
+              resultsToAdd.add(psiMethod);
             }
             if (!findAll) {
               return false;
