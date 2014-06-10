@@ -1010,7 +1010,7 @@ public class RobotParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // SETTING END_OF_LINE (NEWLINE_TOKEN | <<eof>>) | EMPTY_LINE
+  // COLUMN_SEP_TOKEN* SETTING END_OF_LINE (NEWLINE_TOKEN | <<eof>>) | EMPTY_LINE
   public static boolean SETTINGS_LINE(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SETTINGS_LINE")) return false;
     boolean result_ = false;
@@ -1021,21 +1021,34 @@ public class RobotParser implements PsiParser {
     return result_;
   }
 
-  // SETTING END_OF_LINE (NEWLINE_TOKEN | <<eof>>)
+  // COLUMN_SEP_TOKEN* SETTING END_OF_LINE (NEWLINE_TOKEN | <<eof>>)
   private static boolean SETTINGS_LINE_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SETTINGS_LINE_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = SETTING(builder_, level_ + 1);
+    result_ = SETTINGS_LINE_0_0(builder_, level_ + 1);
+    result_ = result_ && SETTING(builder_, level_ + 1);
     result_ = result_ && END_OF_LINE(builder_, level_ + 1);
-    result_ = result_ && SETTINGS_LINE_0_2(builder_, level_ + 1);
+    result_ = result_ && SETTINGS_LINE_0_3(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
   }
 
+  // COLUMN_SEP_TOKEN*
+  private static boolean SETTINGS_LINE_0_0(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "SETTINGS_LINE_0_0")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!consumeToken(builder_, COLUMN_SEP_TOKEN)) break;
+      if (!empty_element_parsed_guard_(builder_, "SETTINGS_LINE_0_0", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
   // NEWLINE_TOKEN | <<eof>>
-  private static boolean SETTINGS_LINE_0_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "SETTINGS_LINE_0_2")) return false;
+  private static boolean SETTINGS_LINE_0_3(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "SETTINGS_LINE_0_3")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, NEWLINE_TOKEN);

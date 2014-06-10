@@ -184,6 +184,8 @@ KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] "ser" " "?)? [Kk] "eyword" "s"? 
     {Comment}                    { return next(COMMENT_TOKEN); }
     {ColumnSep}                  { return next(COLUMN_SEP_TOKEN); }
     {WhiteSpace}                 { return next(WHITESPACE_TOKEN); }
+    {RobotKeyword}               { return keywordOrTag(); }
+    {KeywordArgument}            { return keywordArgOrTag(); }
 }
 
 <SETTINGS> {

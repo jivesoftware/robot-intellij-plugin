@@ -11,6 +11,15 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.1.7</h3>
+<ul>
+   <li>
+    Make parsing the settings table more lenient, since you can have spaces at the start of a line. 
+    Produce fewer Bad syntax tokens, because this may cause performance issues when there's a large text file with
+    invalid robot syntex in the project. Invalid syntax will be handled at the parser layer. 
+   </li>
+</ul>
+
 <h3>Version 1.1.6</h3>
 <ul>
 <li>

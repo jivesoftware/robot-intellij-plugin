@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.jivesoftware.robot.intellij.plugin</id>
     <name>Robot Plugin</name>
-    <version>1.1.6</version>
+    <version>1.1.7</version>
     <vendor email="charles.capps@jivesoftware.com" url="http://www.jiveosftware.com">Jive Software</vendor>
 
     <description><![CDATA[
@@ -27,6 +27,16 @@
     ]]></description>
 
     <change-notes><![CDATA[
+
+    <h3>Version 1.1.7</h3>
+    <ul>
+       <li>
+        Make parsing the settings table more lenient, since you can have spaces at the start of a line.
+        Produce fewer Bad syntax tokens, because this may cause performance issues when there's a large text file with
+        invalid robot syntex in the project. Invalid syntax will be handled at the parser layer.
+       </li>
+    </ul>
+
       <h3>Version 1.1.6</h3>
     <ul>
        <li>
