@@ -68,7 +68,7 @@ public class RobotCustomUsagesSearcher extends CustomUsageSearcher {
         return;
       }
       String name = methodToFindUsages.getName();
-      List<RobotKeyword> robotKeywords = RobotPsiUtil.findKeywordUsagesByName(name, methodToFindUsages.getProject());
+      List<RobotKeyword> robotKeywords = RobotPsiUtil.findKeywordUsagesByJavaMethodName(name, methodToFindUsages.getProject());
       for (RobotKeyword keyword: robotKeywords) {
         PsiReference ref = new RobotKeywordRef(keyword);
         TextRange rangeInElement = ref.getRangeInElement();

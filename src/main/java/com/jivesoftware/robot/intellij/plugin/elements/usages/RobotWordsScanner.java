@@ -69,4 +69,5 @@ public class RobotWordsScanner implements WordsScanner {
     if (!processor.process(occurrence)) return false;
     return true;
   }
+
 }

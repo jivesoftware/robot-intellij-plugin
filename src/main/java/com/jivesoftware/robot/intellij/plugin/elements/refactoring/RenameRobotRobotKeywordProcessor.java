@@ -1,7 +1,6 @@
 package com.jivesoftware.robot.intellij.plugin.elements.refactoring;
 
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiMethod;
 import com.intellij.refactoring.rename.RenamePsiElementProcessor;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
@@ -29,7 +28,7 @@ public class RenameRobotRobotKeywordProcessor extends RenamePsiElementProcessor 
     }
     RobotKeywordDef robotKeywordDef = (RobotKeywordDef) element;
     String name = robotKeywordDef.getName();
-    List<RobotKeyword> robotKeywords = RobotPsiUtil.findKeywordUsagesByName(RobotPsiUtil.robotKeywordToMethodFast(name),
+    List<RobotKeyword> robotKeywords = RobotPsiUtil.findKeywordUsagesByName(name,
             robotKeywordDef.getProject());
     for (RobotKeyword robotKeyword: robotKeywords) {
       allRenames.put(robotKeyword, RobotPsiUtil.methodToRobotKeyword(newName));
