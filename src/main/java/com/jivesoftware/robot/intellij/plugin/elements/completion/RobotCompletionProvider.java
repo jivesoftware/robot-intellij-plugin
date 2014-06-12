@@ -9,6 +9,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.util.ProcessingContext;
+import com.jivesoftware.robot.intellij.plugin.elements.PresentationPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.references.PsiMethodWithRobotName;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordDefinitionFinder;
@@ -63,47 +64,50 @@ public class RobotCompletionProvider extends CompletionProvider<CompletionParame
       return;
     }
     final String text = leaf.getText();
-    final String textMethodName = RobotPsiUtil.robotKeywordToMethodFast(text);
     PsiFile file = leaf.getContainingFile();
     Project project = file.getProject();
-    Map<String, PsiElement> keywordDefinitions = getRobotKeywordDefinitions(textMethodName, project);
+    Map<String, PsiElement> keywordDefinitions = getRobotKeywordDefinitions(text, project);
     Set<String> keys = keywordDefinitions.keySet();
     for (String key: keys) {
       PsiElement el = keywordDefinitions.get(key);
       if (el instanceof PsiNamedElement) {
         PsiNamedElement named = (PsiNamedElement) el;
-        String name = named.getName();
-        String methodName = RobotPsiUtil.robotKeywordToMethodFast(name);
-        if (!methodName.toLowerCase().contains(textMethodName.toLowerCase())) {
-          continue;
-        }
         if (named instanceof PsiMethod) {
-          named = new PsiMethodWithRobotName(named.getNode());
-            result.addElement(LookupElementBuilder.create(named)
+          PsiMethodWithRobotName method = new PsiMethodWithRobotName(named.getNode());
+          String parameterText = PresentationPsiUtil.getPresentableMethodParametersText(method);
+            result.addElement(LookupElementBuilder.create(method)
                     .withCaseSensitivity(false)
-                    .withTypeText("Java Keyword")
-                    .withIcon(RobotIcons.FILE));
+                    .withTailText(parameterText, true)
+                    .withIcon(RobotIcons.METHOD));
         } else if (named instanceof RobotKeywordDef) {
+            RobotKeywordDef robotKeywordDef = (RobotKeywordDef) named;
+            String argumentsText = PresentationPsiUtil.getRobotKeywordArgumentTest(robotKeywordDef);
             result.addElement(LookupElementBuilder.create(named)
                     .withCaseSensitivity(false)
-                    .withTypeText("Robot Keyword")
-                    .withIcon(RobotIcons.FILE));
+                    .withTailText(argumentsText, true)
+                    .withIcon(RobotIcons.ROBOT));
         }
       }
     }
   }
 
-  private Map<String, PsiElement> getRobotKeywordDefinitions(String textMethodName, Project project) {
+  private Map<String, PsiElement> getRobotKeywordDefinitions(String textTyped, Project project) {
     RobotKeywordDefinitionFinder robotKeywordDefinitionFinder = new RobotKeywordDefinitionFinder(project, "", RobotKeywordDefinitionFinder.KEYWORD_SCOPE.ROBOT_AND_JAVA_KEYWORDS, true, true);
     robotKeywordDefinitionFinder.process();
     List<PsiElement> results = robotKeywordDefinitionFinder.getResults();
     Map<String, PsiElement> defs = Maps.newHashMap();
     for (PsiElement el: results) {
         String elText = ((PsiNamedElement) el).getName();
-        if (elText.toLowerCase().contains(textMethodName.toLowerCase())) {
-            defs.put(elText.toLowerCase(), el);
+        String elNormal = normalize(elText);
+        String textNormal = normalize(textTyped);
+        if (elNormal.contains(textNormal)) {
+            defs.put(elNormal, el);
         }
     }
       return defs;
+  }
+
+  private static String normalize(String keywordName) {
+      return RobotPsiUtil.robotKeywordToMethodFast(keywordName).toLowerCase();
   }
 }

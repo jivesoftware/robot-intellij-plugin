@@ -126,7 +126,7 @@ public class RobotImplUtil {
             @Nullable
             @Override
             public Icon getIcon(boolean unused) {
-                return RobotIcons.FILE;
+                return RobotIcons.ROBOT;
             }
         };
     }
@@ -154,7 +154,7 @@ public class RobotImplUtil {
             @Nullable
             @Override
             public Icon getIcon(boolean unused) {
-                return RobotIcons.FILE;
+                return RobotIcons.ROBOT;
             }
         };
     }
@@ -182,7 +182,7 @@ public class RobotImplUtil {
             @Nullable
             @Override
             public Icon getIcon(boolean unused) {
-                return RobotIcons.FILE;
+                return RobotIcons.ROBOT;
             }
         };
     }

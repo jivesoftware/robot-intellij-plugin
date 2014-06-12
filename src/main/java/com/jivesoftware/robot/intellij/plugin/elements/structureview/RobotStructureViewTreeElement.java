@@ -2,10 +2,12 @@ package com.jivesoftware.robot.intellij.plugin.elements.structureview;
 
 import com.google.common.collect.Lists;
 import com.intellij.ide.structureView.StructureViewTreeElement;
+import com.intellij.ide.util.treeView.smartTree.SortableTreeElement;
 import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiNamedElement;
 import com.jivesoftware.robot.intellij.plugin.elements.presentations.KeywordDefPresentationStructureView;
 import com.jivesoftware.robot.intellij.plugin.elements.presentations.TestCasePresentationStructureView;
 import com.jivesoftware.robot.intellij.plugin.icons.RobotIcons;
@@ -20,7 +22,7 @@ import java.util.List;
 /**
  * Created by charles on 6/5/14.
  */
-public class RobotStructureViewTreeElement implements StructureViewTreeElement {
+public class RobotStructureViewTreeElement implements StructureViewTreeElement, SortableTreeElement {
 
     private final PsiElement myElement;
 
@@ -67,7 +69,10 @@ public class RobotStructureViewTreeElement implements StructureViewTreeElement {
             return ((RobotTestCasesTable) myElement).getPresentation();
         }
         if (myElement instanceof RobotPsiFile) {
-            return ((RobotPsiFile) myElement).getPresentation();
+            ItemPresentation presentation = ((RobotPsiFile) myElement).getPresentation();
+            if (presentation != null) {
+                return presentation;
+            }
         }
         return new ItemPresentation() {
             @Nullable
@@ -85,7 +90,7 @@ public class RobotStructureViewTreeElement implements StructureViewTreeElement {
             @Nullable
             @Override
             public Icon getIcon(boolean b) {
-                return RobotIcons.FILE;
+                return RobotIcons.ROBOT;
             }
         };
     }
@@ -96,16 +101,16 @@ public class RobotStructureViewTreeElement implements StructureViewTreeElement {
         if (myElement instanceof RobotPsiFile) {
             return getChildren((RobotPsiFile)myElement);
         }
-        if (myElement instanceof RobotSettingsTable) {
+        else if (myElement instanceof RobotSettingsTable) {
             return TreeElement.EMPTY_ARRAY; //TODO: Show settings in structure view.
         }
-        if (myElement instanceof RobotVariablesTable) {
+        else if (myElement instanceof RobotVariablesTable) {
             return TreeElement.EMPTY_ARRAY; //TODO: Show variables in structure view
         }
-        if (myElement instanceof RobotKeywordsTable) {
+        else if (myElement instanceof RobotKeywordsTable) {
             return getChildren((RobotKeywordsTable)myElement);
         }
-        if (myElement instanceof RobotTestCasesTable) {
+        else if (myElement instanceof RobotTestCasesTable) {
             return getChildren((RobotTestCasesTable)myElement);
         }
         return TreeElement.EMPTY_ARRAY;
@@ -153,5 +158,14 @@ public class RobotStructureViewTreeElement implements StructureViewTreeElement {
         }
 
         return children.toArray(new TreeElement[children.size()]);
+    }
+
+    @NotNull
+    @Override
+    public String getAlphaSortKey() {
+        if (myElement instanceof PsiNamedElement) {
+            return ((PsiNamedElement)myElement).getName();
+        }
+        return myElement.getText();
     }
 }

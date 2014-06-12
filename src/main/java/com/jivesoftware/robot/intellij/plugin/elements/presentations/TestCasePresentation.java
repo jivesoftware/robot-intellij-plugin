@@ -1,7 +1,6 @@
 package com.jivesoftware.robot.intellij.plugin.elements.presentations;
 
 import com.intellij.navigation.ItemPresentation;
-import com.jivesoftware.robot.intellij.plugin.elements.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.icons.RobotIcons;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotTestCase;
 import org.jetbrains.annotations.Nullable;
@@ -36,6 +35,6 @@ public class TestCasePresentation implements ItemPresentation {
     @Nullable
     @Override
     public Icon getIcon(boolean b) {
-        return RobotIcons.FILE;
+        return RobotIcons.ROBOT;
     }
 }

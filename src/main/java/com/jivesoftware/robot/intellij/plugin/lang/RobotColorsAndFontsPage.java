@@ -41,7 +41,7 @@ public class RobotColorsAndFontsPage implements ColorSettingsPage {
 
   @Nullable
   public Icon getIcon() {
-    return RobotIcons.FILE;
+    return RobotIcons.ROBOT;
   }
 
   @Override

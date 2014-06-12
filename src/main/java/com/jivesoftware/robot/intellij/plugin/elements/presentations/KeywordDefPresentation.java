@@ -36,6 +36,6 @@ public class KeywordDefPresentation implements ItemPresentation {
     @Nullable
     @Override
     public Icon getIcon(boolean b) {
-        return RobotIcons.FILE;
+        return RobotIcons.ROBOT;
     }
 }

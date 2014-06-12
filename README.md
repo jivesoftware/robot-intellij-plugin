@@ -11,6 +11,24 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.1.9</h3>
+<ul>
+   <li>
+    Fixed minor bug with structure view always displaying the expand arrow for leaf elements.
+   </li>
+   <li>
+   Added icons for structure view and autocomplete.
+   </li>
+   <li>
+   Fixed autocomplete bug with Keywords not completing if you've typed more than 1 word.
+   </li>
+   <li>
+   Improved autocomplete to display the arguments of the Java keyword / Robot keyword. (May need to see if this
+   negatively affects performance for large projects since all Java keywords are in scope. May need to
+   only autocomplete the Robot keywords that are in scope, since this is something we can determine easily.)
+   </li>
+</ul>
+
 <h3>Version 1.1.8</h3>
 <ul>
    <li>

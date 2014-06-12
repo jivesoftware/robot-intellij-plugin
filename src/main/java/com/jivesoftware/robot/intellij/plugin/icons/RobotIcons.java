@@ -25,6 +25,8 @@ import javax.swing.*;
  */
 public class RobotIcons {
 
-    public static final Icon FILE = IconLoader.getIcon("/com/jivesoftware/robot/intellij/plugin/icons/robot-small.png");
+    public static final Icon ROBOT = IconLoader.getIcon("/com/jivesoftware/robot/intellij/plugin/icons/robot-small.png");
+    public static final Icon METHOD = IconLoader.getIcon("/com/jivesoftware/robot/intellij/plugin/icons/method.png");
+    public static final Icon KEYWORD = IconLoader.getIcon("/com/jivesoftware/robot/intellij/plugin/icons/key_icon_small.png");
 
 }

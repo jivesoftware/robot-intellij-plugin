@@ -21,7 +21,7 @@ public class KeywordDefPresentationStructureView implements ItemPresentation {
     @Nullable
     @Override
     public String getPresentableText() {
-        return String.format("Robot Keyword: %s", def.getText());
+        return String.format("%s", def.getText());
     }
 
     @Nullable
@@ -33,6 +33,6 @@ public class KeywordDefPresentationStructureView implements ItemPresentation {
     @Nullable
     @Override
     public Icon getIcon(boolean b) {
-        return RobotIcons.FILE;
+        return RobotIcons.KEYWORD;
     }
 }

@@ -51,7 +51,7 @@ public class RobotFileType extends LanguageFileType {
     }
 
     public Icon getIcon() {
-        return RobotIcons.FILE;
+        return RobotIcons.ROBOT;
     }
 
     @Override

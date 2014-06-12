@@ -10,7 +10,7 @@ import javax.swing.*;
 
 public class NewRobotFileAction extends CreateFileFromTemplateAction {
   public NewRobotFileAction() {
-    super("NewRobotFile.robot", "Create a new robot test case file", RobotIcons.FILE);
+    super("NewRobotFile.robot", "Create a new robot test case file", RobotIcons.ROBOT);
   }
 
   public NewRobotFileAction(String text, String description, Icon icon) {
@@ -21,8 +21,8 @@ public class NewRobotFileAction extends CreateFileFromTemplateAction {
   protected void buildDialog(Project project, PsiDirectory directory, CreateFileFromTemplateDialog.Builder builder) {
     builder
         .setTitle("New Robot File")
-        .addKind("Robot Test Case File", RobotIcons.FILE, "RobotTestCaseFile")
-        .addKind("Robot Keywords File", RobotIcons.FILE, "RobotKeywordsFile");
+        .addKind("Robot Test Case File", RobotIcons.ROBOT, "RobotTestCaseFile")
+        .addKind("Robot Keywords File", RobotIcons.ROBOT, "RobotKeywordsFile");
 
   }
 

@@ -20,7 +20,7 @@ public class TestCasePresentationStructureView implements ItemPresentation {
     @Nullable
     @Override
     public String getPresentableText() {
-        return String.format("Robot Test: %s", robotTestCase.getNameIdentifier().getText());
+        return String.format("%s", robotTestCase.getNameIdentifier().getText());
     }
 
     @Nullable
@@ -32,6 +32,6 @@ public class TestCasePresentationStructureView implements ItemPresentation {
     @Nullable
     @Override
     public Icon getIcon(boolean b) {
-        return RobotIcons.FILE;
+        return RobotIcons.ROBOT;
     }
 }

@@ -1,5 +1,6 @@
 package com.jivesoftware.robot.intellij.plugin.elements.structureview;
 
+import com.intellij.ide.structureView.StructureViewModel;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.structureView.TextEditorBasedStructureViewModel;
 import com.intellij.psi.PsiFile;
@@ -10,7 +11,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Created by charles on 6/5/14.
  */
-public class RobotStructureViewModel extends TextEditorBasedStructureViewModel {
+public class RobotStructureViewModel extends TextEditorBasedStructureViewModel implements
+        StructureViewModel.ElementInfoProvider {
 
     public RobotStructureViewModel(PsiFile psiFile) {
         super(psiFile);
@@ -25,7 +27,16 @@ public class RobotStructureViewModel extends TextEditorBasedStructureViewModel {
     @Override
     @NotNull
     public Class[] getSuitableClasses() {
-        return new Class[] {RobotPsiFile.class, RobotTestCasesTable.class, RobotKeywordsTable.class, RobotSettingsTable.class, RobotVariablesTable.class,
-                RobotKeyword.class, RobotKeywordDef.class, RobotTestCase.class};
+        return new Class[] {RobotTestCasesTable.class, RobotKeywordsTable.class, RobotKeywordDef.class, RobotTestCase.class};
+    }
+
+    @Override
+    public boolean isAlwaysShowsPlus(StructureViewTreeElement element) {
+        return false;
+    }
+
+    @Override
+    public boolean isAlwaysLeaf(StructureViewTreeElement element) {
+        return false;
     }
 }
