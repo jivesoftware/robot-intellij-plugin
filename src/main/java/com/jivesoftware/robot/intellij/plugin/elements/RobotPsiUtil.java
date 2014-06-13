@@ -1,6 +1,9 @@
 package com.jivesoftware.robot.intellij.plugin.elements;
 
 import com.google.common.collect.Lists;
+import com.intellij.ide.DataManager;
+import com.intellij.openapi.actionSystem.DataContext;
+import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.*;
@@ -19,6 +22,12 @@ import java.util.Collection;
 import java.util.List;
 
 public class RobotPsiUtil {
+
+  public static Project getCurrentProject() {
+      DataContext dataContext = DataManager.getInstance().getDataContextFromFocus().getResultSync();
+      Project project = DataKeys.PROJECT.getData(dataContext);
+      return project;
+  }
 
   public static boolean isJavaRobotKeyword(PsiElement element) {
     if (!(element instanceof PsiMethod)) {

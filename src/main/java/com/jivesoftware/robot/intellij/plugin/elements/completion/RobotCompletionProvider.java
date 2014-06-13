@@ -1,27 +1,26 @@
 package com.jivesoftware.robot.intellij.plugin.elements.completion;
 
-import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.*;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiMethod;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.util.ProcessingContext;
 import com.jivesoftware.robot.intellij.plugin.elements.PresentationPsiUtil;
-import com.jivesoftware.robot.intellij.plugin.elements.RobotPsiUtil;
-import com.jivesoftware.robot.intellij.plugin.elements.references.PsiMethodWithRobotName;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordDefinitionFinder;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotTagFinder;
 import com.jivesoftware.robot.intellij.plugin.icons.RobotIcons;
 import com.jivesoftware.robot.intellij.plugin.parser.RobotTypes;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDef;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -29,85 +28,86 @@ import java.util.Set;
  * Apparently, the RobotKeywordUsagesProvider already handles auto-completing robot-defined keywords.
  */
 public class RobotCompletionProvider extends CompletionProvider<CompletionParameters> {
-  @Override
-  protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-    PsiElement element = parameters.getOriginalPosition();
-    if (!(element instanceof LeafPsiElement)) {
-      return;
-    }
-    LeafPsiElement leaf = (LeafPsiElement) element;
-    if (leaf.getElementType() == RobotTypes.TAG_TOKEN) {
-      handleTagTokens(leaf, parameters, context, result);
-    } else if (leaf.getElementType() == RobotTypes.ROBOT_KEYWORD_TOKEN) {
-      handleKeywordTokens(leaf, parameters, context, result);
+
+    private Set<LookupElement> myTagCompletions;
+    private Set<LookupElement> myKeywordCompletions;
+
+    public RobotCompletionProvider() {
+        super();
     }
 
-  }
-
-  private void handleTagTokens(LeafPsiElement leaf, @NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
-    RobotTagFinder robotTagFinder = new RobotTagFinder(leaf.getProject());
-    robotTagFinder.process();
-    List<String> tags = robotTagFinder.getResults();
-    for (String tag: tags) {
-        result.addElement(LookupElementBuilder.create(tag));
-    }
-  }
-
-  private void handleKeywordTokens(LeafPsiElement leaf, @NotNull CompletionParameters parameters, ProcessingContext context,
-                                   @NotNull CompletionResultSet result) {
-    if (!(leaf.getParent() instanceof RobotKeyword)) {
-        return;
-    }
-    RobotKeyword parent = (RobotKeyword) leaf.getParent();
-    PsiReference ref = parent.getReference();
-    if (ref == null) {
-      return;
-    }
-    final String text = leaf.getText();
-    PsiFile file = leaf.getContainingFile();
-    Project project = file.getProject();
-    Map<String, PsiElement> keywordDefinitions = getRobotKeywordDefinitions(text, project);
-    Set<String> keys = keywordDefinitions.keySet();
-    for (String key: keys) {
-      PsiElement el = keywordDefinitions.get(key);
-      if (el instanceof PsiNamedElement) {
-        PsiNamedElement named = (PsiNamedElement) el;
-        if (named instanceof PsiMethod) {
-          PsiMethodWithRobotName method = new PsiMethodWithRobotName(named.getNode());
-          String parameterText = PresentationPsiUtil.getPresentableMethodParametersText(method);
-            result.addElement(LookupElementBuilder.create(method)
-                    .withCaseSensitivity(false)
-                    .withTailText(parameterText, true)
-                    .withIcon(RobotIcons.METHOD));
-        } else if (named instanceof RobotKeywordDef) {
-            RobotKeywordDef robotKeywordDef = (RobotKeywordDef) named;
-            String argumentsText = PresentationPsiUtil.getRobotKeywordArgumentTest(robotKeywordDef);
-            result.addElement(LookupElementBuilder.create(named)
-                    .withCaseSensitivity(false)
-                    .withTailText(argumentsText, true)
-                    .withIcon(RobotIcons.ROBOT));
+    private Set<LookupElement> getTagCompletions(Project project, CompletionParameters parameters) {
+        if (myTagCompletions != null && parameters.getInvocationCount() > 1) {
+            return myTagCompletions;
         }
-      }
+        myTagCompletions = Sets.newHashSet();
+        populateTags(project, myTagCompletions);
+        return myTagCompletions;
     }
-  }
 
-  private Map<String, PsiElement> getRobotKeywordDefinitions(String textTyped, Project project) {
-    RobotKeywordDefinitionFinder robotKeywordDefinitionFinder = new RobotKeywordDefinitionFinder(project, "", RobotKeywordDefinitionFinder.KEYWORD_SCOPE.ROBOT_AND_JAVA_KEYWORDS, true, true);
-    robotKeywordDefinitionFinder.process();
-    List<PsiElement> results = robotKeywordDefinitionFinder.getResults();
-    Map<String, PsiElement> defs = Maps.newHashMap();
-    for (PsiElement el: results) {
-        String elText = ((PsiNamedElement) el).getName();
-        String elNormal = normalize(elText);
-        String textNormal = normalize(textTyped);
-        if (elNormal.contains(textNormal)) {
-            defs.put(elNormal, el);
+    private Set<LookupElement> getKeywordCompletions(Project project, CompletionParameters parameters) {
+        if (myKeywordCompletions != null && parameters.getInvocationCount() > 1) {
+            return myKeywordCompletions;
+        }
+        myKeywordCompletions = Sets.newHashSet();
+        populateKeywords(project, myKeywordCompletions);
+        return myKeywordCompletions;
+    }
+
+    private void populateTags(Project project, Collection<LookupElement> populateMe) {
+        RobotTagFinder robotTagFinder = new RobotTagFinder(project);
+        robotTagFinder.process();
+        List<String> tags = robotTagFinder.getResults();
+        for (String tag : tags) {
+            populateMe.add(LookupElementBuilder.create(tag));
         }
     }
-      return defs;
-  }
 
-  private static String normalize(String keywordName) {
-      return RobotPsiUtil.robotKeywordToMethodFast(keywordName).toLowerCase();
-  }
+    private void populateKeywords(Project project, Collection<LookupElement> populateMe) {
+        RobotKeywordDefinitionFinder robotKeywordDefinitionFinder = new RobotKeywordDefinitionFinder(project, "", RobotKeywordDefinitionFinder.KEYWORD_SCOPE.ROBOT_AND_JAVA_KEYWORDS, true, true);
+        robotKeywordDefinitionFinder.process();
+        List<PsiElement> results = robotKeywordDefinitionFinder.getResults();
+        for (PsiElement el : results) {
+            if (el instanceof PsiMethod) {
+                PsiMethod method = (PsiMethod) el;
+                String parameterText = PresentationPsiUtil.getPresentableMethodParametersText(method);
+                populateMe.add(LookupElementBuilder.create(method)
+                        .withCaseSensitivity(false)
+                        .withTailText(parameterText, true)
+                        .withIcon(RobotIcons.METHOD));
+            } else if (el instanceof RobotKeywordDef) {
+                RobotKeywordDef robotKeywordDef = (RobotKeywordDef) el;
+                String argumentsText = PresentationPsiUtil.getRobotKeywordArgumentTest(robotKeywordDef);
+                populateMe.add(LookupElementBuilder.create(robotKeywordDef)
+                        .withCaseSensitivity(false)
+                        .withTailText(argumentsText, true)
+                        .withIcon(RobotIcons.KEYWORD));
+            }
+        }
+    }
+
+    @Override
+    protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context, @NotNull CompletionResultSet result) {
+        PsiElement element = parameters.getOriginalPosition();
+        if (!(element instanceof LeafPsiElement)) {
+            return;
+        }
+        LeafPsiElement leaf = (LeafPsiElement) element;
+        if (leaf.getElementType() == RobotTypes.TAG_TOKEN) {
+            handleTagTokens(leaf, parameters, result);
+        } else if (leaf.getElementType() == RobotTypes.ROBOT_KEYWORD_TOKEN) {
+            handleKeywordTokens(leaf, parameters, result);
+        }
+
+    }
+
+    private void handleTagTokens(LeafPsiElement leaf, @NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
+        Set<LookupElement> tagCompletions = getTagCompletions(leaf.getProject(), parameters);
+        result.addAllElements(tagCompletions);
+    }
+
+    private void handleKeywordTokens(LeafPsiElement leaf, CompletionParameters parameters, @NotNull CompletionResultSet result) {
+        Set<LookupElement> keywordCompletions = getKeywordCompletions(leaf.getProject(), parameters);
+        result.addAllElements(keywordCompletions);
+    }
 }
