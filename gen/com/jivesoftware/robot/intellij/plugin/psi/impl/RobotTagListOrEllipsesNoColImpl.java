@@ -12,21 +12,21 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotTagSettingLineImpl extends ASTWrapperPsiElement implements RobotTagSettingLine {
+public class RobotTagListOrEllipsesNoColImpl extends ASTWrapperPsiElement implements RobotTagListOrEllipsesNoCol {
 
-  public RobotTagSettingLineImpl(ASTNode node) {
+  public RobotTagListOrEllipsesNoColImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitTagSettingLine(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitTagListOrEllipsesNoCol(this);
     else super.accept(visitor);
   }
 
   @Override
   @Nullable
-  public RobotContinueNoCol getContinueNoCol() {
-    return findChildByClass(RobotContinueNoCol.class);
+  public RobotEllipsesForSettingsTable getEllipsesForSettingsTable() {
+    return findChildByClass(RobotEllipsesForSettingsTable.class);
   }
 
   @Override

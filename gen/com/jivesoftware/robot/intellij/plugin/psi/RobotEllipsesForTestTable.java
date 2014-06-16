@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotContinueNoCol extends PsiElement {
+public interface RobotEllipsesForTestTable extends PsiElement {
 
   @NotNull
   RobotEllipses getEllipses();

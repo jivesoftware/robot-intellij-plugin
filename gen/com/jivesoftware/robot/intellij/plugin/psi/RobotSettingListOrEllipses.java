@@ -5,12 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotContinueCol extends PsiElement {
+public interface RobotSettingListOrEllipses extends PsiElement {
 
-  @NotNull
-  RobotEllipses getEllipses();
+  @Nullable
+  RobotEllipsesForSettingsTable getEllipsesForSettingsTable();
 
-  @NotNull
-  RobotEndOfLine getEndOfLine();
+  @Nullable
+  RobotSettingList getSettingList();
 
 }

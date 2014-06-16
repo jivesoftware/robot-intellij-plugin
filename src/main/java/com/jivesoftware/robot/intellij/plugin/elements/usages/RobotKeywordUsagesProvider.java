@@ -19,7 +19,7 @@ public class RobotKeywordUsagesProvider implements FindUsagesProvider {
 
   public static final TokenSet COMMENTS = TokenSet.EMPTY;
 
-  public static final TokenSet LITERALS = TokenSet.EMPTY;
+  public static final TokenSet LITERALS = TokenSet.create(RobotTypes.TAGS_SETTING_TOKEN, RobotTypes.FORCE_TAGS_SETTING_KEYWORD_TOKEN);
 
 
   @Nullable

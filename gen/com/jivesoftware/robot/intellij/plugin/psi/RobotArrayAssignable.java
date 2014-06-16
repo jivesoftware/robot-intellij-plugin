@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface RobotArrayAssignable extends PsiElement {
 
   @NotNull
-  List<RobotContinueNoCol> getContinueNoColList();
+  List<RobotEllipsesForSettingsTable> getEllipsesForSettingsTableList();
 
   @NotNull
   List<RobotKeywordArg> getKeywordArgList();

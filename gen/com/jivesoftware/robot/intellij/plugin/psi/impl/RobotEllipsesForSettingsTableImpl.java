@@ -12,14 +12,14 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotContinueNoColImpl extends ASTWrapperPsiElement implements RobotContinueNoCol {
+public class RobotEllipsesForSettingsTableImpl extends ASTWrapperPsiElement implements RobotEllipsesForSettingsTable {
 
-  public RobotContinueNoColImpl(ASTNode node) {
+  public RobotEllipsesForSettingsTableImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitContinueNoCol(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitEllipsesForSettingsTable(this);
     else super.accept(visitor);
   }
 

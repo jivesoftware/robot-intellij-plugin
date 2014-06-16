@@ -11,6 +11,13 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.2.0</h3>
+<ul>
+<li>Added line continuation support with the ellipsees (...) syntax used by Robot</li>
+<li>Made parsing far more accurate, including the characters allowed in various contexts, etc.</li>
+<li>Fixed a regression with rename refactoring not working for Robot-defined keywords with a space in the name.</li>
+</ul>
+
 <h3>Version 1.1.9</h3>
 <ul>
    <li>

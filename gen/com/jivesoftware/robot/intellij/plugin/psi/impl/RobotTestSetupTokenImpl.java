@@ -12,33 +12,15 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotSettingImpl extends ASTWrapperPsiElement implements RobotSetting {
+public class RobotTestSetupTokenImpl extends ASTWrapperPsiElement implements RobotTestSetupToken {
 
-  public RobotSettingImpl(ASTNode node) {
+  public RobotTestSetupTokenImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitSetting(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitTestSetupToken(this);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public RobotForceTagsSetting getForceTagsSetting() {
-    return findChildByClass(RobotForceTagsSetting.class);
-  }
-
-  @Override
-  @Nullable
-  public RobotGenericSetting getGenericSetting() {
-    return findChildByClass(RobotGenericSetting.class);
-  }
-
-  @Override
-  @Nullable
-  public RobotTestSetupSetting getTestSetupSetting() {
-    return findChildByClass(RobotTestSetupSetting.class);
   }
 
 }

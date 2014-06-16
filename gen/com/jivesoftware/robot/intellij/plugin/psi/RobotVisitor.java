@@ -32,19 +32,19 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitContinueCol(@NotNull RobotContinueCol o) {
-    visitPsiElement(o);
-  }
-
-  public void visitContinueNoCol(@NotNull RobotContinueNoCol o) {
-    visitPsiElement(o);
-  }
-
   public void visitDocumentationSetting(@NotNull RobotDocumentationSetting o) {
     visitPsiElement(o);
   }
 
   public void visitEllipses(@NotNull RobotEllipses o) {
+    visitPsiElement(o);
+  }
+
+  public void visitEllipsesForSettingsTable(@NotNull RobotEllipsesForSettingsTable o) {
+    visitPsiElement(o);
+  }
+
+  public void visitEllipsesForTestTable(@NotNull RobotEllipsesForTestTable o) {
     visitPsiElement(o);
   }
 
@@ -164,11 +164,11 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitSettingLine(@NotNull RobotSettingLine o) {
+  public void visitSettingList(@NotNull RobotSettingList o) {
     visitPsiElement(o);
   }
 
-  public void visitSettingList(@NotNull RobotSettingList o) {
+  public void visitSettingListOrEllipses(@NotNull RobotSettingListOrEllipses o) {
     visitPsiElement(o);
   }
 
@@ -188,15 +188,15 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitTagLine(@NotNull RobotTagLine o) {
-    visitPsiElement(o);
-  }
-
   public void visitTagList(@NotNull RobotTagList o) {
     visitPsiElement(o);
   }
 
-  public void visitTagSettingLine(@NotNull RobotTagSettingLine o) {
+  public void visitTagListOrEllipses(@NotNull RobotTagListOrEllipses o) {
+    visitPsiElement(o);
+  }
+
+  public void visitTagListOrEllipsesNoCol(@NotNull RobotTagListOrEllipsesNoCol o) {
     visitPsiElement(o);
   }
 
@@ -237,6 +237,14 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitTestSettingLine(@NotNull RobotTestSettingLine o) {
+    visitPsiElement(o);
+  }
+
+  public void visitTestSetupSetting(@NotNull RobotTestSetupSetting o) {
+    visitPsiElement(o);
+  }
+
+  public void visitTestSetupToken(@NotNull RobotTestSetupToken o) {
     visitPsiElement(o);
   }
 

@@ -5,15 +5,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotKeywordInvocationSettings extends PsiElement {
+public interface RobotTestSetupSetting extends PsiElement {
 
   @NotNull
   List<RobotEllipsesForSettingsTable> getEllipsesForSettingsTableList();
 
   @NotNull
-  RobotKeyword getKeyword();
+  RobotKeywordInvocationSettings getKeywordInvocationSettings();
 
   @NotNull
-  List<RobotKeywordArg> getKeywordArgList();
+  RobotTestSetupToken getTestSetupToken();
 
 }

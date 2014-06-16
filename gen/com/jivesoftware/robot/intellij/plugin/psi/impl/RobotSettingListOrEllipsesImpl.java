@@ -12,27 +12,27 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotTagLineImpl extends ASTWrapperPsiElement implements RobotTagLine {
+public class RobotSettingListOrEllipsesImpl extends ASTWrapperPsiElement implements RobotSettingListOrEllipses {
 
-  public RobotTagLineImpl(ASTNode node) {
+  public RobotSettingListOrEllipsesImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitTagLine(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitSettingListOrEllipses(this);
     else super.accept(visitor);
   }
 
   @Override
   @Nullable
-  public RobotContinueCol getContinueCol() {
-    return findChildByClass(RobotContinueCol.class);
+  public RobotEllipsesForSettingsTable getEllipsesForSettingsTable() {
+    return findChildByClass(RobotEllipsesForSettingsTable.class);
   }
 
   @Override
   @Nullable
-  public RobotTagList getTagList() {
-    return findChildByClass(RobotTagList.class);
+  public RobotSettingList getSettingList() {
+    return findChildByClass(RobotSettingList.class);
   }
 
 }

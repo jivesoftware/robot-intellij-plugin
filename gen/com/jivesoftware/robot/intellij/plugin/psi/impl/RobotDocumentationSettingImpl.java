@@ -25,8 +25,8 @@ public class RobotDocumentationSettingImpl extends ASTWrapperPsiElement implemen
 
   @Override
   @NotNull
-  public List<RobotContinueCol> getContinueColList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotContinueCol.class);
+  public List<RobotEllipsesForTestTable> getEllipsesForTestTableList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotEllipsesForTestTable.class);
   }
 
 }

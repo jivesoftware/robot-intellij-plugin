@@ -3,9 +3,7 @@ package com.jivesoftware.robot.intellij.plugin.elements.references;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.impl.PsiElementBase;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiSearchHelper;
 import com.intellij.util.Processor;
@@ -22,7 +20,9 @@ import java.util.Set;
  * They must be annotated with @RobotKeyword and the containing class must be annotated with @RobotKeywords.
  */
 public class RobotTagFinder implements Processor<PsiFile> {
-  public static final String searchTerm = "tags";
+  public static final String TAGS_SETTING = "[tags]";
+  public static final String FORCE_TAGS_SETTING = "Force tags";
+  public static final String FORCE_TAGS_SETTING2 = "Force Tags";
 
   private final Project project;
   private final Set<String> results;
@@ -40,9 +40,9 @@ public class RobotTagFinder implements Processor<PsiFile> {
   public void process() {
 
     GlobalSearchScope robotFilesInProject = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.projectScope(project), RobotFileType.INSTANCE);
-    PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWord(searchTerm, robotFilesInProject,
-                                                                         this,
-                                                                         false);
+    PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWordInLiterals(TAGS_SETTING, robotFilesInProject, this);
+    PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWordInLiterals(FORCE_TAGS_SETTING, robotFilesInProject, this);
+    PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWordInLiterals(FORCE_TAGS_SETTING2, robotFilesInProject, this);
   }
 
   private boolean addResultsForRobotFile(PsiFile psiFile, Set<String> resultsToAdd) {
@@ -75,8 +75,8 @@ public class RobotTagFinder implements Processor<PsiFile> {
             if (tagsSetting == null) {
                 continue;
             }
-            List<RobotTagSettingLine> tagsSettingLines = tagsSetting.getTagSettingLineList();
-            for (RobotTagSettingLine tagSettingLine: tagsSettingLines) {
+            List<RobotTagListOrEllipsesNoCol> tagsSettingLines = tagsSetting.getTagListOrEllipsesNoColList();
+            for (RobotTagListOrEllipsesNoCol tagSettingLine: tagsSettingLines) {
                 if (tagSettingLine.getTagList() == null) {
                     continue;
                 }
@@ -105,8 +105,8 @@ public class RobotTagFinder implements Processor<PsiFile> {
             if (tagsSetting == null) {
                 continue;
             }
-            List<RobotTagLine> tagLines = tagsSetting.getTagLineList();
-            for (RobotTagLine tagLine: tagLines) {
+            List<RobotTagListOrEllipses> tagLines = tagsSetting.getTagListOrEllipsesList();
+            for (RobotTagListOrEllipses tagLine: tagLines) {
                 if (tagLine.getTagList() == null) {
                     continue;
                 }

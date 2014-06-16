@@ -25,8 +25,8 @@ public class RobotTestCaseHeaderImpl extends ASTWrapperPsiElement implements Rob
 
   @Override
   @Nullable
-  public RobotContinueCol getContinueCol() {
-    return findChildByClass(RobotContinueCol.class);
+  public RobotEllipsesForTestTable getEllipsesForTestTable() {
+    return findChildByClass(RobotEllipsesForTestTable.class);
   }
 
   @Override

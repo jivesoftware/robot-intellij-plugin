@@ -13,4 +13,7 @@ public interface RobotSetting extends PsiElement {
   @Nullable
   RobotGenericSetting getGenericSetting();
 
+  @Nullable
+  RobotTestSetupSetting getTestSetupSetting();
+
 }

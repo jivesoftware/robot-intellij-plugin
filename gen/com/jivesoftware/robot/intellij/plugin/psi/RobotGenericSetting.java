@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface RobotGenericSetting extends PsiElement {
 
   @NotNull
-  List<RobotSettingLine> getSettingLineList();
+  List<RobotSettingListOrEllipses> getSettingListOrEllipsesList();
 
 }

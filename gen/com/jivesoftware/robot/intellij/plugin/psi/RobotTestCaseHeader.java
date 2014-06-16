@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface RobotTestCaseHeader extends PsiElement {
 
   @Nullable
-  RobotContinueCol getContinueCol();
+  RobotEllipsesForTestTable getEllipsesForTestTable();
 
   @NotNull
   RobotEndOfLine getEndOfLine();

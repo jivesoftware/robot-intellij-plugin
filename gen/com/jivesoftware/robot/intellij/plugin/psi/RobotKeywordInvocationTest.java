@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface RobotKeywordInvocationTest extends PsiElement {
 
   @NotNull
-  List<RobotContinueCol> getContinueColList();
+  List<RobotEllipsesForTestTable> getEllipsesForTestTableList();
 
   @NotNull
   RobotKeyword getKeyword();

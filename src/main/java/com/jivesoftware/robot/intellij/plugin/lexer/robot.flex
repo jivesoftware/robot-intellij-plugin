@@ -119,7 +119,7 @@ LineTerminator = \r|\n|\r\n
 InputCharacter = [^\r\n]
 
 /* Keyword arguments and test case headers use the same chars.*/
-KeywordArgumentChar = [^\r\n\t\#\|\=\@\%\\ ] | \\\| | \\\$ | \\\@ | \\\% | \\\# | \\\= | \\\\
+KeywordArgumentChar = [^\r\n\t\# ] | \\#
 TestCaseHeaderChar =  {KeywordArgumentChar}
 
 ColumnSep = " " " "+ | [ \t]* "\t" [ \t]* | [ \t]+ \| [ \t]+
@@ -143,7 +143,7 @@ Assignment = {Variable} " "? "="
 ArrayAssignment = {ArrayVariable} " "? "="
 
 RobotKeyword = {RobotWord} ({SingleSpace} {RobotWord})*
-RobotWord = [a-zA-Z][a-zA-Z0-9]*
+RobotWord = [a-zA-Z][a-zA-Z0-9\-]*
 
 Identifier = [a-zA-Z_][a-zA-Z0-9_]*
 
@@ -152,15 +152,22 @@ TestCaseHeader = {TestCaseHeaderWord} ({SingleSpace} {TestCaseHeaderWord})*
 
 KeywordArgumentWord = {KeywordArgumentChar}+
 KeywordArgument = ({KeywordArgumentWord} ({SingleSpace} {KeywordArgumentWord})*) | {Variable} | \\
+
+/* Settings for the ***Settings*** Table*/
+TestSetupSetting = [Tt] [Ee] [Ss] [Tt] " "? [Ss] [Ee] [Tt] [Uu] [Pp]
+TestTeardownSetting = [Tt] [Ee] [Ss] [Tt] " "? [Tt] [Ee] [Aa] [Rr] [Dd] [Oo] [Ww] [Nn]
+SuiteSetupSetting = [Ss] [Uu] [Ii] [Tt] [Ee] " "? [Ss] [Ee] [Tt] [Uu] [Pp]
 ForceTags = [Ff] "orce" " "? [Tt] "ags"
 
 /* Settings for robot test cases */
-TagsMeta = "[" {WhiteSpace}* [Tt] "ags" {WhiteSpace}* "]"
+TagsMeta = "[" {WhiteSpace}* [Tt] [Aa] [Gg] [Ss] {WhiteSpace}* "]"
 DocsMeta = "[" {WhiteSpace}* [Dd] "ocumentation" {WhiteSpace}* "]"
 DocsArgument = {NonWhiteSpace} {InputCharacter}*
 
-SetupMeta = ("[" {WhiteSpace}* [Ss] "etup" {WhiteSpace}* "]") | ("[" {WhiteSpace}* [Pp] "recondition" {WhiteSpace}* "]")
-TeardownMeta = ("[" {WhiteSpace}* [Tt] "eardown" {WhiteSpace}* "]") | ("[" {WhiteSpace}* [Pp] "ostcondition" {WhiteSpace}* "]")
+SetupMeta = ("[" {WhiteSpace}* [Ss] [Ee] [Tt] [Uu] [Pp] {WhiteSpace}* "]")
+          | ("[" {WhiteSpace}* [Pp] "recondition" {WhiteSpace}* "]")
+TeardownMeta = ("[" {WhiteSpace}* [Tt] [Ee] [Aa] [Rr] [Dd] [Oo] [Ww] [Nn] {WhiteSpace}* "]")
+             | ("[" {WhiteSpace}* [Pp] "ostcondition" {WhiteSpace}* "]")
 TimeoutMeta = "[" {WhiteSpace}* [Tt] "imeout" {WhiteSpace}* "]"
 TemplateMeta = "[" {WhiteSpace}* [Tt] "emplate" {WhiteSpace}* "]"
 
@@ -176,10 +183,10 @@ ArgumentsMeta = "[" {WhiteSpace}* [Aa] "rguments" {WhiteSpace}* "]"
 ReturnMeta = "[" {WhiteSpace}* [Rr] "eturn" {WhiteSpace}* "]"
 
 /* Table headings */
-SettingsTableHeading  = "*"+ {WhiteSpace}* (([Ss] "etting" "s"?) | "Metadata") {WhiteSpace}* ("*")*
-VariablesTableHeading = "*"+ {WhiteSpace}* ([Vv] "ariable" "s"?) {WhiteSpace}* "*"*
-TestCasesTableHeading = "*"+ {WhiteSpace}* [Tt] "est" " "* [Cc] "ase" "s"? {WhiteSpace}* "*"*
-KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] "ser" " "*)? [Kk] "eyword" "s"? {WhiteSpace}* "*"*
+SettingsTableHeading  = "*"+ {WhiteSpace}* (([Ss] [Ee] [Tt] [Tt] [Ii] [Nn] [Gg] [Ss]?) | "Metadata") {WhiteSpace}* ("*")*
+VariablesTableHeading = "*"+ {WhiteSpace}* ([Vv] [Aa] [Rr] [Ii] [Aa] [Bb] [Ll] [Ee] [Ss]?) {WhiteSpace}* "*"*
+TestCasesTableHeading = "*"+ {WhiteSpace}* [Tt] [Ee] [Ss] [Tt] " "? [Cc] [Aa] [Ss] [Ee] [Ss]? {WhiteSpace}* "*"*
+KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] [Ss] [Ee] [Rr] " "*)? [Kk] [Ee] [Yy] [Ww] [Oo] [Rr] [Dd] [Ss]? {WhiteSpace}* "*"*
 
 /*
    These states are for the different Robot tables, because different tokens are allowed in different tables.
@@ -223,6 +230,9 @@ KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] "ser" " "*)? [Kk] "eyword" "s"? 
      {ArrayVariable}     { return next(ARRAY_VARIABLE_TOKEN); }
      {TimeoutValue}      { if (onTimeoutLine) { return next(TIMEOUT_VALUE_TOKEN); } return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {ForceTags}         { return next(FORCE_TAGS_SETTING_KEYWORD_TOKEN);}
+     {TestSetupSetting}     { return next(TEST_SETUP_SETTING_TOKEN); }
+     {TestTeardownSetting}  { return next(TEST_TEARDOWN_SETTING_TOKEN); }
+     {SuiteSetupSetting}    { return next(SUITE_SETUP_SETTING_TOKEN); }
      {RobotKeyword}      { return next(ROBOT_KEYWORD_TOKEN); }
      {KeywordArgument}   { return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }
@@ -233,7 +243,7 @@ KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] "ser" " "*)? [Kk] "eyword" "s"? 
  /* identifiers */
      {EndOfLine}         { return newLine(); }
      {Comment}           { return next(COMMENT_TOKEN); }
-     {VariablesTableHeading}     { yybegin(BAD_SYNTAX); return next(BAD_SYNTAX_TOKEN); }
+     {VariablesTableHeading}     { return next(VARIABLES_TABLE_HEADING_TOKEN); }
      {KeywordsTableHeading}      { yybegin(KEYWORDS); return next(KEYWORDS_TABLE_HEADING_TOKEN); }
      {TestCasesTableHeading}     { yybegin(TEST_CASES); return next(TEST_CASES_TABLE_HEADING_TOKEN); }
      {SettingsTableHeading}      { yybegin(SETTINGS); return next(SETTINGS_TABLE_HEADING_TOKEN); }
@@ -257,7 +267,7 @@ KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] "ser" " "*)? [Kk] "eyword" "s"? 
      {SettingsTableHeading}      { yybegin(SETTINGS); return next(SETTINGS_TABLE_HEADING_TOKEN); }
      {VariablesTableHeading}     { yybegin(VARIABLES); return next(VARIABLES_TABLE_HEADING_TOKEN); }
      {KeywordsTableHeading}      { yybegin(KEYWORDS); return next(KEYWORDS_TABLE_HEADING_TOKEN); }
-     {TestCasesTableHeading}      { yybegin(BAD_SYNTAX); return next(BAD_SYNTAX_TOKEN); }
+     {TestCasesTableHeading}      { return next(TEST_CASES_TABLE_HEADING_TOKEN); }
      {Ellipses}          { return next(ELLIPSES_TOKEN); }
      {TagsMeta}          { return next(TAGS_SETTING_TOKEN); }
      {DocsMeta}          { previous_state = yystate(); yybegin(DOCS_SETTING); return next(DOCUMENTATION_SETTING_TOKEN); }

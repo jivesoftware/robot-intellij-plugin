@@ -36,12 +36,12 @@ public class RobotCompletionProvider extends CompletionProvider<CompletionParame
         super();
     }
 
-    private Set<LookupElement> getTagCompletions(Project project, CompletionParameters parameters) {
+    private Set<LookupElement> getTagCompletions(Project project, CompletionParameters parameters, String currentlyTyped) {
         if (myTagCompletions != null && parameters.getInvocationCount() > 1) {
             return myTagCompletions;
         }
         myTagCompletions = Sets.newHashSet();
-        populateTags(project, myTagCompletions);
+        populateTags(project, myTagCompletions, currentlyTyped);
         return myTagCompletions;
     }
 
@@ -54,11 +54,14 @@ public class RobotCompletionProvider extends CompletionProvider<CompletionParame
         return myKeywordCompletions;
     }
 
-    private void populateTags(Project project, Collection<LookupElement> populateMe) {
+    private void populateTags(Project project, Collection<LookupElement> populateMe, String currentlyTyped) {
         RobotTagFinder robotTagFinder = new RobotTagFinder(project);
         robotTagFinder.process();
         List<String> tags = robotTagFinder.getResults();
         for (String tag : tags) {
+            if (tag.equals(currentlyTyped)) {
+                continue;
+            }
             populateMe.add(LookupElementBuilder.create(tag));
         }
     }
@@ -102,7 +105,7 @@ public class RobotCompletionProvider extends CompletionProvider<CompletionParame
     }
 
     private void handleTagTokens(LeafPsiElement leaf, @NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
-        Set<LookupElement> tagCompletions = getTagCompletions(leaf.getProject(), parameters);
+        Set<LookupElement> tagCompletions = getTagCompletions(leaf.getProject(), parameters, leaf.getText());
         result.addAllElements(tagCompletions);
     }
 

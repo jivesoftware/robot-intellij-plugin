@@ -25,8 +25,8 @@ public class RobotForceTagsSettingImpl extends ASTWrapperPsiElement implements R
 
   @Override
   @NotNull
-  public List<RobotTagSettingLine> getTagSettingLineList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotTagSettingLine.class);
+  public List<RobotTagListOrEllipsesNoCol> getTagListOrEllipsesNoColList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotTagListOrEllipsesNoCol.class);
   }
 
 }

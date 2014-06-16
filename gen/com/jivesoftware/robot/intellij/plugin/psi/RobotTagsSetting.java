@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface RobotTagsSetting extends PsiElement {
 
   @NotNull
-  List<RobotTagLine> getTagLineList();
+  List<RobotTagListOrEllipses> getTagListOrEllipsesList();
 
 }
