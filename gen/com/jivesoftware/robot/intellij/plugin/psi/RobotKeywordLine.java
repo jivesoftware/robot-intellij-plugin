@@ -8,13 +8,16 @@ import com.intellij.psi.PsiElement;
 public interface RobotKeywordLine extends PsiElement {
 
   @Nullable
+  RobotEllipsesLineTest getEllipsesLineTest();
+
+  @Nullable
   RobotEmptyLine getEmptyLine();
 
   @Nullable
   RobotEndOfLine getEndOfLine();
 
   @Nullable
-  RobotKeywordInvocation getKeywordInvocation();
+  RobotKeywordInvocationTest getKeywordInvocationTest();
 
   @Nullable
   RobotVariableAssignToKeyword getVariableAssignToKeyword();

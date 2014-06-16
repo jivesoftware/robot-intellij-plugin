@@ -12,27 +12,27 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotKeywordInvocationImpl extends ASTWrapperPsiElement implements RobotKeywordInvocation {
+public class RobotContinueColImpl extends ASTWrapperPsiElement implements RobotContinueCol {
 
-  public RobotKeywordInvocationImpl(ASTNode node) {
+  public RobotContinueColImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitKeywordInvocation(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitContinueCol(this);
     else super.accept(visitor);
   }
 
   @Override
   @NotNull
-  public RobotKeyword getKeyword() {
-    return findNotNullChildByClass(RobotKeyword.class);
+  public RobotEllipses getEllipses() {
+    return findNotNullChildByClass(RobotEllipses.class);
   }
 
   @Override
   @NotNull
-  public List<RobotKeywordArg> getKeywordArgList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotKeywordArg.class);
+  public RobotEndOfLine getEndOfLine() {
+    return findNotNullChildByClass(RobotEndOfLine.class);
   }
 
 }

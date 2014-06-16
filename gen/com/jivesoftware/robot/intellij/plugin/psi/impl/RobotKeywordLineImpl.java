@@ -25,6 +25,12 @@ public class RobotKeywordLineImpl extends ASTWrapperPsiElement implements RobotK
 
   @Override
   @Nullable
+  public RobotEllipsesLineTest getEllipsesLineTest() {
+    return findChildByClass(RobotEllipsesLineTest.class);
+  }
+
+  @Override
+  @Nullable
   public RobotEmptyLine getEmptyLine() {
     return findChildByClass(RobotEmptyLine.class);
   }
@@ -37,8 +43,8 @@ public class RobotKeywordLineImpl extends ASTWrapperPsiElement implements RobotK
 
   @Override
   @Nullable
-  public RobotKeywordInvocation getKeywordInvocation() {
-    return findChildByClass(RobotKeywordInvocation.class);
+  public RobotKeywordInvocationTest getKeywordInvocationTest() {
+    return findChildByClass(RobotKeywordInvocationTest.class);
   }
 
   @Override

@@ -5,6 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotComment extends PsiElement {
+public interface RobotTagList extends PsiElement {
+
+  @NotNull
+  List<RobotTag> getTagList();
 
 }

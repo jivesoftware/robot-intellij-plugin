@@ -14,6 +14,9 @@ public interface RobotVariablesLine extends PsiElement {
   RobotAssignable getAssignable();
 
   @Nullable
+  RobotEllipsesLineSettings getEllipsesLineSettings();
+
+  @Nullable
   RobotEmptyLine getEmptyLine();
 
   @Nullable

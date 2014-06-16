@@ -31,8 +31,8 @@ public class RobotAssignableImpl extends ASTWrapperPsiElement implements RobotAs
 
   @Override
   @Nullable
-  public RobotKeywordInvocation getKeywordInvocation() {
-    return findChildByClass(RobotKeywordInvocation.class);
+  public RobotKeywordInvocationSettings getKeywordInvocationSettings() {
+    return findChildByClass(RobotKeywordInvocationSettings.class);
   }
 
 }

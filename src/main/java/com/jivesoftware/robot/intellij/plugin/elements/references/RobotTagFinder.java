@@ -75,9 +75,14 @@ public class RobotTagFinder implements Processor<PsiFile> {
             if (tagsSetting == null) {
                 continue;
             }
-            List<RobotTag> tags = tagsSetting.getTagList();
-            for (RobotTag tag: tags) {
-                resultsToAdd.add(tag.getText());
+            List<RobotTagSettingLine> tagsSettingLines = tagsSetting.getTagSettingLineList();
+            for (RobotTagSettingLine tagSettingLine: tagsSettingLines) {
+                if (tagSettingLine.getTagList() == null) {
+                    continue;
+                }
+                for (RobotTag tag: tagSettingLine.getTagList().getTagList()) {
+                    resultsToAdd.add(tag.getText());
+                }
             }
         }
     }
@@ -100,10 +105,15 @@ public class RobotTagFinder implements Processor<PsiFile> {
             if (tagsSetting == null) {
                 continue;
             }
-            List<RobotTag> tags = tagsSetting.getTagList();
-            for (RobotTag tag: tags) {
-                String tagString = tag.getText();
-                resultsToAdd.add(tagString);
+            List<RobotTagLine> tagLines = tagsSetting.getTagLineList();
+            for (RobotTagLine tagLine: tagLines) {
+                if (tagLine.getTagList() == null) {
+                    continue;
+                }
+                for (RobotTag tag: tagLine.getTagList().getTagList()) {
+                    String tagString = tag.getText();
+                    resultsToAdd.add(tagString);
+                }
             }
         }
     }

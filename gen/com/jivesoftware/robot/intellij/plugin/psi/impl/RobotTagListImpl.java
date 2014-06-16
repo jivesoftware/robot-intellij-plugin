@@ -12,21 +12,21 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotForceTagsSettingImpl extends ASTWrapperPsiElement implements RobotForceTagsSetting {
+public class RobotTagListImpl extends ASTWrapperPsiElement implements RobotTagList {
 
-  public RobotForceTagsSettingImpl(ASTNode node) {
+  public RobotTagListImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitForceTagsSetting(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitTagList(this);
     else super.accept(visitor);
   }
 
   @Override
   @NotNull
-  public List<RobotTagSettingLine> getTagSettingLineList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotTagSettingLine.class);
+  public List<RobotTag> getTagList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotTag.class);
   }
 
 }

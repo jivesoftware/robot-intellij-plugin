@@ -23,4 +23,10 @@ public class RobotDocumentationSettingImpl extends ASTWrapperPsiElement implemen
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public List<RobotContinueCol> getContinueColList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotContinueCol.class);
+  }
+
 }

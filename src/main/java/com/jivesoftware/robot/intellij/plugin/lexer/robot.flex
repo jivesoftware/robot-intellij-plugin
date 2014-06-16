@@ -41,21 +41,56 @@ return;
 
 %{
   int yyline, yycolumn, yychar;
+  private boolean onDocsLine = false;
   private boolean onTagsLine = false;
   private boolean onTimeoutLine = false;
   private boolean keywordToLeft = false;
   private boolean startLine = true;
+  private boolean firstRobotCell = true;
   private int previous_state = YYINITIAL;
 
   private IElementType next(IElementType toReturn) {
     if (toReturn != WHITESPACE_TOKEN) {
         startLine = false;
     }
+
+    if (firstRobotCell && toReturn != WHITESPACE_TOKEN && toReturn != COLUMN_SEP_TOKEN) {
+        // If we see an ellipses, then retain the state from the previous line so everything is tokenized properly
+        if (toReturn == ELLIPSES_TOKEN && onDocsLine) {
+            yybegin(DOCS_SETTING);
+        } else if (toReturn != ELLIPSES_TOKEN) {
+           keywordToLeft = onTagsLine = onTimeoutLine = onDocsLine = false;
+        }
+        firstRobotCell = false;
+    }
+
     if (toReturn == BAD_SYNTAX_TOKEN) {
         System.out.println(String.format("Bad syntax \"%s\" at line %d col %d", yytext(), yyline, yycolumn));
     }
     else if (toReturn == ROBOT_KEYWORD_TOKEN) {
+        if (keywordToLeft) {
+            return ROBOT_KEYWORD_ARG_TOKEN;
+        }
+        if (onTagsLine) {
+            return TAG_TOKEN;
+        }
+        if (onDocsLine) {
+            return DOCUMENTATION_TOKEN;
+        }
         keywordToLeft = true;
+        return ROBOT_KEYWORD_TOKEN;
+    }
+    else if (toReturn == ROBOT_KEYWORD_ARG_TOKEN) {
+         if (keywordToLeft) {
+            return ROBOT_KEYWORD_ARG_TOKEN;
+         }
+         if (onTagsLine) {
+            return TAG_TOKEN;
+         }
+         if (onDocsLine) {
+            return DOCUMENTATION_TOKEN;
+         }
+         return ROBOT_KEYWORD_ARG_TOKEN;
     }
     else if (toReturn == TAGS_SETTING_TOKEN) {
         onTagsLine = true;
@@ -66,29 +101,14 @@ return;
     else if (toReturn == FORCE_TAGS_SETTING_KEYWORD_TOKEN) {
         onTagsLine = true;
     }
+    else if (toReturn == DOCUMENTATION_SETTING_TOKEN) {
+        onDocsLine = true;
+    }
     return toReturn;
   }
   private IElementType newLine() {
-    startLine = true;
-    keywordToLeft = onTagsLine = onTimeoutLine = false;
+    startLine = firstRobotCell = true;
     return NEWLINE_TOKEN;
-  }
-
-  private IElementType keywordArgOrTag() {
-    if (onTagsLine) {
-        return next(TAG_TOKEN);
-    }
-    return next(ROBOT_KEYWORD_ARG_TOKEN);
-  }
-
-  private IElementType keywordOrTag() {
-    if (onTagsLine) {
-        return next(TAG_TOKEN);
-    }
-    if (keywordToLeft) {
-        return next(ROBOT_KEYWORD_ARG_TOKEN);
-    }
-    return next(ROBOT_KEYWORD_TOKEN);
   }
 
 
@@ -99,15 +119,16 @@ LineTerminator = \r|\n|\r\n
 InputCharacter = [^\r\n]
 
 /* Keyword arguments and test case headers use the same chars.*/
-KeywordArgumentChar = [^\r\n\t\# ]
-TestCaseHeaderChar = [^\r\n\t\# ]
+KeywordArgumentChar = [^\r\n\t\#\|\=\@\%\\ ] | \\\| | \\\$ | \\\@ | \\\% | \\\# | \\\= | \\\\
+TestCaseHeaderChar =  {KeywordArgumentChar}
 
-ColumnSep = "\t"+ | [ \t] [ \t]+
+ColumnSep = " " " "+ | [ \t]* "\t" [ \t]* | [ \t]+ \| [ \t]+
 SingleSpace = " "
 WhiteSpace = [ \t]
 NonWhiteSpace = [^ \t\r\n]
 
 EndOfLine = {WhiteSpace}* {LineTerminator}
+Ellipses = \.\.\.
 
 /* integer literals */
 DecIntegerLiteral = 0 | [1-9][0-9]*
@@ -130,7 +151,7 @@ TestCaseHeaderWord = {TestCaseHeaderChar}+
 TestCaseHeader = {TestCaseHeaderWord} ({SingleSpace} {TestCaseHeaderWord})*
 
 KeywordArgumentWord = {KeywordArgumentChar}+
-KeywordArgument = ({KeywordArgumentWord} ({SingleSpace} {KeywordArgumentWord})*) | {Variable}
+KeywordArgument = ({KeywordArgumentWord} ({SingleSpace} {KeywordArgumentWord})*) | {Variable} | \\
 ForceTags = [Ff] "orce" " "? [Tt] "ags"
 
 /* Settings for robot test cases */
@@ -157,8 +178,8 @@ ReturnMeta = "[" {WhiteSpace}* [Rr] "eturn" {WhiteSpace}* "]"
 /* Table headings */
 SettingsTableHeading  = "*"+ {WhiteSpace}* (([Ss] "etting" "s"?) | "Metadata") {WhiteSpace}* ("*")*
 VariablesTableHeading = "*"+ {WhiteSpace}* ([Vv] "ariable" "s"?) {WhiteSpace}* "*"*
-TestCasesTableHeading = "*"+ {WhiteSpace}* [Tt] "est" " "? [Cc] "ase" "s"? {WhiteSpace}* "*"*
-KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] "ser" " "?)? [Kk] "eyword" "s"? {WhiteSpace}* "*"*
+TestCasesTableHeading = "*"+ {WhiteSpace}* [Tt] "est" " "* [Cc] "ase" "s"? {WhiteSpace}* "*"*
+KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] "ser" " "*)? [Kk] "eyword" "s"? {WhiteSpace}* "*"*
 
 /*
    These states are for the different Robot tables, because different tokens are allowed in different tables.
@@ -184,8 +205,9 @@ KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] "ser" " "?)? [Kk] "eyword" "s"? 
     {Comment}                    { return next(COMMENT_TOKEN); }
     {ColumnSep}                  { return next(COLUMN_SEP_TOKEN); }
     {WhiteSpace}                 { return next(WHITESPACE_TOKEN); }
-    {RobotKeyword}               { return keywordOrTag(); }
-    {KeywordArgument}            { return keywordArgOrTag(); }
+    {Ellipses}                   { return next(ELLIPSES_TOKEN); }
+    {RobotKeyword}               { return next(ROBOT_KEYWORD_TOKEN); }
+    {KeywordArgument}            { return next(ROBOT_KEYWORD_ARG_TOKEN); }
 }
 
 <SETTINGS> {
@@ -196,12 +218,13 @@ KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] "ser" " "?)? [Kk] "eyword" "s"? 
      {KeywordsTableHeading}      { yybegin(KEYWORDS); return next(KEYWORDS_TABLE_HEADING_TOKEN); }
      {TestCasesTableHeading}     { yybegin(TEST_CASES); return next(TEST_CASES_TABLE_HEADING_TOKEN); }
      {SettingsTableHeading}      { yybegin(BAD_SYNTAX); return next(BAD_SYNTAX_TOKEN); }
+     {Ellipses}          { return next(ELLIPSES_TOKEN); }
      {Variable}          { return next(VARIABLE_TOKEN); }
      {ArrayVariable}     { return next(ARRAY_VARIABLE_TOKEN); }
      {TimeoutValue}      { if (onTimeoutLine) { return next(TIMEOUT_VALUE_TOKEN); } return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {ForceTags}         { return next(FORCE_TAGS_SETTING_KEYWORD_TOKEN);}
-     {RobotKeyword}      { return keywordOrTag(); }
-     {KeywordArgument}   { return keywordArgOrTag(); }
+     {RobotKeyword}      { return next(ROBOT_KEYWORD_TOKEN); }
+     {KeywordArgument}   { return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }
      {WhiteSpace}        { return next(WHITESPACE_TOKEN); }
 }
@@ -214,12 +237,13 @@ KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] "ser" " "?)? [Kk] "eyword" "s"? 
      {KeywordsTableHeading}      { yybegin(KEYWORDS); return next(KEYWORDS_TABLE_HEADING_TOKEN); }
      {TestCasesTableHeading}     { yybegin(TEST_CASES); return next(TEST_CASES_TABLE_HEADING_TOKEN); }
      {SettingsTableHeading}      { yybegin(SETTINGS); return next(SETTINGS_TABLE_HEADING_TOKEN); }
+     {Ellipses}          { return next(ELLIPSES_TOKEN); }
      {Assignment}        { return next(ASSIGNMENT_TOKEN); }
      {ArrayAssignment}   { return next(ARRAY_ASSIGNMENT_TOKEN); }
      {Variable}          { return next(VARIABLE_TOKEN); }
      {ArrayVariable}     { return next(ARRAY_VARIABLE_TOKEN); }
-     {RobotKeyword}      { return keywordOrTag(); }
-     {KeywordArgument}   { return keywordArgOrTag(); }
+     {RobotKeyword}      { return next(ROBOT_KEYWORD_TOKEN); }
+     {KeywordArgument}   { return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }
      {WhiteSpace}        { return next(WHITESPACE_TOKEN); }
 }
@@ -234,6 +258,7 @@ KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] "ser" " "?)? [Kk] "eyword" "s"? 
      {VariablesTableHeading}     { yybegin(VARIABLES); return next(VARIABLES_TABLE_HEADING_TOKEN); }
      {KeywordsTableHeading}      { yybegin(KEYWORDS); return next(KEYWORDS_TABLE_HEADING_TOKEN); }
      {TestCasesTableHeading}      { yybegin(BAD_SYNTAX); return next(BAD_SYNTAX_TOKEN); }
+     {Ellipses}          { return next(ELLIPSES_TOKEN); }
      {TagsMeta}          { return next(TAGS_SETTING_TOKEN); }
      {DocsMeta}          { previous_state = yystate(); yybegin(DOCS_SETTING); return next(DOCUMENTATION_SETTING_TOKEN); }
      {SetupMeta}         { return next(SETUP_SETTING_TOKEN); }
@@ -244,10 +269,10 @@ KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] "ser" " "?)? [Kk] "eyword" "s"? 
      {ArrayAssignment}   { return ARRAY_ASSIGNMENT_TOKEN; }
      {Variable}          { return next(VARIABLE_TOKEN); }
      {ArrayVariable}     { return next(ARRAY_VARIABLE_TOKEN); }
-     {TimeoutValue}      { if (onTimeoutLine) { return next(TIMEOUT_VALUE_TOKEN);} return keywordArgOrTag(); }
-     {RobotKeyword}      { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return keywordOrTag(); }
-     {TestCaseHeader}    { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return keywordArgOrTag(); }
-     {KeywordArgument}   { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return keywordArgOrTag(); }
+     {TimeoutValue}      { if (onTimeoutLine) { return next(TIMEOUT_VALUE_TOKEN);} return next(ROBOT_KEYWORD_ARG_TOKEN); }
+     {RobotKeyword}      { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
+     {TestCaseHeader}    { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return next(ROBOT_KEYWORD_ARG_TOKEN); }
+     {KeywordArgument}   { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }
      {WhiteSpace}        { return next(WHITESPACE_TOKEN); }
 }
@@ -267,6 +292,7 @@ KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] "ser" " "?)? [Kk] "eyword" "s"? 
      {VariablesTableHeading}     { yybegin(VARIABLES); return next(VARIABLES_TABLE_HEADING_TOKEN); }
      {TestCasesTableHeading}     { yybegin(TEST_CASES); return next(TEST_CASES_TABLE_HEADING_TOKEN); }
      {KeywordsTableHeading}      { yybegin(BAD_SYNTAX); return next(BAD_SYNTAX_TOKEN); }
+     {Ellipses}          { return next(ELLIPSES_TOKEN); }
      {DocsMeta}          { previous_state = yystate(); yybegin(DOCS_SETTING); return next(DOCUMENTATION_SETTING_TOKEN); }
      {ArgumentsMeta}     { return next(ARGUMENTS_SETTING_TOKEN); }
      {SetupMeta}         { return next(SETUP_SETTING_TOKEN); }
@@ -278,8 +304,8 @@ KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] "ser" " "?)? [Kk] "eyword" "s"? 
      {ArrayAssignment}   { return ARRAY_ASSIGNMENT_TOKEN; }
      {Variable}          { return next(VARIABLE_TOKEN); }
      {ArrayVariable}     { return next(ARRAY_VARIABLE_TOKEN); }
-     {RobotKeyword}      { if (startLine) { return next(ROBOT_KEYWORD_DEF_TOKEN); } return keywordOrTag(); }
-     {KeywordArgument}   { if (startLine) { return next(BAD_SYNTAX_TOKEN); } return keywordArgOrTag(); }
+     {RobotKeyword}      { if (startLine) { return next(ROBOT_KEYWORD_DEF_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
+     {KeywordArgument}   { if (startLine) { return next(BAD_SYNTAX_TOKEN); } return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }
      {WhiteSpace}        { return next(WHITESPACE_TOKEN); }
 }

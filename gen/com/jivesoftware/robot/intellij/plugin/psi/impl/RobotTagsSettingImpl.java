@@ -25,8 +25,8 @@ public class RobotTagsSettingImpl extends ASTWrapperPsiElement implements RobotT
 
   @Override
   @NotNull
-  public List<RobotTag> getTagList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotTag.class);
+  public List<RobotTagLine> getTagLineList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotTagLine.class);
   }
 
 }

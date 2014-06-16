@@ -15,8 +15,12 @@ public interface RobotTypes {
   IElementType ARRAY_ASSIGNABLE = new RobotElementType("ARRAY_ASSIGNABLE");
   IElementType ASSIGNABLE = new RobotElementType("ASSIGNABLE");
   IElementType ASSIGNMENT = new RobotElementType("ASSIGNMENT");
-  IElementType COMMENT = new RobotElementType("COMMENT");
+  IElementType CONTINUE_COL = new RobotElementType("CONTINUE_COL");
+  IElementType CONTINUE_NO_COL = new RobotElementType("CONTINUE_NO_COL");
   IElementType DOCUMENTATION_SETTING = new RobotElementType("DOCUMENTATION_SETTING");
+  IElementType ELLIPSES = new RobotElementType("ELLIPSES");
+  IElementType ELLIPSES_LINE_SETTINGS = new RobotElementType("ELLIPSES_LINE_SETTINGS");
+  IElementType ELLIPSES_LINE_TEST = new RobotElementType("ELLIPSES_LINE_TEST");
   IElementType EMPTY_LINE = new RobotElementType("EMPTY_LINE");
   IElementType END_OF_LINE = new RobotElementType("END_OF_LINE");
   IElementType ERROR = new RobotElementType("ERROR");
@@ -26,16 +30,17 @@ public interface RobotTypes {
   IElementType KEYWORDS_TABLE = new RobotElementType("KEYWORDS_TABLE");
   IElementType KEYWORDS_TABLE_HEADING = new RobotElementType("KEYWORDS_TABLE_HEADING");
   IElementType KEYWORD_ARG = new RobotElementType("KEYWORD_ARG");
+  IElementType KEYWORD_ARG_LIST = new RobotElementType("KEYWORD_ARG_LIST");
   IElementType KEYWORD_DEF = new RobotElementType("KEYWORD_DEF");
   IElementType KEYWORD_DEFINITION = new RobotElementType("KEYWORD_DEFINITION");
   IElementType KEYWORD_DEFINITION_HEADER = new RobotElementType("KEYWORD_DEFINITION_HEADER");
-  IElementType KEYWORD_INVOCATION = new RobotElementType("KEYWORD_INVOCATION");
+  IElementType KEYWORD_INVOCATION_SETTINGS = new RobotElementType("KEYWORD_INVOCATION_SETTINGS");
+  IElementType KEYWORD_INVOCATION_TEST = new RobotElementType("KEYWORD_INVOCATION_TEST");
   IElementType KEYWORD_LINE = new RobotElementType("KEYWORD_LINE");
   IElementType KEYWORD_SETTING = new RobotElementType("KEYWORD_SETTING");
   IElementType KEYWORD_SETTINGS = new RobotElementType("KEYWORD_SETTINGS");
   IElementType KEYWORD_SETTING_LINE = new RobotElementType("KEYWORD_SETTING_LINE");
   IElementType MULTI_ASSIGNMENT = new RobotElementType("MULTI_ASSIGNMENT");
-  IElementType OTHER = new RobotElementType("OTHER");
   IElementType RETURN_LINE = new RobotElementType("RETURN_LINE");
   IElementType RETURN_SETTING = new RobotElementType("RETURN_SETTING");
   IElementType ROBOT_TABLE = new RobotElementType("ROBOT_TABLE");
@@ -43,10 +48,15 @@ public interface RobotTypes {
   IElementType SETTINGS_LINE = new RobotElementType("SETTINGS_LINE");
   IElementType SETTINGS_TABLE = new RobotElementType("SETTINGS_TABLE");
   IElementType SETTINGS_TABLE_HEADING = new RobotElementType("SETTINGS_TABLE_HEADING");
+  IElementType SETTING_LINE = new RobotElementType("SETTING_LINE");
+  IElementType SETTING_LIST = new RobotElementType("SETTING_LIST");
   IElementType SETUP_SETTING = new RobotElementType("SETUP_SETTING");
   IElementType SINGLE_ASSIGNMENT = new RobotElementType("SINGLE_ASSIGNMENT");
   IElementType TAG = new RobotElementType("TAG");
   IElementType TAGS_SETTING = new RobotElementType("TAGS_SETTING");
+  IElementType TAG_LINE = new RobotElementType("TAG_LINE");
+  IElementType TAG_LIST = new RobotElementType("TAG_LIST");
+  IElementType TAG_SETTING_LINE = new RobotElementType("TAG_SETTING_LINE");
   IElementType TEARDOWN_SETTING = new RobotElementType("TEARDOWN_SETTING");
   IElementType TEMPLATE_SETTING = new RobotElementType("TEMPLATE_SETTING");
   IElementType TESTCASE_LINE = new RobotElementType("TESTCASE_LINE");
@@ -73,6 +83,7 @@ public interface RobotTypes {
   IElementType COMMENT_TOKEN = new RobotToken("COMMENT_TOKEN");
   IElementType DOCUMENTATION_SETTING_TOKEN = new RobotToken("DOCUMENTATION_SETTING_TOKEN");
   IElementType DOCUMENTATION_TOKEN = new RobotToken("DOCUMENTATION_TOKEN");
+  IElementType ELLIPSES_TOKEN = new RobotToken("ELLIPSES_TOKEN");
   IElementType FORCE_TAGS_SETTING_KEYWORD_TOKEN = new RobotToken("FORCE_TAGS_SETTING_KEYWORD_TOKEN");
   IElementType KEYWORDS_TABLE_HEADING_TOKEN = new RobotToken("KEYWORDS_TABLE_HEADING_TOKEN");
   IElementType NEWLINE_TOKEN = new RobotToken("NEWLINE_TOKEN");
@@ -82,7 +93,6 @@ public interface RobotTypes {
   IElementType ROBOT_KEYWORD_TOKEN = new RobotToken("ROBOT_KEYWORD_TOKEN");
   IElementType SETTINGS_TABLE_HEADING_TOKEN = new RobotToken("SETTINGS_TABLE_HEADING_TOKEN");
   IElementType SETUP_SETTING_TOKEN = new RobotToken("SETUP_SETTING_TOKEN");
-  IElementType SINGLE_SPACE_TOKEN = new RobotToken("SINGLE_SPACE_TOKEN");
   IElementType TAGS_SETTING_TOKEN = new RobotToken("TAGS_SETTING_TOKEN");
   IElementType TAG_TOKEN = new RobotToken("TAG_TOKEN");
   IElementType TEARDOWN_SETTING_TOKEN = new RobotToken("TEARDOWN_SETTING_TOKEN");
@@ -116,11 +126,23 @@ public interface RobotTypes {
       else if (type == ASSIGNMENT) {
         return new RobotAssignmentImpl(node);
       }
-      else if (type == COMMENT) {
-        return new RobotCommentImpl(node);
+      else if (type == CONTINUE_COL) {
+        return new RobotContinueColImpl(node);
+      }
+      else if (type == CONTINUE_NO_COL) {
+        return new RobotContinueNoColImpl(node);
       }
       else if (type == DOCUMENTATION_SETTING) {
         return new RobotDocumentationSettingImpl(node);
+      }
+      else if (type == ELLIPSES) {
+        return new RobotEllipsesImpl(node);
+      }
+      else if (type == ELLIPSES_LINE_SETTINGS) {
+        return new RobotEllipsesLineSettingsImpl(node);
+      }
+      else if (type == ELLIPSES_LINE_TEST) {
+        return new RobotEllipsesLineTestImpl(node);
       }
       else if (type == EMPTY_LINE) {
         return new RobotEmptyLineImpl(node);
@@ -149,6 +171,9 @@ public interface RobotTypes {
       else if (type == KEYWORD_ARG) {
         return new RobotKeywordArgImpl(node);
       }
+      else if (type == KEYWORD_ARG_LIST) {
+        return new RobotKeywordArgListImpl(node);
+      }
       else if (type == KEYWORD_DEF) {
         return new RobotKeywordDefImpl(node);
       }
@@ -158,8 +183,11 @@ public interface RobotTypes {
       else if (type == KEYWORD_DEFINITION_HEADER) {
         return new RobotKeywordDefinitionHeaderImpl(node);
       }
-      else if (type == KEYWORD_INVOCATION) {
-        return new RobotKeywordInvocationImpl(node);
+      else if (type == KEYWORD_INVOCATION_SETTINGS) {
+        return new RobotKeywordInvocationSettingsImpl(node);
+      }
+      else if (type == KEYWORD_INVOCATION_TEST) {
+        return new RobotKeywordInvocationTestImpl(node);
       }
       else if (type == KEYWORD_LINE) {
         return new RobotKeywordLineImpl(node);
@@ -175,9 +203,6 @@ public interface RobotTypes {
       }
       else if (type == MULTI_ASSIGNMENT) {
         return new RobotMultiAssignmentImpl(node);
-      }
-      else if (type == OTHER) {
-        return new RobotOtherImpl(node);
       }
       else if (type == RETURN_LINE) {
         return new RobotReturnLineImpl(node);
@@ -200,6 +225,12 @@ public interface RobotTypes {
       else if (type == SETTINGS_TABLE_HEADING) {
         return new RobotSettingsTableHeadingImpl(node);
       }
+      else if (type == SETTING_LINE) {
+        return new RobotSettingLineImpl(node);
+      }
+      else if (type == SETTING_LIST) {
+        return new RobotSettingListImpl(node);
+      }
       else if (type == SETUP_SETTING) {
         return new RobotSetupSettingImpl(node);
       }
@@ -211,6 +242,15 @@ public interface RobotTypes {
       }
       else if (type == TAGS_SETTING) {
         return new RobotTagsSettingImpl(node);
+      }
+      else if (type == TAG_LINE) {
+        return new RobotTagLineImpl(node);
+      }
+      else if (type == TAG_LIST) {
+        return new RobotTagListImpl(node);
+      }
+      else if (type == TAG_SETTING_LINE) {
+        return new RobotTagSettingLineImpl(node);
       }
       else if (type == TEARDOWN_SETTING) {
         return new RobotTeardownSettingImpl(node);

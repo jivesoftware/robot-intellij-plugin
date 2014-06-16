@@ -25,14 +25,20 @@ public class RobotArrayAssignableImpl extends ASTWrapperPsiElement implements Ro
 
   @Override
   @NotNull
+  public List<RobotContinueNoCol> getContinueNoColList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotContinueNoCol.class);
+  }
+
+  @Override
+  @NotNull
   public List<RobotKeywordArg> getKeywordArgList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotKeywordArg.class);
   }
 
   @Override
   @Nullable
-  public RobotKeywordInvocation getKeywordInvocation() {
-    return findChildByClass(RobotKeywordInvocation.class);
+  public RobotKeywordInvocationSettings getKeywordInvocationSettings() {
+    return findChildByClass(RobotKeywordInvocationSettings.class);
   }
 
 }

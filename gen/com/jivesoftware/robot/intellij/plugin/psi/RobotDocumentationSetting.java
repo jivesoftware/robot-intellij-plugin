@@ -7,4 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface RobotDocumentationSetting extends PsiElement {
 
+  @NotNull
+  List<RobotContinueCol> getContinueColList();
+
 }

@@ -5,9 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotGenericSetting extends PsiElement {
+public interface RobotEllipsesLineSettings extends PsiElement {
 
   @NotNull
-  List<RobotSettingLine> getSettingLineList();
+  RobotEllipses getEllipses();
+
+  @NotNull
+  RobotEndOfLine getEndOfLine();
 
 }

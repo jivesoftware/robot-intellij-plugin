@@ -7,11 +7,13 @@ import com.jivesoftware.robot.intellij.plugin.lang.RobotFileType;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 
+import static java.lang.String.format;
+
 public class RobotElementFactory {
 
   public static RobotKeyword createKeyword(Project project, String text) {
-    String start = "*** Test Cases ***\nSome Test\n  ";
-    RobotPsiFile file = createFile(project, start + text);
+    String template = "*** Test Cases ***\nSome Test Case\n    %s\n";
+    RobotPsiFile file = createFile(project, format(template, text));
     PsiElement[] children = file.getChildren();
     for (PsiElement el: children) {
       if (el instanceof RobotRobotTable) {
@@ -22,10 +24,10 @@ public class RobotElementFactory {
         RobotTestCasesTable testCasesTable = table.getTestCasesTable();
         for (RobotTestCase robotTestCase: testCasesTable.getTestCaseList()) {
           for (RobotTestcaseLine robotTestcaseLine: robotTestCase.getTestcaseLineList()) {
-            if (robotTestcaseLine.getKeywordInvocation() == null) {
-              return null;
+            if (robotTestcaseLine.getKeywordInvocationTest() == null) {
+              continue;
             }
-            RobotKeywordInvocation invocation = robotTestcaseLine.getKeywordInvocation();
+            RobotKeywordInvocationTest invocation = robotTestcaseLine.getKeywordInvocationTest();
             return invocation.getKeyword();
           }
         }
@@ -39,7 +41,7 @@ public class RobotElementFactory {
     String template = "*** Keywords ***\n" +
                       "%s\n" +
                       "  Log  abc  INFO";
-    RobotPsiFile file = createFile(project, String.format(template, keywordDefName));
+    RobotPsiFile file = createFile(project, format(template, keywordDefName));
     for (PsiElement el: file.getChildren()) {
       if (el instanceof RobotRobotTable) {
         RobotRobotTable table = (RobotRobotTable) el;

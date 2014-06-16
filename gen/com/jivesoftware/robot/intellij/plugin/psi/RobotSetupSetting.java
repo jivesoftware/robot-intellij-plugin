@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface RobotSetupSetting extends PsiElement {
 
   @NotNull
-  RobotKeywordInvocation getKeywordInvocation();
+  RobotKeywordInvocationSettings getKeywordInvocationSettings();
 
 }

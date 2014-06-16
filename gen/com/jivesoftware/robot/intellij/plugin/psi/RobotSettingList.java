@@ -5,9 +5,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotGenericSetting extends PsiElement {
+public interface RobotSettingList extends PsiElement {
 
   @NotNull
-  List<RobotSettingLine> getSettingLineList();
+  List<RobotKeywordArg> getKeywordArgList();
 
 }

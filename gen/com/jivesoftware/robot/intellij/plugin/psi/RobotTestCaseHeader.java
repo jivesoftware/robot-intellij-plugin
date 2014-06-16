@@ -7,6 +7,9 @@ import com.intellij.psi.PsiElement;
 
 public interface RobotTestCaseHeader extends PsiElement {
 
+  @Nullable
+  RobotContinueCol getContinueCol();
+
   @NotNull
   RobotEndOfLine getEndOfLine();
 

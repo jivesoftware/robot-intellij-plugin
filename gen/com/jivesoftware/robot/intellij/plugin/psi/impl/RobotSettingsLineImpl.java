@@ -25,6 +25,12 @@ public class RobotSettingsLineImpl extends ASTWrapperPsiElement implements Robot
 
   @Override
   @Nullable
+  public RobotEllipsesLineSettings getEllipsesLineSettings() {
+    return findChildByClass(RobotEllipsesLineSettings.class);
+  }
+
+  @Override
+  @Nullable
   public RobotEmptyLine getEmptyLine() {
     return findChildByClass(RobotEmptyLine.class);
   }

@@ -11,6 +11,6 @@ public interface RobotAssignable extends PsiElement {
   RobotKeywordArg getKeywordArg();
 
   @Nullable
-  RobotKeywordInvocation getKeywordInvocation();
+  RobotKeywordInvocationSettings getKeywordInvocationSettings();
 
 }

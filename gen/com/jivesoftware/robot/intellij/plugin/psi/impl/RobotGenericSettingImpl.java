@@ -23,4 +23,10 @@ public class RobotGenericSettingImpl extends ASTWrapperPsiElement implements Rob
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public List<RobotSettingLine> getSettingLineList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotSettingLine.class);
+  }
+
 }

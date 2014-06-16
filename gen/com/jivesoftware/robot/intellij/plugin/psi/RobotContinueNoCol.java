@@ -5,12 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotKeywordInvocation extends PsiElement {
+public interface RobotContinueNoCol extends PsiElement {
 
   @NotNull
-  RobotKeyword getKeyword();
+  RobotEllipses getEllipses();
 
   @NotNull
-  List<RobotKeywordArg> getKeywordArgList();
+  RobotEndOfLine getEndOfLine();
 
 }

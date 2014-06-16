@@ -8,7 +8,10 @@ import com.intellij.psi.PsiElement;
 public interface RobotVariableAssignToKeyword extends PsiElement {
 
   @NotNull
-  RobotKeywordInvocation getKeywordInvocation();
+  List<RobotContinueCol> getContinueColList();
+
+  @NotNull
+  RobotKeywordInvocationTest getKeywordInvocationTest();
 
   @Nullable
   RobotMultiAssignment getMultiAssignment();

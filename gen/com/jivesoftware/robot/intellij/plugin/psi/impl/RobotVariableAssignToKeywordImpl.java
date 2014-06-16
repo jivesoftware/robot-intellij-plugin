@@ -25,8 +25,14 @@ public class RobotVariableAssignToKeywordImpl extends ASTWrapperPsiElement imple
 
   @Override
   @NotNull
-  public RobotKeywordInvocation getKeywordInvocation() {
-    return findNotNullChildByClass(RobotKeywordInvocation.class);
+  public List<RobotContinueCol> getContinueColList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotContinueCol.class);
+  }
+
+  @Override
+  @NotNull
+  public RobotKeywordInvocationTest getKeywordInvocationTest() {
+    return findNotNullChildByClass(RobotKeywordInvocationTest.class);
   }
 
   @Override

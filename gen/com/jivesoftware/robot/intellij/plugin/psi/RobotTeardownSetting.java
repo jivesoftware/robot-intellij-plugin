@@ -8,6 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface RobotTeardownSetting extends PsiElement {
 
   @NotNull
-  RobotKeywordInvocation getKeywordInvocation();
+  RobotKeywordInvocationSettings getKeywordInvocationSettings();
 
 }

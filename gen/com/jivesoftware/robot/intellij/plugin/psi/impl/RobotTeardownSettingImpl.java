@@ -25,8 +25,8 @@ public class RobotTeardownSettingImpl extends ASTWrapperPsiElement implements Ro
 
   @Override
   @NotNull
-  public RobotKeywordInvocation getKeywordInvocation() {
-    return findNotNullChildByClass(RobotKeywordInvocation.class);
+  public RobotKeywordInvocationSettings getKeywordInvocationSettings() {
+    return findNotNullChildByClass(RobotKeywordInvocationSettings.class);
   }
 
 }

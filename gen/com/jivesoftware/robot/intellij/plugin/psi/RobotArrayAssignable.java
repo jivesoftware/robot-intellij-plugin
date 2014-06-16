@@ -8,9 +8,12 @@ import com.intellij.psi.PsiElement;
 public interface RobotArrayAssignable extends PsiElement {
 
   @NotNull
+  List<RobotContinueNoCol> getContinueNoColList();
+
+  @NotNull
   List<RobotKeywordArg> getKeywordArgList();
 
   @Nullable
-  RobotKeywordInvocation getKeywordInvocation();
+  RobotKeywordInvocationSettings getKeywordInvocationSettings();
 
 }

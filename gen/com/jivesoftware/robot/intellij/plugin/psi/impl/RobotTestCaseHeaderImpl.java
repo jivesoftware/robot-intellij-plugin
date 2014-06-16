@@ -24,6 +24,12 @@ public class RobotTestCaseHeaderImpl extends ASTWrapperPsiElement implements Rob
   }
 
   @Override
+  @Nullable
+  public RobotContinueCol getContinueCol() {
+    return findChildByClass(RobotContinueCol.class);
+  }
+
+  @Override
   @NotNull
   public RobotEndOfLine getEndOfLine() {
     return findNotNullChildByClass(RobotEndOfLine.class);

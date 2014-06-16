@@ -63,7 +63,9 @@ public class RobotPsiUtil {
         if (!sb.toString().isEmpty()) { //Append the single space separator for robot keywords
           char lastSoFar = sb.toString().charAt(sb.length() - 1);
           if (!Character.isUpperCase(lastSoFar) || sub.length() > 1) {
-            sb.append(" ");
+            if (!Character.isWhitespace(lastSoFar)) {
+                sb.append(" ");
+            }
           }
         }
         sb.append(cap);
@@ -243,13 +245,13 @@ public class RobotPsiUtil {
     for (RobotKeywordDefinition robotKeywordDefinition : robotKeywordDefinitionList) {
       List<RobotKeywordLine> lines = robotKeywordDefinition.getKeywordLineList();
       for (RobotKeywordLine line : lines) {
-        RobotKeywordInvocation invocation = line.getKeywordInvocation();
+        RobotKeywordInvocationTest invocation = line.getKeywordInvocationTest();
         RobotVariableAssignToKeyword assignToKeyword = line.getVariableAssignToKeyword();
         if (invocation != null) {
           RobotKeyword keyword = invocation.getKeyword();
           addKeywordIfMatch(name, keyword, keywordList);
         } else if (assignToKeyword != null) {
-          RobotKeyword keyword = assignToKeyword.getKeywordInvocation().getKeyword();
+          RobotKeyword keyword = assignToKeyword.getKeywordInvocationTest().getKeyword();
           addKeywordIfMatch(name, keyword, keywordList);
         }
       }
@@ -265,13 +267,13 @@ public class RobotPsiUtil {
 
   public static void findKeywordUsagesInTestCase(RobotTestCase testCase, String name, List<RobotKeyword> keywordList) {
     for (RobotTestcaseLine line : testCase.getTestcaseLineList()) {
-      RobotKeywordInvocation invocation = line.getKeywordInvocation();
+      RobotKeywordInvocationTest invocation = line.getKeywordInvocationTest();
       RobotVariableAssignToKeyword assignToKeyword = line.getVariableAssignToKeyword();
       if (invocation != null) {
         RobotKeyword keyword = invocation.getKeyword();
         addKeywordIfMatch(name, keyword, keywordList);
       } else if (assignToKeyword != null) {
-        RobotKeywordInvocation assignInvocation = assignToKeyword.getKeywordInvocation();
+        RobotKeywordInvocationTest assignInvocation = assignToKeyword.getKeywordInvocationTest();
         RobotKeyword keyword = assignInvocation.getKeyword();
         addKeywordIfMatch(name, keyword, keywordList);
       }
