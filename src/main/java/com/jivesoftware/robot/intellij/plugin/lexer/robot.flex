@@ -158,6 +158,7 @@ TestSetupSetting = [Tt] [Ee] [Ss] [Tt] " "? [Ss] [Ee] [Tt] [Uu] [Pp]
 TestTeardownSetting = [Tt] [Ee] [Ss] [Tt] " "? [Tt] [Ee] [Aa] [Rr] [Dd] [Oo] [Ww] [Nn]
 SuiteSetupSetting = [Ss] [Uu] [Ii] [Tt] [Ee] " "? [Ss] [Ee] [Tt] [Uu] [Pp]
 ForceTags = [Ff] "orce" " "? [Tt] "ags"
+ResourceSetting = [Rr] [Ee] [Ss] [Oo] [Uu] [Rr] [Cc] [Ee]
 
 /* Settings for robot test cases */
 TagsMeta = "[" {WhiteSpace}* [Tt] [Aa] [Gg] [Ss] {WhiteSpace}* "]"
@@ -230,6 +231,7 @@ KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] [Ss] [Ee] [Rr] " "*)? [Kk] [Ee] 
      {ArrayVariable}     { return next(ARRAY_VARIABLE_TOKEN); }
      {TimeoutValue}      { if (onTimeoutLine) { return next(TIMEOUT_VALUE_TOKEN); } return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {ForceTags}         { return next(FORCE_TAGS_SETTING_KEYWORD_TOKEN);}
+     {ResourceSetting}     { return next(RESOURCE_SETTING_TOKEN); }
      {TestSetupSetting}     { return next(TEST_SETUP_SETTING_TOKEN); }
      {TestTeardownSetting}  { return next(TEST_TEARDOWN_SETTING_TOKEN); }
      {SuiteSetupSetting}    { return next(SUITE_SETUP_SETTING_TOKEN); }

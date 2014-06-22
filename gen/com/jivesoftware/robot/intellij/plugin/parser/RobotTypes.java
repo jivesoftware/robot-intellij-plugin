@@ -31,7 +31,7 @@ public interface RobotTypes {
   IElementType KEYWORDS_TABLE_HEADING = new RobotElementType("KEYWORDS_TABLE_HEADING");
   IElementType KEYWORD_ARG = new RobotElementType("KEYWORD_ARG");
   IElementType KEYWORD_ARG_LIST = new RobotElementType("KEYWORD_ARG_LIST");
-  IElementType KEYWORD_DEF = new RobotElementType("KEYWORD_DEF");
+  IElementType KEYWORD_DEF = new RobotKeywordDefElementType("KEYWORD_DEF");
   IElementType KEYWORD_DEFINITION = new RobotElementType("KEYWORD_DEFINITION");
   IElementType KEYWORD_DEFINITION_HEADER = new RobotElementType("KEYWORD_DEFINITION_HEADER");
   IElementType KEYWORD_INVOCATION_SETTINGS = new RobotElementType("KEYWORD_INVOCATION_SETTINGS");
@@ -41,6 +41,7 @@ public interface RobotTypes {
   IElementType KEYWORD_SETTINGS = new RobotElementType("KEYWORD_SETTINGS");
   IElementType KEYWORD_SETTING_LINE = new RobotElementType("KEYWORD_SETTING_LINE");
   IElementType MULTI_ASSIGNMENT = new RobotElementType("MULTI_ASSIGNMENT");
+  IElementType RESOURCE_SETTING = new RobotElementType("RESOURCE_SETTING");
   IElementType RETURN_LINE = new RobotElementType("RETURN_LINE");
   IElementType RETURN_SETTING = new RobotElementType("RETURN_SETTING");
   IElementType ROBOT_TABLE = new RobotElementType("ROBOT_TABLE");
@@ -89,6 +90,7 @@ public interface RobotTypes {
   IElementType FORCE_TAGS_SETTING_KEYWORD_TOKEN = new RobotToken("FORCE_TAGS_SETTING_KEYWORD_TOKEN");
   IElementType KEYWORDS_TABLE_HEADING_TOKEN = new RobotToken("KEYWORDS_TABLE_HEADING_TOKEN");
   IElementType NEWLINE_TOKEN = new RobotToken("NEWLINE_TOKEN");
+  IElementType RESOURCE_SETTING_TOKEN = new RobotToken("RESOURCE_SETTING_TOKEN");
   IElementType RETURN_SETTING_TOKEN = new RobotToken("RETURN_SETTING_TOKEN");
   IElementType ROBOT_KEYWORD_ARG_TOKEN = new RobotToken("ROBOT_KEYWORD_ARG_TOKEN");
   IElementType ROBOT_KEYWORD_DEF_TOKEN = new RobotToken("ROBOT_KEYWORD_DEF_TOKEN");
@@ -208,6 +210,9 @@ public interface RobotTypes {
       }
       else if (type == MULTI_ASSIGNMENT) {
         return new RobotMultiAssignmentImpl(node);
+      }
+      else if (type == RESOURCE_SETTING) {
+        return new RobotResourceSettingImpl(node);
       }
       else if (type == RETURN_LINE) {
         return new RobotReturnLineImpl(node);

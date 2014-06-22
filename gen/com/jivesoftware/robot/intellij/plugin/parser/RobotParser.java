@@ -116,6 +116,9 @@ public class RobotParser implements PsiParser {
     else if (root_ == MULTI_ASSIGNMENT) {
       result_ = MULTI_ASSIGNMENT(builder_, 0);
     }
+    else if (root_ == RESOURCE_SETTING) {
+      result_ = RESOURCE_SETTING(builder_, 0);
+    }
     else if (root_ == RETURN_LINE) {
       result_ = RETURN_LINE(builder_, 0);
     }
@@ -1201,6 +1204,19 @@ public class RobotParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // RESOURCE_SETTING_TOKEN  COLUMN_SEP_TOKEN  KEYWORD_ARG
+  public static boolean RESOURCE_SETTING(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "RESOURCE_SETTING")) return false;
+    if (!nextTokenIs(builder_, RESOURCE_SETTING_TOKEN)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeTokens(builder_, 0, RESOURCE_SETTING_TOKEN, COLUMN_SEP_TOKEN);
+    result_ = result_ && KEYWORD_ARG(builder_, level_ + 1);
+    exit_section_(builder_, marker_, RESOURCE_SETTING, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
   // COLUMN_SEP_TOKEN RETURN_SETTING END_OF_LINE (NEWLINE_TOKEN | <<eof>>)
   public static boolean RETURN_LINE(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "RETURN_LINE")) return false;
@@ -1281,12 +1297,13 @@ public class RobotParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // FORCE_TAGS_SETTING | TEST_SETUP_SETTING | GENERIC_SETTING
+  // FORCE_TAGS_SETTING | RESOURCE_SETTING | TEST_SETUP_SETTING | GENERIC_SETTING
   public static boolean SETTING(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SETTING")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, "<setting>");
     result_ = FORCE_TAGS_SETTING(builder_, level_ + 1);
+    if (!result_) result_ = RESOURCE_SETTING(builder_, level_ + 1);
     if (!result_) result_ = TEST_SETUP_SETTING(builder_, level_ + 1);
     if (!result_) result_ = GENERIC_SETTING(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, SETTING, result_, false, null);
@@ -1870,7 +1887,7 @@ public class RobotParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // TEST_SETUP_TOKEN ELLIPSES_FOR_SETTINGS_TABLE+ COLUMN_SEP_TOKEN KEYWORD_INVOCATION_SETTINGS | 
+  // TEST_SETUP_TOKEN ELLIPSES_FOR_SETTINGS_TABLE+ COLUMN_SEP_TOKEN KEYWORD_INVOCATION_SETTINGS |
   //                        TEST_SETUP_TOKEN COLUMN_SEP_TOKEN KEYWORD_INVOCATION_SETTINGS
   public static boolean TEST_SETUP_SETTING(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TEST_SETUP_SETTING")) return false;

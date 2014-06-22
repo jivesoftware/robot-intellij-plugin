@@ -16,7 +16,7 @@ public class RobotKeywordDefinitionSymbolContributor implements ChooseByNameCont
   @Override
   public String[] getNames(Project project, boolean includeNonProjectItems) {
     List<String> names = Lists.newArrayList();
-    List<RobotKeywordDef> keywordDefs = RobotPsiUtil.findAllRobotKeywordDefs(project);
+    List<RobotKeywordDef> keywordDefs = RobotPsiUtil.findAllRobotKeywordDefsInRobotFiles(project);
     for (RobotKeywordDef keywordDef: keywordDefs) {
       names.add(keywordDef.getText());
     }

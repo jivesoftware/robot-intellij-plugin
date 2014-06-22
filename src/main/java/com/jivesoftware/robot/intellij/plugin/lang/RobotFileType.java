@@ -29,7 +29,6 @@ import javax.swing.*;
 public class RobotFileType extends LanguageFileType {
 
     public static final RobotFileType INSTANCE = new RobotFileType();
-    public static final IFileElementType FILE = new IFileElementType("Robot File Type", RobotLanguage.INSTANCE);
 
     private RobotFileType() {
         super(RobotLanguage.INSTANCE);

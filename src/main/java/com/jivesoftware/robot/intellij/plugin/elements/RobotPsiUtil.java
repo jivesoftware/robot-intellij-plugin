@@ -1,5 +1,6 @@
 package com.jivesoftware.robot.intellij.plugin.elements;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.intellij.ide.DataManager;
 import com.intellij.openapi.actionSystem.DataContext;
@@ -10,10 +11,13 @@ import com.intellij.psi.*;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.PsiSearchHelper;
+import com.intellij.psi.stubs.AbstractStubIndex;
+import com.intellij.psi.stubs.StubIndex;
 import com.intellij.util.indexing.FileBasedIndex;
 import com.jivesoftware.robot.intellij.plugin.elements.references.FindRobotKeywordsUsagesByNameProcessor;
 import com.jivesoftware.robot.intellij.plugin.elements.references.FindRobotRobotKeywordsByNameProcessor;
-import com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordDefinitionFinder;
+import com.jivesoftware.robot.intellij.plugin.elements.search.RobotKeywordDefinitionFinder;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefNormalizedNameIndex;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotFileType;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
@@ -35,6 +39,10 @@ public class RobotPsiUtil {
     }
     PsiModifierList psiModifierList = ((PsiMethod) element).getModifierList();
     return psiModifierList.findAnnotation(RobotKeywordDefinitionFinder.ROBOT_KEYWORD_ANNOTATION) != null;
+  }
+
+  public static String normalizeKeywordForIndex(String keywordOrMethod) {
+      return keywordOrMethod.replace(" ", "").toLowerCase();
   }
 
   public static String robotKeywordToMethodFast(String keyword) {
@@ -137,16 +145,35 @@ public class RobotPsiUtil {
     return results;
   }
 
-  public static List<RobotKeywordDef> findAllRobotKeywordDefs(Project project) {
-    Collection<VirtualFile> robotFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, RobotFileType.INSTANCE,
-            GlobalSearchScope.projectScope(project));
-    List<RobotKeywordDef> results = Lists.newArrayList();
-    for (VirtualFile f : robotFiles) {
-      PsiFile psiFile = PsiManager.getInstance(project).findFile(f);
-      findKeywordDefsInFile(psiFile, results);
-    }
-    return results;
+  public static List<RobotKeywordDef> findAllRobotKeywordDefsInRobotFiles(Project project) {
+      StubIndex STUB_INDEX = StubIndex.getInstance();
+      Collection<String> keys = STUB_INDEX.getAllKeys(RobotKeywordDefNormalizedNameIndex.KEY, project);
+      List<RobotKeywordDef> defs = Lists.newArrayList();
+      for (String key: keys) {
+          Collection<RobotKeywordDef> defsForKey = STUB_INDEX.getElements(RobotKeywordDefNormalizedNameIndex.KEY, key,
+                  project, GlobalSearchScope.allScope(project), RobotKeywordDef.class);
+          defs.addAll(defsForKey);
+      }
+      return defs;
   }
+
+    public static List<RobotKeywordDef> findAllRobotKeywordDefsInRobotFilesStartingWith(Project project, String startsWith) {
+        StubIndex STUB_INDEX = StubIndex.getInstance();
+        final String normalizedStartsWith = RobotPsiUtil.normalizeKeywordForIndex(startsWith);
+        Collection<String> keys = STUB_INDEX.getAllKeys(RobotKeywordDefNormalizedNameIndex.KEY, project);
+        List<RobotKeywordDef> defs = Lists.newArrayList();
+        for (String key: keys) {
+            Collection<RobotKeywordDef> defsForKey = STUB_INDEX.getElements(RobotKeywordDefNormalizedNameIndex.KEY, key,
+                    project, GlobalSearchScope.allScope(project), RobotKeywordDef.class);
+            for (RobotKeywordDef def: defsForKey) {
+                String normalizedName = RobotPsiUtil.normalizeKeywordForIndex(def.getName());
+                if (normalizedName.startsWith(normalizedStartsWith)) {
+                    defs.add(def);
+                }
+            }
+        }
+        return defs;
+    }
 
   public static List<RobotKeyword> findKeywordUsagesByName(String name, Project project) {
     GlobalSearchScope robotFileScope = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.projectScope(project), RobotFileType.INSTANCE);
@@ -287,5 +314,62 @@ public class RobotPsiUtil {
       keywordList.add(keyword);
     }
   }
+
+  //-----------------Context-sensitive finders-------------------
+  public static void findRobotKeywordDefsInContext(RobotKeyword context, Predicate<RobotKeywordDef> filter, List<RobotKeywordDef> populateMe) {
+      PsiFile containingFile = context.getContainingFile();
+      if (!(containingFile instanceof RobotPsiFile)) {
+          return;
+      }
+      RobotPsiFile robotPsiFile = (RobotPsiFile)containingFile;
+
+  }
+
+  private static void findRobotKeywordDefsInFileRecursive(RobotPsiFile file, Predicate<RobotKeywordDef> filter, List<RobotKeywordDef> populateMe) {
+      findRobotKeywordDefsInFile(file, filter, populateMe);
+
+  }
+
+  private static void findRobotKeywordDefsInFile(RobotPsiFile file, Predicate<RobotKeywordDef> filter, List<RobotKeywordDef> populateMe) {
+      for (PsiElement child: file.getChildren()) {
+          if (child instanceof RobotRobotTable) {
+              RobotRobotTable table = (RobotRobotTable) child;
+              if (table.getKeywordsTable() != null) {
+                  RobotKeywordsTable keywordsTable = table.getKeywordsTable();
+                  for (RobotKeywordDefinition definition: keywordsTable.getKeywordDefinitionList()) {
+                      RobotKeywordDefinitionHeader header = definition.getKeywordDefinitionHeader();
+                      RobotKeywordDef def = header.getKeywordDef();
+                      if (filter.apply(def)) {
+                          populateMe.add(def);
+                      }
+                  }
+              }
+          }
+      }
+  }
+
+  private static List<RobotPsiFile> getIncludedResourceFiles(RobotPsiFile file) {
+     List<RobotPsiFile> includedResourceFiles = Lists.newArrayList();
+      for (PsiElement child: file.getChildren()) {
+          if (child instanceof RobotRobotTable) {
+            RobotRobotTable table = (RobotRobotTable) child;
+            if (table.getSettingsTable() != null) {
+                RobotSettingsTable settingsTable = table.getSettingsTable();
+                for (RobotSettingsLine line: settingsTable.getSettingsLineList()) {
+                    if (line.getSetting() != null) {
+                        RobotSetting setting = line.getSetting();
+                        //setting.getGenericSetting()
+                    }
+                }
+            }
+          }
+      }
+      return includedResourceFiles;
+  }
+
+
+
+
+
 
 }

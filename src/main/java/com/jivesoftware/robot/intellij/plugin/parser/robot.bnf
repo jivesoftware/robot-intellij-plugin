@@ -16,7 +16,9 @@
 
   psiImplUtilClass="com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil"
   implements("KEYWORD")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
-  implements("KEYWORD_DEF")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
+  implements("KEYWORD_DEF")="com.jivesoftware.robot.intellij.plugin.elements.references.IRobotKeywordDef"
+  extends("KEYWORD_DEF")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordDefBase"
+  elementTypeClass("KEYWORD_DEF")="com.jivesoftware.robot.intellij.plugin.parser.RobotKeywordDefElementType"
   implements("TEST_CASE")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
 }
 
@@ -33,7 +35,7 @@ SETTINGS_LINE ::= COLUMN_SEP_TOKEN* SETTING END_OF_LINE (NEWLINE_TOKEN | <<eof>>
                   EMPTY_LINE |
                   ELLIPSES_LINE_SETTINGS
 
-SETTING ::= FORCE_TAGS_SETTING | TEST_SETUP_SETTING | GENERIC_SETTING
+SETTING ::= FORCE_TAGS_SETTING | RESOURCE_SETTING | TEST_SETUP_SETTING | GENERIC_SETTING
 
 TAG_LIST_OR_ELLIPSES_NO_COL ::= TAG_LIST | ELLIPSES_FOR_SETTINGS_TABLE
 FORCE_TAGS_SETTING ::= FORCE_TAGS_SETTING_KEYWORD_TOKEN TAG_LIST_OR_ELLIPSES_NO_COL+ | FORCE_TAGS_SETTING_KEYWORD_TOKEN
@@ -44,6 +46,8 @@ GENERIC_SETTING ::= ROBOT_KEYWORD_TOKEN SETTING_LIST_OR_ELLIPSES+ | ROBOT_KEYWOR
 TEST_SETUP_TOKEN ::=  (TEST_SETUP_SETTING_TOKEN | TEST_TEARDOWN_SETTING_TOKEN | SUITE_SETUP_SETTING_TOKEN)
 TEST_SETUP_SETTING ::= TEST_SETUP_TOKEN ELLIPSES_FOR_SETTINGS_TABLE+ COLUMN_SEP_TOKEN KEYWORD_INVOCATION_SETTINGS |
                        TEST_SETUP_TOKEN COLUMN_SEP_TOKEN KEYWORD_INVOCATION_SETTINGS
+
+RESOURCE_SETTING ::= RESOURCE_SETTING_TOKEN  COLUMN_SEP_TOKEN  KEYWORD_ARG
 
 
 /* Variables table */
@@ -135,6 +139,6 @@ ELLIPSES_FOR_SETTINGS_TABLE ::= END_OF_LINE NEWLINE_TOKEN WHITESPACE_TOKEN? COLU
 
 KEYWORD ::= ROBOT_KEYWORD_TOKEN { methods=[getName setName getNameIdentifier getReference getReferences handleElementRename]}
 
-KEYWORD_DEF ::= ROBOT_KEYWORD_DEF_TOKEN { methods=[getName setName getNameIdentifier getPresentation]}
+KEYWORD_DEF ::= ROBOT_KEYWORD_DEF_TOKEN { methods=[getName setName getNameIdentifier getPresentation] }
 
 ERROR ::= BAD_SYNTAX_TOKEN

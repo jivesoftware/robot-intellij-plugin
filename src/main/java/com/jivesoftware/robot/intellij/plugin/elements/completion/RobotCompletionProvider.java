@@ -12,7 +12,7 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.util.ProcessingContext;
 import com.jivesoftware.robot.intellij.plugin.elements.PresentationPsiUtil;
-import com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordDefinitionFinder;
+import com.jivesoftware.robot.intellij.plugin.elements.search.RobotKeywordDefinitionFinder;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotTagFinder;
 import com.jivesoftware.robot.intellij.plugin.icons.RobotIcons;
 import com.jivesoftware.robot.intellij.plugin.parser.RobotTypes;
@@ -45,12 +45,12 @@ public class RobotCompletionProvider extends CompletionProvider<CompletionParame
         return myTagCompletions;
     }
 
-    private Set<LookupElement> getKeywordCompletions(Project project, CompletionParameters parameters) {
+    private Set<LookupElement> getKeywordCompletions(Project project, CompletionParameters parameters, String text) {
         if (myKeywordCompletions != null && parameters.getInvocationCount() > 1) {
             return myKeywordCompletions;
         }
         myKeywordCompletions = Sets.newHashSet();
-        populateKeywords(project, myKeywordCompletions);
+        populateKeywords(project, myKeywordCompletions, text);
         return myKeywordCompletions;
     }
 
@@ -66,8 +66,11 @@ public class RobotCompletionProvider extends CompletionProvider<CompletionParame
         }
     }
 
-    private void populateKeywords(Project project, Collection<LookupElement> populateMe) {
-        RobotKeywordDefinitionFinder robotKeywordDefinitionFinder = new RobotKeywordDefinitionFinder(project, "", RobotKeywordDefinitionFinder.KEYWORD_SCOPE.ROBOT_AND_JAVA_KEYWORDS, true, true);
+    private void populateKeywords(Project project, Collection<LookupElement> populateMe, String text) {
+        RobotKeywordDefinitionFinder robotKeywordDefinitionFinder =
+                new RobotKeywordDefinitionFinder(project, text,
+                        RobotKeywordDefinitionFinder.KEYWORD_SCOPE.ROBOT_AND_JAVA_KEYWORDS,
+                        RobotKeywordDefinitionFinder.SEARCH_TYPE.STARTS_WITH, true);
         robotKeywordDefinitionFinder.process();
         List<PsiElement> results = robotKeywordDefinitionFinder.getResults();
         for (PsiElement el : results) {
@@ -96,10 +99,11 @@ public class RobotCompletionProvider extends CompletionProvider<CompletionParame
             return;
         }
         LeafPsiElement leaf = (LeafPsiElement) element;
+        String text = leaf.getText();
         if (leaf.getElementType() == RobotTypes.TAG_TOKEN) {
             handleTagTokens(leaf, parameters, result);
         } else if (leaf.getElementType() == RobotTypes.ROBOT_KEYWORD_TOKEN) {
-            handleKeywordTokens(leaf, parameters, result);
+            handleKeywordTokens(leaf, parameters, result, text);
         }
 
     }
@@ -109,8 +113,8 @@ public class RobotCompletionProvider extends CompletionProvider<CompletionParame
         result.addAllElements(tagCompletions);
     }
 
-    private void handleKeywordTokens(LeafPsiElement leaf, CompletionParameters parameters, @NotNull CompletionResultSet result) {
-        Set<LookupElement> keywordCompletions = getKeywordCompletions(leaf.getProject(), parameters);
+    private void handleKeywordTokens(LeafPsiElement leaf, CompletionParameters parameters, @NotNull CompletionResultSet result, String text) {
+        Set<LookupElement> keywordCompletions = getKeywordCompletions(leaf.getProject(), parameters, text);
         result.addAllElements(keywordCompletions);
     }
 }

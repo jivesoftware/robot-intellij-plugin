@@ -5,6 +5,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiElement;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement;
+import com.jivesoftware.robot.intellij.plugin.elements.references.IRobotKeywordDef;
 
 public class RobotVisitor extends PsiElementVisitor {
 
@@ -97,7 +98,7 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitKeywordDef(@NotNull RobotKeywordDef o) {
-    visitNamedElement(o);
+    visitIRobotKeywordDef(o);
   }
 
   public void visitKeywordDefinition(@NotNull RobotKeywordDefinition o) {
@@ -133,6 +134,10 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitMultiAssignment(@NotNull RobotMultiAssignment o) {
+    visitPsiElement(o);
+  }
+
+  public void visitResourceSetting(@NotNull RobotResourceSetting o) {
     visitPsiElement(o);
   }
 
@@ -270,6 +275,10 @@ public class RobotVisitor extends PsiElementVisitor {
 
   public void visitVariableAssignToKeyword(@NotNull RobotVariableAssignToKeyword o) {
     visitPsiElement(o);
+  }
+
+  public void visitIRobotKeywordDef(@NotNull IRobotKeywordDef o) {
+    visitElement(o);
   }
 
   public void visitNamedElement(@NotNull RobotNamedElement o) {

@@ -4,10 +4,10 @@ package com.jivesoftware.robot.intellij.plugin.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement;
+import com.jivesoftware.robot.intellij.plugin.elements.references.IRobotKeywordDef;
 import com.intellij.navigation.ItemPresentation;
 
-public interface RobotKeywordDef extends RobotNamedElement {
+public interface RobotKeywordDef extends IRobotKeywordDef {
 
   @Nullable
   @NonNls

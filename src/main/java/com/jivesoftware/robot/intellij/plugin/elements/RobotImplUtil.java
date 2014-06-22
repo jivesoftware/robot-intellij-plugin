@@ -7,6 +7,7 @@ import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 import com.intellij.util.IncorrectOperationException;
 import com.jivesoftware.robot.intellij.plugin.elements.presentations.KeywordDefPresentation;
 import com.jivesoftware.robot.intellij.plugin.elements.presentations.TestCasePresentation;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordDefStub;
 import com.jivesoftware.robot.intellij.plugin.icons.RobotIcons;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
@@ -94,6 +95,10 @@ public class RobotImplUtil {
     @Nullable
     @NonNls
     public static String getName(RobotKeywordDef element) {
+        RobotKeywordDefStub stub = element.getStub();
+        if (stub != null) {
+            return stub.getName();
+        }
         return element.getText();
     }
 

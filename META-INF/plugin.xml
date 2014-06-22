@@ -221,6 +221,10 @@
         <internalFileTemplate name="fileTemplates.internal.RobotTestCaseFile"/>
         <internalFileTemplate name="fileTemplates.internal.RobotKeywordsFile"/>
 
+        <!-- Psi Stub indexes-->
+        <stubElementTypeHolder class="com.jivesoftware.robot.intellij.plugin.parser.RobotTypes"/>
+        <stubIndex implementation="com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefNormalizedNameIndex"/>
+
     </extensions>
 
     <application-components>
