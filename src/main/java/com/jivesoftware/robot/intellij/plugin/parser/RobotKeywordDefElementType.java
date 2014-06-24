@@ -2,9 +2,11 @@ package com.jivesoftware.robot.intellij.plugin.parser;
 
 import com.intellij.psi.stubs.*;
 import com.intellij.util.io.StringRef;
-import com.jivesoftware.robot.intellij.plugin.elements.RobotPsiUtil;
+import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordDefStub;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordDefStubImpl;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefFirstCharIndex;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefFirstTwoCharsIndex;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefNormalizedNameIndex;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotLanguage;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDef;
@@ -49,10 +51,23 @@ public class RobotKeywordDefElementType extends IStubElementType<RobotKeywordDef
 
     @Override
     public void indexStub(@NotNull RobotKeywordDefStub stub, @NotNull IndexSink sink) {
-        String name = stub.getName();
+        final String name = stub.getName();
         if (name != null) {
             String normalizedName = RobotPsiUtil.normalizeKeywordForIndex(name);
             sink.occurrence(RobotKeywordDefNormalizedNameIndex.KEY, normalizedName);
+
+            if (normalizedName.length() >= 1) {
+                String firstCharacter = normalizedName.substring(0, 1);
+                sink.occurrence(RobotKeywordDefFirstCharIndex.KEY, firstCharacter);
+            }
+            if (normalizedName.length() >= 2) {
+                String firstTwoCharacters = normalizedName.substring(0, 2);
+                sink.occurrence(RobotKeywordDefFirstTwoCharsIndex.KEY, firstTwoCharacters);
+            }
+            if (normalizedName.length() >= 3) {
+                String firstThreeCharacters = normalizedName.substring(0, 3);
+                sink.occurrence(RobotKeywordDefFirstTwoCharsIndex.KEY, firstThreeCharacters);
+            }
         }
     }
 }

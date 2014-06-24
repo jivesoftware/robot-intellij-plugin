@@ -14,8 +14,9 @@ import com.intellij.usages.Usage;
 import com.intellij.usages.UsageInfo2UsageAdapter;
 import com.intellij.util.CollectionQuery;
 import com.intellij.util.Processor;
-import com.jivesoftware.robot.intellij.plugin.elements.RobotPsiUtil;
+import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordRef;
+import com.jivesoftware.robot.intellij.plugin.elements.search.RobotJavaPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDef;
 import org.jetbrains.annotations.NotNull;
@@ -64,15 +65,13 @@ public class RobotCustomUsagesSearcher extends CustomUsageSearcher {
     @Override
     public void run() {
       usages = Lists.newArrayList();
-      if (!RobotPsiUtil.isJavaRobotKeyword(methodToFindUsages)) {
+      if (!RobotJavaPsiUtil.isPsiMethodRobotKeyword(methodToFindUsages)) {
         return;
       }
       String name = methodToFindUsages.getName();
       List<RobotKeyword> robotKeywords = RobotPsiUtil.findKeywordUsagesByJavaMethodName(name, methodToFindUsages.getProject());
       for (RobotKeyword keyword: robotKeywords) {
-        PsiReference ref = new RobotKeywordRef(keyword);
-        TextRange rangeInElement = ref.getRangeInElement();
-        UsageInfo usageInfo = new UsageInfo(keyword, rangeInElement.getStartOffset(), rangeInElement.getEndOffset());
+        UsageInfo usageInfo = new UsageInfo(keyword, false);
         usages.add(new UsageInfo2UsageAdapter(usageInfo));
       }
     }

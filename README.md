@@ -11,6 +11,14 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.2.1</h3>
+<ul>
+    <li>Greatly improved autocomplete performance, and performance throughout the plugin.</li>
+    <li>Created PsiStub indexes for RobotKeywordDef class to speed up all lookups of Robot keyword definitions in Robot files.</li>
+    <li>Also sped up lookups of Java Robot keywords by directly using the Annotation stub index that IntelliJ provides.</li>
+    <li>Fix minor parsing bug, where an argument to a Keyword Definition couldn't be an array type, e.g. @{myVar}.</li>
+</ul>
+
 <h3>Version 1.2.0</h3>
 <ul>
 <li>Added line continuation support with the ellipsees (...) syntax used by Robot</li>

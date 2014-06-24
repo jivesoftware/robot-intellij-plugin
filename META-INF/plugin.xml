@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.jivesoftware.robot.intellij.plugin</id>
     <name>Robot Plugin</name>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <vendor email="charles.capps@jivesoftware.com" url="http://www.jiveosftware.com">Jive Software</vendor>
 
     <description><![CDATA[
@@ -28,12 +28,21 @@
 
     <change-notes><![CDATA[
 
+    <h3>Version 1.2.1</h3>
+    <ul>
+        <li>Greatly improved autocomplete performance, and performance throughout the plugin.</li>
+        <li>Created PsiStub indexes for RobotKeywordDef class to speed up all lookups of Robot keyword definitions in Robot files.</li>
+        <li>Also sped up lookups of Java Robot keywords by directly using the Annotation stub index.</li>
+        <li>Fix minor parsing bug, where an argument to a Keyword Definition couldn't be an array type, e.g. @{myVar}.</li>
+    </ul>
+
     <h3>Version 1.2.0</h3>
     <ul>
     <li>Added line continuation support with the ellipsees (...) syntax used by Robot</li>
     <li>Made parsing far more accurate, including the characters allowed in various contexts, etc.</li>
     <li>Fixed a regression with rename refactoring not working for Robot-defined keywords with a space in the name.</li>
     </ul>
+
     <h3>Version 1.1.9</h3>
     <ul>
        <li>
@@ -184,46 +193,61 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <fileTypeFactory implementation="com.jivesoftware.robot.intellij.plugin.lang.RobotFileTypeFactory"/>
-        <syntaxHighlighter key="soy" implementationClass="com.jivesoftware.robot.intellij.plugin.lang.RobotSyntaxHighlighter"/>
+        <syntaxHighlighter key="soy"
+                           implementationClass="com.jivesoftware.robot.intellij.plugin.lang.RobotSyntaxHighlighter"/>
         <colorSettingsPage implementation="com.jivesoftware.robot.intellij.plugin.lang.RobotColorsAndFontsPage"/>
 
-        <lang.parserDefinition language="RobotTestFile" implementationClass="com.jivesoftware.robot.intellij.plugin.parser.RobotParserDefinition"/>
-        <psi.referenceContributor implementation="com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordReferenceContributor"/>
-        <gotoSymbolContributor implementation="com.jivesoftware.robot.intellij.plugin.elements.symbols.RobotKeywordDefinitionSymbolContributor"/>
-        <lang.commenter language="RobotTestFile" implementationClass="com.jivesoftware.robot.intellij.plugin.lang.RobotCommenter"/>
+        <lang.parserDefinition language="RobotTestFile"
+                               implementationClass="com.jivesoftware.robot.intellij.plugin.parser.RobotParserDefinition"/>
+        <psi.referenceContributor
+                implementation="com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordReferenceContributor"/>
+        <gotoSymbolContributor
+                implementation="com.jivesoftware.robot.intellij.plugin.elements.symbols.RobotKeywordDefinitionSymbolContributor"/>
+        <lang.commenter language="RobotTestFile"
+                        implementationClass="com.jivesoftware.robot.intellij.plugin.lang.RobotCommenter"/>
 
         <!-- This enables Find Usages of Robot Keywords defined in Robot -->
         <lang.findUsagesProvider language="RobotTestFile"
                                  implementationClass="com.jivesoftware.robot.intellij.plugin.elements.usages.RobotKeywordUsagesProvider"/>
 
         <!-- This enables Find Usages of a Java method that is a Robot Keyword definition -->
-        <customUsageSearcher implementation="com.jivesoftware.robot.intellij.plugin.elements.usages.RobotCustomUsagesSearcher" />
+        <customUsageSearcher
+                implementation="com.jivesoftware.robot.intellij.plugin.elements.usages.RobotCustomUsagesSearcher"/>
 
         <!-- This doesn't do much yet, but will provide find usages highlighting, etc. -->
-       <!-- <findUsagesHandlerFactory implementation="com.jivesoftware.robot.intellij.plugin.elements.usages.RobotFindUsagesHandlerFactory"/>-->
+        <!-- <findUsagesHandlerFactory implementation="com.jivesoftware.robot.intellij.plugin.elements.usages.RobotFindUsagesHandlerFactory"/>-->
 
         <!-- Enables auto-completion of robot keywords -->
         <completion.contributor language="RobotTestFile"
                                 implementationClass="com.jivesoftware.robot.intellij.plugin.elements.completion.RobotCompletionContributor"/>
 
         <!-- Enables renaming Java keywords to refactor all usages in Robot files.-->
-        <renamePsiElementProcessor implementation="com.jivesoftware.robot.intellij.plugin.elements.refactoring.RenameJavaRobotKeywordProcessor" />
+        <renamePsiElementProcessor
+                implementation="com.jivesoftware.robot.intellij.plugin.elements.refactoring.RenameJavaRobotKeywordProcessor"/>
 
         <!-- Enables renaming things within Robot-->
-        <renamePsiElementProcessor implementation="com.jivesoftware.robot.intellij.plugin.elements.refactoring.RenameRobotRobotKeywordProcessor" />
+        <renamePsiElementProcessor
+                implementation="com.jivesoftware.robot.intellij.plugin.elements.refactoring.RenameRobotRobotKeywordProcessor"/>
         <lang.namesValidator language="RobotTestFile"
-                             implementationClass="com.jivesoftware.robot.intellij.plugin.elements.refactoring.RobotKeywordDefNamesValidator" />
+                             implementationClass="com.jivesoftware.robot.intellij.plugin.elements.refactoring.RobotKeywordDefNamesValidator"/>
 
         <!-- Structure view -->
         <lang.psiStructureViewFactory language="RobotTestFile"
-                                      implementationClass="com.jivesoftware.robot.intellij.plugin.elements.structureview.RobotStructureViewFactory" />
+                                      implementationClass="com.jivesoftware.robot.intellij.plugin.elements.structureview.RobotStructureViewFactory"/>
 
         <internalFileTemplate name="fileTemplates.internal.RobotTestCaseFile"/>
         <internalFileTemplate name="fileTemplates.internal.RobotKeywordsFile"/>
 
         <!-- Psi Stub indexes-->
         <stubElementTypeHolder class="com.jivesoftware.robot.intellij.plugin.parser.RobotTypes"/>
-        <stubIndex implementation="com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefNormalizedNameIndex"/>
+        <stubIndex
+                implementation="com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefNormalizedNameIndex"/>
+        <stubIndex
+                implementation="com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefFirstCharIndex"/>
+        <stubIndex
+                implementation="com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefFirstTwoCharsIndex"/>
+        <stubIndex
+                implementation="com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefFirstThreeCharsIndex"/>
 
     </extensions>
 
@@ -236,7 +260,8 @@
     </project-components>
 
     <actions>
-        <action id="RobotPlugin.NewFile" class="com.jivesoftware.robot.intellij.plugin.actions.NewRobotFileAction" text="Robot File"
+        <action id="RobotPlugin.NewFile" class="com.jivesoftware.robot.intellij.plugin.actions.NewRobotFileAction"
+                text="Robot File"
                 description="Create a new Robot File">
             <add-to-group group-id="NewXml" anchor="last"/>
         </action>

@@ -4,7 +4,7 @@ import com.intellij.find.findUsages.FindUsagesHandler;
 import com.intellij.find.findUsages.FindUsagesHandlerFactory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
-import com.jivesoftware.robot.intellij.plugin.elements.RobotPsiUtil;
+import com.jivesoftware.robot.intellij.plugin.elements.search.RobotJavaPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDef;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,7 +15,7 @@ public class RobotFindUsagesHandlerFactory extends FindUsagesHandlerFactory {
     if (element instanceof RobotKeywordDef) {
       return true;
     }
-    return RobotPsiUtil.isJavaRobotKeyword(element);
+    return RobotJavaPsiUtil.isJavaRobotKeyword(element);
   }
 
   @Nullable

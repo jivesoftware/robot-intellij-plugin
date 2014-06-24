@@ -2,7 +2,7 @@ package com.jivesoftware.robot.intellij.plugin.elements.refactoring;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.rename.RenamePsiElementProcessor;
-import com.jivesoftware.robot.intellij.plugin.elements.RobotPsiUtil;
+import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDef;
 import org.jetbrains.annotations.NotNull;

@@ -12,8 +12,10 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.util.ProcessingContext;
 import com.jivesoftware.robot.intellij.plugin.elements.PresentationPsiUtil;
+import com.jivesoftware.robot.intellij.plugin.elements.search.KeywordScope;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotKeywordDefinitionFinder;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotTagFinder;
+import com.jivesoftware.robot.intellij.plugin.elements.search.SearchType;
 import com.jivesoftware.robot.intellij.plugin.icons.RobotIcons;
 import com.jivesoftware.robot.intellij.plugin.parser.RobotTypes;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDef;
@@ -29,27 +31,18 @@ import java.util.Set;
  */
 public class RobotCompletionProvider extends CompletionProvider<CompletionParameters> {
 
-    private Set<LookupElement> myTagCompletions;
-    private Set<LookupElement> myKeywordCompletions;
-
     public RobotCompletionProvider() {
         super();
     }
 
     private Set<LookupElement> getTagCompletions(Project project, CompletionParameters parameters, String currentlyTyped) {
-        if (myTagCompletions != null && parameters.getInvocationCount() > 1) {
-            return myTagCompletions;
-        }
-        myTagCompletions = Sets.newHashSet();
+        Set<LookupElement> myTagCompletions = Sets.newHashSet();
         populateTags(project, myTagCompletions, currentlyTyped);
         return myTagCompletions;
     }
 
     private Set<LookupElement> getKeywordCompletions(Project project, CompletionParameters parameters, String text) {
-        if (myKeywordCompletions != null && parameters.getInvocationCount() > 1) {
-            return myKeywordCompletions;
-        }
-        myKeywordCompletions = Sets.newHashSet();
+        Set<LookupElement> myKeywordCompletions = Sets.newHashSet();
         populateKeywords(project, myKeywordCompletions, text);
         return myKeywordCompletions;
     }
@@ -68,26 +61,33 @@ public class RobotCompletionProvider extends CompletionProvider<CompletionParame
 
     private void populateKeywords(Project project, Collection<LookupElement> populateMe, String text) {
         RobotKeywordDefinitionFinder robotKeywordDefinitionFinder =
-                new RobotKeywordDefinitionFinder(project, text,
-                        RobotKeywordDefinitionFinder.KEYWORD_SCOPE.ROBOT_AND_JAVA_KEYWORDS,
-                        RobotKeywordDefinitionFinder.SEARCH_TYPE.STARTS_WITH, true);
+                new RobotKeywordDefinitionFinder(project, text, KeywordScope.ROBOT_AND_JAVA_KEYWORDS, SearchType.STARTS_WITH, true);
         robotKeywordDefinitionFinder.process();
         List<PsiElement> results = robotKeywordDefinitionFinder.getResults();
+        Set<String> includedNames = Sets.newHashSet();
         for (PsiElement el : results) {
             if (el instanceof PsiMethod) {
                 PsiMethod method = (PsiMethod) el;
+                if (includedNames.contains(method.getName())) {
+                    continue;
+                }
                 String parameterText = PresentationPsiUtil.getPresentableMethodParametersText(method);
                 populateMe.add(LookupElementBuilder.create(method)
                         .withCaseSensitivity(false)
                         .withTailText(parameterText, true)
                         .withIcon(RobotIcons.METHOD));
+                includedNames.add(method.getName());
             } else if (el instanceof RobotKeywordDef) {
                 RobotKeywordDef robotKeywordDef = (RobotKeywordDef) el;
+                if (includedNames.contains(robotKeywordDef.getName())) {
+                    continue;
+                }
                 String argumentsText = PresentationPsiUtil.getRobotKeywordArgumentTest(robotKeywordDef);
                 populateMe.add(LookupElementBuilder.create(robotKeywordDef)
                         .withCaseSensitivity(false)
                         .withTailText(argumentsText, true)
                         .withIcon(RobotIcons.KEYWORD));
+                includedNames.add(robotKeywordDef.getName());
             }
         }
     }

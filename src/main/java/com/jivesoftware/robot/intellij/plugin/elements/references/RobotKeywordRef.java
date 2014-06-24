@@ -4,8 +4,10 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceBase;
-import com.jivesoftware.robot.intellij.plugin.elements.RobotPsiUtil;
+import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
+import com.jivesoftware.robot.intellij.plugin.elements.search.KeywordScope;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotKeywordDefinitionFinder;
+import com.jivesoftware.robot.intellij.plugin.elements.search.SearchType;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,9 +26,8 @@ public class RobotKeywordRef extends PsiReferenceBase<PsiElement> {
     Project project = myElement.getProject();
 
     RobotKeywordDefinitionFinder robotKeywordDefinitionFinder =
-            new RobotKeywordDefinitionFinder(project, getCanonicalText(),
-                    RobotKeywordDefinitionFinder.KEYWORD_SCOPE.ROBOT_AND_JAVA_KEYWORDS,
-                    RobotKeywordDefinitionFinder.SEARCH_TYPE.EXACT_MATCH);
+            new RobotKeywordDefinitionFinder(project, getCanonicalText(), KeywordScope.ROBOT_AND_JAVA_KEYWORDS,
+                    SearchType.EXACT_MATCH);
     robotKeywordDefinitionFinder.process();
     List<PsiElement> results = robotKeywordDefinitionFinder.getResults();
     if (results.size() <= 0) {
@@ -41,8 +42,7 @@ public class RobotKeywordRef extends PsiReferenceBase<PsiElement> {
   @NotNull
   @Override
   public String getCanonicalText() {
-    String keywordText = myElement.getText();
-    return keywordText;
+    return myElement.getText();
   }
 
   @NotNull

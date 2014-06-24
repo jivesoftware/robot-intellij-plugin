@@ -136,6 +136,10 @@ public class RobotImplUtil {
         };
     }
 
+    public static String toString(RobotKeywordDef element) {
+        return "RobotKeywordDef: " + getName(element);
+    }
+
     @Nullable
     public static PsiElement getNameIdentifier(RobotTestCasesTable element) {
         return element.getTestCasesTableHeading();

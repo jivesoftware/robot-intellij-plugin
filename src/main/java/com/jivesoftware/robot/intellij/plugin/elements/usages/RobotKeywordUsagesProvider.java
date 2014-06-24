@@ -1,12 +1,10 @@
 package com.jivesoftware.robot.intellij.plugin.elements.usages;
 
 import com.intellij.find.impl.HelpID;
-import com.intellij.lang.cacheBuilder.DefaultWordsScanner;
 import com.intellij.lang.cacheBuilder.WordsScanner;
 import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.TokenSet;
-import com.jivesoftware.robot.intellij.plugin.elements.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.lexer.RobotScannerAdapter;
 import com.jivesoftware.robot.intellij.plugin.parser.RobotTypes;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDef;
