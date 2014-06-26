@@ -54,7 +54,7 @@ return;
         startLine = false;
     }
 
-    if (firstRobotCell && toReturn != WHITESPACE_TOKEN && toReturn != COLUMN_SEP_TOKEN) {
+    if (firstRobotCell && toReturn != WHITESPACE_TOKEN && toReturn != COLUMN_SEP_TOKEN && toReturn != EMPTY_CELL_TOKEN) {
         // If we see an ellipses, then retain the state from the previous line so everything is tokenized properly
         if (toReturn == ELLIPSES_TOKEN && onDocsLine) {
             yybegin(DOCS_SETTING);
@@ -129,9 +129,10 @@ NonWhiteSpace = [^ \t\r\n]
 
 EndOfLine = {WhiteSpace}* {LineTerminator}
 Ellipses = \.\.\.
+EmptyCell = "\\"
 
 /* integer literals */
-DecIntegerLiteral = 0 | [1-9][0-9]*
+DecIntegerLiteral = 0 | "-"? [1-9][0-9]*
 
 /* comments */
 Comment = "#" {InputCharacter}*
@@ -151,7 +152,7 @@ TestCaseHeaderWord = {TestCaseHeaderChar}+
 TestCaseHeader = {TestCaseHeaderWord} ({SingleSpace} {TestCaseHeaderWord})*
 
 KeywordArgumentWord = {KeywordArgumentChar}+
-KeywordArgument = ({KeywordArgumentWord} ({SingleSpace} {KeywordArgumentWord})*) | {Variable} | \\
+KeywordArgument = ({KeywordArgumentWord} ({SingleSpace} {KeywordArgumentWord})*) | {Variable} | {EmptyCell}
 
 /* Settings for the ***Settings*** Table*/
 TestSetupSetting = [Tt] [Ee] [Ss] [Tt] " "? [Ss] [Ee] [Tt] [Uu] [Pp]
@@ -189,6 +190,11 @@ VariablesTableHeading = "*"+ {WhiteSpace}* ([Vv] [Aa] [Rr] [Ii] [Aa] [Bb] [Ll] [
 TestCasesTableHeading = "*"+ {WhiteSpace}* [Tt] [Ee] [Ss] [Tt] " "? [Cc] [Aa] [Ss] [Ee] [Ss]? {WhiteSpace}* "*"*
 KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] [Ss] [Ee] [Rr] " "*)? [Kk] [Ee] [Yy] [Ww] [Oo] [Rr] [Dd] [Ss]? {WhiteSpace}* "*"*
 
+/*For loops*/
+ForLoopStart = ":FOR"
+InRange = "IN RANGE"
+In = "IN"
+
 /*
    These states are for the different Robot tables, because different tokens are allowed in different tables.
    For example, in the "Test Cases" table, you can have a [tags] setting.
@@ -213,6 +219,10 @@ KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] [Ss] [Ee] [Rr] " "*)? [Kk] [Ee] 
     {Comment}                    { return next(COMMENT_TOKEN); }
     {ColumnSep}                  { return next(COLUMN_SEP_TOKEN); }
     {WhiteSpace}                 { return next(WHITESPACE_TOKEN); }
+    {EmptyCell}                  { return next(EMPTY_CELL_TOKEN); }
+    {ForLoopStart}               { return next(FOR_LOOP_START_TOKEN); }
+    {InRange}                    { return next(IN_RANGE_TOKEN); }
+    {In}                         { return next(IN_TOKEN); }
     {Ellipses}                   { return next(ELLIPSES_TOKEN); }
     {RobotKeyword}               { return next(ROBOT_KEYWORD_TOKEN); }
     {KeywordArgument}            { return next(ROBOT_KEYWORD_ARG_TOKEN); }
@@ -277,6 +287,11 @@ KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] [Ss] [Ee] [Rr] " "*)? [Kk] [Ee] 
      {TeardownMeta}      { return next(TEARDOWN_SETTING_TOKEN); }
      {TimeoutMeta}       { return next(TIMEOUT_SETTING_TOKEN); }
      {TemplateMeta}      { return next(TEMPLATE_SETTING_TOKEN); }
+     {EmptyCell}                  { return next(EMPTY_CELL_TOKEN); }
+     {ForLoopStart}               { return next(FOR_LOOP_START_TOKEN); }
+     {InRange}                    { return next(IN_RANGE_TOKEN); }
+     {In}                         { return next(IN_TOKEN); }
+     {DecIntegerLiteral}          { return next(INTEGER_TOKEN); }
      {Assignment}        { return next(ASSIGNMENT_TOKEN); }
      {ArrayAssignment}   { return ARRAY_ASSIGNMENT_TOKEN; }
      {Variable}          { return next(VARIABLE_TOKEN); }
@@ -312,6 +327,11 @@ KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] [Ss] [Ee] [Rr] " "*)? [Kk] [Ee] 
      {TimeoutMeta}       { return next(TIMEOUT_SETTING_TOKEN); }
      {ReturnMeta}        { return next(RETURN_SETTING_TOKEN); }
      {TimeoutValue}      { if (onTimeoutLine) { return next(TIMEOUT_VALUE_TOKEN);} return next(ROBOT_KEYWORD_ARG_TOKEN); }
+     {EmptyCell}                  { return next(EMPTY_CELL_TOKEN); }
+     {ForLoopStart}               { return next(FOR_LOOP_START_TOKEN); }
+     {InRange}                    { return next(IN_RANGE_TOKEN); }
+     {In}                         { return next(IN_TOKEN); }
+     {DecIntegerLiteral}          { return next(INTEGER_TOKEN); }
      {Assignment}        { return ASSIGNMENT_TOKEN; }
      {ArrayAssignment}   { return ARRAY_ASSIGNMENT_TOKEN; }
      {Variable}          { return next(VARIABLE_TOKEN); }

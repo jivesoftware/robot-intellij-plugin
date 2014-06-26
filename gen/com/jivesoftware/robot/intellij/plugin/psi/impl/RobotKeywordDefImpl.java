@@ -50,4 +50,8 @@ public class RobotKeywordDefImpl extends RobotKeywordDefBase implements RobotKey
     return RobotImplUtil.getPresentation(this);
   }
 
+  public String toString() {
+    return RobotImplUtil.toString(this);
+  }
+
 }

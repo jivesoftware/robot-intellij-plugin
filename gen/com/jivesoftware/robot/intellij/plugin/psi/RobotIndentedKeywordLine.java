@@ -5,10 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotKeywordLine extends PsiElement {
-
-  @Nullable
-  RobotEllipsesLineTest getEllipsesLineTest();
+public interface RobotIndentedKeywordLine extends PsiElement {
 
   @Nullable
   RobotEmptyLine getEmptyLine();
@@ -17,15 +14,12 @@ public interface RobotKeywordLine extends PsiElement {
   RobotEndOfLine getEndOfLine();
 
   @Nullable
-  RobotForLoopIn getForLoopIn();
+  RobotIndentedEllipsesLineTest getIndentedEllipsesLineTest();
 
   @Nullable
-  RobotForLoopInRange getForLoopInRange();
+  RobotIndentedKeywordInvocationTest getIndentedKeywordInvocationTest();
 
   @Nullable
-  RobotKeywordInvocationTest getKeywordInvocationTest();
-
-  @Nullable
-  RobotVariableAssignToKeyword getVariableAssignToKeyword();
+  RobotIndentedVariableAssignToKeyword getIndentedVariableAssignToKeyword();
 
 }

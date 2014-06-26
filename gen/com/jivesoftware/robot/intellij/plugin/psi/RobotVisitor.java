@@ -37,6 +37,14 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitDoubleBoundForLoop(@NotNull RobotDoubleBoundForLoop o) {
+    visitPsiElement(o);
+  }
+
+  public void visitDoubleBoundForLoopWithStep(@NotNull RobotDoubleBoundForLoopWithStep o) {
+    visitPsiElement(o);
+  }
+
   public void visitEllipses(@NotNull RobotEllipses o) {
     visitPsiElement(o);
   }
@@ -73,7 +81,47 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitForLoopIn(@NotNull RobotForLoopIn o) {
+    visitPsiElement(o);
+  }
+
+  public void visitForLoopInRange(@NotNull RobotForLoopInRange o) {
+    visitPsiElement(o);
+  }
+
+  public void visitForLoopValueList(@NotNull RobotForLoopValueList o) {
+    visitPsiElement(o);
+  }
+
+  public void visitForVarIn(@NotNull RobotForVarIn o) {
+    visitPsiElement(o);
+  }
+
+  public void visitForVarInRange(@NotNull RobotForVarInRange o) {
+    visitPsiElement(o);
+  }
+
   public void visitGenericSetting(@NotNull RobotGenericSetting o) {
+    visitPsiElement(o);
+  }
+
+  public void visitIndentedEllipsesForTestTable(@NotNull RobotIndentedEllipsesForTestTable o) {
+    visitPsiElement(o);
+  }
+
+  public void visitIndentedEllipsesLineTest(@NotNull RobotIndentedEllipsesLineTest o) {
+    visitPsiElement(o);
+  }
+
+  public void visitIndentedKeywordInvocationTest(@NotNull RobotIndentedKeywordInvocationTest o) {
+    visitPsiElement(o);
+  }
+
+  public void visitIndentedKeywordLine(@NotNull RobotIndentedKeywordLine o) {
+    visitPsiElement(o);
+  }
+
+  public void visitIndentedVariableAssignToKeyword(@NotNull RobotIndentedVariableAssignToKeyword o) {
     visitPsiElement(o);
   }
 
@@ -182,6 +230,18 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitSingleAssignment(@NotNull RobotSingleAssignment o) {
+    visitPsiElement(o);
+  }
+
+  public void visitSingleBoundForLoop(@NotNull RobotSingleBoundForLoop o) {
+    visitPsiElement(o);
+  }
+
+  public void visitSingleVariable(@NotNull RobotSingleVariable o) {
+    visitPsiElement(o);
+  }
+
+  public void visitSingleVariableList(@NotNull RobotSingleVariableList o) {
     visitPsiElement(o);
   }
 

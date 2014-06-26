@@ -16,6 +16,8 @@ public interface RobotTypes {
   IElementType ASSIGNABLE = new RobotElementType("ASSIGNABLE");
   IElementType ASSIGNMENT = new RobotElementType("ASSIGNMENT");
   IElementType DOCUMENTATION_SETTING = new RobotElementType("DOCUMENTATION_SETTING");
+  IElementType DOUBLE_BOUND_FOR_LOOP = new RobotElementType("DOUBLE_BOUND_FOR_LOOP");
+  IElementType DOUBLE_BOUND_FOR_LOOP_WITH_STEP = new RobotElementType("DOUBLE_BOUND_FOR_LOOP_WITH_STEP");
   IElementType ELLIPSES = new RobotElementType("ELLIPSES");
   IElementType ELLIPSES_FOR_SETTINGS_TABLE = new RobotElementType("ELLIPSES_FOR_SETTINGS_TABLE");
   IElementType ELLIPSES_FOR_TEST_TABLE = new RobotElementType("ELLIPSES_FOR_TEST_TABLE");
@@ -25,7 +27,17 @@ public interface RobotTypes {
   IElementType END_OF_LINE = new RobotElementType("END_OF_LINE");
   IElementType ERROR = new RobotElementType("ERROR");
   IElementType FORCE_TAGS_SETTING = new RobotElementType("FORCE_TAGS_SETTING");
+  IElementType FOR_LOOP_IN = new RobotElementType("FOR_LOOP_IN");
+  IElementType FOR_LOOP_IN_RANGE = new RobotElementType("FOR_LOOP_IN_RANGE");
+  IElementType FOR_LOOP_VALUE_LIST = new RobotElementType("FOR_LOOP_VALUE_LIST");
+  IElementType FOR_VAR_IN = new RobotElementType("FOR_VAR_IN");
+  IElementType FOR_VAR_IN_RANGE = new RobotElementType("FOR_VAR_IN_RANGE");
   IElementType GENERIC_SETTING = new RobotElementType("GENERIC_SETTING");
+  IElementType INDENTED_ELLIPSES_FOR_TEST_TABLE = new RobotElementType("INDENTED_ELLIPSES_FOR_TEST_TABLE");
+  IElementType INDENTED_ELLIPSES_LINE_TEST = new RobotElementType("INDENTED_ELLIPSES_LINE_TEST");
+  IElementType INDENTED_KEYWORD_INVOCATION_TEST = new RobotElementType("INDENTED_KEYWORD_INVOCATION_TEST");
+  IElementType INDENTED_KEYWORD_LINE = new RobotElementType("INDENTED_KEYWORD_LINE");
+  IElementType INDENTED_VARIABLE_ASSIGN_TO_KEYWORD = new RobotElementType("INDENTED_VARIABLE_ASSIGN_TO_KEYWORD");
   IElementType KEYWORD = new RobotElementType("KEYWORD");
   IElementType KEYWORDS_TABLE = new RobotElementType("KEYWORDS_TABLE");
   IElementType KEYWORDS_TABLE_HEADING = new RobotElementType("KEYWORDS_TABLE_HEADING");
@@ -53,6 +65,9 @@ public interface RobotTypes {
   IElementType SETTING_LIST_OR_ELLIPSES = new RobotElementType("SETTING_LIST_OR_ELLIPSES");
   IElementType SETUP_SETTING = new RobotElementType("SETUP_SETTING");
   IElementType SINGLE_ASSIGNMENT = new RobotElementType("SINGLE_ASSIGNMENT");
+  IElementType SINGLE_BOUND_FOR_LOOP = new RobotElementType("SINGLE_BOUND_FOR_LOOP");
+  IElementType SINGLE_VARIABLE = new RobotElementType("SINGLE_VARIABLE");
+  IElementType SINGLE_VARIABLE_LIST = new RobotElementType("SINGLE_VARIABLE_LIST");
   IElementType TAG = new RobotElementType("TAG");
   IElementType TAGS_SETTING = new RobotElementType("TAGS_SETTING");
   IElementType TAG_LIST = new RobotElementType("TAG_LIST");
@@ -87,7 +102,12 @@ public interface RobotTypes {
   IElementType DOCUMENTATION_SETTING_TOKEN = new RobotToken("DOCUMENTATION_SETTING_TOKEN");
   IElementType DOCUMENTATION_TOKEN = new RobotToken("DOCUMENTATION_TOKEN");
   IElementType ELLIPSES_TOKEN = new RobotToken("ELLIPSES_TOKEN");
+  IElementType EMPTY_CELL_TOKEN = new RobotToken("EMPTY_CELL_TOKEN");
   IElementType FORCE_TAGS_SETTING_KEYWORD_TOKEN = new RobotToken("FORCE_TAGS_SETTING_KEYWORD_TOKEN");
+  IElementType FOR_LOOP_START_TOKEN = new RobotToken("FOR_LOOP_START_TOKEN");
+  IElementType INTEGER_TOKEN = new RobotToken("INTEGER_TOKEN");
+  IElementType IN_RANGE_TOKEN = new RobotToken("IN_RANGE_TOKEN");
+  IElementType IN_TOKEN = new RobotToken("IN_TOKEN");
   IElementType KEYWORDS_TABLE_HEADING_TOKEN = new RobotToken("KEYWORDS_TABLE_HEADING_TOKEN");
   IElementType NEWLINE_TOKEN = new RobotToken("NEWLINE_TOKEN");
   IElementType RESOURCE_SETTING_TOKEN = new RobotToken("RESOURCE_SETTING_TOKEN");
@@ -136,6 +156,12 @@ public interface RobotTypes {
       else if (type == DOCUMENTATION_SETTING) {
         return new RobotDocumentationSettingImpl(node);
       }
+      else if (type == DOUBLE_BOUND_FOR_LOOP) {
+        return new RobotDoubleBoundForLoopImpl(node);
+      }
+      else if (type == DOUBLE_BOUND_FOR_LOOP_WITH_STEP) {
+        return new RobotDoubleBoundForLoopWithStepImpl(node);
+      }
       else if (type == ELLIPSES) {
         return new RobotEllipsesImpl(node);
       }
@@ -163,8 +189,38 @@ public interface RobotTypes {
       else if (type == FORCE_TAGS_SETTING) {
         return new RobotForceTagsSettingImpl(node);
       }
+      else if (type == FOR_LOOP_IN) {
+        return new RobotForLoopInImpl(node);
+      }
+      else if (type == FOR_LOOP_IN_RANGE) {
+        return new RobotForLoopInRangeImpl(node);
+      }
+      else if (type == FOR_LOOP_VALUE_LIST) {
+        return new RobotForLoopValueListImpl(node);
+      }
+      else if (type == FOR_VAR_IN) {
+        return new RobotForVarInImpl(node);
+      }
+      else if (type == FOR_VAR_IN_RANGE) {
+        return new RobotForVarInRangeImpl(node);
+      }
       else if (type == GENERIC_SETTING) {
         return new RobotGenericSettingImpl(node);
+      }
+      else if (type == INDENTED_ELLIPSES_FOR_TEST_TABLE) {
+        return new RobotIndentedEllipsesForTestTableImpl(node);
+      }
+      else if (type == INDENTED_ELLIPSES_LINE_TEST) {
+        return new RobotIndentedEllipsesLineTestImpl(node);
+      }
+      else if (type == INDENTED_KEYWORD_INVOCATION_TEST) {
+        return new RobotIndentedKeywordInvocationTestImpl(node);
+      }
+      else if (type == INDENTED_KEYWORD_LINE) {
+        return new RobotIndentedKeywordLineImpl(node);
+      }
+      else if (type == INDENTED_VARIABLE_ASSIGN_TO_KEYWORD) {
+        return new RobotIndentedVariableAssignToKeywordImpl(node);
       }
       else if (type == KEYWORD) {
         return new RobotKeywordImpl(node);
@@ -246,6 +302,15 @@ public interface RobotTypes {
       }
       else if (type == SINGLE_ASSIGNMENT) {
         return new RobotSingleAssignmentImpl(node);
+      }
+      else if (type == SINGLE_BOUND_FOR_LOOP) {
+        return new RobotSingleBoundForLoopImpl(node);
+      }
+      else if (type == SINGLE_VARIABLE) {
+        return new RobotSingleVariableImpl(node);
+      }
+      else if (type == SINGLE_VARIABLE_LIST) {
+        return new RobotSingleVariableListImpl(node);
       }
       else if (type == TAG) {
         return new RobotTagImpl(node);

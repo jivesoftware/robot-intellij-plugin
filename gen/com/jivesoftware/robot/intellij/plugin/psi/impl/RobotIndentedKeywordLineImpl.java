@@ -12,27 +12,15 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotTestcaseLineImpl extends ASTWrapperPsiElement implements RobotTestcaseLine {
+public class RobotIndentedKeywordLineImpl extends ASTWrapperPsiElement implements RobotIndentedKeywordLine {
 
-  public RobotTestcaseLineImpl(ASTNode node) {
+  public RobotIndentedKeywordLineImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitTestcaseLine(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitIndentedKeywordLine(this);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public RobotArgumentList getArgumentList() {
-    return findChildByClass(RobotArgumentList.class);
-  }
-
-  @Override
-  @Nullable
-  public RobotEllipsesLineTest getEllipsesLineTest() {
-    return findChildByClass(RobotEllipsesLineTest.class);
   }
 
   @Override
@@ -49,26 +37,20 @@ public class RobotTestcaseLineImpl extends ASTWrapperPsiElement implements Robot
 
   @Override
   @Nullable
-  public RobotForLoopIn getForLoopIn() {
-    return findChildByClass(RobotForLoopIn.class);
+  public RobotIndentedEllipsesLineTest getIndentedEllipsesLineTest() {
+    return findChildByClass(RobotIndentedEllipsesLineTest.class);
   }
 
   @Override
   @Nullable
-  public RobotForLoopInRange getForLoopInRange() {
-    return findChildByClass(RobotForLoopInRange.class);
+  public RobotIndentedKeywordInvocationTest getIndentedKeywordInvocationTest() {
+    return findChildByClass(RobotIndentedKeywordInvocationTest.class);
   }
 
   @Override
   @Nullable
-  public RobotKeywordInvocationTest getKeywordInvocationTest() {
-    return findChildByClass(RobotKeywordInvocationTest.class);
-  }
-
-  @Override
-  @Nullable
-  public RobotVariableAssignToKeyword getVariableAssignToKeyword() {
-    return findChildByClass(RobotVariableAssignToKeyword.class);
+  public RobotIndentedVariableAssignToKeyword getIndentedVariableAssignToKeyword() {
+    return findChildByClass(RobotIndentedVariableAssignToKeyword.class);
   }
 
 }

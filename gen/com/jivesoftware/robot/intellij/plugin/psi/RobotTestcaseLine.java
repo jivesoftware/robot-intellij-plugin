@@ -20,6 +20,12 @@ public interface RobotTestcaseLine extends PsiElement {
   RobotEndOfLine getEndOfLine();
 
   @Nullable
+  RobotForLoopIn getForLoopIn();
+
+  @Nullable
+  RobotForLoopInRange getForLoopInRange();
+
+  @Nullable
   RobotKeywordInvocationTest getKeywordInvocationTest();
 
   @Nullable

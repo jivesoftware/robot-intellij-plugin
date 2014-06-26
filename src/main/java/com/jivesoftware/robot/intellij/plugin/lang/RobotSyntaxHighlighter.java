@@ -44,32 +44,35 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
         return new RobotScannerAdapter();
     }
 
+    static final TextAttributesKey ROBOT_LANGUAGE_KEYWORD_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.LANG_KEYWORD",
+            DefaultLanguageHighlighterColors.KEYWORD);
+
     static final TextAttributesKey ROBOT_TABLE_HEADER_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.TABLE",
             DefaultLanguageHighlighterColors.CONSTANT);
 
     static final TextAttributesKey ROBOT_TEST_CASE_HEADER_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.TEST_CASE_HEADER",
-            DefaultLanguageHighlighterColors.INSTANCE_METHOD);
+            DefaultLanguageHighlighterColors.CONSTANT);
 
     static final TextAttributesKey ROBOT_KEYWORD_DEF_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.KEYWORD_DEF",
-            DefaultLanguageHighlighterColors.INSTANCE_METHOD);
+            DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
 
     static final TextAttributesKey ROBOT_TAG_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.TAG",
-            DefaultLanguageHighlighterColors.VALID_STRING_ESCAPE);
+            DefaultLanguageHighlighterColors.STRING);
 
     static final TextAttributesKey ROBOT_DOCS_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.DOCS",
             DefaultLanguageHighlighterColors.BLOCK_COMMENT);
 
     static final TextAttributesKey ROBOT_KEYWORD_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.KEYWORD",
-            DefaultLanguageHighlighterColors.KEYWORD);
+            DefaultLanguageHighlighterColors.FUNCTION_CALL);
 
     static final TextAttributesKey ROBOT_SETTING_KEYWORD_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.SETTING",
-            DefaultLanguageHighlighterColors.KEYWORD);
+            DefaultLanguageHighlighterColors.FUNCTION_CALL);
 
     static final TextAttributesKey ROBOT_VARIABLE_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.VARIABLE",
-            DefaultLanguageHighlighterColors.LOCAL_VARIABLE);
+            DefaultLanguageHighlighterColors.KEYWORD);
 
     static final TextAttributesKey ROBOT_ASSIGNMENT_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.ASSIGNMENT",
-            DefaultLanguageHighlighterColors.CLASS_NAME);
+            DefaultLanguageHighlighterColors.KEYWORD);
 
     static final TextAttributesKey ROBOT_COMMENT_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.COMMENT",
             DefaultLanguageHighlighterColors.LINE_COMMENT);
@@ -77,8 +80,11 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
     static final TextAttributesKey ROBOT_KEYWORD_ARG_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.KEYWORD_ARG",
             DefaultLanguageHighlighterColors.STRING);
 
+    static final TextAttributesKey ROBOT_NUMBER_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.NUMBER",
+            DefaultLanguageHighlighterColors.NUMBER);
+
     static final TextAttributesKey ROBOT_TABLE_SETTING_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.META_INFO",
-            DefaultLanguageHighlighterColors.PREDEFINED_SYMBOL);
+            DefaultLanguageHighlighterColors.METADATA);
 
     static final TextAttributesKey ROBOT_COL_SEP_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.COLUMN_SEP",
             DefaultLanguageHighlighterColors.COMMA);
@@ -90,6 +96,11 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
     static {
         keys1 = new HashMap<IElementType, TextAttributesKey>();
         keys2 = new HashMap<IElementType, TextAttributesKey>();
+
+        // Language keywords
+        keys1.put(RobotTypes.FOR_LOOP_START_TOKEN, ROBOT_LANGUAGE_KEYWORD_KEY);
+        keys1.put(RobotTypes.IN_RANGE_TOKEN, ROBOT_LANGUAGE_KEYWORD_KEY);
+        keys1.put(RobotTypes.IN_TOKEN, ROBOT_LANGUAGE_KEYWORD_KEY);
 
         // Table headers
         keys1.put(RobotTypes.SETTINGS_TABLE_HEADING_TOKEN, ROBOT_TABLE_HEADER_KEY);
@@ -125,6 +136,7 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
 
         //Number literals and keyword arguments
         keys1.put(RobotTypes.ROBOT_KEYWORD_ARG_TOKEN, ROBOT_KEYWORD_ARG_KEY);
+        keys1.put(RobotTypes.INTEGER_TOKEN, ROBOT_NUMBER_KEY);
 
         //Table settings tokens for settings like [tags]
         keys1.put(RobotTypes.TAGS_SETTING_TOKEN, ROBOT_TABLE_SETTING_KEY);

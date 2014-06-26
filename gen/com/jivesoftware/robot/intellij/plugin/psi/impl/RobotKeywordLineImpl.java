@@ -43,6 +43,18 @@ public class RobotKeywordLineImpl extends ASTWrapperPsiElement implements RobotK
 
   @Override
   @Nullable
+  public RobotForLoopIn getForLoopIn() {
+    return findChildByClass(RobotForLoopIn.class);
+  }
+
+  @Override
+  @Nullable
+  public RobotForLoopInRange getForLoopInRange() {
+    return findChildByClass(RobotForLoopInRange.class);
+  }
+
+  @Override
+  @Nullable
   public RobotKeywordInvocationTest getKeywordInvocationTest() {
     return findChildByClass(RobotKeywordInvocationTest.class);
   }

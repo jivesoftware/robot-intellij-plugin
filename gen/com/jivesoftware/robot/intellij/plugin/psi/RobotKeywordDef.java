@@ -20,4 +20,6 @@ public interface RobotKeywordDef extends IRobotKeywordDef {
 
   ItemPresentation getPresentation();
 
+  String toString();
+
 }
