@@ -279,10 +279,6 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitTestCaseSettings(@NotNull RobotTestCaseSettings o) {
-    visitPsiElement(o);
-  }
-
   public void visitTestCaseSetupSetting(@NotNull RobotTestCaseSetupSetting o) {
     visitPsiElement(o);
   }

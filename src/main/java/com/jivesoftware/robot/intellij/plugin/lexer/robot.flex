@@ -138,8 +138,9 @@ DecIntegerLiteral = 0 | "-"? [1-9][0-9]*
 Comment = "#" {InputCharacter}*
 
 /* identifiers */
-Variable = "${" {Identifier} "}"
-ArrayVariable = "@{" {Identifier} "}"
+VariableName = {KeywordArgumentWord} ({SingleSpace} {KeywordArgumentWord})*
+Variable = "${" " "? {VariableName} " "? "}"
+ArrayVariable = "@{" " "? {VariableName} " "? "}"
 Assignment = {Variable} " "? "="
 ArrayAssignment = {ArrayVariable} " "? "="
 

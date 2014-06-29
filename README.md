@@ -11,6 +11,14 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.2.2</h3>
+<ul>
+    <li>Added support for parsing FOR IN RANGE, and FOR IN loops in the Robot language.</li>
+    <li>Fixed parsing of several edge cases, such as how Robot variables can have numbers for their name,
+    and Settings can have spaces in-between letters and are case-insensitive.</li>
+    <li>Added Unit tests to improve code quality and be sure many use cases are parsing correctly.</li>
+</ul>
+
 <h3>Version 1.2.1</h3>
 <ul>
     <li>Greatly improved autocomplete performance, and performance throughout the plugin.</li>

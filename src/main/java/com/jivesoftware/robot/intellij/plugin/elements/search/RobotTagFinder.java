@@ -94,10 +94,12 @@ public class RobotTagFinder implements Processor<PsiFile> {
     }
 
     private void addResultsForTestCase(RobotTestCase testCase, Set<String> resultsToAdd) {
-        RobotTestCaseSettings robotTestCaseSettings = testCase.getTestCaseSettings();
-        List<RobotTestSettingLine> lines = robotTestCaseSettings.getTestSettingLineList();
-        for (RobotTestSettingLine line: lines) {
-            RobotTestSetting setting = line.getTestSetting();
+        List<RobotTestcaseLine> lines = testCase.getTestcaseLineList();
+        for (RobotTestcaseLine line: lines) {
+            if (line.getTestSettingLine() == null) {
+                continue;
+            }
+            RobotTestSetting setting = line.getTestSettingLine().getTestSetting();
             if (setting == null) {
                 continue;
             }

@@ -7,13 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface RobotTestSettingLine extends PsiElement {
 
-  @Nullable
-  RobotEmptyLine getEmptyLine();
-
-  @Nullable
+  @NotNull
   RobotEndOfLine getEndOfLine();
 
-  @Nullable
+  @NotNull
   RobotTestSetting getTestSetting();
 
 }

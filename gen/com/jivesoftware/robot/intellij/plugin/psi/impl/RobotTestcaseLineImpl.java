@@ -67,6 +67,12 @@ public class RobotTestcaseLineImpl extends ASTWrapperPsiElement implements Robot
 
   @Override
   @Nullable
+  public RobotTestSettingLine getTestSettingLine() {
+    return findChildByClass(RobotTestSettingLine.class);
+  }
+
+  @Override
+  @Nullable
   public RobotVariableAssignToKeyword getVariableAssignToKeyword() {
     return findChildByClass(RobotVariableAssignToKeyword.class);
   }

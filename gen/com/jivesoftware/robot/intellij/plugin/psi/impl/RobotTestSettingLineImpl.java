@@ -24,21 +24,15 @@ public class RobotTestSettingLineImpl extends ASTWrapperPsiElement implements Ro
   }
 
   @Override
-  @Nullable
-  public RobotEmptyLine getEmptyLine() {
-    return findChildByClass(RobotEmptyLine.class);
-  }
-
-  @Override
-  @Nullable
+  @NotNull
   public RobotEndOfLine getEndOfLine() {
-    return findChildByClass(RobotEndOfLine.class);
+    return findNotNullChildByClass(RobotEndOfLine.class);
   }
 
   @Override
-  @Nullable
+  @NotNull
   public RobotTestSetting getTestSetting() {
-    return findChildByClass(RobotTestSetting.class);
+    return findNotNullChildByClass(RobotTestSetting.class);
   }
 
 }

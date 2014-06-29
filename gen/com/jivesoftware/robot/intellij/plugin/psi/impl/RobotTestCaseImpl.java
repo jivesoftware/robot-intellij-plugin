@@ -36,12 +36,6 @@ public class RobotTestCaseImpl extends ASTWrapperPsiElement implements RobotTest
     return findNotNullChildByClass(RobotTestCaseHeader.class);
   }
 
-  @Override
-  @NotNull
-  public RobotTestCaseSettings getTestCaseSettings() {
-    return findNotNullChildByClass(RobotTestCaseSettings.class);
-  }
-
   @Nullable
   @NonNls
   public String getName() {

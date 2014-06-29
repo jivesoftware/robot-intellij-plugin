@@ -15,9 +15,6 @@ public interface RobotTestCase extends RobotNamedElement {
   @NotNull
   RobotTestCaseHeader getTestCaseHeader();
 
-  @NotNull
-  RobotTestCaseSettings getTestCaseSettings();
-
   @Nullable
   @NonNls
   String getName();

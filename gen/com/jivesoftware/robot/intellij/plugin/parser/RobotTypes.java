@@ -76,7 +76,6 @@ public interface RobotTypes {
   IElementType TEST_CASES_TABLE = new RobotElementType("TEST_CASES_TABLE");
   IElementType TEST_CASES_TABLE_HEADING = new RobotElementType("TEST_CASES_TABLE_HEADING");
   IElementType TEST_CASE_HEADER = new RobotElementType("TEST_CASE_HEADER");
-  IElementType TEST_CASE_SETTINGS = new RobotElementType("TEST_CASE_SETTINGS");
   IElementType TEST_CASE_SETUP_SETTING = new RobotElementType("TEST_CASE_SETUP_SETTING");
   IElementType TEST_CASE_TEARDOWN_SETTING = new RobotElementType("TEST_CASE_TEARDOWN_SETTING");
   IElementType TEST_CASE_TEMPLATE_SETTING = new RobotElementType("TEST_CASE_TEMPLATE_SETTING");
@@ -335,9 +334,6 @@ public interface RobotTypes {
       }
       else if (type == TEST_CASE_HEADER) {
         return new RobotTestCaseHeaderImpl(node);
-      }
-      else if (type == TEST_CASE_SETTINGS) {
-        return new RobotTestCaseSettingsImpl(node);
       }
       else if (type == TEST_CASE_SETUP_SETTING) {
         return new RobotTestCaseSetupSettingImpl(node);
