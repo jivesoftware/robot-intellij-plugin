@@ -12,14 +12,14 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotTemplateSettingImpl extends ASTWrapperPsiElement implements RobotTemplateSetting {
+public class RobotTestCaseTimeoutSettingImpl extends ASTWrapperPsiElement implements RobotTestCaseTimeoutSetting {
 
-  public RobotTemplateSettingImpl(ASTNode node) {
+  public RobotTestCaseTimeoutSettingImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitTemplateSetting(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitTestCaseTimeoutSetting(this);
     else super.accept(visitor);
   }
 

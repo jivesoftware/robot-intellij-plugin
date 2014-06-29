@@ -14,9 +14,9 @@ public interface RobotKeywordSetting extends PsiElement {
   RobotDocumentationSetting getDocumentationSetting();
 
   @Nullable
-  RobotTeardownSetting getTeardownSetting();
+  RobotTestCaseTeardownSetting getTestCaseTeardownSetting();
 
   @Nullable
-  RobotTimeoutSetting getTimeoutSetting();
+  RobotTestCaseTimeoutSetting getTestCaseTimeoutSetting();
 
 }

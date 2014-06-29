@@ -24,15 +24,9 @@ public class RobotAssignableInVariablesTblImpl extends ASTWrapperPsiElement impl
   }
 
   @Override
-  @Nullable
+  @NotNull
   public RobotKeywordArg getKeywordArg() {
-    return findChildByClass(RobotKeywordArg.class);
-  }
-
-  @Override
-  @Nullable
-  public RobotKeywordInvocationSettings getKeywordInvocationSettings() {
-    return findChildByClass(RobotKeywordInvocationSettings.class);
+    return findNotNullChildByClass(RobotKeywordArg.class);
   }
 
 }

@@ -31,14 +31,8 @@ public class RobotArrayAssignableInVariablesTblImpl extends ASTWrapperPsiElement
 
   @Override
   @NotNull
-  public List<RobotKeywordArg> getKeywordArgList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotKeywordArg.class);
-  }
-
-  @Override
-  @Nullable
-  public RobotKeywordInvocationSettings getKeywordInvocationSettings() {
-    return findChildByClass(RobotKeywordInvocationSettings.class);
+  public List<RobotKeywordArgList> getKeywordArgListList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotKeywordArgList.class);
   }
 
 }

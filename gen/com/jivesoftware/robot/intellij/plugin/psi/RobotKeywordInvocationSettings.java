@@ -14,6 +14,6 @@ public interface RobotKeywordInvocationSettings extends PsiElement {
   RobotKeyword getKeyword();
 
   @NotNull
-  List<RobotKeywordArg> getKeywordArgList();
+  List<RobotKeywordArgList> getKeywordArgListList();
 
 }

@@ -219,10 +219,6 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitSetupSetting(@NotNull RobotSetupSetting o) {
-    visitPsiElement(o);
-  }
-
   public void visitSingleAssignment(@NotNull RobotSingleAssignment o) {
     visitPsiElement(o);
   }
@@ -263,14 +259,6 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitTeardownSetting(@NotNull RobotTeardownSetting o) {
-    visitPsiElement(o);
-  }
-
-  public void visitTemplateSetting(@NotNull RobotTemplateSetting o) {
-    visitPsiElement(o);
-  }
-
   public void visitTestcaseLine(@NotNull RobotTestcaseLine o) {
     visitPsiElement(o);
   }
@@ -295,6 +283,22 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitTestCaseSetupSetting(@NotNull RobotTestCaseSetupSetting o) {
+    visitPsiElement(o);
+  }
+
+  public void visitTestCaseTeardownSetting(@NotNull RobotTestCaseTeardownSetting o) {
+    visitPsiElement(o);
+  }
+
+  public void visitTestCaseTemplateSetting(@NotNull RobotTestCaseTemplateSetting o) {
+    visitPsiElement(o);
+  }
+
+  public void visitTestCaseTimeoutSetting(@NotNull RobotTestCaseTimeoutSetting o) {
+    visitPsiElement(o);
+  }
+
   public void visitTestSetting(@NotNull RobotTestSetting o) {
     visitPsiElement(o);
   }
@@ -308,10 +312,6 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitTestSetupToken(@NotNull RobotTestSetupToken o) {
-    visitPsiElement(o);
-  }
-
-  public void visitTimeoutSetting(@NotNull RobotTimeoutSetting o) {
     visitPsiElement(o);
   }
 

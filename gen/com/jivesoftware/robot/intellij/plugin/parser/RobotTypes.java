@@ -61,7 +61,6 @@ public interface RobotTypes {
   IElementType SETTINGS_TABLE_HEADING = new RobotElementType("SETTINGS_TABLE_HEADING");
   IElementType SETTING_LIST = new RobotElementType("SETTING_LIST");
   IElementType SETTING_LIST_OR_ELLIPSES = new RobotElementType("SETTING_LIST_OR_ELLIPSES");
-  IElementType SETUP_SETTING = new RobotElementType("SETUP_SETTING");
   IElementType SINGLE_ASSIGNMENT = new RobotElementType("SINGLE_ASSIGNMENT");
   IElementType SINGLE_BOUND_FOR_LOOP = new RobotElementType("SINGLE_BOUND_FOR_LOOP");
   IElementType SINGLE_VARIABLE = new RobotElementType("SINGLE_VARIABLE");
@@ -72,19 +71,20 @@ public interface RobotTypes {
   IElementType TAG_LIST = new RobotElementType("TAG_LIST");
   IElementType TAG_LIST_OR_ELLIPSES = new RobotElementType("TAG_LIST_OR_ELLIPSES");
   IElementType TAG_LIST_OR_ELLIPSES_NO_COL = new RobotElementType("TAG_LIST_OR_ELLIPSES_NO_COL");
-  IElementType TEARDOWN_SETTING = new RobotElementType("TEARDOWN_SETTING");
-  IElementType TEMPLATE_SETTING = new RobotElementType("TEMPLATE_SETTING");
   IElementType TESTCASE_LINE = new RobotElementType("TESTCASE_LINE");
   IElementType TEST_CASE = new RobotElementType("TEST_CASE");
   IElementType TEST_CASES_TABLE = new RobotElementType("TEST_CASES_TABLE");
   IElementType TEST_CASES_TABLE_HEADING = new RobotElementType("TEST_CASES_TABLE_HEADING");
   IElementType TEST_CASE_HEADER = new RobotElementType("TEST_CASE_HEADER");
   IElementType TEST_CASE_SETTINGS = new RobotElementType("TEST_CASE_SETTINGS");
+  IElementType TEST_CASE_SETUP_SETTING = new RobotElementType("TEST_CASE_SETUP_SETTING");
+  IElementType TEST_CASE_TEARDOWN_SETTING = new RobotElementType("TEST_CASE_TEARDOWN_SETTING");
+  IElementType TEST_CASE_TEMPLATE_SETTING = new RobotElementType("TEST_CASE_TEMPLATE_SETTING");
+  IElementType TEST_CASE_TIMEOUT_SETTING = new RobotElementType("TEST_CASE_TIMEOUT_SETTING");
   IElementType TEST_SETTING = new RobotElementType("TEST_SETTING");
   IElementType TEST_SETTING_LINE = new RobotElementType("TEST_SETTING_LINE");
   IElementType TEST_SETUP_SETTING = new RobotElementType("TEST_SETUP_SETTING");
   IElementType TEST_SETUP_TOKEN = new RobotElementType("TEST_SETUP_TOKEN");
-  IElementType TIMEOUT_SETTING = new RobotElementType("TIMEOUT_SETTING");
   IElementType VARIABLE = new RobotElementType("VARIABLE");
   IElementType VARIABLES_LINE = new RobotElementType("VARIABLES_LINE");
   IElementType VARIABLES_TABLE = new RobotElementType("VARIABLES_TABLE");
@@ -117,6 +117,7 @@ public interface RobotTypes {
   IElementType SETTINGS_TABLE_HEADING_TOKEN = new RobotToken("SETTINGS_TABLE_HEADING_TOKEN");
   IElementType SETUP_SETTING_TOKEN = new RobotToken("SETUP_SETTING_TOKEN");
   IElementType SUITE_SETUP_SETTING_TOKEN = new RobotToken("SUITE_SETUP_SETTING_TOKEN");
+  IElementType SUITE_TEARDOWN_SETTING_TOKEN = new RobotToken("SUITE_TEARDOWN_SETTING_TOKEN");
   IElementType TAGS_SETTING_TOKEN = new RobotToken("TAGS_SETTING_TOKEN");
   IElementType TAG_TOKEN = new RobotToken("TAG_TOKEN");
   IElementType TEARDOWN_SETTING_TOKEN = new RobotToken("TEARDOWN_SETTING_TOKEN");
@@ -290,9 +291,6 @@ public interface RobotTypes {
       else if (type == SETTING_LIST_OR_ELLIPSES) {
         return new RobotSettingListOrEllipsesImpl(node);
       }
-      else if (type == SETUP_SETTING) {
-        return new RobotSetupSettingImpl(node);
-      }
       else if (type == SINGLE_ASSIGNMENT) {
         return new RobotSingleAssignmentImpl(node);
       }
@@ -323,12 +321,6 @@ public interface RobotTypes {
       else if (type == TAG_LIST_OR_ELLIPSES_NO_COL) {
         return new RobotTagListOrEllipsesNoColImpl(node);
       }
-      else if (type == TEARDOWN_SETTING) {
-        return new RobotTeardownSettingImpl(node);
-      }
-      else if (type == TEMPLATE_SETTING) {
-        return new RobotTemplateSettingImpl(node);
-      }
       else if (type == TESTCASE_LINE) {
         return new RobotTestcaseLineImpl(node);
       }
@@ -347,6 +339,18 @@ public interface RobotTypes {
       else if (type == TEST_CASE_SETTINGS) {
         return new RobotTestCaseSettingsImpl(node);
       }
+      else if (type == TEST_CASE_SETUP_SETTING) {
+        return new RobotTestCaseSetupSettingImpl(node);
+      }
+      else if (type == TEST_CASE_TEARDOWN_SETTING) {
+        return new RobotTestCaseTeardownSettingImpl(node);
+      }
+      else if (type == TEST_CASE_TEMPLATE_SETTING) {
+        return new RobotTestCaseTemplateSettingImpl(node);
+      }
+      else if (type == TEST_CASE_TIMEOUT_SETTING) {
+        return new RobotTestCaseTimeoutSettingImpl(node);
+      }
       else if (type == TEST_SETTING) {
         return new RobotTestSettingImpl(node);
       }
@@ -358,9 +362,6 @@ public interface RobotTypes {
       }
       else if (type == TEST_SETUP_TOKEN) {
         return new RobotTestSetupTokenImpl(node);
-      }
-      else if (type == TIMEOUT_SETTING) {
-        return new RobotTimeoutSettingImpl(node);
       }
       else if (type == VARIABLE) {
         return new RobotVariableImpl(node);

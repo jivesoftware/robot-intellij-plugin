@@ -1,7 +1,7 @@
 package com.jivesoftware.robot.intellij.plugin.parser;
 
-import com.jivesoftware.robot.intellij.plugin.psi.RobotDocumentationSetting;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
+import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
+import com.jivesoftware.robot.intellij.plugin.psi.*;
 import org.junit.Test;
 
 /**
@@ -31,18 +31,38 @@ public class EllipsesTests extends RobotParserTest {
             "  ...   Some Message\n" +
             "  ...   INFO";
 
+    private static final String ELLIPSES_IN_VARAIBLE_ASSIGNMENT =
+            "*** Test Cases***\n" +
+                    "Test Ellipses inside variable assignment.\n" +
+                    "  ${var}=    Evaluate\n" +
+                    "  ...        \"${EMPTY} Abc Def\"\n" +
+                    "  Log    ${var}";
+
     @Test
     public void testDocumentationWithEllipses() {
-        doTestParseSucceeds(DOCUMENTATION_ELLIPSES, RobotDocumentationSetting.class);
+        RobotPsiFile file = doTestParseSucceeds(DOCUMENTATION_ELLIPSES);
+        assertFileHasPsiElements(file, RobotDocumentationSetting.class, 1);
     }
 
     @Test
     public void testKeywordWithEllipsesSimple() {
-        doTestParseSucceeds(KEYWORD_WITH_ELLIPSES_SIMPLE, RobotKeyword.class);
+        RobotPsiFile file = doTestParseSucceeds(KEYWORD_WITH_ELLIPSES_SIMPLE);
+        assertFileHasPsiElements(file, RobotEllipses.class, 1);
+        assertFileHasPsiElements(file, RobotKeyword.class, 1);
     }
 
     @Test
     public void testKeywordWithEllipsesBeforeArg() {
-        doTestParseSucceeds(KEYWORD_WITH_ELLIPSES_BEFORE_ARG, RobotKeyword.class);
+        RobotPsiFile file = doTestParseSucceeds(KEYWORD_WITH_ELLIPSES_BEFORE_ARG);
+        assertFileHasPsiElements(file, RobotEllipses.class, 3);
+        assertFileHasPsiElements(file, RobotKeyword.class, 1);
+    }
+
+    @Test
+    public void testEllipsesInVariableAssignment() {
+        RobotPsiFile file = doTestParseSucceeds(ELLIPSES_IN_VARAIBLE_ASSIGNMENT);
+        assertFileHasPsiElements(file, RobotVariableAssignToKeyword.class, 1);
+        assertFileHasPsiElements(file, RobotEllipses.class, 1);
+        assertFileHasPsiElements(file, RobotKeyword.class, 2);
     }
 }

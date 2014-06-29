@@ -11,18 +11,18 @@ public interface RobotTestSetting extends PsiElement {
   RobotDocumentationSetting getDocumentationSetting();
 
   @Nullable
-  RobotSetupSetting getSetupSetting();
-
-  @Nullable
   RobotTagsSetting getTagsSetting();
 
   @Nullable
-  RobotTeardownSetting getTeardownSetting();
+  RobotTestCaseSetupSetting getTestCaseSetupSetting();
 
   @Nullable
-  RobotTemplateSetting getTemplateSetting();
+  RobotTestCaseTeardownSetting getTestCaseTeardownSetting();
 
   @Nullable
-  RobotTimeoutSetting getTimeoutSetting();
+  RobotTestCaseTemplateSetting getTestCaseTemplateSetting();
+
+  @Nullable
+  RobotTestCaseTimeoutSetting getTestCaseTimeoutSetting();
 
 }

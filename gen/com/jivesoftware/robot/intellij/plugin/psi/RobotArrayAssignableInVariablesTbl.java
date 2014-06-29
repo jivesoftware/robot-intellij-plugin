@@ -11,9 +11,6 @@ public interface RobotArrayAssignableInVariablesTbl extends PsiElement {
   List<RobotEllipsesForSettingsTable> getEllipsesForSettingsTableList();
 
   @NotNull
-  List<RobotKeywordArg> getKeywordArgList();
-
-  @Nullable
-  RobotKeywordInvocationSettings getKeywordInvocationSettings();
+  List<RobotKeywordArgList> getKeywordArgListList();
 
 }

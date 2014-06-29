@@ -155,23 +155,32 @@ KeywordArgumentWord = {KeywordArgumentChar}+
 KeywordArgument = ({KeywordArgumentWord} ({SingleSpace} {KeywordArgumentWord})*) | {Variable} | {EmptyCell}
 
 /* Settings for the ***Settings*** Table*/
-TestSetupSetting = [Tt] [Ee] [Ss] [Tt] " "? [Ss] [Ee] [Tt] [Uu] [Pp]
-TestTeardownSetting = [Tt] [Ee] [Ss] [Tt] " "? [Tt] [Ee] [Aa] [Rr] [Dd] [Oo] [Ww] [Nn]
-SuiteSetupSetting = [Ss] [Uu] [Ii] [Tt] [Ee] " "? [Ss] [Ee] [Tt] [Uu] [Pp]
-ForceTags = [Ff] "orce" " "? [Tt] "ags"
-ResourceSetting = [Rr] [Ee] [Ss] [Oo] [Uu] [Rr] [Cc] [Ee]
+Setup = [Ss] " "? [Ee] " "? [Tt] " "? [Uu] " "? [Pp]
+Teardown = [Tt] " "? [Ee] " "? [Aa] " "? [Rr] " "? [Dd] " "? [Oo] " "? [Ww] " "? [Nn]
+Test = [Tt] " "? [Ee] " "? [Ss] " "? [Tt]
+Precondition = [Pp] " "? [Rr] " "? [Ee] " "? [Cc] " "? [Oo] " "? [Nn] " "? [Dd] " "? [Ii] " "? [Tt] " "? [Ii] " "? [Oo] " "? [Nn]
+Postcondition = [Pp] " "? [Oo] " "? [Ss] " "? [Tt] " "? [Cc] " "? [Oo] " "? [Nn] " "? [Dd] " "? [Ii] " "? [Tt] " "? [Ii] " "? [Oo] " "? [Nn]
+Suite = [Ss] " "?  [Uu] " "?  [Ii] " "?  [Tt] " "?  [Ee]
+
+TestSetupSetting = {Test} " "? ({Setup} | {Precondition})
+TestTeardownSetting = {Test} " "? ({Teardown} | {Postcondition})
+SuiteSetupSetting = {Suite} " "? ({Setup} | {Precondition})
+SuiteTeardownSetting = {Suite} " "? ({Teardown} | {Postcondition})
+ForceTags = [Ff] " "? [Oo] " "? [Rr] " "? [Cc] " "? [Ee] " "? [Tt] " "? [Aa] " "? [Gg] " "? [Ss]
+ResourceSetting = [Rr] " "? [Ee] " "? [Ss] " "? [Oo] " "? [Uu] " "? [Rr] " "? [Cc] " "? [Ee]
+Documentation = [Dd] " "? [Oo] " "? [Cc] " "? [Uu] " "? [Mm] " "? [Ee] " "? [Nn] " "? [Tt] " "? [Aa] " "? [Tt] " "? [Ii] " "? [Oo] " "? [Nn]
 
 /* Settings for robot test cases */
-TagsMeta = "[" {WhiteSpace}* [Tt] [Aa] [Gg] [Ss] {WhiteSpace}* "]"
-DocsMeta = "[" {WhiteSpace}* [Dd] "ocumentation" {WhiteSpace}* "]"
+TagsMeta = "[" {WhiteSpace}* [Tt] " "? [Aa] " "? [Gg] " "? [Ss] {WhiteSpace}* "]"
+DocsMeta = "[" {WhiteSpace}* {Documentation} {WhiteSpace}* "]"
 DocsArgument = {NonWhiteSpace} {InputCharacter}*
 
-SetupMeta = ("[" {WhiteSpace}* [Ss] [Ee] [Tt] [Uu] [Pp] {WhiteSpace}* "]")
-          | ("[" {WhiteSpace}* [Pp] "recondition" {WhiteSpace}* "]")
-TeardownMeta = ("[" {WhiteSpace}* [Tt] [Ee] [Aa] [Rr] [Dd] [Oo] [Ww] [Nn] {WhiteSpace}* "]")
-             | ("[" {WhiteSpace}* [Pp] "ostcondition" {WhiteSpace}* "]")
-TimeoutMeta = "[" {WhiteSpace}* [Tt] "imeout" {WhiteSpace}* "]"
-TemplateMeta = "[" {WhiteSpace}* [Tt] "emplate" {WhiteSpace}* "]"
+SetupMeta = ("[" " "? {Setup} " "? "]")
+          | ("[" {WhiteSpace}* {Precondition} {WhiteSpace}* "]")
+TeardownMeta = ("[" {WhiteSpace}* {Teardown} {WhiteSpace}* "]")
+             | ("[" {WhiteSpace}* {Postcondition} {WhiteSpace}* "]")
+TimeoutMeta = "[" {WhiteSpace}* [Tt] " "? [Ii] " "? [Mm] " "? [Ee] " "? [Oo] " "? [Uu] " "? [Tt] {WhiteSpace}* "]"
+TemplateMeta = "[" {WhiteSpace}* [Tt] " "? [Ee] " "? [Mm] " "? [Pp] " "? [Ll] " "? [Aa] " "? [Tt] " "? [Ee] {WhiteSpace}* "]"
 
 HourTime =  {DecIntegerLiteral} {SingleSpace}? [Hh] "our" ("s")?
 MinuteTime= {DecIntegerLiteral} {SingleSpace}? ([Mm] "inute" | [Mm] "in") ("s")?
@@ -181,14 +190,15 @@ TimeoutValue = {HourTime} {SingleSpace} {MinuteTime} {SingleSpace} {SecondTime} 
 {HourTime} {SingleSpace} {SecondTime} | {MinuteTime} {SingleSpace} {SecondTime} | {MinuteTime} | {SecondTime}
 
 /* Settings for Robot Keywords table */
-ArgumentsMeta = "[" {WhiteSpace}* [Aa] "rguments" {WhiteSpace}* "]"
-ReturnMeta = "[" {WhiteSpace}* [Rr] "eturn" {WhiteSpace}* "]"
+ArgumentsMeta = "[" " "? [Aa] " "? [Rr] " "? [Gg] " "? [Uu] " "? [Mm] " "? [Ee] " "? [Nn] " "? [Tt] " "? [Ss] " "? "]"
+ReturnMeta = "[" " "? [Rr] " "? [Ee] " "? [Tt] " "? [Uu] " "? [Rr] " "? [Nn] " "? "]"
 
 /* Table headings */
-SettingsTableHeading  = "*"+ {WhiteSpace}* (([Ss] [Ee] [Tt] [Tt] [Ii] [Nn] [Gg] [Ss]?) | "Metadata") {WhiteSpace}* ("*")*
-VariablesTableHeading = "*"+ {WhiteSpace}* ([Vv] [Aa] [Rr] [Ii] [Aa] [Bb] [Ll] [Ee] [Ss]?) {WhiteSpace}* "*"*
-TestCasesTableHeading = "*"+ {WhiteSpace}* [Tt] [Ee] [Ss] [Tt] " "? [Cc] [Aa] [Ss] [Ee] [Ss]? {WhiteSpace}* "*"*
-KeywordsTableHeading = "*"+ {WhiteSpace}* ([Uu] [Ss] [Ee] [Rr] " "*)? [Kk] [Ee] [Yy] [Ww] [Oo] [Rr] [Dd] [Ss]? {WhiteSpace}* "*"*
+SettingsTableHeading  = "*"+ " "? (([Ss] " "? [Ee] " "? [Tt] " "? [Tt] " "? [Ii] " "? [Nn] " "? [Gg] " "? [Ss]?)
+                                 | ([Mm] " "? [Ee] " "? [Tt] " "? [Aa] " "? [Dd] " "? [Aa] " "? [Tt] " "? [Aa])) " "? ("*")*
+VariablesTableHeading = "*"+ " "? ([Vv] " "? [Aa] " "? [Rr] " "? [Ii] " "? [Aa] " "? [Bb] " "? [Ll] " "? [Ee] " "? [Ss]?) " "? "*"*
+TestCasesTableHeading = "*"+ " "? [Tt] " "? [Ee] " "? [Ss] " "? [Tt] " "? [Cc] " "? [Aa] " "? [Ss] " "? [Ee] " "? [Ss]? " "? "*"*
+KeywordsTableHeading = "*"+ " "? ([Uu] " "? [Ss] " "? [Ee] " "? [Rr] " "?)? [Kk] " "? [Ee] " "? [Yy] " "? [Ww] " "? [Oo] " "? [Rr] " "? [Dd] " "? [Ss]? {WhiteSpace}? "*"*
 
 /*For loops*/
 ForLoopStart = ":FOR"
@@ -245,6 +255,7 @@ In = "IN"
      {TestSetupSetting}     { return next(TEST_SETUP_SETTING_TOKEN); }
      {TestTeardownSetting}  { return next(TEST_TEARDOWN_SETTING_TOKEN); }
      {SuiteSetupSetting}    { return next(SUITE_SETUP_SETTING_TOKEN); }
+     {SuiteTeardownSetting}    { return next(SUITE_TEARDOWN_SETTING_TOKEN); }
      {RobotKeyword}      { return next(ROBOT_KEYWORD_TOKEN); }
      {KeywordArgument}   { return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }
@@ -264,7 +275,6 @@ In = "IN"
      {ArrayAssignment}   { return next(ARRAY_ASSIGNMENT_TOKEN); }
      {Variable}          { return next(VARIABLE_TOKEN); }
      {ArrayVariable}     { return next(ARRAY_VARIABLE_TOKEN); }
-     {RobotKeyword}      { return next(ROBOT_KEYWORD_TOKEN); }
      {KeywordArgument}   { return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }
      {WhiteSpace}        { return next(WHITESPACE_TOKEN); }

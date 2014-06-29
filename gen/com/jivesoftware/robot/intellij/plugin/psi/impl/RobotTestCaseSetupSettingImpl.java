@@ -12,15 +12,21 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotTimeoutSettingImpl extends ASTWrapperPsiElement implements RobotTimeoutSetting {
+public class RobotTestCaseSetupSettingImpl extends ASTWrapperPsiElement implements RobotTestCaseSetupSetting {
 
-  public RobotTimeoutSettingImpl(ASTNode node) {
+  public RobotTestCaseSetupSettingImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitTimeoutSetting(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitTestCaseSetupSetting(this);
     else super.accept(visitor);
+  }
+
+  @Override
+  @NotNull
+  public RobotKeywordInvocationSettings getKeywordInvocationSettings() {
+    return findNotNullChildByClass(RobotKeywordInvocationSettings.class);
   }
 
 }

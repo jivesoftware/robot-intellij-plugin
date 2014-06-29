@@ -37,8 +37,8 @@ public class RobotKeywordInvocationSettingsImpl extends ASTWrapperPsiElement imp
 
   @Override
   @NotNull
-  public List<RobotKeywordArg> getKeywordArgList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotKeywordArg.class);
+  public List<RobotKeywordArgList> getKeywordArgListList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotKeywordArgList.class);
   }
 
 }

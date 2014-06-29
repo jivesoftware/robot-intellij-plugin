@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotSetupSetting extends PsiElement {
+public interface RobotTestCaseSetupSetting extends PsiElement {
 
   @NotNull
   RobotKeywordInvocationSettings getKeywordInvocationSettings();

@@ -7,10 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface RobotAssignableInVariablesTbl extends PsiElement {
 
-  @Nullable
+  @NotNull
   RobotKeywordArg getKeywordArg();
-
-  @Nullable
-  RobotKeywordInvocationSettings getKeywordInvocationSettings();
 
 }

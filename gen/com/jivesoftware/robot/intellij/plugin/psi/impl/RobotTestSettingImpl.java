@@ -31,32 +31,32 @@ public class RobotTestSettingImpl extends ASTWrapperPsiElement implements RobotT
 
   @Override
   @Nullable
-  public RobotSetupSetting getSetupSetting() {
-    return findChildByClass(RobotSetupSetting.class);
-  }
-
-  @Override
-  @Nullable
   public RobotTagsSetting getTagsSetting() {
     return findChildByClass(RobotTagsSetting.class);
   }
 
   @Override
   @Nullable
-  public RobotTeardownSetting getTeardownSetting() {
-    return findChildByClass(RobotTeardownSetting.class);
+  public RobotTestCaseSetupSetting getTestCaseSetupSetting() {
+    return findChildByClass(RobotTestCaseSetupSetting.class);
   }
 
   @Override
   @Nullable
-  public RobotTemplateSetting getTemplateSetting() {
-    return findChildByClass(RobotTemplateSetting.class);
+  public RobotTestCaseTeardownSetting getTestCaseTeardownSetting() {
+    return findChildByClass(RobotTestCaseTeardownSetting.class);
   }
 
   @Override
   @Nullable
-  public RobotTimeoutSetting getTimeoutSetting() {
-    return findChildByClass(RobotTimeoutSetting.class);
+  public RobotTestCaseTemplateSetting getTestCaseTemplateSetting() {
+    return findChildByClass(RobotTestCaseTemplateSetting.class);
+  }
+
+  @Override
+  @Nullable
+  public RobotTestCaseTimeoutSetting getTestCaseTimeoutSetting() {
+    return findChildByClass(RobotTestCaseTimeoutSetting.class);
   }
 
 }

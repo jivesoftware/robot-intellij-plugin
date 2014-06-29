@@ -15,6 +15,7 @@ import com.jivesoftware.robot.intellij.plugin.psi.RobotTestcaseLine;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Assert;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -85,5 +86,13 @@ public abstract class RobotParserTest extends LightCodeInsightFixtureTestCase {
      */
     protected static PsiErrorElement findFirstError(PsiElement parent) {
         return PsiTreeUtil.findChildOfType(parent, PsiErrorElement.class);
+    }
+
+    protected static <T extends PsiElement> Collection<T> assertFileHasPsiElements(RobotPsiFile file, Class<T> psiClass, int numExpected) {
+       Collection<T> children = PsiTreeUtil.findChildrenOfType(file, psiClass);
+       Assert.assertEquals(
+               String.format("Expected the Robot file to contain %d elements of type %s", numExpected, psiClass.getSimpleName()),
+               numExpected, children.size());
+        return children;
     }
 }
