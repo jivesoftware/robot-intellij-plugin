@@ -66,8 +66,7 @@ public class RobotWordsScanner implements WordsScanner {
 
     occurrence.init(tokenText, from, to, kind);
 
-    if (!processor.process(occurrence)) return false;
-    return true;
+    return processor.process(occurrence);
   }
 
 }

@@ -25,14 +25,14 @@ public class RobotVariablesLineImpl extends ASTWrapperPsiElement implements Robo
 
   @Override
   @Nullable
-  public RobotArrayAssignable getArrayAssignable() {
-    return findChildByClass(RobotArrayAssignable.class);
+  public RobotArrayAssignableInVariablesTbl getArrayAssignableInVariablesTbl() {
+    return findChildByClass(RobotArrayAssignableInVariablesTbl.class);
   }
 
   @Override
   @Nullable
-  public RobotAssignable getAssignable() {
-    return findChildByClass(RobotAssignable.class);
+  public RobotAssignableInVariablesTbl getAssignableInVariablesTbl() {
+    return findChildByClass(RobotAssignableInVariablesTbl.class);
   }
 
   @Override

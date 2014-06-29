@@ -11,9 +11,8 @@ public interface RobotTypes {
 
   IElementType ARGUMENTS_SETTING = new RobotElementType("ARGUMENTS_SETTING");
   IElementType ARGUMENT_DEF = new RobotElementType("ARGUMENT_DEF");
-  IElementType ARGUMENT_LIST = new RobotElementType("ARGUMENT_LIST");
-  IElementType ARRAY_ASSIGNABLE = new RobotElementType("ARRAY_ASSIGNABLE");
-  IElementType ASSIGNABLE = new RobotElementType("ASSIGNABLE");
+  IElementType ARRAY_ASSIGNABLE_IN_VARIABLES_TBL = new RobotElementType("ARRAY_ASSIGNABLE_IN_VARIABLES_TBL");
+  IElementType ASSIGNABLE_IN_VARIABLES_TBL = new RobotElementType("ASSIGNABLE_IN_VARIABLES_TBL");
   IElementType ASSIGNMENT = new RobotElementType("ASSIGNMENT");
   IElementType DOCUMENTATION_SETTING = new RobotElementType("DOCUMENTATION_SETTING");
   IElementType DOUBLE_BOUND_FOR_LOOP = new RobotElementType("DOUBLE_BOUND_FOR_LOOP");
@@ -56,7 +55,6 @@ public interface RobotTypes {
   IElementType RESOURCE_SETTING = new RobotElementType("RESOURCE_SETTING");
   IElementType RETURN_LINE = new RobotElementType("RETURN_LINE");
   IElementType RETURN_SETTING = new RobotElementType("RETURN_SETTING");
-  IElementType ROBOT_TABLE = new RobotElementType("ROBOT_TABLE");
   IElementType SETTING = new RobotElementType("SETTING");
   IElementType SETTINGS_LINE = new RobotElementType("SETTINGS_LINE");
   IElementType SETTINGS_TABLE = new RobotElementType("SETTINGS_TABLE");
@@ -68,6 +66,7 @@ public interface RobotTypes {
   IElementType SINGLE_BOUND_FOR_LOOP = new RobotElementType("SINGLE_BOUND_FOR_LOOP");
   IElementType SINGLE_VARIABLE = new RobotElementType("SINGLE_VARIABLE");
   IElementType SINGLE_VARIABLE_LIST = new RobotElementType("SINGLE_VARIABLE_LIST");
+  IElementType TABLE = new RobotElementType("TABLE");
   IElementType TAG = new RobotElementType("TAG");
   IElementType TAGS_SETTING = new RobotElementType("TAGS_SETTING");
   IElementType TAG_LIST = new RobotElementType("TAG_LIST");
@@ -141,14 +140,11 @@ public interface RobotTypes {
       else if (type == ARGUMENT_DEF) {
         return new RobotArgumentDefImpl(node);
       }
-      else if (type == ARGUMENT_LIST) {
-        return new RobotArgumentListImpl(node);
+      else if (type == ARRAY_ASSIGNABLE_IN_VARIABLES_TBL) {
+        return new RobotArrayAssignableInVariablesTblImpl(node);
       }
-      else if (type == ARRAY_ASSIGNABLE) {
-        return new RobotArrayAssignableImpl(node);
-      }
-      else if (type == ASSIGNABLE) {
-        return new RobotAssignableImpl(node);
+      else if (type == ASSIGNABLE_IN_VARIABLES_TBL) {
+        return new RobotAssignableInVariablesTblImpl(node);
       }
       else if (type == ASSIGNMENT) {
         return new RobotAssignmentImpl(node);
@@ -276,9 +272,6 @@ public interface RobotTypes {
       else if (type == RETURN_SETTING) {
         return new RobotReturnSettingImpl(node);
       }
-      else if (type == ROBOT_TABLE) {
-        return new RobotRobotTableImpl(node);
-      }
       else if (type == SETTING) {
         return new RobotSettingImpl(node);
       }
@@ -311,6 +304,9 @@ public interface RobotTypes {
       }
       else if (type == SINGLE_VARIABLE_LIST) {
         return new RobotSingleVariableListImpl(node);
+      }
+      else if (type == TABLE) {
+        return new RobotTableImpl(node);
       }
       else if (type == TAG) {
         return new RobotTagImpl(node);

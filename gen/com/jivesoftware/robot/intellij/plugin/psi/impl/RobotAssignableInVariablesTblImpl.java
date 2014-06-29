@@ -12,14 +12,14 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotAssignableImpl extends ASTWrapperPsiElement implements RobotAssignable {
+public class RobotAssignableInVariablesTblImpl extends ASTWrapperPsiElement implements RobotAssignableInVariablesTbl {
 
-  public RobotAssignableImpl(ASTNode node) {
+  public RobotAssignableInVariablesTblImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitAssignable(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitAssignableInVariablesTbl(this);
     else super.accept(visitor);
   }
 

@@ -31,7 +31,7 @@ public class RobotCustomUsagesSearcher extends CustomUsageSearcher {
     }
     if (element instanceof PsiMethod) {
       processJavaUsages((PsiMethod)element, processor);
-    } else if (element instanceof RobotKeywordDef) {
+    } else {
       processKeywordUsages((RobotKeywordDef)element, processor);
     }
   }
@@ -46,9 +46,9 @@ public class RobotCustomUsagesSearcher extends CustomUsageSearcher {
 
   private void processKeywordUsages(RobotKeywordDef keywordDef, Processor<Usage> processor) {
     Application app = ApplicationManager.getApplication();
-    FindRobotUsagesRunnable findJavaUsagesRunnable = new FindRobotUsagesRunnable(keywordDef);
-    app.runReadAction(findJavaUsagesRunnable);
-    List<Usage> usages = findJavaUsagesRunnable.getUsages();
+    FindRobotUsagesRunnable findRobotUsagesRunnable = new FindRobotUsagesRunnable(keywordDef);
+    app.runReadAction(findRobotUsagesRunnable);
+    List<Usage> usages = findRobotUsagesRunnable.getUsages();
     new CollectionQuery<Usage>(usages).forEach(processor);
   }
 
@@ -89,7 +89,6 @@ public class RobotCustomUsagesSearcher extends CustomUsageSearcher {
     public FindRobotUsagesRunnable(RobotKeywordDef robotKeywordDef) {
       this.keywordToFindUsages = robotKeywordDef;
     }
-
 
     @Override
     public void run() {

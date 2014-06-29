@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotArrayAssignable extends PsiElement {
+public interface RobotArrayAssignableInVariablesTbl extends PsiElement {
 
   @NotNull
   List<RobotEllipsesForSettingsTable> getEllipsesForSettingsTableList();

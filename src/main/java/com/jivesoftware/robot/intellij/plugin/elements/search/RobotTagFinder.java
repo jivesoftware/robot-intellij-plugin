@@ -1,4 +1,4 @@
-package com.jivesoftware.robot.intellij.plugin.elements.references;
+package com.jivesoftware.robot.intellij.plugin.elements.search;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -47,8 +47,8 @@ public class RobotTagFinder implements Processor<PsiFile> {
 
   private boolean addResultsForRobotFile(PsiFile psiFile, Set<String> resultsToAdd) {
     if (psiFile instanceof RobotPsiFile) {
-      RobotRobotTable[] tables = ((RobotPsiFile) psiFile).findChildrenByClass(RobotRobotTable.class);
-      for (RobotRobotTable table: tables) {
+      RobotTable[] tables = ((RobotPsiFile) psiFile).findChildrenByClass(RobotTable.class);
+      for (RobotTable table: tables) {
           if (table.getTestCasesTable() != null) {
               addResultsForTestCaseTable(table.getTestCasesTable(), resultsToAdd);
           }

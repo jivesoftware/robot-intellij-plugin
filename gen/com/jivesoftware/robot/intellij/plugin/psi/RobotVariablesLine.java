@@ -8,10 +8,10 @@ import com.intellij.psi.PsiElement;
 public interface RobotVariablesLine extends PsiElement {
 
   @Nullable
-  RobotArrayAssignable getArrayAssignable();
+  RobotArrayAssignableInVariablesTbl getArrayAssignableInVariablesTbl();
 
   @Nullable
-  RobotAssignable getAssignable();
+  RobotAssignableInVariablesTbl getAssignableInVariablesTbl();
 
   @Nullable
   RobotEllipsesLineSettings getEllipsesLineSettings();

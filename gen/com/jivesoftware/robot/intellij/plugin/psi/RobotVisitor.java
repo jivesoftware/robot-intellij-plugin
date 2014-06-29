@@ -5,7 +5,8 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiElement;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement;
-import com.jivesoftware.robot.intellij.plugin.elements.references.IRobotKeywordDef;
+import com.intellij.psi.StubBasedPsiElement;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordDefStub;
 
 public class RobotVisitor extends PsiElementVisitor {
 
@@ -17,15 +18,11 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitArgumentList(@NotNull RobotArgumentList o) {
+  public void visitArrayAssignableInVariablesTbl(@NotNull RobotArrayAssignableInVariablesTbl o) {
     visitPsiElement(o);
   }
 
-  public void visitArrayAssignable(@NotNull RobotArrayAssignable o) {
-    visitPsiElement(o);
-  }
-
-  public void visitAssignable(@NotNull RobotAssignable o) {
+  public void visitAssignableInVariablesTbl(@NotNull RobotAssignableInVariablesTbl o) {
     visitPsiElement(o);
   }
 
@@ -146,7 +143,8 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitKeywordDef(@NotNull RobotKeywordDef o) {
-    visitIRobotKeywordDef(o);
+    visitNamedElement(o);
+    // visitKeywordDefStub>(o);
   }
 
   public void visitKeywordDefinition(@NotNull RobotKeywordDefinition o) {
@@ -197,10 +195,6 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitRobotTable(@NotNull RobotRobotTable o) {
-    visitPsiElement(o);
-  }
-
   public void visitSetting(@NotNull RobotSetting o) {
     visitPsiElement(o);
   }
@@ -242,6 +236,10 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitSingleVariableList(@NotNull RobotSingleVariableList o) {
+    visitPsiElement(o);
+  }
+
+  public void visitTable(@NotNull RobotTable o) {
     visitPsiElement(o);
   }
 
@@ -335,10 +333,6 @@ public class RobotVisitor extends PsiElementVisitor {
 
   public void visitVariableAssignToKeyword(@NotNull RobotVariableAssignToKeyword o) {
     visitPsiElement(o);
-  }
-
-  public void visitIRobotKeywordDef(@NotNull IRobotKeywordDef o) {
-    visitElement(o);
   }
 
   public void visitNamedElement(@NotNull RobotNamedElement o) {

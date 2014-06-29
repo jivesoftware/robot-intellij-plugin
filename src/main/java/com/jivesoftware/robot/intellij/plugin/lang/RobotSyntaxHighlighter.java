@@ -45,7 +45,7 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
     }
 
     static final TextAttributesKey ROBOT_LANGUAGE_KEYWORD_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.LANG_KEYWORD",
-            DefaultLanguageHighlighterColors.KEYWORD);
+            DefaultLanguageHighlighterColors.STATIC_FIELD);
 
     static final TextAttributesKey ROBOT_TABLE_HEADER_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.TABLE",
             DefaultLanguageHighlighterColors.CONSTANT);
@@ -63,16 +63,16 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
             DefaultLanguageHighlighterColors.BLOCK_COMMENT);
 
     static final TextAttributesKey ROBOT_KEYWORD_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.KEYWORD",
-            DefaultLanguageHighlighterColors.FUNCTION_CALL);
+            DefaultLanguageHighlighterColors.KEYWORD);
 
     static final TextAttributesKey ROBOT_SETTING_KEYWORD_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.SETTING",
-            DefaultLanguageHighlighterColors.FUNCTION_CALL);
+            DefaultLanguageHighlighterColors.KEYWORD);
 
     static final TextAttributesKey ROBOT_VARIABLE_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.VARIABLE",
-            DefaultLanguageHighlighterColors.KEYWORD);
+            DefaultLanguageHighlighterColors.INSTANCE_FIELD);
 
     static final TextAttributesKey ROBOT_ASSIGNMENT_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.ASSIGNMENT",
-            DefaultLanguageHighlighterColors.KEYWORD);
+            DefaultLanguageHighlighterColors.INSTANCE_FIELD);
 
     static final TextAttributesKey ROBOT_COMMENT_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.COMMENT",
             DefaultLanguageHighlighterColors.LINE_COMMENT);

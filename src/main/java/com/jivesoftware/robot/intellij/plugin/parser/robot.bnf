@@ -16,15 +16,17 @@
 
   psiImplUtilClass="com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil"
   implements("KEYWORD")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
-  implements("KEYWORD_DEF")="com.jivesoftware.robot.intellij.plugin.elements.references.IRobotKeywordDef"
-  extends("KEYWORD_DEF")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordDefBase"
+  implements("KEYWORD_DEF")=["com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
+                             "com.intellij.psi.StubBasedPsiElement<com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordDefStub>"]
+  extends("KEYWORD_DEF")="com.intellij.extapi.psi.StubBasedPsiElementBase<com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordDefStub>"
   elementTypeClass("KEYWORD_DEF")="com.jivesoftware.robot.intellij.plugin.parser.RobotKeywordDefElementType"
   implements("TEST_CASE")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
 }
 
-robotFile ::= !<<eof>> (ROBOT_TABLE|EMPTY_LINE)* { methods=[getNameIdentifier getPresentation]}
+//Top-level File. A sequence of Robot Tables or empty lines.
+robotFile ::= !<<eof>> (TABLE|EMPTY_LINE)* { methods=[getNameIdentifier getPresentation]}
 
-ROBOT_TABLE ::= (SETTINGS_TABLE|VARIABLES_TABLE|TEST_CASES_TABLE|KEYWORDS_TABLE)
+TABLE ::= (SETTINGS_TABLE|VARIABLES_TABLE|TEST_CASES_TABLE|KEYWORDS_TABLE)
 
 /* Settings Table Grammar */
 SETTINGS_TABLE ::= SETTINGS_TABLE_HEADING SETTINGS_LINE*
@@ -55,8 +57,8 @@ VARIABLES_TABLE ::= VARIABLES_TABLE_HEADING VARIABLES_LINE*
 
 VARIABLES_TABLE_HEADING ::= VARIABLES_TABLE_HEADING_TOKEN END_OF_LINE (NEWLINE_TOKEN | <<eof>>)
 
-VARIABLES_LINE ::= (ASSIGNMENT_TOKEN | VARIABLE_TOKEN)  (COLUMN_SEP_TOKEN   ASSIGNABLE)? END_OF_LINE (NEWLINE_TOKEN | <<eof>>) |
-                   (ARRAY_ASSIGNMENT_TOKEN | ARRAY_VARIABLE_TOKEN)  (COLUMN_SEP_TOKEN   ARRAY_ASSIGNABLE)? END_OF_LINE  (NEWLINE_TOKEN | <<eof>>) |
+VARIABLES_LINE ::= (ASSIGNMENT_TOKEN | VARIABLE_TOKEN)  (COLUMN_SEP_TOKEN   ASSIGNABLE_IN_VARIABLES_TBL)? END_OF_LINE (NEWLINE_TOKEN | <<eof>>) |
+                   (ARRAY_ASSIGNMENT_TOKEN | ARRAY_VARIABLE_TOKEN)  (COLUMN_SEP_TOKEN   ARRAY_ASSIGNABLE_IN_VARIABLES_TBL)? END_OF_LINE  (NEWLINE_TOKEN | <<eof>>) |
                    EMPTY_LINE  |
                    ELLIPSES_LINE_SETTINGS
 
@@ -86,7 +88,7 @@ TEMPLATE_SETTING ::= TEMPLATE_SETTING_TOKEN COLUMN_SEP_TOKEN ROBOT_KEYWORD_TOKEN
 TIMEOUT_SETTING ::= TIMEOUT_SETTING_TOKEN COLUMN_SEP_TOKEN TIMEOUT_VALUE_TOKEN
 
 TESTCASE_LINE ::= COLUMN_SEP_TOKEN (KEYWORD_INVOCATION_TEST | VARIABLE_ASSIGN_TO_KEYWORD) END_OF_LINE (NEWLINE_TOKEN | <<eof>>) |
-                  COLUMN_SEP_TOKEN ARGUMENT_LIST END_OF_LINE (NEWLINE_TOKEN | <<eof>>) |
+                  KEYWORD_ARG_LIST END_OF_LINE (NEWLINE_TOKEN | <<eof>>) |
                   EMPTY_LINE |
                   ELLIPSES_LINE_TEST |
                   FOR_LOOP_IN_RANGE  |
@@ -123,24 +125,38 @@ RETURN_SETTING ::= RETURN_SETTING_TOKEN (COLUMN_SEP_TOKEN KEYWORD_ARG)+
 
 
 /* Shared grammar */
+//--------------------Variables and assignment----------------------
 SINGLE_VARIABLE ::= VARIABLE_TOKEN
-SINGLE_VARIABLE_LIST ::= SINGLE_VARIABLE (COLUMN_SEP_TOKEN SINGLE_VARIABLE)*
+SINGLE_VARIABLE_LIST ::= SINGLE_VARIABLE (COLUMN_SEP_TOKEN SINGLE_VARIABLE)* //Used for variable list in :FOR loops
 VARIABLE ::= VARIABLE_TOKEN | ARRAY_VARIABLE_TOKEN
-ARGUMENT_LIST ::= KEYWORD_ARG (COLUMN_SEP_TOKEN KEYWORD_ARG)*
 ASSIGNMENT ::= ASSIGNMENT_TOKEN | ARRAY_ASSIGNMENT_TOKEN
+
+//--------------------Keyword invocation-----------------------------
+//Arguments to a keyword, not including line continuation
 KEYWORD_ARG_LIST ::= (COLUMN_SEP_TOKEN KEYWORD_ARG)+
+//Invoking a keyword, possibly over multiple lines with ellipses -- for the Test Cases or Keywords tables
 KEYWORD_INVOCATION_TEST ::= KEYWORD (KEYWORD_ARG_LIST | ELLIPSES_FOR_TEST_TABLE)+ | KEYWORD
+//Invoking a keyword when indented inside a FOR loop.
 INDENTED_KEYWORD_INVOCATION_TEST ::= KEYWORD (KEYWORD_ARG_LIST | INDENTED_ELLIPSES_FOR_TEST_TABLE)+ | KEYWORD
+//Invoking a keyword, possibly over multiple lines with ellipses -- for the Settings table and variables table (no column separator at start of each line)
 KEYWORD_INVOCATION_SETTINGS ::= KEYWORD (KEYWORD_ARG | ELLIPSES_FOR_SETTINGS_TABLE)+ | KEYWORD
-ASSIGNABLE ::= KEYWORD_INVOCATION_SETTINGS | KEYWORD_ARG
-ARRAY_ASSIGNABLE ::= KEYWORD_INVOCATION_SETTINGS | KEYWORD_ARG ( ELLIPSES_FOR_SETTINGS_TABLE? COLUMN_SEP_TOKEN KEYWORD_ARG)*
+//In a Variables table, you can assign a variable to a keyword invocation or a literal value
+ASSIGNABLE_IN_VARIABLES_TBL ::= KEYWORD_INVOCATION_SETTINGS | KEYWORD_ARG
+ARRAY_ASSIGNABLE_IN_VARIABLES_TBL ::= KEYWORD_INVOCATION_SETTINGS | KEYWORD_ARG ( ELLIPSES_FOR_SETTINGS_TABLE? COLUMN_SEP_TOKEN KEYWORD_ARG)*
+
+//Rule for assigning a variable to a keyword invocation.
 VARIABLE_ASSIGN_TO_KEYWORD ::= ( MULTI_ASSIGNMENT | SINGLE_ASSIGNMENT ) ELLIPSES_FOR_TEST_TABLE* COLUMN_SEP_TOKEN  KEYWORD_INVOCATION_TEST
+//Same rule, but any additional lines due to line continuation (...) must be indented, for FOR loops.
 INDENTED_VARIABLE_ASSIGN_TO_KEYWORD ::= ( MULTI_ASSIGNMENT | SINGLE_ASSIGNMENT ) INDENTED_ELLIPSES_FOR_TEST_TABLE* COLUMN_SEP_TOKEN  INDENTED_KEYWORD_INVOCATION_TEST
 SINGLE_ASSIGNMENT ::= VARIABLE | ASSIGNMENT
 MULTI_ASSIGNMENT ::=  VARIABLE (COLUMN_SEP_TOKEN  VARIABLE)+
                     | VARIABLE (COLUMN_SEP_TOKEN VARIABLE)* COLUMN_SEP_TOKEN ASSIGNMENT
+// An argument to a keyword can be a varible, a literal, an empty cell (\), or an integer.
 KEYWORD_ARG ::= VARIABLE | ROBOT_KEYWORD_ARG_TOKEN | EMPTY_CELL_TOKEN | INTEGER_TOKEN
+// Tags are tokenized specially by being after the [tags] setting or "Force Tags" setting.
 TAG ::= TAG_TOKEN
+
+//Junk we can have at the end of any line.
 END_OF_LINE ::= WHITESPACE_TOKEN? COLUMN_SEP_TOKEN? COMMENT_TOKEN?
 ELLIPSES_LINE_TEST ::= COLUMN_SEP_TOKEN  ELLIPSES  END_OF_LINE
 INDENTED_ELLIPSES_LINE_TEST ::= COLUMN_SEP_TOKEN EMPTY_CELL_TOKEN COLUMN_SEP_TOKEN  ELLIPSES  END_OF_LINE
@@ -156,7 +172,7 @@ SINGLE_BOUND_FOR_LOOP ::= FOR_VAR_IN_RANGE COLUMN_SEP_TOKEN KEYWORD_ARG
 DOUBLE_BOUND_FOR_LOOP ::= FOR_VAR_IN_RANGE COLUMN_SEP_TOKEN KEYWORD_ARG COLUMN_SEP_TOKEN KEYWORD_ARG
 DOUBLE_BOUND_FOR_LOOP_WITH_STEP ::= FOR_VAR_IN_RANGE COLUMN_SEP_TOKEN KEYWORD_ARG COLUMN_SEP_TOKEN KEYWORD_ARG COLUMN_SEP_TOKEN KEYWORD_ARG
 
-FOR_LOOP_IN_RANGE ::= COLUMN_SEP_TOKEN (SINGLE_BOUND_FOR_LOOP | DOUBLE_BOUND_FOR_LOOP | DOUBLE_BOUND_FOR_LOOP_WITH_STEP) END_OF_LINE NEWLINE_TOKEN
+FOR_LOOP_IN_RANGE ::= COLUMN_SEP_TOKEN (DOUBLE_BOUND_FOR_LOOP_WITH_STEP | DOUBLE_BOUND_FOR_LOOP | SINGLE_BOUND_FOR_LOOP ) END_OF_LINE NEWLINE_TOKEN
                       INDENTED_KEYWORD_LINE+
 
 FOR_VAR_IN ::= FOR_LOOP_START_TOKEN  COLUMN_SEP_TOKEN SINGLE_VARIABLE_LIST IN_TOKEN

@@ -14,7 +14,7 @@ import com.intellij.util.ProcessingContext;
 import com.jivesoftware.robot.intellij.plugin.elements.PresentationPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.search.KeywordScope;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotKeywordDefinitionFinder;
-import com.jivesoftware.robot.intellij.plugin.elements.references.RobotTagFinder;
+import com.jivesoftware.robot.intellij.plugin.elements.search.RobotTagFinder;
 import com.jivesoftware.robot.intellij.plugin.elements.search.SearchType;
 import com.jivesoftware.robot.intellij.plugin.icons.RobotIcons;
 import com.jivesoftware.robot.intellij.plugin.parser.RobotTypes;

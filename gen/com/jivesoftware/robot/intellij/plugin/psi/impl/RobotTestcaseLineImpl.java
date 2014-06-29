@@ -25,12 +25,6 @@ public class RobotTestcaseLineImpl extends ASTWrapperPsiElement implements Robot
 
   @Override
   @Nullable
-  public RobotArgumentList getArgumentList() {
-    return findChildByClass(RobotArgumentList.class);
-  }
-
-  @Override
-  @Nullable
   public RobotEllipsesLineTest getEllipsesLineTest() {
     return findChildByClass(RobotEllipsesLineTest.class);
   }
@@ -57,6 +51,12 @@ public class RobotTestcaseLineImpl extends ASTWrapperPsiElement implements Robot
   @Nullable
   public RobotForLoopInRange getForLoopInRange() {
     return findChildByClass(RobotForLoopInRange.class);
+  }
+
+  @Override
+  @Nullable
+  public RobotKeywordArgList getKeywordArgList() {
+    return findChildByClass(RobotKeywordArgList.class);
   }
 
   @Override

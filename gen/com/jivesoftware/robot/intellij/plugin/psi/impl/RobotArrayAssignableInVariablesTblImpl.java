@@ -12,39 +12,33 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotRobotTableImpl extends ASTWrapperPsiElement implements RobotRobotTable {
+public class RobotArrayAssignableInVariablesTblImpl extends ASTWrapperPsiElement implements RobotArrayAssignableInVariablesTbl {
 
-  public RobotRobotTableImpl(ASTNode node) {
+  public RobotArrayAssignableInVariablesTblImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitRobotTable(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitArrayAssignableInVariablesTbl(this);
     else super.accept(visitor);
   }
 
   @Override
-  @Nullable
-  public RobotKeywordsTable getKeywordsTable() {
-    return findChildByClass(RobotKeywordsTable.class);
+  @NotNull
+  public List<RobotEllipsesForSettingsTable> getEllipsesForSettingsTableList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotEllipsesForSettingsTable.class);
+  }
+
+  @Override
+  @NotNull
+  public List<RobotKeywordArg> getKeywordArgList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotKeywordArg.class);
   }
 
   @Override
   @Nullable
-  public RobotSettingsTable getSettingsTable() {
-    return findChildByClass(RobotSettingsTable.class);
-  }
-
-  @Override
-  @Nullable
-  public RobotTestCasesTable getTestCasesTable() {
-    return findChildByClass(RobotTestCasesTable.class);
-  }
-
-  @Override
-  @Nullable
-  public RobotVariablesTable getVariablesTable() {
-    return findChildByClass(RobotVariablesTable.class);
+  public RobotKeywordInvocationSettings getKeywordInvocationSettings() {
+    return findChildByClass(RobotKeywordInvocationSettings.class);
   }
 
 }

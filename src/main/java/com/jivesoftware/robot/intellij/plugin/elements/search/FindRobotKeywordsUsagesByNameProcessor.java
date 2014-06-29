@@ -1,4 +1,4 @@
-package com.jivesoftware.robot.intellij.plugin.elements.references;
+package com.jivesoftware.robot.intellij.plugin.elements.search;
 
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiFile;

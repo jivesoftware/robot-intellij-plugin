@@ -5,9 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotArgumentList extends PsiElement {
+public interface RobotAssignableInVariablesTbl extends PsiElement {
 
-  @NotNull
-  List<RobotKeywordArg> getKeywordArgList();
+  @Nullable
+  RobotKeywordArg getKeywordArg();
+
+  @Nullable
+  RobotKeywordInvocationSettings getKeywordInvocationSettings();
 
 }

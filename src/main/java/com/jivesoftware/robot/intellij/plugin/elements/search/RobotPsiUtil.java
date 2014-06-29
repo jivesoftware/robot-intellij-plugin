@@ -14,7 +14,6 @@ import com.intellij.psi.search.PsiSearchHelper;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.stubs.StubIndexKey;
 import com.intellij.util.indexing.FileBasedIndex;
-import com.jivesoftware.robot.intellij.plugin.elements.references.FindRobotKeywordsUsagesByNameProcessor;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefFirstCharIndex;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefFirstThreeCharsIndex;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefFirstTwoCharsIndex;
@@ -85,8 +84,8 @@ public class RobotPsiUtil {
         if (!(file instanceof RobotPsiFile)) {
             return;
         }
-        RobotRobotTable[] tables = ((RobotPsiFile) file).findChildrenByClass(RobotRobotTable.class);
-        for (RobotRobotTable table : tables) {
+        RobotTable[] tables = ((RobotPsiFile) file).findChildrenByClass(RobotTable.class);
+        for (RobotTable table : tables) {
             if (table.getTestCasesTable() != null) {
                 addAllTestCasesInTable(table.getTestCasesTable(), results);
             }
@@ -97,8 +96,8 @@ public class RobotPsiUtil {
         if (!(file instanceof RobotPsiFile)) {
             return;
         }
-        RobotRobotTable[] tables = ((RobotPsiFile) file).findChildrenByClass(RobotRobotTable.class);
-        for (RobotRobotTable table : tables) {
+        RobotTable[] tables = ((RobotPsiFile) file).findChildrenByClass(RobotTable.class);
+        for (RobotTable table : tables) {
             if (table.getTestCasesTable() != null) {
                 addAllTestCasesInTableByName(table.getTestCasesTable(), name, results);
             }
@@ -183,7 +182,7 @@ public class RobotPsiUtil {
         STUB_INDEX.processElements(RobotKeywordDefNormalizedNameIndex.KEY, normalizedName, project,
                 GlobalSearchScope.allScope(project), RobotKeywordDef.class, processor);
         if (results.size() > 0) {
-            return Optional.of((RobotKeywordDef)results.get(0));
+            return Optional.of((RobotKeywordDef) results.get(0));
         }
         return Optional.absent();
     }
@@ -210,8 +209,8 @@ public class RobotPsiUtil {
         if (!(psiFile instanceof RobotPsiFile)) {
             return;
         }
-        RobotRobotTable[] tables = ((RobotPsiFile) psiFile).findChildrenByClass(RobotRobotTable.class);
-        for (RobotRobotTable table : tables) {
+        RobotTable[] tables = ((RobotPsiFile) psiFile).findChildrenByClass(RobotTable.class);
+        for (RobotTable table : tables) {
             if (table.getKeywordsTable() != null) {
                 findKeywordDefsInKeywordsTable(table.getKeywordsTable(), name, keywordDefList);
             }
@@ -239,15 +238,19 @@ public class RobotPsiUtil {
         if (!(psiFile instanceof RobotPsiFile)) {
             return;
         }
-        RobotRobotTable[] tables = ((RobotPsiFile) psiFile).findChildrenByClass(RobotRobotTable.class);
-        for (RobotRobotTable robotRobotTable : tables) {
-            RobotTestCasesTable testCasesTable = robotRobotTable.getTestCasesTable();
+        RobotTable[] tables = ((RobotPsiFile) psiFile).findChildrenByClass(RobotTable.class);
+        for (RobotTable RobotTable : tables) {
+            RobotTestCasesTable testCasesTable = RobotTable.getTestCasesTable();
             if (testCasesTable != null) {
                 findKeywordUsagesInTestCasesTable(testCasesTable, name, keywordList);
             }
-            RobotKeywordsTable robotKeywordsTable = robotRobotTable.getKeywordsTable();
+            RobotKeywordsTable robotKeywordsTable = RobotTable.getKeywordsTable();
             if (robotKeywordsTable != null) {
                 findKeywordUsagesInKeywordsTable(robotKeywordsTable, name, keywordList);
+            }
+            RobotSettingsTable robotSettingsTable = RobotTable.getSettingsTable();
+            if (robotSettingsTable != null) {
+                findKeywordUsagesInSettingsTable(robotSettingsTable, name, keywordList);
             }
         }
     }
@@ -264,6 +267,20 @@ public class RobotPsiUtil {
                     addKeywordIfMatch(name, keyword, keywordList);
                 } else if (assignToKeyword != null) {
                     RobotKeyword keyword = assignToKeyword.getKeywordInvocationTest().getKeyword();
+                    addKeywordIfMatch(name, keyword, keywordList);
+                }
+            }
+        }
+    }
+
+    public static void findKeywordUsagesInSettingsTable(RobotSettingsTable settingsTable, String name, List<RobotKeyword> keywordList) {
+        List<RobotSettingsLine> lines = settingsTable.getSettingsLineList();
+        for (RobotSettingsLine line : lines) {
+            if (line.getSetting() != null) {
+                RobotSetting setting = line.getSetting();
+                if (setting.getTestSetupSetting() != null) {
+                    RobotTestSetupSetting setupSetting = setting.getTestSetupSetting();
+                    RobotKeyword keyword = setupSetting.getKeywordInvocationSettings().getKeyword();
                     addKeywordIfMatch(name, keyword, keywordList);
                 }
             }
@@ -301,56 +318,7 @@ public class RobotPsiUtil {
     }
 
     //-----------------Context-sensitive finders-------------------
-    public static void findRobotKeywordDefsInContext(RobotKeyword context, Predicate<RobotKeywordDef> filter, List<RobotKeywordDef> populateMe) {
-        PsiFile containingFile = context.getContainingFile();
-        if (!(containingFile instanceof RobotPsiFile)) {
-            return;
-        }
-        RobotPsiFile robotPsiFile = (RobotPsiFile) containingFile;
-
-    }
-
-    private static void findRobotKeywordDefsInFileRecursive(RobotPsiFile file, Predicate<RobotKeywordDef> filter, List<RobotKeywordDef> populateMe) {
-        findRobotKeywordDefsInFile(file, filter, populateMe);
-
-    }
-
-    private static void findRobotKeywordDefsInFile(RobotPsiFile file, Predicate<RobotKeywordDef> filter, List<RobotKeywordDef> populateMe) {
-        for (PsiElement child : file.getChildren()) {
-            if (child instanceof RobotRobotTable) {
-                RobotRobotTable table = (RobotRobotTable) child;
-                if (table.getKeywordsTable() != null) {
-                    RobotKeywordsTable keywordsTable = table.getKeywordsTable();
-                    for (RobotKeywordDefinition definition : keywordsTable.getKeywordDefinitionList()) {
-                        RobotKeywordDefinitionHeader header = definition.getKeywordDefinitionHeader();
-                        RobotKeywordDef def = header.getKeywordDef();
-                        if (filter.apply(def)) {
-                            populateMe.add(def);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private static List<RobotPsiFile> getIncludedResourceFiles(RobotPsiFile file) {
-        List<RobotPsiFile> includedResourceFiles = Lists.newArrayList();
-        for (PsiElement child : file.getChildren()) {
-            if (child instanceof RobotRobotTable) {
-                RobotRobotTable table = (RobotRobotTable) child;
-                if (table.getSettingsTable() != null) {
-                    RobotSettingsTable settingsTable = table.getSettingsTable();
-                    for (RobotSettingsLine line : settingsTable.getSettingsLineList()) {
-                        if (line.getSetting() != null) {
-                            RobotSetting setting = line.getSetting();
-                            //setting.getGenericSetting()
-                        }
-                    }
-                }
-            }
-        }
-        return includedResourceFiles;
-    }
+    //TODO: Methods to find variables in scope
 
 
 }

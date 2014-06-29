@@ -5,7 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotRobotTable extends PsiElement {
+public interface RobotTable extends PsiElement {
 
   @Nullable
   RobotKeywordsTable getKeywordsTable();

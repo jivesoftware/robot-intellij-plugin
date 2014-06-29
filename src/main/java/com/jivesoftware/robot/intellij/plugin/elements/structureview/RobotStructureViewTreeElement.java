@@ -7,7 +7,6 @@ import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiNamedElement;
 import com.jivesoftware.robot.intellij.plugin.elements.presentations.KeywordDefPresentationStructureView;
 import com.jivesoftware.robot.intellij.plugin.elements.presentations.TestCasePresentationStructureView;
 import com.jivesoftware.robot.intellij.plugin.icons.RobotIcons;
@@ -120,8 +119,8 @@ public class RobotStructureViewTreeElement implements StructureViewTreeElement, 
         List<TreeElement> children = Lists.newArrayList();
 
         for (PsiElement el: root.getChildren()) {
-            if (el instanceof RobotRobotTable) {
-                RobotRobotTable table = (RobotRobotTable)el;
+            if (el instanceof RobotTable) {
+                RobotTable table = (RobotTable)el;
                 if (table.getKeywordsTable() != null) {
                     children.add(new RobotStructureViewTreeElement(table.getKeywordsTable()));
                 }
@@ -163,9 +162,6 @@ public class RobotStructureViewTreeElement implements StructureViewTreeElement, 
     @NotNull
     @Override
     public String getAlphaSortKey() {
-        if (myElement instanceof PsiNamedElement) {
-            return ((PsiNamedElement)myElement).getName();
-        }
         return myElement.getText();
     }
 }
