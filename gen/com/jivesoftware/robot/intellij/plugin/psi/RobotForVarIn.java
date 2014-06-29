@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface RobotForVarIn extends PsiElement {
 
   @NotNull
+  List<RobotIndentedEllipsesForTestTable> getIndentedEllipsesForTestTableList();
+
+  @NotNull
   RobotSingleVariableList getSingleVariableList();
 
 }

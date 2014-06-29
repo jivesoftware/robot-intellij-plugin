@@ -11,6 +11,9 @@ public interface RobotSingleBoundForLoop extends PsiElement {
   RobotForVarInRange getForVarInRange();
 
   @NotNull
+  List<RobotIndentedEllipsesForTestTable> getIndentedEllipsesForTestTableList();
+
+  @NotNull
   RobotKeywordArg getKeywordArg();
 
 }

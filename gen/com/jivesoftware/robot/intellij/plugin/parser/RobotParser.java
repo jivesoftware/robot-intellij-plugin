@@ -485,37 +485,105 @@ public class RobotParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // FOR_VAR_IN_RANGE COLUMN_SEP_TOKEN KEYWORD_ARG COLUMN_SEP_TOKEN KEYWORD_ARG
+  // FOR_VAR_IN_RANGE INDENTED_ELLIPSES_FOR_TEST_TABLE* COLUMN_SEP_TOKEN KEYWORD_ARG
+  //                                            INDENTED_ELLIPSES_FOR_TEST_TABLE* COLUMN_SEP_TOKEN KEYWORD_ARG
   public static boolean DOUBLE_BOUND_FOR_LOOP(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "DOUBLE_BOUND_FOR_LOOP")) return false;
     if (!nextTokenIs(builder_, FOR_LOOP_START_TOKEN)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = FOR_VAR_IN_RANGE(builder_, level_ + 1);
+    result_ = result_ && DOUBLE_BOUND_FOR_LOOP_1(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, COLUMN_SEP_TOKEN);
     result_ = result_ && KEYWORD_ARG(builder_, level_ + 1);
+    result_ = result_ && DOUBLE_BOUND_FOR_LOOP_4(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, COLUMN_SEP_TOKEN);
     result_ = result_ && KEYWORD_ARG(builder_, level_ + 1);
     exit_section_(builder_, marker_, DOUBLE_BOUND_FOR_LOOP, result_);
     return result_;
   }
 
+  // INDENTED_ELLIPSES_FOR_TEST_TABLE*
+  private static boolean DOUBLE_BOUND_FOR_LOOP_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "DOUBLE_BOUND_FOR_LOOP_1")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!INDENTED_ELLIPSES_FOR_TEST_TABLE(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "DOUBLE_BOUND_FOR_LOOP_1", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
+  // INDENTED_ELLIPSES_FOR_TEST_TABLE*
+  private static boolean DOUBLE_BOUND_FOR_LOOP_4(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "DOUBLE_BOUND_FOR_LOOP_4")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!INDENTED_ELLIPSES_FOR_TEST_TABLE(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "DOUBLE_BOUND_FOR_LOOP_4", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
   /* ********************************************************** */
-  // FOR_VAR_IN_RANGE COLUMN_SEP_TOKEN KEYWORD_ARG COLUMN_SEP_TOKEN KEYWORD_ARG COLUMN_SEP_TOKEN KEYWORD_ARG
+  // FOR_VAR_IN_RANGE INDENTED_ELLIPSES_FOR_TEST_TABLE* COLUMN_SEP_TOKEN KEYWORD_ARG
+  //                                                      INDENTED_ELLIPSES_FOR_TEST_TABLE* COLUMN_SEP_TOKEN KEYWORD_ARG
+  //                                                      INDENTED_ELLIPSES_FOR_TEST_TABLE* COLUMN_SEP_TOKEN KEYWORD_ARG
   public static boolean DOUBLE_BOUND_FOR_LOOP_WITH_STEP(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "DOUBLE_BOUND_FOR_LOOP_WITH_STEP")) return false;
     if (!nextTokenIs(builder_, FOR_LOOP_START_TOKEN)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = FOR_VAR_IN_RANGE(builder_, level_ + 1);
+    result_ = result_ && DOUBLE_BOUND_FOR_LOOP_WITH_STEP_1(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, COLUMN_SEP_TOKEN);
     result_ = result_ && KEYWORD_ARG(builder_, level_ + 1);
+    result_ = result_ && DOUBLE_BOUND_FOR_LOOP_WITH_STEP_4(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, COLUMN_SEP_TOKEN);
     result_ = result_ && KEYWORD_ARG(builder_, level_ + 1);
+    result_ = result_ && DOUBLE_BOUND_FOR_LOOP_WITH_STEP_7(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, COLUMN_SEP_TOKEN);
     result_ = result_ && KEYWORD_ARG(builder_, level_ + 1);
     exit_section_(builder_, marker_, DOUBLE_BOUND_FOR_LOOP_WITH_STEP, result_);
     return result_;
+  }
+
+  // INDENTED_ELLIPSES_FOR_TEST_TABLE*
+  private static boolean DOUBLE_BOUND_FOR_LOOP_WITH_STEP_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "DOUBLE_BOUND_FOR_LOOP_WITH_STEP_1")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!INDENTED_ELLIPSES_FOR_TEST_TABLE(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "DOUBLE_BOUND_FOR_LOOP_WITH_STEP_1", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
+  // INDENTED_ELLIPSES_FOR_TEST_TABLE*
+  private static boolean DOUBLE_BOUND_FOR_LOOP_WITH_STEP_4(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "DOUBLE_BOUND_FOR_LOOP_WITH_STEP_4")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!INDENTED_ELLIPSES_FOR_TEST_TABLE(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "DOUBLE_BOUND_FOR_LOOP_WITH_STEP_4", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
+  // INDENTED_ELLIPSES_FOR_TEST_TABLE*
+  private static boolean DOUBLE_BOUND_FOR_LOOP_WITH_STEP_7(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "DOUBLE_BOUND_FOR_LOOP_WITH_STEP_7")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!INDENTED_ELLIPSES_FOR_TEST_TABLE(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "DOUBLE_BOUND_FOR_LOOP_WITH_STEP_7", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
   }
 
   /* ********************************************************** */
@@ -822,17 +890,31 @@ public class RobotParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // FOR_LOOP_START_TOKEN  COLUMN_SEP_TOKEN SINGLE_VARIABLE_LIST IN_TOKEN
+  // FOR_LOOP_START_TOKEN  INDENTED_ELLIPSES_FOR_TEST_TABLE* COLUMN_SEP_TOKEN SINGLE_VARIABLE_LIST IN_TOKEN
   public static boolean FOR_VAR_IN(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "FOR_VAR_IN")) return false;
     if (!nextTokenIs(builder_, FOR_LOOP_START_TOKEN)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, FOR_LOOP_START_TOKEN, COLUMN_SEP_TOKEN);
+    result_ = consumeToken(builder_, FOR_LOOP_START_TOKEN);
+    result_ = result_ && FOR_VAR_IN_1(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, COLUMN_SEP_TOKEN);
     result_ = result_ && SINGLE_VARIABLE_LIST(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, IN_TOKEN);
     exit_section_(builder_, marker_, FOR_VAR_IN, result_);
     return result_;
+  }
+
+  // INDENTED_ELLIPSES_FOR_TEST_TABLE*
+  private static boolean FOR_VAR_IN_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "FOR_VAR_IN_1")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!INDENTED_ELLIPSES_FOR_TEST_TABLE(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "FOR_VAR_IN_1", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
   }
 
   /* ********************************************************** */
@@ -1809,17 +1891,30 @@ public class RobotParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // FOR_VAR_IN_RANGE COLUMN_SEP_TOKEN KEYWORD_ARG
+  // FOR_VAR_IN_RANGE INDENTED_ELLIPSES_FOR_TEST_TABLE* COLUMN_SEP_TOKEN KEYWORD_ARG
   public static boolean SINGLE_BOUND_FOR_LOOP(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SINGLE_BOUND_FOR_LOOP")) return false;
     if (!nextTokenIs(builder_, FOR_LOOP_START_TOKEN)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = FOR_VAR_IN_RANGE(builder_, level_ + 1);
+    result_ = result_ && SINGLE_BOUND_FOR_LOOP_1(builder_, level_ + 1);
     result_ = result_ && consumeToken(builder_, COLUMN_SEP_TOKEN);
     result_ = result_ && KEYWORD_ARG(builder_, level_ + 1);
     exit_section_(builder_, marker_, SINGLE_BOUND_FOR_LOOP, result_);
     return result_;
+  }
+
+  // INDENTED_ELLIPSES_FOR_TEST_TABLE*
+  private static boolean SINGLE_BOUND_FOR_LOOP_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "SINGLE_BOUND_FOR_LOOP_1")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!INDENTED_ELLIPSES_FOR_TEST_TABLE(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "SINGLE_BOUND_FOR_LOOP_1", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
   }
 
   /* ********************************************************** */
@@ -1835,7 +1930,7 @@ public class RobotParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // SINGLE_VARIABLE (COLUMN_SEP_TOKEN SINGLE_VARIABLE)*
+  // SINGLE_VARIABLE (INDENTED_ELLIPSES_FOR_TEST_TABLE | (COLUMN_SEP_TOKEN SINGLE_VARIABLE))*
   public static boolean SINGLE_VARIABLE_LIST(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SINGLE_VARIABLE_LIST")) return false;
     if (!nextTokenIs(builder_, VARIABLE_TOKEN)) return false;
@@ -1847,7 +1942,7 @@ public class RobotParser implements PsiParser {
     return result_;
   }
 
-  // (COLUMN_SEP_TOKEN SINGLE_VARIABLE)*
+  // (INDENTED_ELLIPSES_FOR_TEST_TABLE | (COLUMN_SEP_TOKEN SINGLE_VARIABLE))*
   private static boolean SINGLE_VARIABLE_LIST_1(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SINGLE_VARIABLE_LIST_1")) return false;
     int pos_ = current_position_(builder_);
@@ -1859,9 +1954,20 @@ public class RobotParser implements PsiParser {
     return true;
   }
 
-  // COLUMN_SEP_TOKEN SINGLE_VARIABLE
+  // INDENTED_ELLIPSES_FOR_TEST_TABLE | (COLUMN_SEP_TOKEN SINGLE_VARIABLE)
   private static boolean SINGLE_VARIABLE_LIST_1_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SINGLE_VARIABLE_LIST_1_0")) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = INDENTED_ELLIPSES_FOR_TEST_TABLE(builder_, level_ + 1);
+    if (!result_) result_ = SINGLE_VARIABLE_LIST_1_0_1(builder_, level_ + 1);
+    exit_section_(builder_, marker_, null, result_);
+    return result_;
+  }
+
+  // COLUMN_SEP_TOKEN SINGLE_VARIABLE
+  private static boolean SINGLE_VARIABLE_LIST_1_0_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "SINGLE_VARIABLE_LIST_1_0_1")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, COLUMN_SEP_TOKEN);

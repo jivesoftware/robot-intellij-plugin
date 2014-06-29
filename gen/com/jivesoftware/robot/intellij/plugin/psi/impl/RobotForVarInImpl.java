@@ -25,6 +25,12 @@ public class RobotForVarInImpl extends ASTWrapperPsiElement implements RobotForV
 
   @Override
   @NotNull
+  public List<RobotIndentedEllipsesForTestTable> getIndentedEllipsesForTestTableList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotIndentedEllipsesForTestTable.class);
+  }
+
+  @Override
+  @NotNull
   public RobotSingleVariableList getSingleVariableList() {
     return findNotNullChildByClass(RobotSingleVariableList.class);
   }

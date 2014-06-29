@@ -31,6 +31,12 @@ public class RobotDoubleBoundForLoopWithStepImpl extends ASTWrapperPsiElement im
 
   @Override
   @NotNull
+  public List<RobotIndentedEllipsesForTestTable> getIndentedEllipsesForTestTableList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotIndentedEllipsesForTestTable.class);
+  }
+
+  @Override
+  @NotNull
   public List<RobotKeywordArg> getKeywordArgList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotKeywordArg.class);
   }

@@ -31,6 +31,12 @@ public class RobotSingleBoundForLoopImpl extends ASTWrapperPsiElement implements
 
   @Override
   @NotNull
+  public List<RobotIndentedEllipsesForTestTable> getIndentedEllipsesForTestTableList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotIndentedEllipsesForTestTable.class);
+  }
+
+  @Override
+  @NotNull
   public RobotKeywordArg getKeywordArg() {
     return findNotNullChildByClass(RobotKeywordArg.class);
   }
