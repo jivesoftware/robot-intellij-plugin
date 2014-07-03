@@ -1,6 +1,5 @@
 package com.jivesoftware.robot.intellij.plugin.elements.usages;
 
-import com.intellij.lang.cacheBuilder.DefaultWordsScanner;
 import com.intellij.lang.cacheBuilder.WordOccurrence;
 import com.intellij.lang.cacheBuilder.WordsScanner;
 import com.intellij.lexer.Lexer;

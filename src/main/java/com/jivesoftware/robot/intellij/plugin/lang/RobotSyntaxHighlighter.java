@@ -53,7 +53,7 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
     static final TextAttributesKey ROBOT_TEST_CASE_HEADER_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.TEST_CASE_HEADER",
             DefaultLanguageHighlighterColors.CONSTANT);
 
-    static final TextAttributesKey ROBOT_KEYWORD_DEF_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.KEYWORD_DEF",
+    static final TextAttributesKey ROBOT_KEYWORD_TITLE_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.KEYWORD_DEF",
             DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
 
     static final TextAttributesKey ROBOT_TAG_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.TAG",
@@ -109,7 +109,7 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
         keys1.put(RobotTypes.KEYWORDS_TABLE_HEADING_TOKEN, ROBOT_TABLE_HEADER_KEY);
 
         // Keyword definition
-        keys1.put(RobotTypes.ROBOT_KEYWORD_DEF_TOKEN, ROBOT_KEYWORD_DEF_KEY);
+        keys1.put(RobotTypes.ROBOT_KEYWORD_TITLE_TOKEN, ROBOT_KEYWORD_TITLE_KEY);
 
         //Test case header
         keys1.put(RobotTypes.TEST_CASE_HEADER_TOKEN, ROBOT_TEST_CASE_HEADER_KEY);

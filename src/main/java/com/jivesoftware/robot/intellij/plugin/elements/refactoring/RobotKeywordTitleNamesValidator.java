@@ -14,7 +14,7 @@ import java.util.Set;
 /**
  * Created by charles.capps on 6/5/14.
  */
-public class RobotKeywordDefNamesValidator implements NamesValidator {
+public class RobotKeywordTitleNamesValidator implements NamesValidator {
   //TODO: find a good way to get the build-in Robot keywords within Java
   private final static Set<String> buildInKeywords = Sets.newHashSet("callmethod", "catenate", "comment", "continueforloop");
   @Override

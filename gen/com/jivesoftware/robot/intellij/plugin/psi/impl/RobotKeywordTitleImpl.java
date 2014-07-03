@@ -9,24 +9,24 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.jivesoftware.robot.intellij.plugin.parser.RobotTypes.*;
 import com.intellij.extapi.psi.StubBasedPsiElementBase;
-import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordDefStub;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStub;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.stubs.IStubElementType;
 
-public class RobotKeywordDefImpl extends StubBasedPsiElementBase<RobotKeywordDefStub> implements RobotKeywordDef {
+public class RobotKeywordTitleImpl extends StubBasedPsiElementBase<RobotKeywordTitleStub> implements RobotKeywordTitle {
 
-  public RobotKeywordDefImpl(ASTNode node) {
+  public RobotKeywordTitleImpl(ASTNode node) {
     super(node);
   }
 
-  public RobotKeywordDefImpl(RobotKeywordDefStub stub, IStubElementType nodeType) {
+  public RobotKeywordTitleImpl(RobotKeywordTitleStub stub, IStubElementType nodeType) {
     super(stub, nodeType);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitKeywordDef(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitKeywordTitle(this);
     else super.accept(visitor);
   }
 

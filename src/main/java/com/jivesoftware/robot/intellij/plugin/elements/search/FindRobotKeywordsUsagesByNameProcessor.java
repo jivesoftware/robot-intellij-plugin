@@ -3,7 +3,6 @@ package com.jivesoftware.robot.intellij.plugin.elements.search;
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiFile;
 import com.intellij.util.Processor;
-import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
 
 import java.util.List;

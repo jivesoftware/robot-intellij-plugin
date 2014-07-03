@@ -18,7 +18,7 @@ import com.jivesoftware.robot.intellij.plugin.elements.search.RobotTagFinder;
 import com.jivesoftware.robot.intellij.plugin.elements.search.SearchType;
 import com.jivesoftware.robot.intellij.plugin.icons.RobotIcons;
 import com.jivesoftware.robot.intellij.plugin.parser.RobotTypes;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDef;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordTitle;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -77,17 +77,17 @@ public class RobotCompletionProvider extends CompletionProvider<CompletionParame
                         .withTailText(parameterText, true)
                         .withIcon(RobotIcons.METHOD));
                 includedNames.add(method.getName());
-            } else if (el instanceof RobotKeywordDef) {
-                RobotKeywordDef robotKeywordDef = (RobotKeywordDef) el;
-                if (includedNames.contains(robotKeywordDef.getName())) {
+            } else if (el instanceof RobotKeywordTitle) {
+                RobotKeywordTitle robotKeywordTitle = (RobotKeywordTitle) el;
+                if (includedNames.contains(robotKeywordTitle.getName())) {
                     continue;
                 }
-                String argumentsText = PresentationPsiUtil.getRobotKeywordArgumentTest(robotKeywordDef);
-                populateMe.add(LookupElementBuilder.create(robotKeywordDef)
+                String argumentsText = PresentationPsiUtil.getRobotKeywordArgumentTest(robotKeywordTitle);
+                populateMe.add(LookupElementBuilder.create(robotKeywordTitle)
                         .withCaseSensitivity(false)
                         .withTailText(argumentsText, true)
                         .withIcon(RobotIcons.KEYWORD));
-                includedNames.add(robotKeywordDef.getName());
+                includedNames.add(robotKeywordTitle.getName());
             }
         }
     }

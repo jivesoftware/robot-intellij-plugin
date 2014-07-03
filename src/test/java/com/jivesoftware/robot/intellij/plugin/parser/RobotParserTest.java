@@ -95,4 +95,5 @@ public abstract class RobotParserTest extends LightCodeInsightFixtureTestCase {
                numExpected, children.size());
         return children;
     }
+
 }

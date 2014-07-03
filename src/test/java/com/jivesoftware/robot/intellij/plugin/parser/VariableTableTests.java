@@ -8,7 +8,7 @@ import org.junit.Test;
 /**
  * Created by charles on 6/29/14.
  */
-public class VariableTests extends RobotParserTest {
+public class VariableTableTests extends RobotParserTest {
     private static final String VALID_VARIABLE_NAMES =
             "*** Variables ***\n" +
             "${camelCaseVar}=   Variable surrounded by spaces\n" +

@@ -2,7 +2,7 @@ package com.jivesoftware.robot.intellij.plugin.elements.presentations;
 
 import com.intellij.navigation.ItemPresentation;
 import com.jivesoftware.robot.intellij.plugin.icons.RobotIcons;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDef;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordTitle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,16 +12,16 @@ import javax.swing.*;
  * Created by charles on 6/5/14.
  */
 public class KeywordDefPresentationStructureView implements ItemPresentation {
-    private final RobotKeywordDef def;
+    private final RobotKeywordTitle title;
 
-    public KeywordDefPresentationStructureView(@NotNull RobotKeywordDef def) {
-        this.def = def;
+    public KeywordDefPresentationStructureView(@NotNull RobotKeywordTitle title) {
+        this.title = title;
     }
 
     @Nullable
     @Override
     public String getPresentableText() {
-        return String.format("%s", def.getText());
+        return String.format("%s", title.getText());
     }
 
     @Nullable

@@ -1,7 +1,6 @@
 package com.jivesoftware.robot.intellij.plugin.elements;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileFactory;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotFileType;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
@@ -31,7 +30,7 @@ public class RobotElementFactory {
         return null;
     }
 
-    public static RobotKeywordDef createKeywordDef(Project project, String keywordDefName) {
+    public static RobotKeywordTitle createKeywordTitle(Project project, String keywordDefName) {
         String template = "*** Keywords ***\n" +
                 "%s\n" +
                 "  Log  abc  INFO";
@@ -43,7 +42,7 @@ public class RobotElementFactory {
         RobotKeywordsTable keywordsTable = table.getKeywordsTable();
         for (RobotKeywordDefinition robotKeywordDefinition : keywordsTable.getKeywordDefinitionList()) {
             RobotKeywordDefinitionHeader header = robotKeywordDefinition.getKeywordDefinitionHeader();
-            return header.getKeywordDef();
+            return header.getKeywordTitle();
         }
         return null;
     }

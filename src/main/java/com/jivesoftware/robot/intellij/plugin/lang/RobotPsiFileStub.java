@@ -1,6 +1,5 @@
 package com.jivesoftware.robot.intellij.plugin.lang;
 
-import com.intellij.psi.stubs.PsiFileStub;
 import com.intellij.psi.stubs.PsiFileStubImpl;
 
 /**

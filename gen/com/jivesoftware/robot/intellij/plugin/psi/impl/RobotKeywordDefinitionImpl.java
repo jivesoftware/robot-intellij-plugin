@@ -41,10 +41,4 @@ public class RobotKeywordDefinitionImpl extends ASTWrapperPsiElement implements 
     return findNotNullChildByClass(RobotKeywordSettings.class);
   }
 
-  @Override
-  @Nullable
-  public RobotReturnLine getReturnLine() {
-    return findChildByClass(RobotReturnLine.class);
-  }
-
 }

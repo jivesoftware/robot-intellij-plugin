@@ -6,7 +6,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiElement;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement;
 import com.intellij.psi.StubBasedPsiElement;
-import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordDefStub;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStub;
 
 public class RobotVisitor extends PsiElementVisitor {
 
@@ -142,11 +142,6 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitKeywordDef(@NotNull RobotKeywordDef o) {
-    visitNamedElement(o);
-    // visitKeywordDefStub>(o);
-  }
-
   public void visitKeywordDefinition(@NotNull RobotKeywordDefinition o) {
     visitPsiElement(o);
   }
@@ -177,6 +172,11 @@ public class RobotVisitor extends PsiElementVisitor {
 
   public void visitKeywordSettingLine(@NotNull RobotKeywordSettingLine o) {
     visitPsiElement(o);
+  }
+
+  public void visitKeywordTitle(@NotNull RobotKeywordTitle o) {
+    visitNamedElement(o);
+    // visitKeywordTitleStub>(o);
   }
 
   public void visitMultiAssignment(@NotNull RobotMultiAssignment o) {

@@ -6,10 +6,10 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement;
 import com.intellij.psi.StubBasedPsiElement;
-import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordDefStub;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStub;
 import com.intellij.navigation.ItemPresentation;
 
-public interface RobotKeywordDef extends RobotNamedElement, StubBasedPsiElement<RobotKeywordDefStub> {
+public interface RobotKeywordTitle extends RobotNamedElement, StubBasedPsiElement<RobotKeywordTitleStub> {
 
   @Nullable
   @NonNls

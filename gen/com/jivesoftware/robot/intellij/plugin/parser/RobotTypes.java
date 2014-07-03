@@ -42,7 +42,6 @@ public interface RobotTypes {
   IElementType KEYWORDS_TABLE_HEADING = new RobotElementType("KEYWORDS_TABLE_HEADING");
   IElementType KEYWORD_ARG = new RobotElementType("KEYWORD_ARG");
   IElementType KEYWORD_ARG_LIST = new RobotElementType("KEYWORD_ARG_LIST");
-  IElementType KEYWORD_DEF = new RobotKeywordDefElementType("KEYWORD_DEF");
   IElementType KEYWORD_DEFINITION = new RobotElementType("KEYWORD_DEFINITION");
   IElementType KEYWORD_DEFINITION_HEADER = new RobotElementType("KEYWORD_DEFINITION_HEADER");
   IElementType KEYWORD_INVOCATION_SETTINGS = new RobotElementType("KEYWORD_INVOCATION_SETTINGS");
@@ -51,6 +50,7 @@ public interface RobotTypes {
   IElementType KEYWORD_SETTING = new RobotElementType("KEYWORD_SETTING");
   IElementType KEYWORD_SETTINGS = new RobotElementType("KEYWORD_SETTINGS");
   IElementType KEYWORD_SETTING_LINE = new RobotElementType("KEYWORD_SETTING_LINE");
+  IElementType KEYWORD_TITLE = new RobotKeywordTitleElementType("KEYWORD_TITLE");
   IElementType MULTI_ASSIGNMENT = new RobotElementType("MULTI_ASSIGNMENT");
   IElementType RESOURCE_SETTING = new RobotElementType("RESOURCE_SETTING");
   IElementType RETURN_LINE = new RobotElementType("RETURN_LINE");
@@ -111,7 +111,7 @@ public interface RobotTypes {
   IElementType RESOURCE_SETTING_TOKEN = new RobotToken("RESOURCE_SETTING_TOKEN");
   IElementType RETURN_SETTING_TOKEN = new RobotToken("RETURN_SETTING_TOKEN");
   IElementType ROBOT_KEYWORD_ARG_TOKEN = new RobotToken("ROBOT_KEYWORD_ARG_TOKEN");
-  IElementType ROBOT_KEYWORD_DEF_TOKEN = new RobotToken("ROBOT_KEYWORD_DEF_TOKEN");
+  IElementType ROBOT_KEYWORD_TITLE_TOKEN = new RobotToken("ROBOT_KEYWORD_TITLE_TOKEN");
   IElementType ROBOT_KEYWORD_TOKEN = new RobotToken("ROBOT_KEYWORD_TOKEN");
   IElementType SETTINGS_TABLE_HEADING_TOKEN = new RobotToken("SETTINGS_TABLE_HEADING_TOKEN");
   IElementType SETUP_SETTING_TOKEN = new RobotToken("SETUP_SETTING_TOKEN");
@@ -233,9 +233,6 @@ public interface RobotTypes {
       else if (type == KEYWORD_ARG_LIST) {
         return new RobotKeywordArgListImpl(node);
       }
-      else if (type == KEYWORD_DEF) {
-        return new RobotKeywordDefImpl(node);
-      }
       else if (type == KEYWORD_DEFINITION) {
         return new RobotKeywordDefinitionImpl(node);
       }
@@ -259,6 +256,9 @@ public interface RobotTypes {
       }
       else if (type == KEYWORD_SETTING_LINE) {
         return new RobotKeywordSettingLineImpl(node);
+      }
+      else if (type == KEYWORD_TITLE) {
+        return new RobotKeywordTitleImpl(node);
       }
       else if (type == MULTI_ASSIGNMENT) {
         return new RobotMultiAssignmentImpl(node);

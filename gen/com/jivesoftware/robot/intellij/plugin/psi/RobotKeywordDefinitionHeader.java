@@ -11,6 +11,6 @@ public interface RobotKeywordDefinitionHeader extends PsiElement {
   RobotEndOfLine getEndOfLine();
 
   @NotNull
-  RobotKeywordDef getKeywordDef();
+  RobotKeywordTitle getKeywordTitle();
 
 }

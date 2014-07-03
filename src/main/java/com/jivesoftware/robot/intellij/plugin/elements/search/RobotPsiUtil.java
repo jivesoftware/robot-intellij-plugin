@@ -1,7 +1,6 @@
 package com.jivesoftware.robot.intellij.plugin.elements.search;
 
 import com.google.common.base.Optional;
-import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -16,8 +15,8 @@ import com.intellij.psi.stubs.StubIndexKey;
 import com.intellij.util.indexing.FileBasedIndex;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefFirstCharIndex;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefFirstThreeCharsIndex;
-import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefFirstTwoCharsIndex;
-import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefNormalizedNameIndex;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordTitleFirstTwoCharsIndex;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordTitleNormalizedNameIndex;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotFileType;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
@@ -134,11 +133,10 @@ public class RobotPsiUtil {
     //-----------------Helpers for finding RobotKeywordDef's---------------
     public static void findAllRobotKeywordDefsInRobotFiles(Project project, List<PsiElement> results) {
         final StubIndex STUB_INDEX = StubIndex.getInstance();
-        Collection<String> keys = STUB_INDEX.getAllKeys(RobotKeywordDefNormalizedNameIndex.KEY, project);
-        List<RobotKeywordDef> defs = Lists.newArrayList();
+        Collection<String> keys = STUB_INDEX.getAllKeys(RobotKeywordTitleNormalizedNameIndex.KEY, project);
         for (String key : keys) {
-            Collection<RobotKeywordDef> defsForKey = StubIndex.getElements(RobotKeywordDefNormalizedNameIndex.KEY, key,
-                    project, GlobalSearchScope.allScope(project), RobotKeywordDef.class);
+            Collection<RobotKeywordTitle> defsForKey = StubIndex.getElements(RobotKeywordTitleNormalizedNameIndex.KEY, key,
+                    project, GlobalSearchScope.allScope(project), RobotKeywordTitle.class);
             results.addAll(defsForKey);
         }
     }
@@ -147,13 +145,13 @@ public class RobotPsiUtil {
         final StubIndex STUB_INDEX = StubIndex.getInstance();
         final String normalizedStartsWith = RobotPsiUtil.normalizeKeywordForIndex(startsWith);
         String keyValue;
-        StubIndexKey<String, RobotKeywordDef> indexKey;
+        StubIndexKey<String, RobotKeywordTitle> indexKey;
         if (normalizedStartsWith.length() >= 3) {
             keyValue = normalizedStartsWith.substring(0, 3);
             indexKey = RobotKeywordDefFirstThreeCharsIndex.KEY;
         } else if (normalizedStartsWith.length() >= 2) {
             keyValue = normalizedStartsWith.substring(0, 2);
-            indexKey = RobotKeywordDefFirstTwoCharsIndex.KEY;
+            indexKey = RobotKeywordTitleFirstTwoCharsIndex.KEY;
         } else if (normalizedStartsWith.length() >= 1) {
             keyValue = normalizedStartsWith.substring(0, 1);
             indexKey = RobotKeywordDefFirstCharIndex.KEY;
@@ -163,26 +161,26 @@ public class RobotPsiUtil {
         }
         GlobalSearchScope robotFilesScope = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.projectScope(project), RobotFileType.INSTANCE);
         RobotKeywordDefProcessor processor = new RobotKeywordDefProcessor(results, SearchType.STARTS_WITH, startsWith);
-        STUB_INDEX.processElements(indexKey, keyValue, project, robotFilesScope, RobotKeywordDef.class, processor);
+        STUB_INDEX.processElements(indexKey, keyValue, project, robotFilesScope, RobotKeywordTitle.class, processor);
     }
 
     public static void findKeywordDefsByName(String name, Project project, List<PsiElement> results) {
         final StubIndex STUB_INDEX = StubIndex.getInstance();
         final String normalizedName = normalizeKeywordForIndex(name);
         RobotKeywordDefProcessor processor = new RobotKeywordDefProcessor(results, SearchType.EXACT_MATCH, name);
-        STUB_INDEX.processElements(RobotKeywordDefNormalizedNameIndex.KEY, normalizedName, project,
-                GlobalSearchScope.allScope(project), RobotKeywordDef.class, processor);
+        STUB_INDEX.processElements(RobotKeywordTitleNormalizedNameIndex.KEY, normalizedName, project,
+                GlobalSearchScope.allScope(project), RobotKeywordTitle.class, processor);
     }
 
-    public static Optional<RobotKeywordDef> findUniqueKeywordDefByName(String name, Project project) {
+    public static Optional<RobotKeywordTitle> findUniqueKeywordDefByName(String name, Project project) {
         final StubIndex STUB_INDEX = StubIndex.getInstance();
         final String normalizedName = normalizeKeywordForIndex(name);
         List<PsiElement> results = Lists.newArrayList();
         RobotKeywordDefProcessor processor = new RobotKeywordDefProcessor(results, SearchType.EXACT_MATCH, name);
-        STUB_INDEX.processElements(RobotKeywordDefNormalizedNameIndex.KEY, normalizedName, project,
-                GlobalSearchScope.allScope(project), RobotKeywordDef.class, processor);
+        STUB_INDEX.processElements(RobotKeywordTitleNormalizedNameIndex.KEY, normalizedName, project,
+                GlobalSearchScope.allScope(project), RobotKeywordTitle.class, processor);
         if (results.size() > 0) {
-            return Optional.of((RobotKeywordDef) results.get(0));
+            return Optional.of((RobotKeywordTitle) results.get(0));
         }
         return Optional.absent();
     }
@@ -205,7 +203,7 @@ public class RobotPsiUtil {
         return processor.getResults();
     }
 
-    public static void findKeywordDefsInFileByName(PsiFile psiFile, String name, List<RobotKeywordDef> keywordDefList) {
+    public static void findKeywordDefsInFileByName(PsiFile psiFile, String name, List<RobotKeywordTitle> keywordDefList) {
         if (!(psiFile instanceof RobotPsiFile)) {
             return;
         }
@@ -217,20 +215,20 @@ public class RobotPsiUtil {
         }
     }
 
-    public static void findKeywordDefsInKeywordsTable(RobotKeywordsTable table, String name, List<RobotKeywordDef> keywordDefs) {
+    public static void findKeywordDefsInKeywordsTable(RobotKeywordsTable table, String name, List<RobotKeywordTitle> keywordDefs) {
         List<RobotKeywordDefinition> definitions = table.getKeywordDefinitionList();
         for (RobotKeywordDefinition definition : definitions) {
             RobotKeywordDefinitionHeader header = definition.getKeywordDefinitionHeader();
-            RobotKeywordDef keywordDef = header.getKeywordDef();
+            RobotKeywordTitle keywordDef = header.getKeywordTitle();
             addKeywordDefIfMatching(keywordDef, name, keywordDefs);
         }
     }
 
-    public static void addKeywordDefIfMatching(RobotKeywordDef def, String name, List<RobotKeywordDef> keywordDefs) {
+    public static void addKeywordDefIfMatching(RobotKeywordTitle title, String name, List<RobotKeywordTitle> keywordDefs) {
         String nameAsMethod = robotKeywordToMethodFast(name);
-        String keywordAsMethod = robotKeywordToMethodFast(def.getName());
+        String keywordAsMethod = robotKeywordToMethodFast(title.getName());
         if (nameAsMethod.equalsIgnoreCase(keywordAsMethod)) {
-            keywordDefs.add(def);
+            keywordDefs.add(title);
         }
     }
 

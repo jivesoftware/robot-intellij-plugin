@@ -17,7 +17,6 @@
 package com.jivesoftware.robot.intellij.plugin.lang;
 
 import com.intellij.openapi.fileTypes.LanguageFileType;
-import com.intellij.psi.tree.IFileElementType;
 import com.jivesoftware.robot.intellij.plugin.icons.RobotIcons;
 import org.jetbrains.annotations.NotNull;
 

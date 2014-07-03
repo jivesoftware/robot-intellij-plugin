@@ -7,13 +7,13 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.TokenSet;
 import com.jivesoftware.robot.intellij.plugin.lexer.RobotScannerAdapter;
 import com.jivesoftware.robot.intellij.plugin.parser.RobotTypes;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDef;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordTitle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class RobotKeywordUsagesProvider implements FindUsagesProvider {
-  public static final TokenSet IDENTIFIERS = TokenSet.create(RobotTypes.ROBOT_KEYWORD_TOKEN, RobotTypes.ROBOT_KEYWORD_DEF_TOKEN);
+  public static final TokenSet IDENTIFIERS = TokenSet.create(RobotTypes.ROBOT_KEYWORD_TOKEN, RobotTypes.ROBOT_KEYWORD_TITLE_TOKEN);
 
   public static final TokenSet COMMENTS = TokenSet.EMPTY;
 
@@ -28,7 +28,7 @@ public class RobotKeywordUsagesProvider implements FindUsagesProvider {
 
   @Override
   public boolean canFindUsagesFor(@NotNull PsiElement psiElement) {
-    return psiElement instanceof RobotKeywordDef;
+    return psiElement instanceof RobotKeywordTitle;
   }
 
   @Nullable
@@ -40,7 +40,7 @@ public class RobotKeywordUsagesProvider implements FindUsagesProvider {
   @NotNull
   @Override
   public String getType(@NotNull PsiElement element) {
-    if (element instanceof RobotKeywordDef) {
+    if (element instanceof RobotKeywordTitle) {
       return "Robot Keyword Definition";
     } else if (element instanceof RobotKeyword) {
       return "Robot Keyword Usage";
@@ -51,7 +51,7 @@ public class RobotKeywordUsagesProvider implements FindUsagesProvider {
   @NotNull
   @Override
   public String getDescriptiveName(@NotNull PsiElement element) {
-    if (element instanceof RobotKeywordDef) {
+    if (element instanceof RobotKeywordTitle) {
       return element.getText();
     }
     return "";
@@ -60,7 +60,7 @@ public class RobotKeywordUsagesProvider implements FindUsagesProvider {
   @NotNull
   @Override
   public String getNodeText(@NotNull PsiElement element, boolean useFullName) {
-    if (element instanceof RobotKeywordDef) {
+    if (element instanceof RobotKeywordTitle) {
       return element.getText();
     }
     return "";

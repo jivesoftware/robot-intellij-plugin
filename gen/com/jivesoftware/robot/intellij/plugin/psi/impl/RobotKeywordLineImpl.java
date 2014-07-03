@@ -61,6 +61,12 @@ public class RobotKeywordLineImpl extends ASTWrapperPsiElement implements RobotK
 
   @Override
   @Nullable
+  public RobotReturnLine getReturnLine() {
+    return findChildByClass(RobotReturnLine.class);
+  }
+
+  @Override
+  @Nullable
   public RobotVariableAssignToKeyword getVariableAssignToKeyword() {
     return findChildByClass(RobotVariableAssignToKeyword.class);
   }

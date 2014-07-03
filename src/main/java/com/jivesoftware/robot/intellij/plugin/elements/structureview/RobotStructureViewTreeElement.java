@@ -58,8 +58,8 @@ public class RobotStructureViewTreeElement implements StructureViewTreeElement, 
         if (myElement instanceof RobotTestCase) {
             return new TestCasePresentationStructureView((RobotTestCase) myElement);
         }
-        if (myElement instanceof RobotKeywordDef) {
-            return new KeywordDefPresentationStructureView((RobotKeywordDef) myElement);
+        if (myElement instanceof RobotKeywordTitle) {
+            return new KeywordDefPresentationStructureView((RobotKeywordTitle) myElement);
         }
         if (myElement instanceof RobotKeywordsTable) {
             return ((RobotKeywordsTable) myElement).getPresentation();
@@ -143,7 +143,7 @@ public class RobotStructureViewTreeElement implements StructureViewTreeElement, 
 
         for (RobotKeywordDefinition robotKeywordDefinition: table.getKeywordDefinitionList()) {
             RobotKeywordDefinitionHeader header = robotKeywordDefinition.getKeywordDefinitionHeader();
-            children.add(new RobotStructureViewTreeElement(header.getKeywordDef()));
+            children.add(new RobotStructureViewTreeElement(header.getKeywordTitle()));
         }
 
         return children.toArray(new TreeElement[children.size()]);

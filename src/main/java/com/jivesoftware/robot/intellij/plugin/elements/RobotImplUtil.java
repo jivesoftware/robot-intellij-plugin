@@ -5,9 +5,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
 import com.intellij.util.IncorrectOperationException;
-import com.jivesoftware.robot.intellij.plugin.elements.presentations.KeywordDefPresentation;
+import com.jivesoftware.robot.intellij.plugin.elements.presentations.KeywordTitlePresentation;
 import com.jivesoftware.robot.intellij.plugin.elements.presentations.TestCasePresentation;
-import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordDefStub;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStub;
 import com.jivesoftware.robot.intellij.plugin.icons.RobotIcons;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
@@ -86,30 +86,30 @@ public class RobotImplUtil {
       return element.setName(name);
     }
 
-    /* Methods for RobotKeywordDef type */
+    /* Methods for RobotKeywordTitle type */
 
-    public static ItemPresentation getPresentation(final RobotKeywordDef element) {
-       return new KeywordDefPresentation(element);
+    public static ItemPresentation getPresentation(final RobotKeywordTitle element) {
+       return new KeywordTitlePresentation(element);
     }
 
     @Nullable
     @NonNls
-    public static String getName(RobotKeywordDef element) {
-        RobotKeywordDefStub stub = element.getStub();
+    public static String getName(RobotKeywordTitle element) {
+        RobotKeywordTitleStub stub = element.getStub();
         if (stub != null) {
             return stub.getName();
         }
         return element.getText();
     }
 
-    public static PsiElement setName(RobotKeywordDef element, @NonNls @NotNull String newName) throws com.intellij.util.IncorrectOperationException {
-        RobotKeywordDef replacement = RobotElementFactory.createKeywordDef(element.getProject(), newName);
+    public static PsiElement setName(RobotKeywordTitle element, @NonNls @NotNull String newName) throws com.intellij.util.IncorrectOperationException {
+        RobotKeywordTitle replacement = RobotElementFactory.createKeywordTitle(element.getProject(), newName);
         element.getParent().getNode().replaceChild(element.getNode(), replacement.getNode());
         return replacement;
     }
 
     @Nullable
-    public static PsiElement getNameIdentifier(RobotKeywordDef element) {
+    public static PsiElement getNameIdentifier(RobotKeywordTitle element) {
         return element;
     }
 
@@ -136,8 +136,8 @@ public class RobotImplUtil {
         };
     }
 
-    public static String toString(RobotKeywordDef element) {
-        return "RobotKeywordDef: " + getName(element);
+    public static String toString(RobotKeywordTitle element) {
+        return "RobotKeywordTitle: " + getName(element);
     }
 
     @Nullable

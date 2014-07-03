@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDef;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordTitle;
 
 import java.util.List;
 
@@ -79,7 +79,7 @@ public class RobotKeywordDefinitionFinder {
                     break;
                 case EXACT_MATCH:
                 default:
-                    Optional<RobotKeywordDef> result = RobotPsiUtil.findUniqueKeywordDefByName(searchTerm, project);
+                    Optional<RobotKeywordTitle> result = RobotPsiUtil.findUniqueKeywordDefByName(searchTerm, project);
                     if (result.isPresent()) {
                         results.add(result.get());
                     }

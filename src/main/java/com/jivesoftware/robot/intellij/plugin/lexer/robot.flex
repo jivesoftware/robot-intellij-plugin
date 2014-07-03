@@ -44,6 +44,7 @@ return;
   private boolean onDocsLine = false;
   private boolean onTagsLine = false;
   private boolean onTimeoutLine = false;
+  private boolean onReturnLine = false;
   private boolean keywordToLeft = false;
   private boolean startLine = true;
   private boolean firstRobotCell = true;
@@ -59,7 +60,7 @@ return;
         if (toReturn == ELLIPSES_TOKEN && onDocsLine) {
             yybegin(DOCS_SETTING);
         } else if (toReturn != ELLIPSES_TOKEN) {
-           keywordToLeft = onTagsLine = onTimeoutLine = onDocsLine = false;
+           keywordToLeft = onTagsLine = onTimeoutLine = onDocsLine = onReturnLine = false;
         }
         firstRobotCell = false;
     }
@@ -68,7 +69,7 @@ return;
         System.out.println(String.format("Bad syntax \"%s\" at line %d col %d", yytext(), yyline, yycolumn));
     }
     else if (toReturn == ROBOT_KEYWORD_TOKEN) {
-        if (keywordToLeft) {
+        if (keywordToLeft || onReturnLine) {
             return ROBOT_KEYWORD_ARG_TOKEN;
         }
         if (onTagsLine) {
@@ -103,6 +104,9 @@ return;
     }
     else if (toReturn == DOCUMENTATION_SETTING_TOKEN) {
         onDocsLine = true;
+    }
+    else if (toReturn == RETURN_SETTING_TOKEN) {
+        onReturnLine = true;
     }
     return toReturn;
   }
@@ -251,12 +255,12 @@ In = "IN"
      {Variable}          { return next(VARIABLE_TOKEN); }
      {ArrayVariable}     { return next(ARRAY_VARIABLE_TOKEN); }
      {TimeoutValue}      { if (onTimeoutLine) { return next(TIMEOUT_VALUE_TOKEN); } return next(ROBOT_KEYWORD_ARG_TOKEN); }
-     {ForceTags}         { return next(FORCE_TAGS_SETTING_KEYWORD_TOKEN);}
-     {ResourceSetting}     { return next(RESOURCE_SETTING_TOKEN); }
-     {TestSetupSetting}     { return next(TEST_SETUP_SETTING_TOKEN); }
-     {TestTeardownSetting}  { return next(TEST_TEARDOWN_SETTING_TOKEN); }
-     {SuiteSetupSetting}    { return next(SUITE_SETUP_SETTING_TOKEN); }
-     {SuiteTeardownSetting}    { return next(SUITE_TEARDOWN_SETTING_TOKEN); }
+     {ForceTags}         { if (startLine) {return next(FORCE_TAGS_SETTING_KEYWORD_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
+     {ResourceSetting}     { if (startLine) {return next(RESOURCE_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
+     {TestSetupSetting}     { if (startLine) {return next(TEST_SETUP_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
+     {TestTeardownSetting}  { if (startLine) {return next(TEST_TEARDOWN_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
+     {SuiteSetupSetting}    { if (startLine) {return next(SUITE_SETUP_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
+     {SuiteTeardownSetting}    { if (startLine) {return next(SUITE_TEARDOWN_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
      {RobotKeyword}      { return next(ROBOT_KEYWORD_TOKEN); }
      {KeywordArgument}   { return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }
@@ -347,7 +351,7 @@ In = "IN"
      {ArrayAssignment}   { return ARRAY_ASSIGNMENT_TOKEN; }
      {Variable}          { return next(VARIABLE_TOKEN); }
      {ArrayVariable}     { return next(ARRAY_VARIABLE_TOKEN); }
-     {RobotKeyword}      { if (startLine) { return next(ROBOT_KEYWORD_DEF_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
+     {RobotKeyword}      { if (startLine) { return next(ROBOT_KEYWORD_TITLE_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
      {KeywordArgument}   { if (startLine) { return next(BAD_SYNTAX_TOKEN); } return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }
      {WhiteSpace}        { return next(WHITESPACE_TOKEN); }

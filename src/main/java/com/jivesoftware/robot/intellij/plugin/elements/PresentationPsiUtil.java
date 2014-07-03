@@ -13,7 +13,7 @@ public class PresentationPsiUtil {
         return parameterText.replaceAll("\\s+", " ");
     }
 
-    public static String getRobotKeywordArgumentTest(RobotKeywordDef def) {
+    public static String getRobotKeywordArgumentTest(RobotKeywordTitle def) {
         PsiElement parent = def.getParent();
         if (!(parent instanceof RobotKeywordDefinitionHeader)) {
             return "";

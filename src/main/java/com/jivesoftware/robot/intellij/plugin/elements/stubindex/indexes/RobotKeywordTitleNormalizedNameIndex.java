@@ -8,8 +8,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Created by charles on 6/21/14.
  */
-public class RobotKeywordDefFirstThreeCharsIndex extends StringStubIndexExtension<RobotKeywordTitle> {
-    public static final StubIndexKey<String, RobotKeywordTitle> KEY = StubIndexKey.createIndexKey("Robot.keywordDef.startsWithFirstThreeChars");
+public class RobotKeywordTitleNormalizedNameIndex extends StringStubIndexExtension<RobotKeywordTitle> {
+    public static final StubIndexKey<String, RobotKeywordTitle> KEY = StubIndexKey.createIndexKey("Robot.keywordDef.normalizedName");
 
     @NotNull
     @Override

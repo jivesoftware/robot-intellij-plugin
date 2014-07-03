@@ -4,7 +4,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.rename.RenamePsiElementProcessor;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDef;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordTitle;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.Map;
 public class RenameRobotRobotKeywordProcessor extends RenamePsiElementProcessor {
     @Override
     public boolean canProcessElement(@NotNull PsiElement psiElement) {
-        return psiElement instanceof RobotKeywordDef;
+        return psiElement instanceof RobotKeywordTitle;
     }
 
     @Override
@@ -27,9 +27,9 @@ public class RenameRobotRobotKeywordProcessor extends RenamePsiElementProcessor 
         if (!canProcessElement(element)) {
             return;
         }
-        final RobotKeywordDef robotKeywordDef = (RobotKeywordDef) element;
-        final String name = robotKeywordDef.getName();
-        final List<RobotKeyword> robotKeywords = RobotPsiUtil.findKeywordUsagesByName(name, robotKeywordDef.getProject());
+        final RobotKeywordTitle robotKeywordTitle = (RobotKeywordTitle) element;
+        final String name = robotKeywordTitle.getName();
+        final List<RobotKeyword> robotKeywords = RobotPsiUtil.findKeywordUsagesByName(name, robotKeywordTitle.getProject());
         final String robotName = RobotPsiUtil.methodToRobotKeyword(newName);
         for (RobotKeyword robotKeyword : robotKeywords) {
             allRenames.put(robotKeyword, robotName);

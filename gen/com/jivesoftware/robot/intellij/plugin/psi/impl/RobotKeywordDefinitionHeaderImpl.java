@@ -31,8 +31,8 @@ public class RobotKeywordDefinitionHeaderImpl extends ASTWrapperPsiElement imple
 
   @Override
   @NotNull
-  public RobotKeywordDef getKeywordDef() {
-    return findNotNullChildByClass(RobotKeywordDef.class);
+  public RobotKeywordTitle getKeywordTitle() {
+    return findNotNullChildByClass(RobotKeywordTitle.class);
   }
 
 }

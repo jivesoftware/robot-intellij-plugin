@@ -4,8 +4,10 @@ import com.intellij.ide.structureView.StructureViewModel;
 import com.intellij.ide.structureView.StructureViewTreeElement;
 import com.intellij.ide.structureView.TextEditorBasedStructureViewModel;
 import com.intellij.psi.PsiFile;
-import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
-import com.jivesoftware.robot.intellij.plugin.psi.*;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordTitle;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordsTable;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotTestCase;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotTestCasesTable;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -27,7 +29,7 @@ public class RobotStructureViewModel extends TextEditorBasedStructureViewModel i
     @Override
     @NotNull
     public Class[] getSuitableClasses() {
-        return new Class[] {RobotTestCasesTable.class, RobotKeywordsTable.class, RobotKeywordDef.class, RobotTestCase.class};
+        return new Class[] {RobotTestCasesTable.class, RobotKeywordsTable.class, RobotKeywordTitle.class, RobotTestCase.class};
     }
 
     @Override

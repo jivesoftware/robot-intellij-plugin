@@ -16,10 +16,10 @@
 
   psiImplUtilClass="com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil"
   implements("KEYWORD")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
-  implements("KEYWORD_DEF")=["com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
-                             "com.intellij.psi.StubBasedPsiElement<com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordDefStub>"]
-  extends("KEYWORD_DEF")="com.intellij.extapi.psi.StubBasedPsiElementBase<com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordDefStub>"
-  elementTypeClass("KEYWORD_DEF")="com.jivesoftware.robot.intellij.plugin.parser.RobotKeywordDefElementType"
+  implements("KEYWORD_TITLE")=["com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
+                             "com.intellij.psi.StubBasedPsiElement<com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStub>"]
+  extends("KEYWORD_TITLE")="com.intellij.extapi.psi.StubBasedPsiElementBase<com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStub>"
+  elementTypeClass("KEYWORD_TITLE")="com.jivesoftware.robot.intellij.plugin.parser.RobotKeywordTitleElementType"
   implements("TEST_CASE")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
 }
 
@@ -33,7 +33,7 @@ SETTINGS_TABLE ::= SETTINGS_TABLE_HEADING SETTINGS_LINE*
 
 SETTINGS_TABLE_HEADING ::= SETTINGS_TABLE_HEADING_TOKEN END_OF_LINE (NEWLINE_TOKEN | <<eof>>)
 
-SETTINGS_LINE ::= COLUMN_SEP_TOKEN* SETTING END_OF_LINE (NEWLINE_TOKEN | <<eof>>) |
+SETTINGS_LINE ::= WHITESPACE_TOKEN? SETTING END_OF_LINE (NEWLINE_TOKEN | <<eof>>) |
                   EMPTY_LINE |
                   ELLIPSES_LINE_SETTINGS
 
@@ -98,9 +98,9 @@ KEYWORDS_TABLE ::= KEYWORDS_TABLE_HEADING (EMPTY_LINE | KEYWORD_DEFINITION)* { m
 
 KEYWORDS_TABLE_HEADING ::= KEYWORDS_TABLE_HEADING_TOKEN END_OF_LINE (NEWLINE_TOKEN | <<eof>>)
 
-KEYWORD_DEFINITION ::= KEYWORD_DEFINITION_HEADER KEYWORD_SETTINGS KEYWORD_LINE* RETURN_LINE?
+KEYWORD_DEFINITION ::= KEYWORD_DEFINITION_HEADER KEYWORD_SETTINGS KEYWORD_LINE*
 
-KEYWORD_DEFINITION_HEADER ::= KEYWORD_DEF END_OF_LINE (NEWLINE_TOKEN | <<eof>>)
+KEYWORD_DEFINITION_HEADER ::= KEYWORD_TITLE END_OF_LINE (NEWLINE_TOKEN | <<eof>>)
 
 KEYWORD_SETTINGS ::= KEYWORD_SETTING_LINE*
 KEYWORD_SETTING_LINE ::= COLUMN_SEP_TOKEN KEYWORD_SETTING END_OF_LINE (NEWLINE_TOKEN | <<eof>>) | EMPTY_LINE
@@ -110,6 +110,7 @@ ARGUMENTS_SETTING ::= ARGUMENTS_SETTING_TOKEN (COLUMN_SEP_TOKEN ARGUMENT_DEF)*
 ARGUMENT_DEF ::= VARIABLE_TOKEN | ARRAY_VARIABLE_TOKEN | ASSIGNMENT_TOKEN WHITESPACE_TOKEN? KEYWORD_ARG | ARRAY_ASSIGNMENT_TOKEN WHITESPACE_TOKEN? KEYWORD_ARG
 
 KEYWORD_LINE ::= COLUMN_SEP_TOKEN ( KEYWORD_INVOCATION_TEST | VARIABLE_ASSIGN_TO_KEYWORD ) END_OF_LINE (NEWLINE_TOKEN | <<eof>>)  |
+                 RETURN_LINE |
                  EMPTY_LINE |
                  ELLIPSES_LINE_TEST |
                  FOR_LOOP_IN_RANGE  |
@@ -148,8 +149,9 @@ VARIABLE_ASSIGN_TO_KEYWORD ::= ( MULTI_ASSIGNMENT | SINGLE_ASSIGNMENT ) ELLIPSES
 //Same rule, but any additional lines due to line continuation (...) must be indented, for FOR loops.
 INDENTED_VARIABLE_ASSIGN_TO_KEYWORD ::= ( MULTI_ASSIGNMENT | SINGLE_ASSIGNMENT ) INDENTED_ELLIPSES_FOR_TEST_TABLE* COLUMN_SEP_TOKEN  INDENTED_KEYWORD_INVOCATION_TEST
 SINGLE_ASSIGNMENT ::= VARIABLE | ASSIGNMENT
-MULTI_ASSIGNMENT ::=  VARIABLE (COLUMN_SEP_TOKEN  VARIABLE)+
-                    | VARIABLE (COLUMN_SEP_TOKEN VARIABLE)* COLUMN_SEP_TOKEN ASSIGNMENT
+MULTI_ASSIGNMENT ::= VARIABLE (COLUMN_SEP_TOKEN VARIABLE)* COLUMN_SEP_TOKEN ASSIGNMENT
+                   | VARIABLE (COLUMN_SEP_TOKEN  VARIABLE)+
+
 // An argument to a keyword can be a varible, a literal, an empty cell (\), or an integer.
 KEYWORD_ARG ::= VARIABLE | ROBOT_KEYWORD_ARG_TOKEN | EMPTY_CELL_TOKEN | INTEGER_TOKEN
 // Tags are tokenized specially by being after the [tags] setting or "Force Tags" setting.
@@ -184,6 +186,6 @@ FOR_LOOP_IN ::= COLUMN_SEP_TOKEN  FOR_VAR_IN  FOR_LOOP_VALUE_LIST
 
 KEYWORD ::= ROBOT_KEYWORD_TOKEN { methods=[getName setName getNameIdentifier getReference getReferences handleElementRename]}
 
-KEYWORD_DEF ::= ROBOT_KEYWORD_DEF_TOKEN { methods=[getName setName getNameIdentifier getPresentation toString] }
+KEYWORD_TITLE ::= ROBOT_KEYWORD_TITLE_TOKEN { methods=[getName setName getNameIdentifier getPresentation toString] }
 
 ERROR ::= BAD_SYNTAX_TOKEN
