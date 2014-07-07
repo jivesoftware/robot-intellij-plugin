@@ -33,6 +33,11 @@ public class BasicTableTests extends RobotParserTest {
                     "  Foo Keyword  123  456  ${var}\n" +
                     "  ${foo}=  Foo Keyword Abc  ${baz}\n";
 
+    private static final String SETTINGS_TABLE_WITH_JUNK =
+            "*** Settings ***  FOO FOO  BAR BAR  ${baz} ${raz}\n" +
+                    "Suite Setup     Foo Bar\n" +
+                    "Suite Teardown  Bar Baz\n";
+
     private static final String ALL_TABLES = SETTINGS_TABLE + KEYWORDS_TABLE + VARIABLES_TABLE + TEST_CASES_TABLE;
 
     @Test
@@ -61,7 +66,7 @@ public class BasicTableTests extends RobotParserTest {
     public void testTestCasesTable() {
         RobotPsiFile file = doTestParseSucceeds(TEST_CASES_TABLE);
         assertFileHasPsiElements(file, RobotTestCasesTable.class, 1);
-        assertFileHasPsiElements(file, RobotTestcaseLine.class, 2);
+        assertFileHasPsiElements(file, RobotTestcaseLine.class, 3);
         assertFileHasPsiElements(file, RobotKeyword.class, 2);
     }
 
@@ -72,5 +77,12 @@ public class BasicTableTests extends RobotParserTest {
         assertFileHasPsiElements(file, RobotKeywordsTable.class, 1);
         assertFileHasPsiElements(file, RobotVariablesTable.class, 1);
         assertFileHasPsiElements(file, RobotTestCasesTable.class, 1);
+    }
+
+    @Test
+    public void testSettingsTableWithJunk() {
+        RobotPsiFile file = doTestParseSucceeds(SETTINGS_TABLE_WITH_JUNK);
+        assertFileHasPsiElements(file, RobotSettingsTable.class, 1);
+        assertFileHasPsiElements(file, RobotTestSetupSetting.class, 2);
     }
 }

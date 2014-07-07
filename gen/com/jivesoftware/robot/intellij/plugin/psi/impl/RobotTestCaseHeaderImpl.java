@@ -23,16 +23,4 @@ public class RobotTestCaseHeaderImpl extends ASTWrapperPsiElement implements Rob
     else super.accept(visitor);
   }
 
-  @Override
-  @Nullable
-  public RobotEllipsesForTestTable getEllipsesForTestTable() {
-    return findChildByClass(RobotEllipsesForTestTable.class);
-  }
-
-  @Override
-  @NotNull
-  public RobotEndOfLine getEndOfLine() {
-    return findNotNullChildByClass(RobotEndOfLine.class);
-  }
-
 }

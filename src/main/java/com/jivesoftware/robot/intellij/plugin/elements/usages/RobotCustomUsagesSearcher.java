@@ -61,7 +61,6 @@ public class RobotCustomUsagesSearcher extends CustomUsageSearcher {
       this.methodToFindUsages = psiMethod;
     }
 
-
     @Override
     public void run() {
       usages = Lists.newArrayList();

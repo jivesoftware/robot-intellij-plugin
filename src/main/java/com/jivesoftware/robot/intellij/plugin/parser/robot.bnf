@@ -15,11 +15,16 @@
   tokenTypeClass="com.jivesoftware.robot.intellij.plugin.lexer.RobotToken"
 
   psiImplUtilClass="com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil"
-  implements("KEYWORD")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
+  implements("KEYWORD")=["com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
+                         "com.intellij.psi.StubBasedPsiElement<com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordStub>"]
+  extends("KEYWORD")="com.intellij.extapi.psi.StubBasedPsiElementBase<com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordStub>"
+  elementTypeClass("KEYWORD")="com.jivesoftware.robot.intellij.plugin.parser.RobotKeywordElementType"
+
   implements("KEYWORD_TITLE")=["com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
                              "com.intellij.psi.StubBasedPsiElement<com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStub>"]
   extends("KEYWORD_TITLE")="com.intellij.extapi.psi.StubBasedPsiElementBase<com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStub>"
   elementTypeClass("KEYWORD_TITLE")="com.jivesoftware.robot.intellij.plugin.parser.RobotKeywordTitleElementType"
+
   implements("TEST_CASE")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
 }
 
@@ -69,7 +74,7 @@ TEST_CASES_TABLE_HEADING ::= TEST_CASES_TABLE_HEADING_TOKEN END_OF_LINE (NEWLINE
 
 TEST_CASE ::= TEST_CASE_HEADER TESTCASE_LINE+  { methods=[getName setName getNameIdentifier getPresentation]}
 
-TEST_CASE_HEADER ::= TEST_CASE_HEADER_TOKEN END_OF_LINE (ELLIPSES_FOR_TEST_TABLE? NEWLINE_TOKEN | <<eof>>)
+TEST_CASE_HEADER ::= TEST_CASE_HEADER_TOKEN
 
 TEST_SETTING_LINE ::= COLUMN_SEP_TOKEN  TEST_SETTING END_OF_LINE (NEWLINE_TOKEN | <<eof>>)
 

@@ -37,7 +37,7 @@ public interface RobotTypes {
   IElementType INDENTED_KEYWORD_INVOCATION_TEST = new RobotElementType("INDENTED_KEYWORD_INVOCATION_TEST");
   IElementType INDENTED_KEYWORD_LINE = new RobotElementType("INDENTED_KEYWORD_LINE");
   IElementType INDENTED_VARIABLE_ASSIGN_TO_KEYWORD = new RobotElementType("INDENTED_VARIABLE_ASSIGN_TO_KEYWORD");
-  IElementType KEYWORD = new RobotElementType("KEYWORD");
+  IElementType KEYWORD = new RobotKeywordElementType("KEYWORD");
   IElementType KEYWORDS_TABLE = new RobotElementType("KEYWORDS_TABLE");
   IElementType KEYWORDS_TABLE_HEADING = new RobotElementType("KEYWORDS_TABLE_HEADING");
   IElementType KEYWORD_ARG = new RobotElementType("KEYWORD_ARG");

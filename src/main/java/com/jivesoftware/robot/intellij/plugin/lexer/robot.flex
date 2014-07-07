@@ -199,11 +199,12 @@ ArgumentsMeta = "[" " "? [Aa] " "? [Rr] " "? [Gg] " "? [Uu] " "? [Mm] " "? [Ee] 
 ReturnMeta = "[" " "? [Rr] " "? [Ee] " "? [Tt] " "? [Uu] " "? [Rr] " "? [Nn] " "? "]"
 
 /* Table headings */
+Junk = {InputCharacter}*
 SettingsTableHeading  = "*"+ " "? (([Ss] " "? [Ee] " "? [Tt] " "? [Tt] " "? [Ii] " "? [Nn] " "? [Gg] " "? [Ss]?)
-                                 | ([Mm] " "? [Ee] " "? [Tt] " "? [Aa] " "? [Dd] " "? [Aa] " "? [Tt] " "? [Aa])) " "? ("*")*
-VariablesTableHeading = "*"+ " "? ([Vv] " "? [Aa] " "? [Rr] " "? [Ii] " "? [Aa] " "? [Bb] " "? [Ll] " "? [Ee] " "? [Ss]?) " "? "*"*
-TestCasesTableHeading = "*"+ " "? [Tt] " "? [Ee] " "? [Ss] " "? [Tt] " "? [Cc] " "? [Aa] " "? [Ss] " "? [Ee] " "? [Ss]? " "? "*"*
-KeywordsTableHeading = "*"+ " "? ([Uu] " "? [Ss] " "? [Ee] " "? [Rr] " "?)? [Kk] " "? [Ee] " "? [Yy] " "? [Ww] " "? [Oo] " "? [Rr] " "? [Dd] " "? [Ss]? {WhiteSpace}? "*"*
+                                 | ([Mm] " "? [Ee] " "? [Tt] " "? [Aa] " "? [Dd] " "? [Aa] " "? [Tt] " "? [Aa])) " "? ("*")* {Junk}
+VariablesTableHeading = "*"+ " "? ([Vv] " "? [Aa] " "? [Rr] " "? [Ii] " "? [Aa] " "? [Bb] " "? [Ll] " "? [Ee] " "? [Ss]?) " "? "*"* {Junk}
+TestCasesTableHeading = "*"+ " "? [Tt] " "? [Ee] " "? [Ss] " "? [Tt] " "? [Cc] " "? [Aa] " "? [Ss] " "? [Ee] " "? [Ss]? " "? "*"* {Junk}
+KeywordsTableHeading = "*"+ " "? ([Uu] " "? [Ss] " "? [Ee] " "? [Rr] " "?)? [Kk] " "? [Ee] " "? [Yy] " "? [Ww] " "? [Oo] " "? [Rr] " "? [Dd] " "? [Ss]? {WhiteSpace}? "*"* {Junk}
 
 /*For loops*/
 ForLoopStart = ":FOR"
@@ -296,12 +297,12 @@ In = "IN"
      {KeywordsTableHeading}      { yybegin(KEYWORDS); return next(KEYWORDS_TABLE_HEADING_TOKEN); }
      {TestCasesTableHeading}      { return next(TEST_CASES_TABLE_HEADING_TOKEN); }
      {Ellipses}          { return next(ELLIPSES_TOKEN); }
-     {TagsMeta}          { return next(TAGS_SETTING_TOKEN); }
-     {DocsMeta}          { previous_state = yystate(); yybegin(DOCS_SETTING); return next(DOCUMENTATION_SETTING_TOKEN); }
-     {SetupMeta}         { return next(SETUP_SETTING_TOKEN); }
-     {TeardownMeta}      { return next(TEARDOWN_SETTING_TOKEN); }
-     {TimeoutMeta}       { return next(TIMEOUT_SETTING_TOKEN); }
-     {TemplateMeta}      { return next(TEMPLATE_SETTING_TOKEN); }
+     {TagsMeta}          { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return next(TAGS_SETTING_TOKEN); }
+     {DocsMeta}          { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } previous_state = yystate(); yybegin(DOCS_SETTING); return next(DOCUMENTATION_SETTING_TOKEN); }
+     {SetupMeta}         { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return next(SETUP_SETTING_TOKEN); }
+     {TeardownMeta}      { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return next(TEARDOWN_SETTING_TOKEN); }
+     {TimeoutMeta}       { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return next(TIMEOUT_SETTING_TOKEN); }
+     {TemplateMeta}      { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return next(TEMPLATE_SETTING_TOKEN); }
      {EmptyCell}                  { return next(EMPTY_CELL_TOKEN); }
      {ForLoopStart}               { return next(FOR_LOOP_START_TOKEN); }
      {InRange}                    { return next(IN_RANGE_TOKEN); }

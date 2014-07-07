@@ -2215,46 +2215,15 @@ public class RobotParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // TEST_CASE_HEADER_TOKEN END_OF_LINE (ELLIPSES_FOR_TEST_TABLE? NEWLINE_TOKEN | <<eof>>)
+  // TEST_CASE_HEADER_TOKEN
   public static boolean TEST_CASE_HEADER(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "TEST_CASE_HEADER")) return false;
     if (!nextTokenIs(builder_, TEST_CASE_HEADER_TOKEN)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = consumeToken(builder_, TEST_CASE_HEADER_TOKEN);
-    result_ = result_ && END_OF_LINE(builder_, level_ + 1);
-    result_ = result_ && TEST_CASE_HEADER_2(builder_, level_ + 1);
     exit_section_(builder_, marker_, TEST_CASE_HEADER, result_);
     return result_;
-  }
-
-  // ELLIPSES_FOR_TEST_TABLE? NEWLINE_TOKEN | <<eof>>
-  private static boolean TEST_CASE_HEADER_2(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "TEST_CASE_HEADER_2")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = TEST_CASE_HEADER_2_0(builder_, level_ + 1);
-    if (!result_) result_ = eof(builder_, level_ + 1);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // ELLIPSES_FOR_TEST_TABLE? NEWLINE_TOKEN
-  private static boolean TEST_CASE_HEADER_2_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "TEST_CASE_HEADER_2_0")) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = TEST_CASE_HEADER_2_0_0(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, NEWLINE_TOKEN);
-    exit_section_(builder_, marker_, null, result_);
-    return result_;
-  }
-
-  // ELLIPSES_FOR_TEST_TABLE?
-  private static boolean TEST_CASE_HEADER_2_0_0(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "TEST_CASE_HEADER_2_0_0")) return false;
-    ELLIPSES_FOR_TEST_TABLE(builder_, level_ + 1);
-    return true;
   }
 
   /* ********************************************************** */

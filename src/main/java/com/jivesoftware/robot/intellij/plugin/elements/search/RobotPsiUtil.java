@@ -1,6 +1,7 @@
 package com.jivesoftware.robot.intellij.plugin.elements.search;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -13,10 +14,7 @@ import com.intellij.psi.search.PsiSearchHelper;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.stubs.StubIndexKey;
 import com.intellij.util.indexing.FileBasedIndex;
-import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefFirstCharIndex;
-import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefFirstThreeCharsIndex;
-import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordTitleFirstTwoCharsIndex;
-import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordTitleNormalizedNameIndex;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.*;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotFileType;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
@@ -186,133 +184,21 @@ public class RobotPsiUtil {
     }
 
     //--------------Helpers to find Keyword usages------------
-    public static List<RobotKeyword> findKeywordUsagesByName(String name, Project project) {
-        GlobalSearchScope robotFileScope = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.projectScope(project), RobotFileType.INSTANCE);
-        FindRobotKeywordsUsagesByNameProcessor processor = new FindRobotKeywordsUsagesByNameProcessor(name, true);
-        PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWord(name, robotFileScope, processor, false);
-
-        return processor.getResults();
+    public static List<RobotKeyword> findKeywordUsagesByName(String keywordName, Project project) {
+        final String robotKeywordAsMethod = RobotPsiUtil.robotKeywordToMethodFast(keywordName);
+        return findKeywordUsagesByJavaMethodName(robotKeywordAsMethod, project);
     }
 
     public static List<RobotKeyword> findKeywordUsagesByJavaMethodName(String javaMethodName, Project project) {
+        Preconditions.checkArgument(!javaMethodName.contains(" "), "RobotPsiUtil: A Java method name can't contain space!");
+        final String normalizedKeywordName = javaMethodName.toLowerCase();
+        final StubIndex STUB_INDEX = StubIndex.getInstance();
         GlobalSearchScope robotFileScope = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.projectScope(project), RobotFileType.INSTANCE);
-        final String robotName = methodToRobotKeyword(javaMethodName);
-        FindRobotKeywordsUsagesByNameProcessor processor = new FindRobotKeywordsUsagesByNameProcessor(robotName, true);
-        PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWord(robotName, robotFileScope, processor, false);
+        RobotKeywordProcessor processor = new RobotKeywordProcessor(normalizedKeywordName, true);
+        STUB_INDEX.processElements(RobotKeywordNormalizedNameIndex.KEY, normalizedKeywordName, project, robotFileScope,
+                RobotKeyword.class, processor);
 
         return processor.getResults();
-    }
-
-    public static void findKeywordDefsInFileByName(PsiFile psiFile, String name, List<RobotKeywordTitle> keywordDefList) {
-        if (!(psiFile instanceof RobotPsiFile)) {
-            return;
-        }
-        RobotTable[] tables = ((RobotPsiFile) psiFile).findChildrenByClass(RobotTable.class);
-        for (RobotTable table : tables) {
-            if (table.getKeywordsTable() != null) {
-                findKeywordDefsInKeywordsTable(table.getKeywordsTable(), name, keywordDefList);
-            }
-        }
-    }
-
-    public static void findKeywordDefsInKeywordsTable(RobotKeywordsTable table, String name, List<RobotKeywordTitle> keywordDefs) {
-        List<RobotKeywordDefinition> definitions = table.getKeywordDefinitionList();
-        for (RobotKeywordDefinition definition : definitions) {
-            RobotKeywordDefinitionHeader header = definition.getKeywordDefinitionHeader();
-            RobotKeywordTitle keywordDef = header.getKeywordTitle();
-            addKeywordDefIfMatching(keywordDef, name, keywordDefs);
-        }
-    }
-
-    public static void addKeywordDefIfMatching(RobotKeywordTitle title, String name, List<RobotKeywordTitle> keywordDefs) {
-        String nameAsMethod = robotKeywordToMethodFast(name);
-        String keywordAsMethod = robotKeywordToMethodFast(title.getName());
-        if (nameAsMethod.equalsIgnoreCase(keywordAsMethod)) {
-            keywordDefs.add(title);
-        }
-    }
-
-    public static void findKeywordUsagesInFileByName(PsiFile psiFile, String name, List<RobotKeyword> keywordList) {
-        if (!(psiFile instanceof RobotPsiFile)) {
-            return;
-        }
-        RobotTable[] tables = ((RobotPsiFile) psiFile).findChildrenByClass(RobotTable.class);
-        for (RobotTable RobotTable : tables) {
-            RobotTestCasesTable testCasesTable = RobotTable.getTestCasesTable();
-            if (testCasesTable != null) {
-                findKeywordUsagesInTestCasesTable(testCasesTable, name, keywordList);
-            }
-            RobotKeywordsTable robotKeywordsTable = RobotTable.getKeywordsTable();
-            if (robotKeywordsTable != null) {
-                findKeywordUsagesInKeywordsTable(robotKeywordsTable, name, keywordList);
-            }
-            RobotSettingsTable robotSettingsTable = RobotTable.getSettingsTable();
-            if (robotSettingsTable != null) {
-                findKeywordUsagesInSettingsTable(robotSettingsTable, name, keywordList);
-            }
-        }
-    }
-
-    public static void findKeywordUsagesInKeywordsTable(RobotKeywordsTable keywordsTable, String name, List<RobotKeyword> keywordList) {
-        List<RobotKeywordDefinition> robotKeywordDefinitionList = keywordsTable.getKeywordDefinitionList();
-        for (RobotKeywordDefinition robotKeywordDefinition : robotKeywordDefinitionList) {
-            List<RobotKeywordLine> lines = robotKeywordDefinition.getKeywordLineList();
-            for (RobotKeywordLine line : lines) {
-                RobotKeywordInvocationTest invocation = line.getKeywordInvocationTest();
-                RobotVariableAssignToKeyword assignToKeyword = line.getVariableAssignToKeyword();
-                if (invocation != null) {
-                    RobotKeyword keyword = invocation.getKeyword();
-                    addKeywordIfMatch(name, keyword, keywordList);
-                } else if (assignToKeyword != null) {
-                    RobotKeyword keyword = assignToKeyword.getKeywordInvocationTest().getKeyword();
-                    addKeywordIfMatch(name, keyword, keywordList);
-                }
-            }
-        }
-    }
-
-    public static void findKeywordUsagesInSettingsTable(RobotSettingsTable settingsTable, String name, List<RobotKeyword> keywordList) {
-        List<RobotSettingsLine> lines = settingsTable.getSettingsLineList();
-        for (RobotSettingsLine line : lines) {
-            if (line.getSetting() != null) {
-                RobotSetting setting = line.getSetting();
-                if (setting.getTestSetupSetting() != null) {
-                    RobotTestSetupSetting setupSetting = setting.getTestSetupSetting();
-                    RobotKeyword keyword = setupSetting.getKeywordInvocationSettings().getKeyword();
-                    addKeywordIfMatch(name, keyword, keywordList);
-                }
-            }
-        }
-    }
-
-    public static void findKeywordUsagesInTestCasesTable(RobotTestCasesTable testCasesTable, String name, List<RobotKeyword> keywordList) {
-        List<RobotTestCase> testCases = testCasesTable.getTestCaseList();
-        for (RobotTestCase testCase : testCases) {
-            findKeywordUsagesInTestCase(testCase, name, keywordList);
-        }
-    }
-
-    public static void findKeywordUsagesInTestCase(RobotTestCase testCase, String name, List<RobotKeyword> keywordList) {
-        for (RobotTestcaseLine line : testCase.getTestcaseLineList()) {
-            RobotKeywordInvocationTest invocation = line.getKeywordInvocationTest();
-            RobotVariableAssignToKeyword assignToKeyword = line.getVariableAssignToKeyword();
-            if (invocation != null) {
-                RobotKeyword keyword = invocation.getKeyword();
-                addKeywordIfMatch(name, keyword, keywordList);
-            } else if (assignToKeyword != null) {
-                RobotKeywordInvocationTest assignInvocation = assignToKeyword.getKeywordInvocationTest();
-                RobotKeyword keyword = assignInvocation.getKeyword();
-                addKeywordIfMatch(name, keyword, keywordList);
-            }
-        }
-    }
-
-    private static void addKeywordIfMatch(String name, RobotKeyword keyword, List<RobotKeyword> keywordList) {
-        String nameAsMethod = robotKeywordToMethodFast(name);
-        String keywordAsMethod = robotKeywordToMethodFast(keyword.getName());
-        if (nameAsMethod.equalsIgnoreCase(keywordAsMethod)) {
-            keywordList.add(keyword);
-        }
     }
 
     //-----------------Context-sensitive finders-------------------

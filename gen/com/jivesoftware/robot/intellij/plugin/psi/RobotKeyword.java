@@ -5,9 +5,11 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement;
+import com.intellij.psi.StubBasedPsiElement;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordStub;
 import com.intellij.psi.PsiReference;
 
-public interface RobotKeyword extends RobotNamedElement {
+public interface RobotKeyword extends RobotNamedElement, StubBasedPsiElement<RobotKeywordStub> {
 
   @Nullable
   @NonNls

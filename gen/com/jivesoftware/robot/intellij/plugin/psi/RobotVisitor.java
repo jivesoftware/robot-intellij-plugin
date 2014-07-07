@@ -6,6 +6,7 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiElement;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement;
 import com.intellij.psi.StubBasedPsiElement;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordStub;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStub;
 
 public class RobotVisitor extends PsiElementVisitor {
@@ -124,6 +125,7 @@ public class RobotVisitor extends PsiElementVisitor {
 
   public void visitKeyword(@NotNull RobotKeyword o) {
     visitNamedElement(o);
+    // visitKeywordStub>(o);
   }
 
   public void visitKeywordsTable(@NotNull RobotKeywordsTable o) {

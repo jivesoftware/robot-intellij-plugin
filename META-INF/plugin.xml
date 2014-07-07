@@ -257,6 +257,8 @@
         <!-- Psi Stub indexes-->
         <stubElementTypeHolder class="com.jivesoftware.robot.intellij.plugin.parser.RobotTypes"/>
         <stubIndex
+                implementation="com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordNormalizedNameIndex"/>
+        <stubIndex
                 implementation="com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordTitleNormalizedNameIndex"/>
         <stubIndex
                 implementation="com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefFirstCharIndex"/>
