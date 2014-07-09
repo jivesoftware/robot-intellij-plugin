@@ -200,13 +200,13 @@ ReturnMeta = "[" " "? [Rr] " "? [Ee] " "? [Tt] " "? [Uu] " "? [Rr] " "? [Nn] " "
 
 /* Table headings */
 Junk = {InputCharacter}*
-SettingsTableHeading  = "*"+ " "? (([Ss] " "? [Ee] " "? [Tt] " "? [Tt] " "? [Ii] " "? [Nn] " "? [Gg] " "? [Ss]?)
+SettingsTableHeading  = " "? "*"+ " "? (([Ss] " "? [Ee] " "? [Tt] " "? [Tt] " "? [Ii] " "? [Nn] " "? [Gg] " "? [Ss]?)
                                  | ([Mm] " "? [Ee] " "? [Tt] " "? [Aa] " "? [Dd] " "? [Aa] " "? [Tt] " "? [Aa])) " "? ("*")* {Junk}
-VariablesTableHeading = "*"+ " "? ([Vv] " "? [Aa] " "? [Rr] " "? [Ii] " "? [Aa] " "? [Bb] " "? [Ll] " "? [Ee] " "? [Ss]?) " "? "*"* {Junk}
-TestCasesTableHeading = "*"+ " "? [Tt] " "? [Ee] " "? [Ss] " "? [Tt] " "? [Cc] " "? [Aa] " "? [Ss] " "? [Ee] " "? [Ss]? " "? "*"* {Junk}
-KeywordsTableHeading = "*"+ " "? ([Uu] " "? [Ss] " "? [Ee] " "? [Rr] " "?)? [Kk] " "? [Ee] " "? [Yy] " "? [Ww] " "? [Oo] " "? [Rr] " "? [Dd] " "? [Ss]? {WhiteSpace}? "*"* {Junk}
+VariablesTableHeading = " "? "*"+ " "? ([Vv] " "? [Aa] " "? [Rr] " "? [Ii] " "? [Aa] " "? [Bb] " "? [Ll] " "? [Ee] " "? [Ss]?) " "? "*"* {Junk}
+TestCasesTableHeading = " "? "*"+ " "? [Tt] " "? [Ee] " "? [Ss] " "? [Tt] " "? [Cc] " "? [Aa] " "? [Ss] " "? [Ee] " "? [Ss]? " "? "*"* {Junk}
+KeywordsTableHeading = " "? "*"+ " "? ([Uu] " "? [Ss] " "? [Ee] " "? [Rr] " "?)? [Kk] " "? [Ee] " "? [Yy] " "? [Ww] " "? [Oo] " "? [Rr] " "? [Dd] " "? [Ss]? {WhiteSpace}? "*"* {Junk}
 
-/*For loops*/
+/* For loops */
 ForLoopStart = ":FOR"
 InRange = "IN RANGE"
 In = "IN"
@@ -227,21 +227,12 @@ In = "IN"
 
 <YYINITIAL> {
     /* identifiers */
-    {EndOfLine}             { return newLine(); }
+    {EndOfLine}                  { return newLine(); }
     {SettingsTableHeading}       { yybegin(SETTINGS); return next(SETTINGS_TABLE_HEADING_TOKEN); }
     {VariablesTableHeading}      { yybegin(VARIABLES); return next(VARIABLES_TABLE_HEADING_TOKEN); }
     {TestCasesTableHeading}      { yybegin(TEST_CASES); return next(TEST_CASES_TABLE_HEADING_TOKEN); }
     {KeywordsTableHeading}       { yybegin(KEYWORDS); return next(KEYWORDS_TABLE_HEADING_TOKEN); }
-    {Comment}                    { return next(COMMENT_TOKEN); }
-    {ColumnSep}                  { return next(COLUMN_SEP_TOKEN); }
-    {WhiteSpace}                 { return next(WHITESPACE_TOKEN); }
-    {EmptyCell}                  { return next(EMPTY_CELL_TOKEN); }
-    {ForLoopStart}               { return next(FOR_LOOP_START_TOKEN); }
-    {InRange}                    { return next(IN_RANGE_TOKEN); }
-    {In}                         { return next(IN_TOKEN); }
-    {Ellipses}                   { return next(ELLIPSES_TOKEN); }
-    {RobotKeyword}               { return next(ROBOT_KEYWORD_TOKEN); }
-    {KeywordArgument}            { return next(ROBOT_KEYWORD_ARG_TOKEN); }
+    {Junk}                       { return next(COMMENT_TOKEN); }
 }
 
 <SETTINGS> {

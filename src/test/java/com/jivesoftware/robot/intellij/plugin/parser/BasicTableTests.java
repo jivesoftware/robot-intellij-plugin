@@ -1,5 +1,6 @@
 package com.jivesoftware.robot.intellij.plugin.parser;
 
+import com.intellij.psi.PsiComment;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import org.junit.Test;
@@ -37,6 +38,13 @@ public class BasicTableTests extends RobotParserTest {
             "*** Settings ***  FOO FOO  BAR BAR  ${baz} ${raz}\n" +
                     "Suite Setup     Foo Bar\n" +
                     "Suite Teardown  Bar Baz\n";
+
+    private static final String JUNK_BEFORE_FIRST_TABLE =
+            "$$%%^^@#$123213   ${foo   ****{}}}\n" +
+                    "    \n" +
+                    "abc\n" +
+                    "   }}{{&&*^!@#   --++ 5=2\n" +
+                    TEST_CASES_TABLE;
 
     private static final String ALL_TABLES = SETTINGS_TABLE + KEYWORDS_TABLE + VARIABLES_TABLE + TEST_CASES_TABLE;
 
@@ -84,5 +92,14 @@ public class BasicTableTests extends RobotParserTest {
         RobotPsiFile file = doTestParseSucceeds(SETTINGS_TABLE_WITH_JUNK);
         assertFileHasPsiElements(file, RobotSettingsTable.class, 1);
         assertFileHasPsiElements(file, RobotTestSetupSetting.class, 2);
+    }
+
+    @Test
+    public void testJunkBeforeFirstTable() {
+        RobotPsiFile file = doTestParseSucceeds(JUNK_BEFORE_FIRST_TABLE);
+        assertFileHasPsiElements(file, RobotTestCasesTable.class, 1);
+        assertFileHasPsiElements(file, RobotTestcaseLine.class, 3);
+        assertFileHasPsiElements(file, RobotKeyword.class, 2);
+        assertFileHasPsiElements(file, PsiComment.class, 3);
     }
 }
