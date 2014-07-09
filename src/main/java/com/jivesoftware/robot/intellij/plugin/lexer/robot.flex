@@ -22,7 +22,7 @@ import com.jivesoftware.robot.intellij.plugin.parser.RobotTypes;
 
 import static com.jivesoftware.robot.intellij.plugin.parser.RobotTypes.*;
 
-//@SuppressWarnings({ "ALL" })
+@SuppressWarnings({ "ALL" })
 
 %%
 
@@ -150,8 +150,6 @@ ArrayAssignment = {ArrayVariable} " "? "="
 
 RobotKeyword = {RobotWord} ({SingleSpace} {RobotWord})*
 RobotWord = [a-zA-Z][a-zA-Z0-9\-]*
-
-Identifier = [a-zA-Z_][a-zA-Z0-9_]*
 
 TestCaseHeaderWord = {TestCaseHeaderChar}+
 TestCaseHeader = {TestCaseHeaderWord} ({SingleSpace} {TestCaseHeaderWord})*
