@@ -7,4 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface RobotAssignment extends PsiElement {
 
+  @Nullable
+  RobotArrayAssignment getArrayAssignment();
+
+  @Nullable
+  RobotScalarAssignment getScalarAssignment();
+
 }

@@ -11,6 +11,6 @@ public interface RobotSingleVariableList extends PsiElement {
   List<RobotIndentedEllipsesForTestTable> getIndentedEllipsesForTestTableList();
 
   @NotNull
-  List<RobotSingleVariable> getSingleVariableList();
+  List<RobotScalarVariable> getScalarVariableList();
 
 }

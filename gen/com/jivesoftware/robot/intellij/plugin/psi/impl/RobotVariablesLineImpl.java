@@ -31,6 +31,12 @@ public class RobotVariablesLineImpl extends ASTWrapperPsiElement implements Robo
 
   @Override
   @Nullable
+  public RobotArrayAssignmentLhs getArrayAssignmentLhs() {
+    return findChildByClass(RobotArrayAssignmentLhs.class);
+  }
+
+  @Override
+  @Nullable
   public RobotAssignableInVariablesTbl getAssignableInVariablesTbl() {
     return findChildByClass(RobotAssignableInVariablesTbl.class);
   }
@@ -51,6 +57,12 @@ public class RobotVariablesLineImpl extends ASTWrapperPsiElement implements Robo
   @Nullable
   public RobotEndOfLine getEndOfLine() {
     return findChildByClass(RobotEndOfLine.class);
+  }
+
+  @Override
+  @Nullable
+  public RobotScalarAssignmentLhs getScalarAssignmentLhs() {
+    return findChildByClass(RobotScalarAssignmentLhs.class);
   }
 
 }

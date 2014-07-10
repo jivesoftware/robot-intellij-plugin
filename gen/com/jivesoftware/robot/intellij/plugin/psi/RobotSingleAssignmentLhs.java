@@ -5,12 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotSingleAssignment extends PsiElement {
+public interface RobotSingleAssignmentLhs extends PsiElement {
 
   @Nullable
-  RobotAssignment getAssignment();
+  RobotArrayAssignmentLhs getArrayAssignmentLhs();
 
   @Nullable
-  RobotVariable getVariable();
+  RobotScalarAssignmentLhs getScalarAssignmentLhs();
 
 }

@@ -12,8 +12,13 @@ public interface RobotTypes {
   IElementType ARGUMENTS_SETTING = new RobotElementType("ARGUMENTS_SETTING");
   IElementType ARGUMENT_DEF = new RobotElementType("ARGUMENT_DEF");
   IElementType ARRAY_ASSIGNABLE_IN_VARIABLES_TBL = new RobotElementType("ARRAY_ASSIGNABLE_IN_VARIABLES_TBL");
+  IElementType ARRAY_ASSIGNMENT = new RobotElementType("ARRAY_ASSIGNMENT");
+  IElementType ARRAY_ASSIGNMENT_LHS = new RobotElementType("ARRAY_ASSIGNMENT_LHS");
+  IElementType ARRAY_ASSIGNMENT_NO_SPACE = new RobotElementType("ARRAY_ASSIGNMENT_NO_SPACE");
+  IElementType ARRAY_VARIABLE = new RobotElementType("ARRAY_VARIABLE");
   IElementType ASSIGNABLE_IN_VARIABLES_TBL = new RobotElementType("ASSIGNABLE_IN_VARIABLES_TBL");
   IElementType ASSIGNMENT = new RobotElementType("ASSIGNMENT");
+  IElementType ASSIGNMENT_NO_SPACE = new RobotElementType("ASSIGNMENT_NO_SPACE");
   IElementType DOCUMENTATION_SETTING = new RobotElementType("DOCUMENTATION_SETTING");
   IElementType DOUBLE_BOUND_FOR_LOOP = new RobotElementType("DOUBLE_BOUND_FOR_LOOP");
   IElementType DOUBLE_BOUND_FOR_LOOP_WITH_STEP = new RobotElementType("DOUBLE_BOUND_FOR_LOOP_WITH_STEP");
@@ -51,19 +56,23 @@ public interface RobotTypes {
   IElementType KEYWORD_SETTINGS = new RobotElementType("KEYWORD_SETTINGS");
   IElementType KEYWORD_SETTING_LINE = new RobotElementType("KEYWORD_SETTING_LINE");
   IElementType KEYWORD_TITLE = new RobotKeywordTitleElementType("KEYWORD_TITLE");
-  IElementType MULTI_ASSIGNMENT = new RobotElementType("MULTI_ASSIGNMENT");
+  IElementType MULTI_ASSIGNMENT_LHS = new RobotElementType("MULTI_ASSIGNMENT_LHS");
   IElementType RESOURCE_SETTING = new RobotElementType("RESOURCE_SETTING");
   IElementType RETURN_LINE = new RobotElementType("RETURN_LINE");
   IElementType RETURN_SETTING = new RobotElementType("RETURN_SETTING");
+  IElementType SCALAR_ASSIGNMENT = new RobotElementType("SCALAR_ASSIGNMENT");
+  IElementType SCALAR_ASSIGNMENT_LHS = new RobotElementType("SCALAR_ASSIGNMENT_LHS");
+  IElementType SCALAR_ASSIGNMENT_NO_SPACE = new RobotElementType("SCALAR_ASSIGNMENT_NO_SPACE");
+  IElementType SCALAR_DEFAULT_ARG_VALUE = new RobotElementType("SCALAR_DEFAULT_ARG_VALUE");
+  IElementType SCALAR_VARIABLE = new RobotElementType("SCALAR_VARIABLE");
   IElementType SETTING = new RobotElementType("SETTING");
   IElementType SETTINGS_LINE = new RobotElementType("SETTINGS_LINE");
   IElementType SETTINGS_TABLE = new RobotElementType("SETTINGS_TABLE");
   IElementType SETTINGS_TABLE_HEADING = new RobotElementType("SETTINGS_TABLE_HEADING");
   IElementType SETTING_LIST = new RobotElementType("SETTING_LIST");
   IElementType SETTING_LIST_OR_ELLIPSES = new RobotElementType("SETTING_LIST_OR_ELLIPSES");
-  IElementType SINGLE_ASSIGNMENT = new RobotElementType("SINGLE_ASSIGNMENT");
+  IElementType SINGLE_ASSIGNMENT_LHS = new RobotElementType("SINGLE_ASSIGNMENT_LHS");
   IElementType SINGLE_BOUND_FOR_LOOP = new RobotElementType("SINGLE_BOUND_FOR_LOOP");
-  IElementType SINGLE_VARIABLE = new RobotElementType("SINGLE_VARIABLE");
   IElementType SINGLE_VARIABLE_LIST = new RobotElementType("SINGLE_VARIABLE_LIST");
   IElementType TABLE = new RobotElementType("TABLE");
   IElementType TAG = new RobotElementType("TAG");
@@ -91,8 +100,10 @@ public interface RobotTypes {
   IElementType VARIABLE_ASSIGN_TO_KEYWORD = new RobotElementType("VARIABLE_ASSIGN_TO_KEYWORD");
 
   IElementType ARGUMENTS_SETTING_TOKEN = new RobotToken("ARGUMENTS_SETTING_TOKEN");
+  IElementType ARRAY_ASSIGNMENT_NO_SPACE_TOKEN = new RobotToken("ARRAY_ASSIGNMENT_NO_SPACE_TOKEN");
   IElementType ARRAY_ASSIGNMENT_TOKEN = new RobotToken("ARRAY_ASSIGNMENT_TOKEN");
   IElementType ARRAY_VARIABLE_TOKEN = new RobotToken("ARRAY_VARIABLE_TOKEN");
+  IElementType ASSIGNMENT_NO_SPACE_TOKEN = new RobotToken("ASSIGNMENT_NO_SPACE_TOKEN");
   IElementType ASSIGNMENT_TOKEN = new RobotToken("ASSIGNMENT_TOKEN");
   IElementType BAD_SYNTAX_TOKEN = new RobotToken("BAD_SYNTAX_TOKEN");
   IElementType COLUMN_SEP_TOKEN = new RobotToken("COLUMN_SEP_TOKEN");
@@ -113,6 +124,7 @@ public interface RobotTypes {
   IElementType ROBOT_KEYWORD_ARG_TOKEN = new RobotToken("ROBOT_KEYWORD_ARG_TOKEN");
   IElementType ROBOT_KEYWORD_TITLE_TOKEN = new RobotToken("ROBOT_KEYWORD_TITLE_TOKEN");
   IElementType ROBOT_KEYWORD_TOKEN = new RobotToken("ROBOT_KEYWORD_TOKEN");
+  IElementType SCALAR_DEFAULT_ARG_VALUE_TOKEN = new RobotToken("SCALAR_DEFAULT_ARG_VALUE_TOKEN");
   IElementType SETTINGS_TABLE_HEADING_TOKEN = new RobotToken("SETTINGS_TABLE_HEADING_TOKEN");
   IElementType SETUP_SETTING_TOKEN = new RobotToken("SETUP_SETTING_TOKEN");
   IElementType SUITE_SETUP_SETTING_TOKEN = new RobotToken("SUITE_SETUP_SETTING_TOKEN");
@@ -143,11 +155,26 @@ public interface RobotTypes {
       else if (type == ARRAY_ASSIGNABLE_IN_VARIABLES_TBL) {
         return new RobotArrayAssignableInVariablesTblImpl(node);
       }
+      else if (type == ARRAY_ASSIGNMENT) {
+        return new RobotArrayAssignmentImpl(node);
+      }
+      else if (type == ARRAY_ASSIGNMENT_LHS) {
+        return new RobotArrayAssignmentLhsImpl(node);
+      }
+      else if (type == ARRAY_ASSIGNMENT_NO_SPACE) {
+        return new RobotArrayAssignmentNoSpaceImpl(node);
+      }
+      else if (type == ARRAY_VARIABLE) {
+        return new RobotArrayVariableImpl(node);
+      }
       else if (type == ASSIGNABLE_IN_VARIABLES_TBL) {
         return new RobotAssignableInVariablesTblImpl(node);
       }
       else if (type == ASSIGNMENT) {
         return new RobotAssignmentImpl(node);
+      }
+      else if (type == ASSIGNMENT_NO_SPACE) {
+        return new RobotAssignmentNoSpaceImpl(node);
       }
       else if (type == DOCUMENTATION_SETTING) {
         return new RobotDocumentationSettingImpl(node);
@@ -260,8 +287,8 @@ public interface RobotTypes {
       else if (type == KEYWORD_TITLE) {
         return new RobotKeywordTitleImpl(node);
       }
-      else if (type == MULTI_ASSIGNMENT) {
-        return new RobotMultiAssignmentImpl(node);
+      else if (type == MULTI_ASSIGNMENT_LHS) {
+        return new RobotMultiAssignmentLhsImpl(node);
       }
       else if (type == RESOURCE_SETTING) {
         return new RobotResourceSettingImpl(node);
@@ -271,6 +298,21 @@ public interface RobotTypes {
       }
       else if (type == RETURN_SETTING) {
         return new RobotReturnSettingImpl(node);
+      }
+      else if (type == SCALAR_ASSIGNMENT) {
+        return new RobotScalarAssignmentImpl(node);
+      }
+      else if (type == SCALAR_ASSIGNMENT_LHS) {
+        return new RobotScalarAssignmentLhsImpl(node);
+      }
+      else if (type == SCALAR_ASSIGNMENT_NO_SPACE) {
+        return new RobotScalarAssignmentNoSpaceImpl(node);
+      }
+      else if (type == SCALAR_DEFAULT_ARG_VALUE) {
+        return new RobotScalarDefaultArgValueImpl(node);
+      }
+      else if (type == SCALAR_VARIABLE) {
+        return new RobotScalarVariableImpl(node);
       }
       else if (type == SETTING) {
         return new RobotSettingImpl(node);
@@ -290,14 +332,11 @@ public interface RobotTypes {
       else if (type == SETTING_LIST_OR_ELLIPSES) {
         return new RobotSettingListOrEllipsesImpl(node);
       }
-      else if (type == SINGLE_ASSIGNMENT) {
-        return new RobotSingleAssignmentImpl(node);
+      else if (type == SINGLE_ASSIGNMENT_LHS) {
+        return new RobotSingleAssignmentLhsImpl(node);
       }
       else if (type == SINGLE_BOUND_FOR_LOOP) {
         return new RobotSingleBoundForLoopImpl(node);
-      }
-      else if (type == SINGLE_VARIABLE) {
-        return new RobotSingleVariableImpl(node);
       }
       else if (type == SINGLE_VARIABLE_LIST) {
         return new RobotSingleVariableListImpl(node);

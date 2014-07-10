@@ -12,27 +12,27 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotSingleAssignmentImpl extends ASTWrapperPsiElement implements RobotSingleAssignment {
+public class RobotSingleAssignmentLhsImpl extends ASTWrapperPsiElement implements RobotSingleAssignmentLhs {
 
-  public RobotSingleAssignmentImpl(ASTNode node) {
+  public RobotSingleAssignmentLhsImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitSingleAssignment(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitSingleAssignmentLhs(this);
     else super.accept(visitor);
   }
 
   @Override
   @Nullable
-  public RobotAssignment getAssignment() {
-    return findChildByClass(RobotAssignment.class);
+  public RobotArrayAssignmentLhs getArrayAssignmentLhs() {
+    return findChildByClass(RobotArrayAssignmentLhs.class);
   }
 
   @Override
   @Nullable
-  public RobotVariable getVariable() {
-    return findChildByClass(RobotVariable.class);
+  public RobotScalarAssignmentLhs getScalarAssignmentLhs() {
+    return findChildByClass(RobotScalarAssignmentLhs.class);
   }
 
 }

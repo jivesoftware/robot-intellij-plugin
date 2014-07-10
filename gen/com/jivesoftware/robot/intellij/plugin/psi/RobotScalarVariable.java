@@ -5,9 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotTestCaseTemplateSetting extends PsiElement {
-
-  @NotNull
-  RobotKeyword getKeyword();
+public interface RobotScalarVariable extends PsiElement {
 
 }

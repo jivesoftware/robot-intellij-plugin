@@ -37,14 +37,14 @@ public class RobotIndentedVariableAssignToKeywordImpl extends ASTWrapperPsiEleme
 
   @Override
   @Nullable
-  public RobotMultiAssignment getMultiAssignment() {
-    return findChildByClass(RobotMultiAssignment.class);
+  public RobotMultiAssignmentLhs getMultiAssignmentLhs() {
+    return findChildByClass(RobotMultiAssignmentLhs.class);
   }
 
   @Override
   @Nullable
-  public RobotSingleAssignment getSingleAssignment() {
-    return findChildByClass(RobotSingleAssignment.class);
+  public RobotSingleAssignmentLhs getSingleAssignmentLhs() {
+    return findChildByClass(RobotSingleAssignmentLhs.class);
   }
 
 }

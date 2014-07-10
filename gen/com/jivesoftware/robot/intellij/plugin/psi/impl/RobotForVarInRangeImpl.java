@@ -23,4 +23,10 @@ public class RobotForVarInRangeImpl extends ASTWrapperPsiElement implements Robo
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public RobotScalarVariable getScalarVariable() {
+    return findNotNullChildByClass(RobotScalarVariable.class);
+  }
+
 }

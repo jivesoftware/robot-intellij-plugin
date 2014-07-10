@@ -23,11 +23,31 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitArrayAssignment(@NotNull RobotArrayAssignment o) {
+    visitPsiElement(o);
+  }
+
+  public void visitArrayAssignmentLhs(@NotNull RobotArrayAssignmentLhs o) {
+    visitPsiElement(o);
+  }
+
+  public void visitArrayAssignmentNoSpace(@NotNull RobotArrayAssignmentNoSpace o) {
+    visitPsiElement(o);
+  }
+
+  public void visitArrayVariable(@NotNull RobotArrayVariable o) {
+    visitPsiElement(o);
+  }
+
   public void visitAssignableInVariablesTbl(@NotNull RobotAssignableInVariablesTbl o) {
     visitPsiElement(o);
   }
 
   public void visitAssignment(@NotNull RobotAssignment o) {
+    visitPsiElement(o);
+  }
+
+  public void visitAssignmentNoSpace(@NotNull RobotAssignmentNoSpace o) {
     visitPsiElement(o);
   }
 
@@ -181,7 +201,7 @@ public class RobotVisitor extends PsiElementVisitor {
     // visitKeywordTitleStub>(o);
   }
 
-  public void visitMultiAssignment(@NotNull RobotMultiAssignment o) {
+  public void visitMultiAssignmentLhs(@NotNull RobotMultiAssignmentLhs o) {
     visitPsiElement(o);
   }
 
@@ -194,6 +214,26 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitReturnSetting(@NotNull RobotReturnSetting o) {
+    visitPsiElement(o);
+  }
+
+  public void visitScalarAssignment(@NotNull RobotScalarAssignment o) {
+    visitPsiElement(o);
+  }
+
+  public void visitScalarAssignmentLhs(@NotNull RobotScalarAssignmentLhs o) {
+    visitPsiElement(o);
+  }
+
+  public void visitScalarAssignmentNoSpace(@NotNull RobotScalarAssignmentNoSpace o) {
+    visitPsiElement(o);
+  }
+
+  public void visitScalarDefaultArgValue(@NotNull RobotScalarDefaultArgValue o) {
+    visitPsiElement(o);
+  }
+
+  public void visitScalarVariable(@NotNull RobotScalarVariable o) {
     visitPsiElement(o);
   }
 
@@ -221,15 +261,11 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitSingleAssignment(@NotNull RobotSingleAssignment o) {
+  public void visitSingleAssignmentLhs(@NotNull RobotSingleAssignmentLhs o) {
     visitPsiElement(o);
   }
 
   public void visitSingleBoundForLoop(@NotNull RobotSingleBoundForLoop o) {
-    visitPsiElement(o);
-  }
-
-  public void visitSingleVariable(@NotNull RobotSingleVariable o) {
     visitPsiElement(o);
   }
 

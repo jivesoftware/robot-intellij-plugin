@@ -48,6 +48,8 @@ return;
   private boolean keywordToLeft = false;
   private boolean startLine = true;
   private boolean firstRobotCell = true;
+  private boolean onArgumentsLine = false;
+  private boolean onForLoopLine = false;
   private int previous_state = YYINITIAL;
 
   private IElementType next(IElementType toReturn) {
@@ -60,7 +62,7 @@ return;
         if (toReturn == ELLIPSES_TOKEN && onDocsLine) {
             yybegin(DOCS_SETTING);
         } else if (toReturn != ELLIPSES_TOKEN) {
-           keywordToLeft = onTagsLine = onTimeoutLine = onDocsLine = onReturnLine = false;
+           keywordToLeft = onTagsLine = onTimeoutLine = onDocsLine = onReturnLine = onArgumentsLine = onForLoopLine = false;
         }
         firstRobotCell = false;
     }
@@ -93,6 +95,10 @@ return;
          }
          return ROBOT_KEYWORD_ARG_TOKEN;
     }
+    else if (toReturn == FOR_LOOP_START_TOKEN) {
+        onForLoopLine = true;
+        return FOR_LOOP_START_TOKEN;
+    }
     else if (toReturn == TAGS_SETTING_TOKEN) {
         onTagsLine = true;
     }
@@ -107,6 +113,9 @@ return;
     }
     else if (toReturn == RETURN_SETTING_TOKEN) {
         onReturnLine = true;
+    }
+    else if (toReturn == ARGUMENTS_SETTING_TOKEN) {
+        onArgumentsLine = true;
     }
     return toReturn;
   }
@@ -144,18 +153,23 @@ Comment = "#" {InputCharacter}*
 /* identifiers */
 VariableName = {KeywordArgumentWord} ({SingleSpace} {KeywordArgumentWord})*
 Variable = "${" " "? {VariableName} " "? "}"
-ArrayVariable = "@{" " "? {VariableName} " "? "}"
 Assignment = {Variable} " "? "="
+AssignmentNoSpace = {Variable} "="
+
+ArrayVariable = "@{" " "? {VariableName} " "? "}"
 ArrayAssignment = {ArrayVariable} " "? "="
 
 RobotKeyword = {RobotWord} ({SingleSpace} {RobotWord})*
-RobotWord = [a-zA-Z][a-zA-Z0-9\-]*
+RobotWord = [a-zA-Z0-9\-_\$\{\}]+
 
 TestCaseHeaderWord = {TestCaseHeaderChar}+
 TestCaseHeader = {TestCaseHeaderWord} ({SingleSpace} {TestCaseHeaderWord})*
 
 KeywordArgumentWord = {KeywordArgumentChar}+
 KeywordArgument = ({KeywordArgumentWord} ({SingleSpace} {KeywordArgumentWord})*) | {Variable} | {EmptyCell}
+
+/* For Keyword definition argument lists: */
+ScalarDefaultArgumentValue = {AssignmentNoSpace} " "? {KeywordArgument}
 
 /* Settings for the ***Settings*** Table*/
 Setup = [Ss] " "? [Ee] " "? [Tt] " "? [Uu] " "? [Pp]
@@ -296,12 +310,18 @@ In = "IN"
      {ForLoopStart}               { return next(FOR_LOOP_START_TOKEN); }
      {InRange}                    { return next(IN_RANGE_TOKEN); }
      {In}                         { return next(IN_TOKEN); }
-     {DecIntegerLiteral}          { return next(INTEGER_TOKEN); }
      {Assignment}        { return next(ASSIGNMENT_TOKEN); }
      {ArrayAssignment}   { return ARRAY_ASSIGNMENT_TOKEN; }
      {Variable}          { return next(VARIABLE_TOKEN); }
      {ArrayVariable}     { return next(ARRAY_VARIABLE_TOKEN); }
      {TimeoutValue}      { if (onTimeoutLine) { return next(TIMEOUT_VALUE_TOKEN);} return next(ROBOT_KEYWORD_ARG_TOKEN); }
+     {DecIntegerLiteral}          {
+                                    if (startLine) { return next(TEST_CASE_HEADER_TOKEN); }
+                                    else if (firstRobotCell) { return next(ROBOT_KEYWORD_TOKEN); }
+                                    else if (onForLoopLine) { return next(INTEGER_TOKEN); }
+                                    else if (keywordToLeft) { return next(INTEGER_TOKEN); }
+                                    return next(ROBOT_KEYWORD_TOKEN);
+                                    }
      {RobotKeyword}      { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
      {TestCaseHeader}    { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {KeywordArgument}   { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return next(ROBOT_KEYWORD_ARG_TOKEN); }
@@ -336,11 +356,16 @@ In = "IN"
      {ForLoopStart}               { return next(FOR_LOOP_START_TOKEN); }
      {InRange}                    { return next(IN_RANGE_TOKEN); }
      {In}                         { return next(IN_TOKEN); }
-     {DecIntegerLiteral}          { return next(INTEGER_TOKEN); }
+     {ScalarDefaultArgumentValue}    { if (onArgumentsLine) { return next(SCALAR_DEFAULT_ARG_VALUE_TOKEN); } return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {Assignment}        { return ASSIGNMENT_TOKEN; }
      {ArrayAssignment}   { return ARRAY_ASSIGNMENT_TOKEN; }
      {Variable}          { return next(VARIABLE_TOKEN); }
      {ArrayVariable}     { return next(ARRAY_VARIABLE_TOKEN); }
+     {DecIntegerLiteral} { if (startLine) { return next(ROBOT_KEYWORD_TITLE_TOKEN); }
+                           else if (firstRobotCell) { return next(ROBOT_KEYWORD_TOKEN); }
+                           else if (onForLoopLine) { return next(INTEGER_TOKEN); }
+                           else if (keywordToLeft) { return next(INTEGER_TOKEN); }
+                           else { return next(ROBOT_KEYWORD_TOKEN); }}
      {RobotKeyword}      { if (startLine) { return next(ROBOT_KEYWORD_TITLE_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
      {KeywordArgument}   { if (startLine) { return next(BAD_SYNTAX_TOKEN); } return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }

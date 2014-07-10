@@ -31,8 +31,8 @@ public class RobotSingleVariableListImpl extends ASTWrapperPsiElement implements
 
   @Override
   @NotNull
-  public List<RobotSingleVariable> getSingleVariableList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotSingleVariable.class);
+  public List<RobotScalarVariable> getScalarVariableList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotScalarVariable.class);
   }
 
 }

@@ -7,4 +7,10 @@ import com.intellij.psi.PsiElement;
 
 public interface RobotVariable extends PsiElement {
 
+  @Nullable
+  RobotArrayVariable getArrayVariable();
+
+  @Nullable
+  RobotScalarVariable getScalarVariable();
+
 }

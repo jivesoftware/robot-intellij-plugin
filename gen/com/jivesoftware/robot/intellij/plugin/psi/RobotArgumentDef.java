@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface RobotArgumentDef extends PsiElement {
 
   @Nullable
-  RobotKeywordArg getKeywordArg();
+  RobotScalarDefaultArgValue getScalarDefaultArgValue();
+
+  @Nullable
+  RobotVariable getVariable();
 
 }

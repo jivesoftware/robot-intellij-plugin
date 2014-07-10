@@ -11,6 +11,9 @@ public interface RobotVariablesLine extends PsiElement {
   RobotArrayAssignableInVariablesTbl getArrayAssignableInVariablesTbl();
 
   @Nullable
+  RobotArrayAssignmentLhs getArrayAssignmentLhs();
+
+  @Nullable
   RobotAssignableInVariablesTbl getAssignableInVariablesTbl();
 
   @Nullable
@@ -21,5 +24,8 @@ public interface RobotVariablesLine extends PsiElement {
 
   @Nullable
   RobotEndOfLine getEndOfLine();
+
+  @Nullable
+  RobotScalarAssignmentLhs getScalarAssignmentLhs();
 
 }

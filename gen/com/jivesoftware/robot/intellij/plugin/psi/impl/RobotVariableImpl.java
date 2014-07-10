@@ -23,4 +23,16 @@ public class RobotVariableImpl extends ASTWrapperPsiElement implements RobotVari
     else super.accept(visitor);
   }
 
+  @Override
+  @Nullable
+  public RobotArrayVariable getArrayVariable() {
+    return findChildByClass(RobotArrayVariable.class);
+  }
+
+  @Override
+  @Nullable
+  public RobotScalarVariable getScalarVariable() {
+    return findChildByClass(RobotScalarVariable.class);
+  }
+
 }

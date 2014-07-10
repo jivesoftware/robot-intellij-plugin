@@ -202,7 +202,7 @@ public class RobotPsiUtil {
     }
 
     //-----------------Context-sensitive finders-------------------
-    //TODO: Methods to find variables in scope
+   // public static List<>
 
 
 }

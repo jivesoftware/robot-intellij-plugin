@@ -2,7 +2,7 @@ package com.jivesoftware.robot.intellij.plugin.parser;
 
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotMultiAssignment;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotMultiAssignmentLhs;
 import org.junit.Test;
 
 /**
@@ -32,26 +32,26 @@ public class AssignmentTests extends RobotParserTest {
     @Test
     public void testMultiAssign() {
         RobotPsiFile file = doTestParseSucceeds(MULTI_ASSIGN);
-        assertFileHasPsiElements(file, RobotMultiAssignment.class, 1);
+        assertFileHasPsiElements(file, RobotMultiAssignmentLhs.class, 1);
         assertFileHasPsiElements(file, RobotKeyword.class, 1);
     }
 
     @Test
     public void testMultiAssignWithEquals() {
         RobotPsiFile file = doTestParseSucceeds(MULTI_ASSIGN_WITH_EQUALS);
-        assertFileHasPsiElements(file, RobotMultiAssignment.class, 1);
+        assertFileHasPsiElements(file, RobotMultiAssignmentLhs.class, 1);
         assertFileHasPsiElements(file, RobotKeyword.class, 1);
     }
 
     @Test
     public void testMultiAssignInvalid1() {
         RobotPsiFile file = doTestParseFails(MULTI_ASSIGN_INVALID_1);
-        assertFileHasPsiElements(file, RobotMultiAssignment.class, 0);
+        assertFileHasPsiElements(file, RobotMultiAssignmentLhs.class, 0);
     }
 
     @Test
     public void testMultiAssignInvalid2() {
         RobotPsiFile file = doTestParseFails(MULTI_ASSIGN_INVALID_2);
-        assertFileHasPsiElements(file, RobotMultiAssignment.class, 0);
+        assertFileHasPsiElements(file, RobotMultiAssignmentLhs.class, 0);
     }
 }

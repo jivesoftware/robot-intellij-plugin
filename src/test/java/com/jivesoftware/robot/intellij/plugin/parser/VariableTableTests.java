@@ -1,7 +1,9 @@
 package com.jivesoftware.robot.intellij.plugin.parser;
 
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotArrayAssignmentLhs;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotScalarAssignment;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotVariablesLine;
 import org.junit.Test;
 
@@ -22,10 +24,34 @@ public class VariableTableTests extends RobotParserTest {
             "  Foo Keyword  ${camelCaseVar}  ${ ABC }  ${___}  ${123}  ${ A Variable Name }\n" +
             "  Bar Keyword  @{ARRAY}\n";
 
+    private static final String ASSIGN_SCALAR_VARIABLE_TO_NOTHING =
+            "*** Variables ***\n" +
+                    "${fooBar}=\n";
+
+    private static final String ASSIGN_ARRAY_VARIABLE_TO_NOTHING =
+            "*** Variables ***\n" +
+                    "@{fooBar}=\n";
+
     @Test
     public void testValidVariableNames() {
         RobotPsiFile file = doTestParseSucceeds(VALID_VARIABLE_NAMES);
         assertFileHasPsiElements(file, RobotVariablesLine.class, 6);
         assertFileHasPsiElements(file, RobotKeyword.class, 2);
+    }
+
+    @Test
+    public void testAssignScalarToNothing() {
+        RobotPsiFile file = doTestParseSucceeds(ASSIGN_SCALAR_VARIABLE_TO_NOTHING);
+        assertFileHasPsiElements(file, RobotVariablesLine.class, 1);
+        assertFileHasPsiElements(file, RobotKeyword.class, 0);
+        assertFileHasPsiElements(file, RobotScalarAssignment.class, 1);
+    }
+
+    @Test
+    public void testAssignArrayToNothing() {
+        RobotPsiFile file = doTestParseSucceeds(ASSIGN_ARRAY_VARIABLE_TO_NOTHING);
+        assertFileHasPsiElements(file, RobotVariablesLine.class, 1);
+        assertFileHasPsiElements(file, RobotKeyword.class, 0);
+        assertFileHasPsiElements(file, RobotArrayAssignmentLhs.class, 1);
     }
 }

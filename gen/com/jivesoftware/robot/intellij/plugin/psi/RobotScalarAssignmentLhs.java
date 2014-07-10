@@ -5,9 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotTestCaseTemplateSetting extends PsiElement {
+public interface RobotScalarAssignmentLhs extends PsiElement {
 
-  @NotNull
-  RobotKeyword getKeyword();
+  @Nullable
+  RobotScalarAssignment getScalarAssignment();
+
+  @Nullable
+  RobotScalarVariable getScalarVariable();
 
 }

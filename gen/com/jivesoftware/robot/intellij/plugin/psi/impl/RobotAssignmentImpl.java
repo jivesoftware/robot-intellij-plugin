@@ -23,4 +23,16 @@ public class RobotAssignmentImpl extends ASTWrapperPsiElement implements RobotAs
     else super.accept(visitor);
   }
 
+  @Override
+  @Nullable
+  public RobotArrayAssignment getArrayAssignment() {
+    return findChildByClass(RobotArrayAssignment.class);
+  }
+
+  @Override
+  @Nullable
+  public RobotScalarAssignment getScalarAssignment() {
+    return findChildByClass(RobotScalarAssignment.class);
+  }
+
 }

@@ -48,6 +48,29 @@ public class KeywordsTableTests extends RobotParserTest {
                     "  [Return]  ${foo}  FOO  ${bar}  BAR\n" +
                     "  Log  Foo\n";
 
+    private static final String KEYWORD_WITH_NUMBERS_FOR_NAME =
+            "*** Keywords ***\n" +
+                    "198923\n" +
+                    "  Log  Foo bar baz\n";
+
+    private static final String KEYWORD_WITH_DASHES_AND_UNDERSCORES_FOR_NAME =
+            "*** Keywords ***\n" +
+                    "----____\n" +
+                    "  Log  Foo bar baz\n";
+
+    private static final String KEYWORD_WITH_$_FOR_NAME =
+            "*** Keywords ***\n" +
+                    "$$$\n" +
+                    "  Log  Foo bar baz\n";
+
+    private static final String INVALID_KEYWORD_WITHOUT_A_TITLE_1 =
+            "*** Keywords ***\n" +
+                    "  Log  foobar\n";
+
+    private static final String INVALID_KEYWORD_WITHOUT_A_TITLE_2 =
+            "*** Keywords ***\n" +
+                    "  [arguments]  ${foo}  ${bar}\n";
+
     @Test
     public void testKeywordWithSingleReturnValue() {
         RobotPsiFile file = doTestParseSucceeds(KEYWORD_WITH_SINGLE_RETURN_VALUE);
@@ -94,5 +117,38 @@ public class KeywordsTableTests extends RobotParserTest {
         assertFileHasPsiElements(file, RobotKeywordDefinition.class, 1);
         assertFileHasPsiElements(file, RobotKeywordTitle.class, 1);
         assertFileHasPsiElements(file, RobotReturnLine.class, 2);
+    }
+
+    @Test
+    public void testKeywordWithNumbersForName() {
+        RobotPsiFile file = doTestParseSucceeds(KEYWORD_WITH_NUMBERS_FOR_NAME);
+        assertFileHasPsiElements(file, RobotKeywordDefinition.class, 1);
+        assertFileHasPsiElements(file, RobotKeywordTitle.class, 1);
+    }
+
+    @Test
+    public void testKeywordWithDashesAndUnderscoresForName() {
+        RobotPsiFile file = doTestParseSucceeds(KEYWORD_WITH_DASHES_AND_UNDERSCORES_FOR_NAME);
+        assertFileHasPsiElements(file, RobotKeywordDefinition.class, 1);
+        assertFileHasPsiElements(file, RobotKeywordTitle.class, 1);
+    }
+
+    @Test
+    public void testKeywordWith$$$ForName() {
+        RobotPsiFile file = doTestParseSucceeds(KEYWORD_WITH_$_FOR_NAME);
+        assertFileHasPsiElements(file, RobotKeywordDefinition.class, 1);
+        assertFileHasPsiElements(file, RobotKeywordTitle.class, 1);
+    }
+
+    @Test
+    public void testInvalidKeywordWithoutATitle1() {
+        RobotPsiFile file = doTestParseFails(INVALID_KEYWORD_WITHOUT_A_TITLE_1);
+        assertFileHasPsiElements(file, RobotKeywordDefinition.class, 0);
+    }
+
+    @Test
+    public void testInvalidKeywordWithoutATitle2() {
+        RobotPsiFile file = doTestParseFails(INVALID_KEYWORD_WITHOUT_A_TITLE_2);
+        assertFileHasPsiElements(file, RobotKeywordDefinition.class, 0);
     }
 }

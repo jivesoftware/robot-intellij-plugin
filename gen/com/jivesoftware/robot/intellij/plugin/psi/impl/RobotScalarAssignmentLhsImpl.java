@@ -12,21 +12,27 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotTestCaseTemplateSettingImpl extends ASTWrapperPsiElement implements RobotTestCaseTemplateSetting {
+public class RobotScalarAssignmentLhsImpl extends ASTWrapperPsiElement implements RobotScalarAssignmentLhs {
 
-  public RobotTestCaseTemplateSettingImpl(ASTNode node) {
+  public RobotScalarAssignmentLhsImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitTestCaseTemplateSetting(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitScalarAssignmentLhs(this);
     else super.accept(visitor);
   }
 
   @Override
-  @NotNull
-  public RobotKeyword getKeyword() {
-    return findNotNullChildByClass(RobotKeyword.class);
+  @Nullable
+  public RobotScalarAssignment getScalarAssignment() {
+    return findChildByClass(RobotScalarAssignment.class);
+  }
+
+  @Override
+  @Nullable
+  public RobotScalarVariable getScalarVariable() {
+    return findChildByClass(RobotScalarVariable.class);
   }
 
 }

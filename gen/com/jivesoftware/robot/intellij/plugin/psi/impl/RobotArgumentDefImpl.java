@@ -25,8 +25,14 @@ public class RobotArgumentDefImpl extends ASTWrapperPsiElement implements RobotA
 
   @Override
   @Nullable
-  public RobotKeywordArg getKeywordArg() {
-    return findChildByClass(RobotKeywordArg.class);
+  public RobotScalarDefaultArgValue getScalarDefaultArgValue() {
+    return findChildByClass(RobotScalarDefaultArgValue.class);
+  }
+
+  @Override
+  @Nullable
+  public RobotVariable getVariable() {
+    return findChildByClass(RobotVariable.class);
   }
 
 }
