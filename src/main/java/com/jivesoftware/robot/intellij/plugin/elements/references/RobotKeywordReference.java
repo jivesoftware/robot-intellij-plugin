@@ -14,9 +14,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class RobotKeywordRef extends PsiReferenceBase<PsiElement> {
+public class RobotKeywordReference extends PsiReferenceBase<RobotKeyword> {
 
-  public RobotKeywordRef(PsiElement element) {
+  public RobotKeywordReference(RobotKeyword element) {
     super(element);
   }
 
@@ -30,7 +30,7 @@ public class RobotKeywordRef extends PsiReferenceBase<PsiElement> {
                     SearchType.EXACT_MATCH);
     robotKeywordDefinitionFinder.process();
     List<PsiElement> results = robotKeywordDefinitionFinder.getResults();
-    if (results.size() <= 0) {
+    if (results.isEmpty()) {
       return null;
     }
     return results.get(0);
@@ -58,10 +58,7 @@ public class RobotKeywordRef extends PsiReferenceBase<PsiElement> {
 
   @Override
   public PsiElement handleElementRename(String name) {
-      if (myElement instanceof RobotKeyword) {
-          return ((RobotKeyword)myElement).setName(RobotPsiUtil.methodToRobotKeyword(name));
-      }
-      return myElement;
+      return myElement.setName(RobotPsiUtil.methodToRobotKeyword(name));
   }
 
 }

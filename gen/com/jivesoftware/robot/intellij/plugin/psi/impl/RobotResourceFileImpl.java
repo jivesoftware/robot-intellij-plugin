@@ -11,16 +11,27 @@ import static com.jivesoftware.robot.intellij.plugin.parser.RobotTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
+import com.intellij.psi.PsiReference;
 
-public class RobotArrayAssignmentNoSpaceImpl extends ASTWrapperPsiElement implements RobotArrayAssignmentNoSpace {
+public class RobotResourceFileImpl extends ASTWrapperPsiElement implements RobotResourceFile {
 
-  public RobotArrayAssignmentNoSpaceImpl(ASTNode node) {
+  public RobotResourceFileImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitArrayAssignmentNoSpace(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitResourceFile(this);
     else super.accept(visitor);
+  }
+
+  @Nullable
+  public PsiReference getReference() {
+    return RobotImplUtil.getReference(this);
+  }
+
+  @NotNull
+  public PsiReference[] getReferences() {
+    return RobotImplUtil.getReferences(this);
   }
 
 }

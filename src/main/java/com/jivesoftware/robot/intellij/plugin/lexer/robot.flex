@@ -50,6 +50,7 @@ return;
   private boolean firstRobotCell = true;
   private boolean onArgumentsLine = false;
   private boolean onForLoopLine = false;
+  private boolean onResourceSettingLine = false;
   private int previous_state = YYINITIAL;
 
   private IElementType next(IElementType toReturn) {
@@ -62,7 +63,8 @@ return;
         if (toReturn == ELLIPSES_TOKEN && onDocsLine) {
             yybegin(DOCS_SETTING);
         } else if (toReturn != ELLIPSES_TOKEN) {
-           keywordToLeft = onTagsLine = onTimeoutLine = onDocsLine = onReturnLine = onArgumentsLine = onForLoopLine = false;
+           keywordToLeft = onTagsLine = onTimeoutLine = onDocsLine = onReturnLine
+                         = onArgumentsLine = onForLoopLine = onResourceSettingLine = false;
         }
         firstRobotCell = false;
     }
@@ -80,6 +82,9 @@ return;
         if (onDocsLine) {
             return DOCUMENTATION_TOKEN;
         }
+        if (onResourceSettingLine) {
+            return ROBOT_FILE_TOKEN;
+        }
         keywordToLeft = true;
         return ROBOT_KEYWORD_TOKEN;
     }
@@ -92,6 +97,9 @@ return;
          }
          if (onDocsLine) {
             return DOCUMENTATION_TOKEN;
+         }
+         if (onResourceSettingLine) {
+             return ROBOT_FILE_TOKEN;
          }
          return ROBOT_KEYWORD_ARG_TOKEN;
     }
@@ -116,6 +124,9 @@ return;
     }
     else if (toReturn == ARGUMENTS_SETTING_TOKEN) {
         onArgumentsLine = true;
+    }
+    else if (toReturn == RESOURCE_SETTING_TOKEN) {
+        onResourceSettingLine = true;
     }
     return toReturn;
   }

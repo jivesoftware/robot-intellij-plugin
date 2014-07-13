@@ -59,4 +59,8 @@ public class RobotKeywordImpl extends StubBasedPsiElementBase<RobotKeywordStub> 
     return RobotImplUtil.handleElementRename(this, name);
   }
 
+  public String toString() {
+    return RobotImplUtil.toString(this);
+  }
+
 }

@@ -86,6 +86,26 @@ public class RobotImplUtil {
       return element.setName(name);
     }
 
+    public static String toString(RobotKeyword element) {
+        return element.getClass().getSimpleName() + ": " + element.getText();
+    }
+
+    /* Methods for RobotResourceFile */
+
+    @NotNull
+    public static PsiReference[] getReferences(RobotResourceFile element) {
+        return ReferenceProvidersRegistry.getReferencesFromProviders(element);
+    }
+
+    @Nullable
+    public static PsiReference getReference(RobotResourceFile element) {
+        PsiReference[] refs = ReferenceProvidersRegistry.getReferencesFromProviders(element);
+        if (refs.length <= 0) {
+            return null;
+        }
+        return refs[0];
+    }
+
     /* Methods for RobotKeywordTitle type */
 
     public static ItemPresentation getPresentation(final RobotKeywordTitle element) {

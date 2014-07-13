@@ -4,7 +4,14 @@ package com.jivesoftware.robot.intellij.plugin.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 
-public interface RobotScalarAssignmentNoSpace extends PsiElement {
+public interface RobotResourceFile extends PsiElement {
+
+  @Nullable
+  PsiReference getReference();
+
+  @NotNull
+  PsiReference[] getReferences();
 
 }

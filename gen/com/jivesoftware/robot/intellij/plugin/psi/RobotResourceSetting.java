@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface RobotResourceSetting extends PsiElement {
 
   @NotNull
-  RobotKeywordArg getKeywordArg();
+  List<RobotEllipsesForSettingsTable> getEllipsesForSettingsTableList();
+
+  @NotNull
+  RobotResourceFile getResourceFile();
 
 }

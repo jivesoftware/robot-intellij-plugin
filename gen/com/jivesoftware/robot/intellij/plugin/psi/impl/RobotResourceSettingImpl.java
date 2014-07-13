@@ -25,8 +25,14 @@ public class RobotResourceSettingImpl extends ASTWrapperPsiElement implements Ro
 
   @Override
   @NotNull
-  public RobotKeywordArg getKeywordArg() {
-    return findNotNullChildByClass(RobotKeywordArg.class);
+  public List<RobotEllipsesForSettingsTable> getEllipsesForSettingsTableList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotEllipsesForSettingsTable.class);
+  }
+
+  @Override
+  @NotNull
+  public RobotResourceFile getResourceFile() {
+    return findNotNullChildByClass(RobotResourceFile.class);
   }
 
 }

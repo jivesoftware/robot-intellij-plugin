@@ -35,9 +35,6 @@ public class RobotParser implements PsiParser {
     else if (root_ == ARRAY_ASSIGNMENT_LHS) {
       result_ = ARRAY_ASSIGNMENT_LHS(builder_, 0);
     }
-    else if (root_ == ARRAY_ASSIGNMENT_NO_SPACE) {
-      result_ = ARRAY_ASSIGNMENT_NO_SPACE(builder_, 0);
-    }
     else if (root_ == ARRAY_VARIABLE) {
       result_ = ARRAY_VARIABLE(builder_, 0);
     }
@@ -46,9 +43,6 @@ public class RobotParser implements PsiParser {
     }
     else if (root_ == ASSIGNMENT) {
       result_ = ASSIGNMENT(builder_, 0);
-    }
-    else if (root_ == ASSIGNMENT_NO_SPACE) {
-      result_ = ASSIGNMENT_NO_SPACE(builder_, 0);
     }
     else if (root_ == DOCUMENTATION_SETTING) {
       result_ = DOCUMENTATION_SETTING(builder_, 0);
@@ -164,6 +158,9 @@ public class RobotParser implements PsiParser {
     else if (root_ == MULTI_ASSIGNMENT_LHS) {
       result_ = MULTI_ASSIGNMENT_LHS(builder_, 0);
     }
+    else if (root_ == RESOURCE_FILE) {
+      result_ = RESOURCE_FILE(builder_, 0);
+    }
     else if (root_ == RESOURCE_SETTING) {
       result_ = RESOURCE_SETTING(builder_, 0);
     }
@@ -178,9 +175,6 @@ public class RobotParser implements PsiParser {
     }
     else if (root_ == SCALAR_ASSIGNMENT_LHS) {
       result_ = SCALAR_ASSIGNMENT_LHS(builder_, 0);
-    }
-    else if (root_ == SCALAR_ASSIGNMENT_NO_SPACE) {
-      result_ = SCALAR_ASSIGNMENT_NO_SPACE(builder_, 0);
     }
     else if (root_ == SCALAR_DEFAULT_ARG_VALUE) {
       result_ = SCALAR_DEFAULT_ARG_VALUE(builder_, 0);
@@ -398,18 +392,6 @@ public class RobotParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ARRAY_ASSIGNMENT_NO_SPACE_TOKEN
-  public static boolean ARRAY_ASSIGNMENT_NO_SPACE(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ARRAY_ASSIGNMENT_NO_SPACE")) return false;
-    if (!nextTokenIs(builder_, ARRAY_ASSIGNMENT_NO_SPACE_TOKEN)) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, ARRAY_ASSIGNMENT_NO_SPACE_TOKEN);
-    exit_section_(builder_, marker_, ARRAY_ASSIGNMENT_NO_SPACE, result_);
-    return result_;
-  }
-
-  /* ********************************************************** */
   // ARRAY_VARIABLE_TOKEN
   public static boolean ARRAY_VARIABLE(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "ARRAY_VARIABLE")) return false;
@@ -444,19 +426,6 @@ public class RobotParser implements PsiParser {
     result_ = SCALAR_ASSIGNMENT(builder_, level_ + 1);
     if (!result_) result_ = ARRAY_ASSIGNMENT(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, ASSIGNMENT, result_, false, null);
-    return result_;
-  }
-
-  /* ********************************************************** */
-  // SCALAR_ASSIGNMENT_NO_SPACE | ARRAY_ASSIGNMENT_NO_SPACE
-  public static boolean ASSIGNMENT_NO_SPACE(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "ASSIGNMENT_NO_SPACE")) return false;
-    if (!nextTokenIs(builder_, "<assignment no space>", ARRAY_ASSIGNMENT_NO_SPACE_TOKEN, ASSIGNMENT_NO_SPACE_TOKEN)) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, "<assignment no space>");
-    result_ = SCALAR_ASSIGNMENT_NO_SPACE(builder_, level_ + 1);
-    if (!result_) result_ = ARRAY_ASSIGNMENT_NO_SPACE(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, ASSIGNMENT_NO_SPACE, result_, false, null);
     return result_;
   }
 
@@ -951,24 +920,24 @@ public class RobotParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ROBOT_KEYWORD_TOKEN SETTING_LIST_OR_ELLIPSES+ | ROBOT_KEYWORD_TOKEN
+  // KEYWORD SETTING_LIST_OR_ELLIPSES+ | KEYWORD
   public static boolean GENERIC_SETTING(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "GENERIC_SETTING")) return false;
     if (!nextTokenIs(builder_, ROBOT_KEYWORD_TOKEN)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
     result_ = GENERIC_SETTING_0(builder_, level_ + 1);
-    if (!result_) result_ = consumeToken(builder_, ROBOT_KEYWORD_TOKEN);
+    if (!result_) result_ = KEYWORD(builder_, level_ + 1);
     exit_section_(builder_, marker_, GENERIC_SETTING, result_);
     return result_;
   }
 
-  // ROBOT_KEYWORD_TOKEN SETTING_LIST_OR_ELLIPSES+
+  // KEYWORD SETTING_LIST_OR_ELLIPSES+
   private static boolean GENERIC_SETTING_0(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "GENERIC_SETTING_0")) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, ROBOT_KEYWORD_TOKEN);
+    result_ = KEYWORD(builder_, level_ + 1);
     result_ = result_ && GENERIC_SETTING_0_1(builder_, level_ + 1);
     exit_section_(builder_, marker_, null, result_);
     return result_;
@@ -1646,16 +1615,42 @@ public class RobotParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // RESOURCE_SETTING_TOKEN  COLUMN_SEP_TOKEN  KEYWORD_ARG
+  // ROBOT_FILE_TOKEN
+  public static boolean RESOURCE_FILE(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "RESOURCE_FILE")) return false;
+    if (!nextTokenIs(builder_, ROBOT_FILE_TOKEN)) return false;
+    boolean result_ = false;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, ROBOT_FILE_TOKEN);
+    exit_section_(builder_, marker_, RESOURCE_FILE, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
+  // RESOURCE_SETTING_TOKEN  ELLIPSES_FOR_SETTINGS_TABLE* COLUMN_SEP_TOKEN  RESOURCE_FILE
   public static boolean RESOURCE_SETTING(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "RESOURCE_SETTING")) return false;
     if (!nextTokenIs(builder_, RESOURCE_SETTING_TOKEN)) return false;
     boolean result_ = false;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeTokens(builder_, 0, RESOURCE_SETTING_TOKEN, COLUMN_SEP_TOKEN);
-    result_ = result_ && KEYWORD_ARG(builder_, level_ + 1);
+    result_ = consumeToken(builder_, RESOURCE_SETTING_TOKEN);
+    result_ = result_ && RESOURCE_SETTING_1(builder_, level_ + 1);
+    result_ = result_ && consumeToken(builder_, COLUMN_SEP_TOKEN);
+    result_ = result_ && RESOURCE_FILE(builder_, level_ + 1);
     exit_section_(builder_, marker_, RESOURCE_SETTING, result_);
     return result_;
+  }
+
+  // ELLIPSES_FOR_SETTINGS_TABLE*
+  private static boolean RESOURCE_SETTING_1(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "RESOURCE_SETTING_1")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!ELLIPSES_FOR_SETTINGS_TABLE(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "RESOURCE_SETTING_1", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
   }
 
   /* ********************************************************** */
@@ -1746,18 +1741,6 @@ public class RobotParser implements PsiParser {
     result_ = SCALAR_VARIABLE(builder_, level_ + 1);
     if (!result_) result_ = SCALAR_ASSIGNMENT(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, SCALAR_ASSIGNMENT_LHS, result_, false, null);
-    return result_;
-  }
-
-  /* ********************************************************** */
-  // ASSIGNMENT_NO_SPACE_TOKEN
-  public static boolean SCALAR_ASSIGNMENT_NO_SPACE(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "SCALAR_ASSIGNMENT_NO_SPACE")) return false;
-    if (!nextTokenIs(builder_, ASSIGNMENT_NO_SPACE_TOKEN)) return false;
-    boolean result_ = false;
-    Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, ASSIGNMENT_NO_SPACE_TOKEN);
-    exit_section_(builder_, marker_, SCALAR_ASSIGNMENT_NO_SPACE, result_);
     return result_;
   }
 

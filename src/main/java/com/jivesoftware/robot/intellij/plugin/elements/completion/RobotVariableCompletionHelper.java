@@ -9,6 +9,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
+import com.jivesoftware.robot.intellij.plugin.elements.search.VariablePsiUtil;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotScalarAssignment;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotScalarDefaultArgValue;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotScalarVariable;
@@ -17,14 +18,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by charles on 7/12/14.
  */
 public class RobotVariableCompletionHelper implements RobotCompletionHelper {
     public static final RobotVariableCompletionHelper INSTANCE = new RobotVariableCompletionHelper();
-    private static final Pattern VARIABLE_PATTERN = Pattern.compile("\\$\\{ ?([^\\{\\}]+) ?\\}");
 
     private RobotVariableCompletionHelper() {
     }
@@ -66,7 +65,7 @@ public class RobotVariableCompletionHelper implements RobotCompletionHelper {
         List<T> scalarsInScope = RobotPsiUtil.findVariablesInScope(element, variableClass);
         Set<LookupElement> lookupElements = Sets.newHashSet();
         for (T var: scalarsInScope) {
-            Matcher matcher = VARIABLE_PATTERN.matcher(var.getText());
+            Matcher matcher = VariablePsiUtil.VARIABLE_PATTERN.matcher(var.getText());
             if (matcher.find()) {
                 String variableName = matcher.group(1);
                 String normalizedVariableName = RobotPsiUtil.normalizeKeywordForIndex(variableName);

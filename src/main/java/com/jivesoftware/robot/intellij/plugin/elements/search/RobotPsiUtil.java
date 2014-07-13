@@ -3,6 +3,7 @@ package com.jivesoftware.robot.intellij.plugin.elements.search;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -14,6 +15,7 @@ import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.stubs.StubIndexKey;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.indexing.FileBasedIndex;
+import com.jivesoftware.robot.intellij.plugin.elements.references.RobotFileReference;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.*;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotFileType;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
@@ -22,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 public class RobotPsiUtil {
 
@@ -214,29 +218,53 @@ public class RobotPsiUtil {
 
         RobotPsiFile file = PsiTreeUtil.getParentOfType(element, RobotPsiFile.class);
         if (file != null) {
-            varsInScope.addAll(findVariablesInVariablesTable(file, variableType));
+            varsInScope.addAll(findVariablesInVariablesTableAndIncludedResourceFiles(file, variableType));
         }
         return varsInScope;
     }
 
     private static <T extends PsiElement> Collection<T> findPsiElementsOfTypeInParent(PsiElement element,
-                                                                                Class<? extends PsiElement> parentType,
-                                                                                Class<T> desiredType) {
+                                                                                      Class<? extends PsiElement> parentType,
+                                                                                      Class<T> desiredType) {
         PsiElement parent = PsiTreeUtil.getParentOfType(element, parentType);
         if (parent != null) {
-            Collection<T> varsInTestCase = PsiTreeUtil.findChildrenOfType(parent, desiredType);
-            return varsInTestCase;
+            return PsiTreeUtil.findChildrenOfType(parent, desiredType);
         }
         return Lists.newArrayList();
     }
 
-    public static <T extends PsiElement> Collection<T> findVariablesInVariablesTable(@NotNull RobotPsiFile file, Class<T> variableTpe) {
-        List<T> foundScalarVars = Lists.newArrayList();
+    public static <T extends PsiElement> Collection<T> findVariablesInVariablesTableAndIncludedResourceFiles(@NotNull RobotPsiFile file, Class<T> variableType) {
+        Collection<T> results = findVariablesInVariablesTable(file, variableType);
+
         RobotTable[] tables = file.findChildrenByClass(RobotTable.class);
         for (RobotTable table: tables) {
+            if (table.getSettingsTable() == null) {
+                continue;
+            }
+            RobotSettingsTable settingsTable = table.getSettingsTable();
+            Collection<RobotResourceSetting> resourceSettings = PsiTreeUtil.findChildrenOfType(settingsTable, RobotResourceSetting.class);
+            for (RobotResourceSetting resourceSetting: resourceSettings) {
+                RobotResourceFile robotResourceFile = resourceSetting.getResourceFile();
+                RobotFileReference robotFileReference = new RobotFileReference(robotResourceFile);
+                PsiElement resourceFile = robotFileReference.resolve();
+                if (resourceFile instanceof RobotPsiFile) {
+                    RobotPsiFile robotPsiFile = (RobotPsiFile) resourceFile;
+                    Collection<T> foundInResourceFile = findVariablesInVariablesTable(robotPsiFile, variableType);
+                    results.addAll(foundInResourceFile);
+                }
+            }
+        }
+        return results;
+    }
+
+
+    public static <T extends PsiElement> Collection<T> findVariablesInVariablesTable(@NotNull RobotPsiFile file, Class<T> variableType) {
+        List<T> foundScalarVars = Lists.newArrayList();
+        RobotTable[] tables = file.findChildrenByClass(RobotTable.class);
+        for (RobotTable table : tables) {
             if (table.getVariablesTable() != null) {
                 RobotVariablesTable robotVariablesTable = table.getVariablesTable();
-                Collection<T> foundVars = PsiTreeUtil.findChildrenOfType(robotVariablesTable, variableTpe);
+                Collection<T> foundVars = PsiTreeUtil.findChildrenOfType(robotVariablesTable, variableType);
                 foundScalarVars.addAll(foundVars);
             }
         }

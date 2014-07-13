@@ -28,4 +28,6 @@ public interface RobotKeyword extends RobotNamedElement, StubBasedPsiElement<Rob
 
   PsiElement handleElementRename(String name);
 
+  String toString();
+
 }

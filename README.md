@@ -11,6 +11,14 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.3.0</h3>
+<ul>
+    <li>Added variable autocomplete for variables in scope, including those from included Resource files</li>
+    <li>Ctrl+Click included resource file from Resource setting to go directly to file.</li>
+    <li>Any text before the first Robot Table is now interpreted as a Comment, since that's how Robot works.</li>
+    <li>Several minor parsing improvements.</li>
+</ul>
+
 <h3>Version 1.2.3</h3>
 <ul>
     <li>Fixed Keywords syntax parsing so that [return] can be called multiple times.</li>
