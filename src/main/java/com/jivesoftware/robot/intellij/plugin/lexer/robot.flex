@@ -134,6 +134,7 @@ InputCharacter = [^\r\n]
 /* Keyword arguments and test case headers use the same chars.*/
 KeywordArgumentChar = [^\r\n\t\# ] | \\#
 TestCaseHeaderChar =  {KeywordArgumentChar}
+VariableChar = [^\r\n\t\#\{\} ]
 
 ColumnSep = " " " "+ | [ \t]* "\t" [ \t]* | [ \t]+ \| [ \t]+
 SingleSpace = " "
@@ -151,7 +152,8 @@ DecIntegerLiteral = 0 | "-"? [1-9][0-9]*
 Comment = "#" {InputCharacter}*
 
 /* identifiers */
-VariableName = {KeywordArgumentWord} ({SingleSpace} {KeywordArgumentWord})*
+VariableWord = {VariableChar}+
+VariableName = {VariableWord} ({SingleSpace} {VariableWord})*
 Variable = "${" " "? {VariableName} " "? "}"
 Assignment = {Variable} " "? "="
 AssignmentNoSpace = {Variable} "="
