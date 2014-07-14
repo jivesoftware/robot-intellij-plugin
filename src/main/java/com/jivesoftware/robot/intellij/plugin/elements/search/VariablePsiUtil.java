@@ -1,6 +1,7 @@
 package com.jivesoftware.robot.intellij.plugin.elements.search;
 
 import com.google.common.base.Optional;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -10,6 +11,7 @@ import com.jivesoftware.robot.intellij.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,7 +31,7 @@ public class VariablePsiUtil {
         return Optional.absent();
     }
 
-    public static Map<String, String> getVariableEnvironment(@NotNull RobotPsiFile file, Map<String, String> env) {
+    public static Map<String, VariableInfo> getVariableEnvironment(@NotNull RobotPsiFile file, Map<String, VariableInfo> env) {
         env = getVariableEnvironmentCurrentFile(file, env);
 
         RobotTable[] tables = file.findChildrenByClass(RobotTable.class);
@@ -45,14 +47,15 @@ public class VariablePsiUtil {
                 PsiElement resourceFile = robotFileReference.resolve(env);
                 if (resourceFile instanceof RobotPsiFile) {
                     RobotPsiFile robotPsiFile = (RobotPsiFile) resourceFile;
-                    env = getVariableEnvironment(robotPsiFile, env);
+                    Map<String, VariableInfo> resourceFileEnv = getVariableEnvironment(robotPsiFile, Maps.<String, VariableInfo>newHashMap());
+                    env = combineMaps(env, resourceFileEnv);
                 }
             }
         }
         return env;
     }
 
-    private static Map<String, String> getVariableEnvironmentCurrentFile(@NotNull RobotPsiFile file, Map<String, String> env) {
+    private static Map<String, VariableInfo> getVariableEnvironmentCurrentFile(@NotNull RobotPsiFile file, Map<String, VariableInfo> env) {
         RobotTable[] tables = file.findChildrenByClass(RobotTable.class);
         for (RobotTable table: tables) {
             if (table.getVariablesTable() == null) {
@@ -68,7 +71,6 @@ public class VariablePsiUtil {
                 if (!varNameOpt.isPresent()) {
                     continue;
                 }
-
                 if (line.getAssignableInVariablesTbl() == null) {
                     continue;
                 }
@@ -78,23 +80,88 @@ public class VariablePsiUtil {
                 String varValue = line.getAssignableInVariablesTbl().getKeywordArg().getText();
                 String actualValue = substitute(varValue, env);
 
-                env.put(normalVarName, actualValue);
+                PsiElement varDefinition = lhs.getScalarAssignment() != null ? lhs.getScalarAssignment() : lhs.getScalarVariable();
+                env.put(normalVarName, new VariableInfo(actualValue, varDefinition));
             }
         }
         return env;
     }
 
-    public static String substitute(String varValue, Map<String, String> env) {
-        String newValue = varValue;
-        Matcher matcher = VARIABLE_PATTERN.matcher(varValue);
+    public static String substitute(String rawStringValue, Map<String, VariableInfo> env) {
+        String subValue = rawStringValue;
+        Matcher matcher = VARIABLE_PATTERN.matcher(rawStringValue);
         while (matcher.find()) {
             String varName = matcher.group(1);
             String normalizedName = RobotPsiUtil.normalizeKeywordForIndex(varName);
-            String envValue = env.get(normalizedName);
+            VariableInfo envValue = env.get(normalizedName);
             if (envValue != null) {
-                newValue = newValue.replace(matcher.group(0), envValue);
+                subValue = subValue.replace(matcher.group(0), envValue.getValue());
             }
         }
-        return newValue;
+        return subValue;
+    }
+
+    private static <T, V> Map<T, V> combineMaps(Map<T, V> primary, Map<T, V> secondary) {
+        Map<T, V> combined = Maps.newHashMap(primary);
+        for (T key: secondary.keySet()) {
+            if (combined.get(key) == null) {
+                combined.put(key, secondary.get(key));
+            }
+        }
+        return combined;
+    }
+
+    //----------Helpers for finding the definition of a Variable from the point of use----------
+    public static Optional<PsiElement> findFirstDefinitionOfVariable(RobotTestCase test, String normalName) {
+        Collection<RobotScalarAssignment> assignments = PsiTreeUtil.findChildrenOfType(test, RobotScalarAssignment.class);
+        for (RobotScalarAssignment assignment: assignments) {
+            Optional<String> optVarName = getVariableName(assignment);
+            if (!optVarName.isPresent()) {
+                continue;
+            }
+            String foundNormalName = RobotPsiUtil.normalizeKeywordForIndex(optVarName.get());
+            if (normalName.equals(foundNormalName)) {
+                return Optional.<PsiElement>of(assignment);
+            }
+        }
+
+        RobotPsiFile file = (RobotPsiFile) test.getContainingFile();
+        Map<String, VariableInfo> env = getVariableEnvironment(file, Maps.<String, VariableInfo>newHashMap());
+        VariableInfo foundVar = env.get(normalName);
+        if (foundVar != null) {
+            return Optional.of(foundVar.getDefinition());
+        }
+        return Optional.absent();
+    }
+
+    public static Optional<PsiElement> findFirstDefinitionOfVariable(RobotKeywordDefinition keywordDefinition, String normalName) {
+
+        Collection<RobotScalarAssignment> assignments = PsiTreeUtil.findChildrenOfType(keywordDefinition, RobotScalarAssignment.class);
+        Collection<RobotArgumentDef> arguments = PsiTreeUtil.findChildrenOfType(keywordDefinition, RobotArgumentDef.class);
+        Collection<RobotScalarDefaultArgValue> defaultArgs = PsiTreeUtil.findChildrenOfType(keywordDefinition, RobotScalarDefaultArgValue.class);
+
+        List<PsiElement> definitionCandidates = Lists.newArrayList();
+        definitionCandidates.addAll(arguments);
+        definitionCandidates.addAll(defaultArgs);
+        definitionCandidates.addAll(assignments);
+
+        for (PsiElement definitionCandidate: definitionCandidates) {
+            Optional<String> optVarName = getVariableName(definitionCandidate);
+            if (!optVarName.isPresent()) {
+                continue;
+            }
+            String foundNormalName = RobotPsiUtil.normalizeKeywordForIndex(optVarName.get());
+            if (normalName.equals(foundNormalName)) {
+                return Optional.of(definitionCandidate);
+            }
+        }
+
+        RobotPsiFile file = (RobotPsiFile) keywordDefinition.getContainingFile();
+        Map<String, VariableInfo> env = getVariableEnvironment(file, Maps.<String, VariableInfo>newHashMap());
+        VariableInfo foundVar = env.get(normalName);
+        if (foundVar != null) {
+            return Optional.of(foundVar.getDefinition());
+        }
+        return Optional.absent();
     }
 }

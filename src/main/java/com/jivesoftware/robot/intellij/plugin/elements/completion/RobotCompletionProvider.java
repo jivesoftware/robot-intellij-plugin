@@ -1,22 +1,13 @@
 package com.jivesoftware.robot.intellij.plugin.elements.completion;
 
-import com.google.common.collect.Sets;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.codeInsight.lookup.LookupElement;
-import com.intellij.codeInsight.lookup.LookupElementBuilder;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.util.ProcessingContext;
-import com.jivesoftware.robot.intellij.plugin.elements.search.RobotTagFinder;
 import com.jivesoftware.robot.intellij.plugin.parser.RobotTypes;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Handles auto-completion of Java-defined keywords when writing Robot Code.

@@ -9,8 +9,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReferenceBase;
-import com.intellij.psi.impl.file.PsiFileImplUtil;
-import com.intellij.psi.impl.source.resolve.reference.impl.providers.PsiFileSystemItemUtil;
+import com.jivesoftware.robot.intellij.plugin.elements.search.VariableInfo;
 import com.jivesoftware.robot.intellij.plugin.elements.search.VariablePsiUtil;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotResourceFile;
@@ -32,7 +31,7 @@ public class RobotFileReference extends PsiReferenceBase<RobotResourceFile> {
     @Nullable
     @Override
     public PsiElement resolve() {
-        Map<String, String> env = Maps.newHashMap();
+        Map<String, VariableInfo> env = Maps.newHashMap();
         final PsiFile file = myElement.getContainingFile();
         if (!(file instanceof RobotPsiFile)) {
             return null;
@@ -43,7 +42,7 @@ public class RobotFileReference extends PsiReferenceBase<RobotResourceFile> {
     }
 
     @Nullable
-    public PsiElement resolve(Map<String, String> environment) {
+    public PsiElement resolve(Map<String, VariableInfo> environment) {
         final String fileName = VariablePsiUtil.substitute(myElement.getText(), environment);
         final Project project = myElement.getProject();
         final File file = new File(fileName);
@@ -67,9 +66,6 @@ public class RobotFileReference extends PsiReferenceBase<RobotResourceFile> {
         return null;
     }
 
-    /**
-     * Return the java method name corresponding to the Robot keyword.
-     */
     @NotNull
     @Override
     public String getCanonicalText() {
