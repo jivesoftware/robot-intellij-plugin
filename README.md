@@ -11,6 +11,15 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.3.1</h3>
+<ul>
+    <li>Added go-to definition for Variables. Can ctrl+click a variable to go to its definition. Works wherever the
+    variable was defined: local variable, Variables table, or included Resource file.</li>
+    <li>Fixed a small bug with Resource file resolving, where the wrong variable would be substituted in the resource
+    file path if the same variable name was included from a resource file and existed in the variables table.
+    </li>
+</ul>
+
 <h3>Version 1.3.0</h3>
 <ul>
     <li>Added variable autocomplete for variables in scope, including those from included Resource files</li>

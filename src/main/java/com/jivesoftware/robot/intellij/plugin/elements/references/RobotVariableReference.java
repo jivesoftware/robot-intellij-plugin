@@ -3,8 +3,10 @@ package com.jivesoftware.robot.intellij.plugin.elements.references;
 import com.google.common.base.Optional;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.jgoodies.common.base.Objects;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.search.VariablePsiUtil;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDefinition;
@@ -24,6 +26,7 @@ public class RobotVariableReference extends PsiReferenceBase<PsiElement> {
     @Override
     public PsiElement resolve() {
         final Optional<String> optVariableName = VariablePsiUtil.getVariableName(myElement);
+        final PsiFile myFile = myElement.getContainingFile();
         if (!optVariableName.isPresent()) {
             return null;
         }
@@ -34,6 +37,15 @@ public class RobotVariableReference extends PsiReferenceBase<PsiElement> {
         if (containingTest != null) {
             Optional<PsiElement> definition = VariablePsiUtil.findFirstDefinitionOfVariable(containingTest, normalName);
             if (definition.isPresent()) {
+                PsiFile containingFile = definition.get().getContainingFile();
+
+                //If the variable resolved to itself, return null
+                if (containingFile != null && myFile != null &&
+                    Objects.equals(containingFile.getName(), myFile.getName()) &&
+                    Objects.equals(definition.get().getTextRange(), myElement.getTextRange())) {
+                    return null;
+                }
+
                 return definition.get();
             }
         }
@@ -42,6 +54,14 @@ public class RobotVariableReference extends PsiReferenceBase<PsiElement> {
         if (containingKeywordDefinition != null) {
             Optional<PsiElement> definition = VariablePsiUtil.findFirstDefinitionOfVariable(containingKeywordDefinition, normalName);
             if (definition.isPresent()) {
+                PsiFile containingFile = definition.get().getContainingFile();
+
+                //If the variable resolved to itself, return null
+                if (containingFile != null && myFile != null &&
+                        Objects.equals(containingFile.getName(), myFile.getName()) &&
+                        Objects.equals(definition.get().getTextRange(), myElement.getTextRange())) {
+                    return null;
+                }
                 return definition.get();
             }
         }

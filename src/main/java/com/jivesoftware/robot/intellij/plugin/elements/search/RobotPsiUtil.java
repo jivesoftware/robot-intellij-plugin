@@ -246,7 +246,7 @@ public class RobotPsiUtil {
                 PsiElement resourceFile = robotFileReference.resolve();
                 if (resourceFile instanceof RobotPsiFile) {
                     RobotPsiFile robotPsiFile = (RobotPsiFile) resourceFile;
-                    Collection<T> foundInResourceFile = findVariablesInVariablesTable(robotPsiFile, variableType);
+                    Collection<T> foundInResourceFile = findVariablesInVariablesTableAndIncludedResourceFiles(robotPsiFile, variableType);
                     results.addAll(foundInResourceFile);
                 }
             }

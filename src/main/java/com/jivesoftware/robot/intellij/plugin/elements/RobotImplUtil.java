@@ -106,6 +106,36 @@ public class RobotImplUtil {
         return refs[0];
     }
 
+     /* Methods for RobotScalarVariable */
+    @NotNull
+    public static PsiReference[] getReferences(RobotScalarVariable element) {
+        return ReferenceProvidersRegistry.getReferencesFromProviders(element);
+    }
+
+    @Nullable
+    public static PsiReference getReference(RobotScalarVariable element) {
+        PsiReference[] refs = ReferenceProvidersRegistry.getReferencesFromProviders(element);
+        if (refs.length <= 0) {
+            return null;
+        }
+        return refs[0];
+    }
+
+    /* Methods for RobotScalarAssignment */
+    @NotNull
+    public static PsiReference[] getReferences(RobotScalarAssignment element) {
+        return ReferenceProvidersRegistry.getReferencesFromProviders(element);
+    }
+
+    @Nullable
+    public static PsiReference getReference(RobotScalarAssignment element) {
+        PsiReference[] refs = ReferenceProvidersRegistry.getReferencesFromProviders(element);
+        if (refs.length <= 0) {
+            return null;
+        }
+        return refs[0];
+    }
+
     /* Methods for RobotKeywordTitle type */
 
     public static ItemPresentation getPresentation(final RobotKeywordTitle element) {
