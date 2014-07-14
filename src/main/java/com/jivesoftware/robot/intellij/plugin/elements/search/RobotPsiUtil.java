@@ -3,6 +3,7 @@ package com.jivesoftware.robot.intellij.plugin.elements.search;
 import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -23,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public class RobotPsiUtil {
 
@@ -231,6 +233,17 @@ public class RobotPsiUtil {
     }
 
     public static <T extends PsiElement> Collection<T> findVariablesInVariablesTableAndIncludedResourceFiles(@NotNull RobotPsiFile file, Class<T> variableType) {
+        return findVariablesInVariablesTableAndIncludedResourceFiles(file, variableType, Sets.<String>newHashSet());
+    }
+
+    private static <T extends PsiElement> Collection<T> findVariablesInVariablesTableAndIncludedResourceFiles(@NotNull RobotPsiFile file, Class<T> variableType, Set<String> searchedFiles) {
+        final VirtualFile currentVirtualFile = file.getVirtualFile();
+        final String currentCanonicalPath = currentVirtualFile != null ? currentVirtualFile.getCanonicalPath() : null;
+        // To avoid infinite loops if the Robot file includes itself, or there's a loop in Resource file inclusions
+        if (currentCanonicalPath != null && searchedFiles.contains(currentCanonicalPath)) {
+            return Lists.newArrayList();
+        }
+        searchedFiles.add(currentCanonicalPath);
         Collection<T> results = findVariablesInVariablesTable(file, variableType);
 
         RobotTable[] tables = file.findChildrenByClass(RobotTable.class);
@@ -246,7 +259,7 @@ public class RobotPsiUtil {
                 PsiElement resourceFile = robotFileReference.resolve();
                 if (resourceFile instanceof RobotPsiFile) {
                     RobotPsiFile robotPsiFile = (RobotPsiFile) resourceFile;
-                    Collection<T> foundInResourceFile = findVariablesInVariablesTableAndIncludedResourceFiles(robotPsiFile, variableType);
+                    Collection<T> foundInResourceFile = findVariablesInVariablesTableAndIncludedResourceFiles(robotPsiFile, variableType, searchedFiles);
                     results.addAll(foundInResourceFile);
                 }
             }

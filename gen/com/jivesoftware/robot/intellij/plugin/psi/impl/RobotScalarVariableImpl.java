@@ -11,6 +11,7 @@ import static com.jivesoftware.robot.intellij.plugin.parser.RobotTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
+import com.intellij.psi.PsiReference;
 
 public class RobotScalarVariableImpl extends ASTWrapperPsiElement implements RobotScalarVariable {
 
@@ -21,6 +22,16 @@ public class RobotScalarVariableImpl extends ASTWrapperPsiElement implements Rob
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitScalarVariable(this);
     else super.accept(visitor);
+  }
+
+  @Nullable
+  public PsiReference getReference() {
+    return RobotImplUtil.getReference(this);
+  }
+
+  @NotNull
+  public PsiReference[] getReferences() {
+    return RobotImplUtil.getReferences(this);
   }
 
 }

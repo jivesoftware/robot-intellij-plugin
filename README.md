@@ -11,6 +11,16 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.3.2</h3>
+<ul>
+    <li>Bugfixes-- fixed a stack overflow if you included the current file as a Resource, or there was a loop in
+        Resource file inclusions.
+     </li>
+     <li>Fixed issue where you couldn't go to declaration of a variable if there was no "=" sign.</li>
+     <li>Fixed issue where you couldn't go to declaration of a variable if it was defined as the empty string and was defined in a variables table.</li>
+     <li>Forgot to include some generated files in git.</li>
+</ul>
+
 <h3>Version 1.3.1</h3>
 <ul>
     <li>Added go-to definition for Variables. Can ctrl+click a variable to go to its definition. Works wherever the

@@ -3,6 +3,8 @@ package com.jivesoftware.robot.intellij.plugin.elements.search;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotFileReference;
@@ -13,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,7 +34,19 @@ public class VariablePsiUtil {
         return Optional.absent();
     }
 
-    public static Map<String, VariableInfo> getVariableEnvironment(@NotNull RobotPsiFile file, Map<String, VariableInfo> env) {
+    public static Map<String, VariableInfo> getVariableEnvironment(@NotNull RobotPsiFile file) {
+        return getVariableEnvironment(file, Maps.<String, VariableInfo>newHashMap(), Sets.<String>newHashSet());
+    }
+
+
+    private static Map<String, VariableInfo> getVariableEnvironment(@NotNull RobotPsiFile file, Map<String, VariableInfo> env, Set<String> searchedFiles) {
+        final VirtualFile currentVirtualFile = file.getVirtualFile();
+        final String currentCanonicalPath = currentVirtualFile != null ? currentVirtualFile.getCanonicalPath() : null;
+        // To avoid infinite loops if the Robot file includes itself, or there's a loop in Resource file inclusions
+        if (currentCanonicalPath != null && searchedFiles.contains(currentCanonicalPath)) {
+            return env;
+        }
+        searchedFiles.add(currentCanonicalPath);
         env = getVariableEnvironmentCurrentFile(file, env);
 
         RobotTable[] tables = file.findChildrenByClass(RobotTable.class);
@@ -47,7 +62,7 @@ public class VariablePsiUtil {
                 PsiElement resourceFile = robotFileReference.resolve(env);
                 if (resourceFile instanceof RobotPsiFile) {
                     RobotPsiFile robotPsiFile = (RobotPsiFile) resourceFile;
-                    Map<String, VariableInfo> resourceFileEnv = getVariableEnvironment(robotPsiFile, Maps.<String, VariableInfo>newHashMap());
+                    Map<String, VariableInfo> resourceFileEnv = getVariableEnvironment(robotPsiFile, Maps.<String, VariableInfo>newHashMap(), searchedFiles);
                     env = combineMaps(env, resourceFileEnv);
                 }
             }
@@ -71,13 +86,11 @@ public class VariablePsiUtil {
                 if (!varNameOpt.isPresent()) {
                     continue;
                 }
-                if (line.getAssignableInVariablesTbl() == null) {
-                    continue;
-                }
+
                 String varName = varNameOpt.get();
                 String normalVarName = RobotPsiUtil.normalizeKeywordForIndex(varName);
 
-                String varValue = line.getAssignableInVariablesTbl().getKeywordArg().getText();
+                String varValue = line.getAssignableInVariablesTbl() == null ? "" : line.getAssignableInVariablesTbl().getKeywordArg().getText();
                 String actualValue = substitute(varValue, env);
 
                 PsiElement varDefinition = lhs.getScalarAssignment() != null ? lhs.getScalarAssignment() : lhs.getScalarVariable();
@@ -96,6 +109,11 @@ public class VariablePsiUtil {
             VariableInfo envValue = env.get(normalizedName);
             if (envValue != null) {
                 subValue = subValue.replace(matcher.group(0), envValue.getValue());
+            } else {
+                // Special case for Robot -- ${EMPTY} is the empty string.
+                if (normalizedName.equals("empty")) {
+                    subValue = subValue.replace(matcher.group(0), "");
+                }
             }
         }
         return subValue;
@@ -113,8 +131,8 @@ public class VariablePsiUtil {
 
     //----------Helpers for finding the definition of a Variable from the point of use----------
     public static Optional<PsiElement> findFirstDefinitionOfVariable(RobotTestCase test, String normalName) {
-        Collection<RobotScalarAssignment> assignments = PsiTreeUtil.findChildrenOfType(test, RobotScalarAssignment.class);
-        for (RobotScalarAssignment assignment: assignments) {
+        Collection<RobotScalarAssignmentLhs> assignments = PsiTreeUtil.findChildrenOfType(test, RobotScalarAssignmentLhs.class);
+        for (RobotScalarAssignmentLhs assignment: assignments) {
             Optional<String> optVarName = getVariableName(assignment);
             if (!optVarName.isPresent()) {
                 continue;
@@ -126,7 +144,7 @@ public class VariablePsiUtil {
         }
 
         RobotPsiFile file = (RobotPsiFile) test.getContainingFile();
-        Map<String, VariableInfo> env = getVariableEnvironment(file, Maps.<String, VariableInfo>newHashMap());
+        Map<String, VariableInfo> env = getVariableEnvironment(file);
         VariableInfo foundVar = env.get(normalName);
         if (foundVar != null) {
             return Optional.of(foundVar.getDefinition());
@@ -136,7 +154,7 @@ public class VariablePsiUtil {
 
     public static Optional<PsiElement> findFirstDefinitionOfVariable(RobotKeywordDefinition keywordDefinition, String normalName) {
 
-        Collection<RobotScalarAssignment> assignments = PsiTreeUtil.findChildrenOfType(keywordDefinition, RobotScalarAssignment.class);
+        Collection<RobotScalarAssignmentLhs> assignments = PsiTreeUtil.findChildrenOfType(keywordDefinition, RobotScalarAssignmentLhs.class);
         Collection<RobotArgumentDef> arguments = PsiTreeUtil.findChildrenOfType(keywordDefinition, RobotArgumentDef.class);
         Collection<RobotScalarDefaultArgValue> defaultArgs = PsiTreeUtil.findChildrenOfType(keywordDefinition, RobotScalarDefaultArgValue.class);
 
@@ -157,7 +175,7 @@ public class VariablePsiUtil {
         }
 
         RobotPsiFile file = (RobotPsiFile) keywordDefinition.getContainingFile();
-        Map<String, VariableInfo> env = getVariableEnvironment(file, Maps.<String, VariableInfo>newHashMap());
+        Map<String, VariableInfo> env = getVariableEnvironment(file);
         VariableInfo foundVar = env.get(normalName);
         if (foundVar != null) {
             return Optional.of(foundVar.getDefinition());

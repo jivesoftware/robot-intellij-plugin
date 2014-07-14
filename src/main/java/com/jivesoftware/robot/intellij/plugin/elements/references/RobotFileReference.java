@@ -1,6 +1,5 @@
 package com.jivesoftware.robot.intellij.plugin.elements.references;
 
-import com.google.common.collect.Maps;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.LocalFileSystem;
@@ -31,13 +30,12 @@ public class RobotFileReference extends PsiReferenceBase<RobotResourceFile> {
     @Nullable
     @Override
     public PsiElement resolve() {
-        Map<String, VariableInfo> env = Maps.newHashMap();
         final PsiFile file = myElement.getContainingFile();
         if (!(file instanceof RobotPsiFile)) {
             return null;
         }
         RobotPsiFile robotPsiFile = (RobotPsiFile) file;
-        env = VariablePsiUtil.getVariableEnvironment(robotPsiFile, env);
+        Map<String, VariableInfo> env = VariablePsiUtil.getVariableEnvironment(robotPsiFile);
         return resolve(env);
     }
 

@@ -2,6 +2,7 @@ package com.jivesoftware.robot.intellij.plugin.elements.references;
 
 import com.google.common.base.Optional;
 import com.intellij.openapi.util.TextRange;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReferenceBase;
@@ -27,6 +28,9 @@ public class RobotVariableReference extends PsiReferenceBase<PsiElement> {
     public PsiElement resolve() {
         final Optional<String> optVariableName = VariablePsiUtil.getVariableName(myElement);
         final PsiFile myFile = myElement.getContainingFile();
+        final VirtualFile myVirtualFile = myFile != null ? myFile.getVirtualFile() : null;
+        final String myCanonicalPath = myVirtualFile != null ? myVirtualFile.getCanonicalPath() : null;
+
         if (!optVariableName.isPresent()) {
             return null;
         }
@@ -38,11 +42,13 @@ public class RobotVariableReference extends PsiReferenceBase<PsiElement> {
             Optional<PsiElement> definition = VariablePsiUtil.findFirstDefinitionOfVariable(containingTest, normalName);
             if (definition.isPresent()) {
                 PsiFile containingFile = definition.get().getContainingFile();
+                VirtualFile virtualFile = containingFile != null ? containingFile.getVirtualFile() : null;
+                String canonicalPath = virtualFile != null ? virtualFile.getCanonicalPath() : null;
 
                 //If the variable resolved to itself, return null
-                if (containingFile != null && myFile != null &&
-                    Objects.equals(containingFile.getName(), myFile.getName()) &&
-                    Objects.equals(definition.get().getTextRange(), myElement.getTextRange())) {
+                if (canonicalPath != null && myCanonicalPath != null &&
+                        canonicalPath.equals(myCanonicalPath) &&
+                        Objects.equals(definition.get().getTextRange(), myElement.getTextRange())) {
                     return null;
                 }
 
@@ -55,10 +61,12 @@ public class RobotVariableReference extends PsiReferenceBase<PsiElement> {
             Optional<PsiElement> definition = VariablePsiUtil.findFirstDefinitionOfVariable(containingKeywordDefinition, normalName);
             if (definition.isPresent()) {
                 PsiFile containingFile = definition.get().getContainingFile();
+                VirtualFile virtualFile = containingFile != null ? containingFile.getVirtualFile() : null;
+                String canonicalPath = virtualFile != null ? virtualFile.getCanonicalPath() : null;
 
                 //If the variable resolved to itself, return null
-                if (containingFile != null && myFile != null &&
-                        Objects.equals(containingFile.getName(), myFile.getName()) &&
+                if (canonicalPath != null && myCanonicalPath != null &&
+                        canonicalPath.equals(myCanonicalPath) &&
                         Objects.equals(definition.get().getTextRange(), myElement.getTextRange())) {
                     return null;
                 }
