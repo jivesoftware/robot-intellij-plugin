@@ -15,6 +15,7 @@ import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.stubs.StubIndexKey;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.indexing.FileBasedIndex;
+import com.jgoodies.common.base.Objects;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotFileReference;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.*;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotFileType;
@@ -70,6 +71,19 @@ public class RobotPsiUtil {
             }
         }
         return sb.toString();
+    }
+
+    public static boolean areIdenticalTextualOccurrences(@NotNull PsiElement el1, @NotNull PsiElement el2) {
+        if (el1.getContainingFile() == null || el2.getContainingFile() == null) {
+            return false;
+        }
+        VirtualFile vf1 = el1.getContainingFile().getVirtualFile();
+        VirtualFile vf2 = el2.getContainingFile().getVirtualFile();
+        if (vf1 == null || vf2 == null) {
+            return false;
+        }
+        return Objects.equals(vf1.getCanonicalPath(), vf2.getCanonicalPath()) &&
+               el1.getTextRange().equals(el2.getTextRange());
     }
 
     public static List<RobotTestCase> findAllRobotTestCases(Project project) {

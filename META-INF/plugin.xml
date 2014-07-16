@@ -254,13 +254,9 @@
         <!-- This enables Find Usages of Robot Keywords defined in Robot -->
         <lang.findUsagesProvider language="RobotTestFile"
                                  implementationClass="com.jivesoftware.robot.intellij.plugin.elements.usages.RobotKeywordUsagesProvider"/>
-
         <!-- This enables Find Usages of a Java method that is a Robot Keyword definition -->
         <customUsageSearcher
                 implementation="com.jivesoftware.robot.intellij.plugin.elements.usages.RobotCustomUsagesSearcher"/>
-
-        <!-- This doesn't do much yet, but will provide find usages highlighting, etc. -->
-        <!-- <findUsagesHandlerFactory implementation="com.jivesoftware.robot.intellij.plugin.elements.usages.RobotFindUsagesHandlerFactory"/>-->
 
         <!-- Enables auto-completion of robot keywords -->
         <completion.contributor language="RobotTestFile"

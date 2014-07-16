@@ -1,6 +1,7 @@
 package com.jivesoftware.robot.intellij.plugin.elements.search;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -8,6 +9,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotFileReference;
+import com.jivesoftware.robot.intellij.plugin.elements.references.RobotVariableReference;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
@@ -181,5 +183,76 @@ public class VariablePsiUtil {
             return Optional.of(foundVar.getDefinition());
         }
         return Optional.absent();
+    }
+
+    //-----------------Find Usages---------------------
+    public static List<PsiElement> findVariableUsages(PsiElement robotVariable) {
+        Optional<String> optVariableName = getVariableName(robotVariable);
+
+        if (!optVariableName.isPresent()) {
+            return Lists.newArrayList();
+        }
+
+        final String normalName = RobotPsiUtil.normalizeKeywordForIndex(optVariableName.get());
+
+        RobotTestCase test = PsiTreeUtil.getParentOfType(robotVariable, RobotTestCase.class);
+        if (test != null) {
+            return findLocalVariableUsages(test, normalName);
+        }
+
+        RobotKeywordDefinition keywordDefinition = PsiTreeUtil.getParentOfType(robotVariable, RobotKeywordDefinition.class);
+        if (keywordDefinition != null) {
+            return findLocalVariableUsages(keywordDefinition, normalName);
+        }
+
+        return Lists.newArrayList();
+    }
+
+    private static List<PsiElement> findLocalVariableUsages(RobotTestCase test, final String expectedNormalName) {
+        Collection<RobotScalarVariable> vars = PsiTreeUtil.findChildrenOfType(test, RobotScalarVariable.class);
+        Collection<RobotScalarAssignment> assignments = PsiTreeUtil.findChildrenOfType(test, RobotScalarAssignment.class);
+        List<PsiElement> allTypes = Lists.newArrayList();
+        allTypes.addAll(vars);
+        allTypes.addAll(assignments);
+
+        List<PsiElement> usages = Lists.newArrayList();
+
+        for (PsiElement el: allTypes) {
+            Optional<String> optVariableName = getVariableName(el);
+            if (optVariableName.isPresent()) {
+                String name = optVariableName.get();
+                String normalName = RobotPsiUtil.normalizeKeywordForIndex(name);
+                if (normalName.equals(expectedNormalName)) {
+                    usages.add(el);
+                }
+            }
+        }
+        return usages;
+    }
+
+    private static List<PsiElement> findLocalVariableUsages(RobotKeywordDefinition keywordDefinition, final String expectedNormalName) {
+        Collection<RobotScalarVariable> vars = PsiTreeUtil.findChildrenOfType(keywordDefinition, RobotScalarVariable.class);
+        Collection<RobotScalarAssignment> assignments = PsiTreeUtil.findChildrenOfType(keywordDefinition, RobotScalarAssignment.class);
+        List<PsiElement> allTypes = Lists.newArrayList();
+        allTypes.addAll(vars);
+        allTypes.addAll(assignments);
+
+        List<PsiElement> usages = Lists.newArrayList();
+
+        for (PsiElement el: allTypes) {
+            RobotArgumentDef parent = PsiTreeUtil.getParentOfType(el, RobotArgumentDef.class);
+            if (parent != null) {
+                continue; //Do not include keyword arguments in usages.
+            }
+            Optional<String> optVariableName = getVariableName(el);
+            if (optVariableName.isPresent()) {
+                String name = optVariableName.get();
+                String normalName = RobotPsiUtil.normalizeKeywordForIndex(name);
+                if (normalName.equals(expectedNormalName)) {
+                    usages.add(el);
+                }
+            }
+        }
+        return usages;
     }
 }

@@ -7,8 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.TokenSet;
 import com.jivesoftware.robot.intellij.plugin.lexer.RobotScannerAdapter;
 import com.jivesoftware.robot.intellij.plugin.parser.RobotTypes;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordTitle;
+import com.jivesoftware.robot.intellij.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +27,11 @@ public class RobotKeywordUsagesProvider implements FindUsagesProvider {
 
   @Override
   public boolean canFindUsagesFor(@NotNull PsiElement psiElement) {
-    return psiElement instanceof RobotKeywordTitle;
+    return psiElement instanceof RobotKeywordTitle ||
+           psiElement instanceof RobotScalarVariable ||
+           psiElement instanceof RobotScalarAssignment ||
+           psiElement instanceof RobotScalarAssignmentLhs ||
+           psiElement instanceof RobotArgumentDef;
   }
 
   @Nullable
@@ -44,6 +47,8 @@ public class RobotKeywordUsagesProvider implements FindUsagesProvider {
       return "Robot Keyword Definition";
     } else if (element instanceof RobotKeyword) {
       return "Robot Keyword Usage";
+    } else if (element instanceof RobotScalarVariable || element instanceof RobotScalarAssignment) {
+      return "Robot Variable Usage";
     }
     return "";
   }
@@ -51,7 +56,9 @@ public class RobotKeywordUsagesProvider implements FindUsagesProvider {
   @NotNull
   @Override
   public String getDescriptiveName(@NotNull PsiElement element) {
-    if (element instanceof RobotKeywordTitle) {
+    if (element instanceof RobotKeywordTitle ||
+        element instanceof RobotScalarVariable ||
+        element instanceof RobotScalarAssignment) {
       return element.getText();
     }
     return "";
@@ -60,7 +67,9 @@ public class RobotKeywordUsagesProvider implements FindUsagesProvider {
   @NotNull
   @Override
   public String getNodeText(@NotNull PsiElement element, boolean useFullName) {
-    if (element instanceof RobotKeywordTitle) {
+    if (element instanceof RobotKeywordTitle ||
+        element instanceof RobotScalarVariable ||
+        element instanceof RobotScalarAssignment) {
       return element.getText();
     }
     return "";
