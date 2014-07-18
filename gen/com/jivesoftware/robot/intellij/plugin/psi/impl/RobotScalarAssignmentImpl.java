@@ -8,15 +8,21 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.jivesoftware.robot.intellij.plugin.parser.RobotTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import com.intellij.extapi.psi.StubBasedPsiElementBase;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotScalarAssignmentStub;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class RobotScalarAssignmentImpl extends ASTWrapperPsiElement implements RobotScalarAssignment {
+public class RobotScalarAssignmentImpl extends StubBasedPsiElementBase<RobotScalarAssignmentStub> implements RobotScalarAssignment {
 
   public RobotScalarAssignmentImpl(ASTNode node) {
     super(node);
+  }
+
+  public RobotScalarAssignmentImpl(RobotScalarAssignmentStub stub, IStubElementType nodeType) {
+    super(stub, nodeType);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -32,6 +38,25 @@ public class RobotScalarAssignmentImpl extends ASTWrapperPsiElement implements R
   @NotNull
   public PsiReference[] getReferences() {
     return RobotImplUtil.getReferences(this);
+  }
+
+  @Nullable
+  @NonNls
+  public String getName() {
+    return RobotImplUtil.getName(this);
+  }
+
+  public PsiElement setName(String newName) {
+    return RobotImplUtil.setName(this, newName);
+  }
+
+  @Nullable
+  public PsiElement getNameIdentifier() {
+    return RobotImplUtil.getNameIdentifier(this);
+  }
+
+  public String toString() {
+    return RobotImplUtil.toString(this);
   }
 
 }

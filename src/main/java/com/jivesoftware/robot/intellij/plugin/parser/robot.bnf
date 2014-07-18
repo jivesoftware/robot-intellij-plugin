@@ -26,6 +26,17 @@
   elementTypeClass("KEYWORD_TITLE")="com.jivesoftware.robot.intellij.plugin.parser.RobotKeywordTitleElementType"
 
   implements("TEST_CASE")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
+
+  implements("SCALAR_VARIABLE")=["com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
+                                  "com.intellij.psi.StubBasedPsiElement<com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotScalarVariableStub>"]
+  extends("SCALAR_VARIABLE")="com.intellij.extapi.psi.StubBasedPsiElementBase<com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotScalarVariableStub>"
+  elementTypeClass("SCALAR_VARIABLE")="com.jivesoftware.robot.intellij.plugin.parser.RobotScalarVariableElementType"
+
+  implements("SCALAR_ASSIGNMENT")=["com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
+                                    "com.intellij.psi.StubBasedPsiElement<com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotScalarAssignmentStub>"]
+  extends("SCALAR_ASSIGNMENT")="com.intellij.extapi.psi.StubBasedPsiElementBase<com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotScalarAssignmentStub>"
+  elementTypeClass("SCALAR_ASSIGNMENT")="com.jivesoftware.robot.intellij.plugin.parser.RobotScalarAssignmentElementType"
+
 }
 
 //Top-level File. A sequence of Robot Tables or empty lines.
@@ -133,9 +144,9 @@ RETURN_SETTING ::= RETURN_SETTING_TOKEN (COLUMN_SEP_TOKEN KEYWORD_ARG)+
 
 /* Shared grammar */
 //--------------------Variables and assignment----------------------
-SCALAR_VARIABLE ::= VARIABLE_TOKEN { methods=[getReference getReferences]}
+SCALAR_VARIABLE ::= VARIABLE_TOKEN { methods=[getReference getReferences getName setName getNameIdentifier toString] }
 ARRAY_VARIABLE  ::= ARRAY_VARIABLE_TOKEN
-SCALAR_ASSIGNMENT ::= ASSIGNMENT_TOKEN { methods=[getReference getReferences]}
+SCALAR_ASSIGNMENT ::= ASSIGNMENT_TOKEN { methods=[getReference getReferences getName setName getNameIdentifier toString]}
 ARRAY_ASSIGNMENT ::= ARRAY_ASSIGNMENT_TOKEN
 SINGLE_VARIABLE_LIST ::= SCALAR_VARIABLE (INDENTED_ELLIPSES_FOR_TEST_TABLE | (COLUMN_SEP_TOKEN SCALAR_VARIABLE))* //Used for variable list in :FOR loops
 VARIABLE ::= SCALAR_VARIABLE | ARRAY_VARIABLE

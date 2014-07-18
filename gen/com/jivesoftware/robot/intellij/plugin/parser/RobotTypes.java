@@ -59,10 +59,10 @@ public interface RobotTypes {
   IElementType RESOURCE_SETTING = new RobotElementType("RESOURCE_SETTING");
   IElementType RETURN_LINE = new RobotElementType("RETURN_LINE");
   IElementType RETURN_SETTING = new RobotElementType("RETURN_SETTING");
-  IElementType SCALAR_ASSIGNMENT = new RobotElementType("SCALAR_ASSIGNMENT");
+  IElementType SCALAR_ASSIGNMENT = new RobotScalarAssignmentElementType("SCALAR_ASSIGNMENT");
   IElementType SCALAR_ASSIGNMENT_LHS = new RobotElementType("SCALAR_ASSIGNMENT_LHS");
   IElementType SCALAR_DEFAULT_ARG_VALUE = new RobotElementType("SCALAR_DEFAULT_ARG_VALUE");
-  IElementType SCALAR_VARIABLE = new RobotElementType("SCALAR_VARIABLE");
+  IElementType SCALAR_VARIABLE = new RobotScalarVariableElementType("SCALAR_VARIABLE");
   IElementType SETTING = new RobotElementType("SETTING");
   IElementType SETTINGS_LINE = new RobotElementType("SETTINGS_LINE");
   IElementType SETTINGS_TABLE = new RobotElementType("SETTINGS_TABLE");

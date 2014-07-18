@@ -238,7 +238,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <fileTypeFactory implementation="com.jivesoftware.robot.intellij.plugin.lang.RobotFileTypeFactory"/>
-        <syntaxHighlighter key="soy"
+        <syntaxHighlighter key="robot"
                            implementationClass="com.jivesoftware.robot.intellij.plugin.lang.RobotSyntaxHighlighter"/>
         <colorSettingsPage implementation="com.jivesoftware.robot.intellij.plugin.lang.RobotColorsAndFontsPage"/>
 
@@ -291,6 +291,10 @@
                 implementation="com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordTitleFirstTwoCharsIndex"/>
         <stubIndex
                 implementation="com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefFirstThreeCharsIndex"/>
+
+        <stubIndex implementation="com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotVariableNormalizedNameIndex"/>
+
+        <stubIndex implementation="com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotAssignmentNormalizedNameIndex"/>
 
     </extensions>
 

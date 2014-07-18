@@ -1,15 +1,20 @@
 package com.jivesoftware.robot.intellij.plugin.elements.search;
 
 import com.google.common.base.Optional;
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotFileReference;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotVariableReference;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotAssignmentNormalizedNameIndex;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordTitleNormalizedNameIndex;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotVariableNormalizedNameIndex;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +34,11 @@ public class VariablePsiUtil {
 
     public static Optional<String> getVariableName(@NotNull PsiElement element) {
         String text = element.getText();
-        Matcher matcher = VARIABLE_PATTERN.matcher(text);
+        return getVariableName(text);
+    }
+
+    public static Optional<String> getVariableName(String codeText) {
+        Matcher matcher = VARIABLE_PATTERN.matcher(codeText);
         if (matcher.find()) {
             return Optional.of(matcher.group(1));
         }
@@ -205,7 +214,44 @@ public class VariablePsiUtil {
             return findLocalVariableUsages(keywordDefinition, normalName);
         }
 
+        RobotVariablesTable variablesTable = PsiTreeUtil.getParentOfType(robotVariable, RobotVariablesTable.class);
+        if (variablesTable != null) {
+            return findUsagesOfVariableFromVariablesTable(robotVariable, normalName);
+        }
+
         return Lists.newArrayList();
+    }
+
+    private static List<PsiElement> findUsagesOfVariableFromVariablesTable(PsiElement sourceVariable, String normalName) {
+        final Project project = sourceVariable.getProject();
+        List<PsiElement> usages = Lists.newArrayList();
+
+        Collection<RobotScalarVariable> scalarVariablesWithSameName = StubIndex.getElements(RobotVariableNormalizedNameIndex.KEY, normalName, project,
+                GlobalSearchScope.allScope(project), RobotScalarVariable.class);
+        for (RobotScalarVariable robotScalarVariable: scalarVariablesWithSameName) {
+            if (isVariableUsage(sourceVariable, robotScalarVariable, normalName)) {
+                usages.add(robotScalarVariable);
+            }
+        }
+
+        return usages;
+    }
+
+    private static boolean isVariableUsage(PsiElement sourceVariable, PsiElement usageVariable, final String sourceNormalName) {
+        Optional<String> optVariableName = getVariableName(usageVariable);
+        if (!optVariableName.isPresent()) {
+            return false;
+        }
+        String normalName = RobotPsiUtil.normalizeKeywordForIndex(optVariableName.get());
+        if (!sourceNormalName.equals(normalName)) {
+            return false;
+        }
+        RobotVariableReference ref = new RobotVariableReference(usageVariable);
+        PsiElement resolvesTo = ref.resolve();
+        if (resolvesTo == null) {
+            return false;
+        }
+        return RobotPsiUtil.areIdenticalTextualOccurrences(sourceVariable, resolvesTo);
     }
 
     private static List<PsiElement> findLocalVariableUsages(RobotTestCase test, final String expectedNormalName) {

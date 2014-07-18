@@ -8,6 +8,8 @@ import com.intellij.util.IncorrectOperationException;
 import com.jivesoftware.robot.intellij.plugin.elements.presentations.KeywordTitlePresentation;
 import com.jivesoftware.robot.intellij.plugin.elements.presentations.TestCasePresentation;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStub;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotScalarAssignmentStub;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotScalarVariableStub;
 import com.jivesoftware.robot.intellij.plugin.icons.RobotIcons;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
@@ -107,6 +109,27 @@ public class RobotImplUtil {
     }
 
      /* Methods for RobotScalarVariable */
+     @Nullable
+     @NonNls
+     public static String getName(RobotScalarVariable element) {
+         RobotScalarVariableStub stub = element.getStub();
+         if (stub != null) {
+             return stub.getName();
+         }
+         return element.getText();
+     }
+
+    public static PsiElement setName(RobotScalarVariable element, @NonNls @NotNull String newName) throws com.intellij.util.IncorrectOperationException {
+        RobotKeywordTitle replacement = RobotElementFactory.createKeywordTitle(element.getProject(), newName);
+        element.getParent().getNode().replaceChild(element.getNode(), replacement.getNode());
+        return replacement;
+    }
+
+    @Nullable
+    public static PsiElement getNameIdentifier(RobotScalarVariable element) {
+        return element;
+    }
+
     @NotNull
     public static PsiReference[] getReferences(RobotScalarVariable element) {
         return ReferenceProvidersRegistry.getReferencesFromProviders(element);
@@ -121,7 +144,32 @@ public class RobotImplUtil {
         return refs[0];
     }
 
+    public static String toString(RobotScalarVariable element) {
+        return "RobotScalarVariable: " + element.getText();
+    }
+
     /* Methods for RobotScalarAssignment */
+    @Nullable
+    @NonNls
+    public static String getName(RobotScalarAssignment element) {
+        RobotScalarAssignmentStub stub = element.getStub();
+        if (stub != null) {
+            return stub.getName();
+        }
+        return element.getText();
+    }
+
+    public static PsiElement setName(RobotScalarAssignment element, @NonNls @NotNull String newName) throws com.intellij.util.IncorrectOperationException {
+        RobotKeywordTitle replacement = RobotElementFactory.createKeywordTitle(element.getProject(), newName);
+        element.getParent().getNode().replaceChild(element.getNode(), replacement.getNode());
+        return replacement;
+    }
+
+    @Nullable
+    public static PsiElement getNameIdentifier(RobotScalarAssignment element) {
+        return element;
+    }
+
     @NotNull
     public static PsiReference[] getReferences(RobotScalarAssignment element) {
         return ReferenceProvidersRegistry.getReferencesFromProviders(element);
@@ -134,6 +182,10 @@ public class RobotImplUtil {
             return null;
         }
         return refs[0];
+    }
+
+    public static String toString(RobotScalarAssignment element) {
+        return "RobotScalarAssignment: " + element.getText();
     }
 
     /* Methods for RobotKeywordTitle type */
