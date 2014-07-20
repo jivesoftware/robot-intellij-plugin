@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -141,9 +142,26 @@ public class VariablePsiUtil {
     }
 
     //----------Helpers for finding the definition of a Variable from the point of use----------
-    public static Optional<PsiElement> findFirstDefinitionOfVariable(RobotTestCase test, String normalName) {
+    public static Optional<PsiElement> findFirstDefinitionOfVariable(RobotTestCase test, PsiElement variableUsage) {
+        Optional<String> optVariableName = getVariableName(variableUsage);
+        if (!optVariableName.isPresent()) {
+            return Optional.absent();
+        }
+        final String normalName = RobotPsiUtil.normalizeKeywordForIndex(optVariableName.get());
+        final TextRange usageTextRange = variableUsage.getTextRange();
+
         Collection<RobotScalarAssignmentLhs> assignments = PsiTreeUtil.findChildrenOfType(test, RobotScalarAssignmentLhs.class);
         for (RobotScalarAssignmentLhs assignment: assignments) {
+            TextRange textRange = assignment.getTextRange();
+            // Skip assignments after the usage. A variable can't be defined in a future line of code!
+            if (textRange != null && usageTextRange != null && textRange.getStartOffset() >= usageTextRange.getStartOffset()) {
+                if (textRange.equals(usageTextRange)) {
+                    // If the usage is an assignment and there are no previous assignments of this variable,
+                    // then don't look further for its definition since it is a definition!
+                    return Optional.absent();
+                }
+                continue;
+            }
             Optional<String> optVarName = getVariableName(assignment);
             if (!optVarName.isPresent()) {
                 continue;
@@ -163,7 +181,13 @@ public class VariablePsiUtil {
         return Optional.absent();
     }
 
-    public static Optional<PsiElement> findFirstDefinitionOfVariable(RobotKeywordDefinition keywordDefinition, String normalName) {
+    public static Optional<PsiElement> findFirstDefinitionOfVariable(RobotKeywordDefinition keywordDefinition, PsiElement variableUsage) {
+        Optional<String> optVariableName = getVariableName(variableUsage);
+        if (!optVariableName.isPresent()) {
+            return Optional.absent();
+        }
+        final String normalName = RobotPsiUtil.normalizeKeywordForIndex(optVariableName.get());
+        final TextRange usageTextRange = variableUsage.getTextRange();
 
         Collection<RobotScalarAssignmentLhs> assignments = PsiTreeUtil.findChildrenOfType(keywordDefinition, RobotScalarAssignmentLhs.class);
         Collection<RobotArgumentDef> arguments = PsiTreeUtil.findChildrenOfType(keywordDefinition, RobotArgumentDef.class);
@@ -175,6 +199,16 @@ public class VariablePsiUtil {
         definitionCandidates.addAll(assignments);
 
         for (PsiElement definitionCandidate: definitionCandidates) {
+            TextRange textRange = definitionCandidate.getTextRange();
+            // A variable can't be defined on a future line of code!
+            if (textRange != null && usageTextRange != null && textRange.getStartOffset() >= usageTextRange.getStartOffset()) {
+                if (textRange.equals(usageTextRange)) {
+                    // If the usage is an assignment and there are no previous assignments of this variable,
+                    // then don't look further for its definition since it is a definition!
+                    return Optional.absent();
+                }
+                continue;
+            }
             Optional<String> optVarName = getVariableName(definitionCandidate);
             if (!optVarName.isPresent()) {
                 continue;

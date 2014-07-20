@@ -2,6 +2,7 @@ package com.jivesoftware.robot.intellij.plugin.elements;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFileFactory;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotFileType;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
@@ -45,6 +46,48 @@ public class RobotElementFactory {
             return header.getKeywordTitle();
         }
         return null;
+    }
+
+    public static RobotScalarVariable createScalarVariable(Project project, String scalarVarName) {
+        String template = "*** Test Cases ***\n" +
+                "My Test Case\n" +
+                "  Log  ${%s}";
+        RobotPsiFile file = createFile(project, format(template, scalarVarName));
+        return PsiTreeUtil.findChildOfType(file, RobotScalarVariable.class);
+    }
+
+    public static RobotScalarAssignment createScalarAssignment(Project project, String scalarVarName) {
+        String template = "*** Test Cases ***\n" +
+                "My Test Case\n" +
+                "  ${%s}=   Evaluate   'Abc'";
+        RobotPsiFile file = createFile(project, format(template, scalarVarName));
+        return PsiTreeUtil.findChildOfType(file, RobotScalarAssignment.class);
+    }
+
+    public static RobotScalarAssignmentLhs createScalarAssignmentLhs(Project project, String scalarVarName) {
+        String template = "*** Test Cases ***\n" +
+                "My Test Case\n" +
+                "  ${%s}=   Evaluate   'Abc'";
+        RobotPsiFile file = createFile(project, format(template, scalarVarName));
+        return PsiTreeUtil.findChildOfType(file, RobotScalarAssignmentLhs.class);
+    }
+
+    public static RobotScalarDefaultArgValue createScalarDefaultArgValue(Project project, String scalarVarName) {
+        String template = "*** Keywords ***\n" +
+                "My Keyword\n" +
+                "  [arguments]  ${%s}=abc\n" +
+                "  Log  Foo\n";
+        RobotPsiFile file = createFile(project, format(template, scalarVarName));
+        return PsiTreeUtil.findChildOfType(file, RobotScalarDefaultArgValue.class);
+    }
+
+    public static RobotArgumentDef createArgumentDef(Project project, String scalarVarName) {
+        String template = "*** Keywords ***\n" +
+                "My Keyword\n" +
+                "  [arguments]  ${%s}\n" +
+                "  Log  Foo\n";
+        RobotPsiFile file = createFile(project, format(template, scalarVarName));
+        return PsiTreeUtil.findChildOfType(file, RobotArgumentDef.class);
     }
 
     public static RobotPsiFile createFile(Project project, String text) {

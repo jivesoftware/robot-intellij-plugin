@@ -18,7 +18,7 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitArgumentDef(@NotNull RobotArgumentDef o) {
-    visitPsiElement(o);
+    visitNamedElement(o);
   }
 
   public void visitArrayAssignableInVariablesTbl(@NotNull RobotArrayAssignableInVariablesTbl o) {
@@ -221,11 +221,11 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitScalarAssignmentLhs(@NotNull RobotScalarAssignmentLhs o) {
-    visitPsiElement(o);
+    visitNamedElement(o);
   }
 
   public void visitScalarDefaultArgValue(@NotNull RobotScalarDefaultArgValue o) {
-    visitPsiElement(o);
+    visitNamedElement(o);
   }
 
   public void visitScalarVariable(@NotNull RobotScalarVariable o) {

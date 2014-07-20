@@ -37,6 +37,9 @@
   extends("SCALAR_ASSIGNMENT")="com.intellij.extapi.psi.StubBasedPsiElementBase<com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotScalarAssignmentStub>"
   elementTypeClass("SCALAR_ASSIGNMENT")="com.jivesoftware.robot.intellij.plugin.parser.RobotScalarAssignmentElementType"
 
+  implements("SCALAR_ASSIGNMENT_LHS")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
+  implements("SCALAR_DEFAULT_ARG_VALUE")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
+  implements("ARGUMENT_DEF")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
 }
 
 //Top-level File. A sequence of Robot Tables or empty lines.
@@ -124,8 +127,8 @@ KEYWORD_SETTING_LINE ::= COLUMN_SEP_TOKEN KEYWORD_SETTING END_OF_LINE (NEWLINE_T
 KEYWORD_SETTING ::= ARGUMENTS_SETTING | DOCUMENTATION_SETTING | TEST_CASE_TEARDOWN_SETTING | TEST_CASE_TIMEOUT_SETTING
 
 ARGUMENTS_SETTING ::= ARGUMENTS_SETTING_TOKEN (COLUMN_SEP_TOKEN ARGUMENT_DEF)*
-SCALAR_DEFAULT_ARG_VALUE ::= SCALAR_DEFAULT_ARG_VALUE_TOKEN
-ARGUMENT_DEF ::= VARIABLE | SCALAR_DEFAULT_ARG_VALUE
+SCALAR_DEFAULT_ARG_VALUE ::= SCALAR_DEFAULT_ARG_VALUE_TOKEN {methods = [getName setName getNameIdentifier getReference getReferences handleElementRename toString]}
+ARGUMENT_DEF ::= VARIABLE | SCALAR_DEFAULT_ARG_VALUE {methods = [getName setName getNameIdentifier getReference getReferences handleElementRename toString]}
 
 KEYWORD_LINE ::= COLUMN_SEP_TOKEN ( KEYWORD_INVOCATION_TEST | VARIABLE_ASSIGN_TO_KEYWORD ) END_OF_LINE (NEWLINE_TOKEN | <<eof>>)  |
                  RETURN_LINE |
@@ -144,15 +147,15 @@ RETURN_SETTING ::= RETURN_SETTING_TOKEN (COLUMN_SEP_TOKEN KEYWORD_ARG)+
 
 /* Shared grammar */
 //--------------------Variables and assignment----------------------
-SCALAR_VARIABLE ::= VARIABLE_TOKEN { methods=[getReference getReferences getName setName getNameIdentifier toString] }
+SCALAR_VARIABLE ::= VARIABLE_TOKEN { methods=[getReference getReferences getName setName getNameIdentifier handleElementRename toString] }
 ARRAY_VARIABLE  ::= ARRAY_VARIABLE_TOKEN
-SCALAR_ASSIGNMENT ::= ASSIGNMENT_TOKEN { methods=[getReference getReferences getName setName getNameIdentifier toString]}
+SCALAR_ASSIGNMENT ::= ASSIGNMENT_TOKEN { methods=[getReference getReferences getName setName getNameIdentifier handleElementRename toString]}
 ARRAY_ASSIGNMENT ::= ARRAY_ASSIGNMENT_TOKEN
 SINGLE_VARIABLE_LIST ::= SCALAR_VARIABLE (INDENTED_ELLIPSES_FOR_TEST_TABLE | (COLUMN_SEP_TOKEN SCALAR_VARIABLE))* //Used for variable list in :FOR loops
 VARIABLE ::= SCALAR_VARIABLE | ARRAY_VARIABLE
 ASSIGNMENT ::= SCALAR_ASSIGNMENT | ARRAY_ASSIGNMENT
 
-SCALAR_ASSIGNMENT_LHS ::= SCALAR_VARIABLE | SCALAR_ASSIGNMENT
+SCALAR_ASSIGNMENT_LHS ::= SCALAR_VARIABLE | SCALAR_ASSIGNMENT { methods=[getName setName getReference getReferences getNameIdentifier handleElementRename toString]}
 ARRAY_ASSIGNMENT_LHS  ::= ARRAY_VARIABLE | ARRAY_ASSIGNMENT
 SINGLE_ASSIGNMENT_LHS ::= SCALAR_ASSIGNMENT_LHS | ARRAY_ASSIGNMENT_LHS
 MULTI_ASSIGNMENT_LHS  ::= VARIABLE (COLUMN_SEP_TOKEN VARIABLE)*  COLUMN_SEP_TOKEN ASSIGNMENT

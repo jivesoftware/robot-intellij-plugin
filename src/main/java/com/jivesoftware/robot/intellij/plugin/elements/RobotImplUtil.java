@@ -1,12 +1,15 @@
 package com.jivesoftware.robot.intellij.plugin.elements;
 
+import com.google.common.base.Optional;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.jivesoftware.robot.intellij.plugin.elements.presentations.KeywordTitlePresentation;
 import com.jivesoftware.robot.intellij.plugin.elements.presentations.TestCasePresentation;
+import com.jivesoftware.robot.intellij.plugin.elements.search.VariablePsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStub;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotScalarAssignmentStub;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotScalarVariableStub;
@@ -116,11 +119,15 @@ public class RobotImplUtil {
          if (stub != null) {
              return stub.getName();
          }
-         return element.getText();
+         Optional<String> optVariableName = VariablePsiUtil.getVariableName(element);
+         if (optVariableName.isPresent()) {
+             return optVariableName.get();
+         }
+         return null;
      }
 
     public static PsiElement setName(RobotScalarVariable element, @NonNls @NotNull String newName) throws com.intellij.util.IncorrectOperationException {
-        RobotKeywordTitle replacement = RobotElementFactory.createKeywordTitle(element.getProject(), newName);
+        RobotScalarVariable replacement = RobotElementFactory.createScalarVariable(element.getProject(), newName);
         element.getParent().getNode().replaceChild(element.getNode(), replacement.getNode());
         return replacement;
     }
@@ -144,6 +151,10 @@ public class RobotImplUtil {
         return refs[0];
     }
 
+    public static PsiElement handleElementRename(RobotScalarVariable element, String name) {
+        return element.setName(name);
+    }
+
     public static String toString(RobotScalarVariable element) {
         return "RobotScalarVariable: " + element.getText();
     }
@@ -156,11 +167,15 @@ public class RobotImplUtil {
         if (stub != null) {
             return stub.getName();
         }
-        return element.getText();
+        Optional<String> optVariableName = VariablePsiUtil.getVariableName(element);
+        if (optVariableName.isPresent()) {
+            return optVariableName.get();
+        }
+        return null;
     }
 
     public static PsiElement setName(RobotScalarAssignment element, @NonNls @NotNull String newName) throws com.intellij.util.IncorrectOperationException {
-        RobotKeywordTitle replacement = RobotElementFactory.createKeywordTitle(element.getProject(), newName);
+        RobotScalarAssignment replacement = RobotElementFactory.createScalarAssignment(element.getProject(), newName);
         element.getParent().getNode().replaceChild(element.getNode(), replacement.getNode());
         return replacement;
     }
@@ -184,8 +199,165 @@ public class RobotImplUtil {
         return refs[0];
     }
 
+    public static PsiElement handleElementRename(RobotScalarAssignment element, String name) {
+        return element.setName(name);
+    }
+
     public static String toString(RobotScalarAssignment element) {
         return "RobotScalarAssignment: " + element.getText();
+    }
+
+    /* Methods for RobotScalarAssingmentLhs */
+    @Nullable
+    @NonNls
+    public static String getName(RobotScalarAssignmentLhs element) {
+        Optional<String> optVariableName = VariablePsiUtil.getVariableName(element);
+        if (optVariableName.isPresent()) {
+            return optVariableName.get();
+        }
+        return null;
+    }
+
+    public static PsiElement setName(RobotScalarAssignmentLhs element, @NonNls @NotNull String newName) throws com.intellij.util.IncorrectOperationException {
+        RobotScalarAssignmentLhs replacement = RobotElementFactory.createScalarAssignmentLhs(element.getProject(), newName);
+        element.getParent().getNode().replaceChild(element.getNode(), replacement.getNode());
+        return replacement;
+    }
+
+    @Nullable
+    public static PsiElement getNameIdentifier(RobotScalarAssignmentLhs element) {
+        RobotScalarAssignment assignment = PsiTreeUtil.findChildOfType(element, RobotScalarAssignment.class);
+        if (assignment != null) {
+            return assignment;
+        }
+        RobotScalarVariable variable = PsiTreeUtil.findChildOfType(element, RobotScalarVariable.class);
+        if (variable != null) {
+            return variable;
+        }
+        return element;
+    }
+
+    @Nullable
+    public static PsiReference getReference(RobotScalarAssignmentLhs element) {
+        PsiReference[] refs = ReferenceProvidersRegistry.getReferencesFromProviders(element);
+        if (refs.length <= 0) {
+            return null;
+        }
+        return refs[0];
+    }
+
+    @NotNull
+    public static PsiReference[] getReferences(RobotScalarAssignmentLhs element) {
+        return ReferenceProvidersRegistry.getReferencesFromProviders(element);
+    }
+
+    public static PsiElement handleElementRename(RobotScalarAssignmentLhs element, String name) {
+        return element.setName(name);
+    }
+
+    public static String toString(RobotScalarAssignmentLhs element) {
+        return "RobotScalarAssignmentLhs: " + element.getText();
+    }
+
+    /* Methods for RobotScalarDefaultArgValue */
+    @Nullable
+    @NonNls
+    public static String getName(RobotScalarDefaultArgValue element) {
+        Optional<String> optVariableName = VariablePsiUtil.getVariableName(element);
+        if (optVariableName.isPresent()) {
+            return optVariableName.get();
+        }
+        return null;
+    }
+
+    public static PsiElement setName(RobotScalarDefaultArgValue element, @NonNls @NotNull String newName) throws com.intellij.util.IncorrectOperationException {
+        RobotScalarDefaultArgValue replacement = RobotElementFactory.createScalarDefaultArgValue(element.getProject(), newName);
+        element.getParent().getNode().replaceChild(element.getNode(), replacement.getNode());
+        return replacement;
+    }
+
+    @Nullable
+    public static PsiElement getNameIdentifier(RobotScalarDefaultArgValue element) {
+        return element;
+    }
+
+    @Nullable
+    public static PsiReference getReference(RobotScalarDefaultArgValue element) {
+        PsiReference[] refs = ReferenceProvidersRegistry.getReferencesFromProviders(element);
+        if (refs.length <= 0) {
+            return null;
+        }
+        return refs[0];
+    }
+
+    @NotNull
+    public static PsiReference[] getReferences(RobotScalarDefaultArgValue element) {
+        return ReferenceProvidersRegistry.getReferencesFromProviders(element);
+    }
+
+    public static PsiElement handleElementRename(RobotScalarDefaultArgValue element, String name) {
+        return element.setName(name);
+    }
+
+    public static String toString(RobotScalarDefaultArgValue element) {
+        return "RobotScalarDefaultArgValue: " + element.getText();
+    }
+
+
+    /* Methods for RobotArgumentDef */
+    @Nullable
+    @NonNls
+    public static String getName(RobotArgumentDef element) {
+        Optional<String> optVariableName = VariablePsiUtil.getVariableName(element);
+        if (optVariableName.isPresent()) {
+            return optVariableName.get();
+        }
+        return null;
+    }
+
+    public static PsiElement setName(RobotArgumentDef element, @NonNls @NotNull String newName) throws com.intellij.util.IncorrectOperationException {
+        RobotArgumentDef replacement = RobotElementFactory.createArgumentDef(element.getProject(), newName);
+        element.getParent().getNode().replaceChild(element.getNode(), replacement.getNode());
+        return replacement;
+    }
+
+    @Nullable
+    public static PsiElement getNameIdentifier(RobotArgumentDef element) {
+        RobotScalarVariable scalarVariable = PsiTreeUtil.findChildOfType(element, RobotScalarVariable.class);
+        if (scalarVariable != null) {
+            return scalarVariable;
+        }
+        RobotScalarDefaultArgValue defaultArgValue = PsiTreeUtil.findChildOfType(element, RobotScalarDefaultArgValue.class);
+        if (defaultArgValue != null) {
+            return defaultArgValue;
+        }
+        RobotArrayVariable arrayVariable = PsiTreeUtil.findChildOfType(element, RobotArrayVariable.class);
+        if (arrayVariable != null) {
+            return arrayVariable;
+        }
+        return element;
+    }
+
+    @Nullable
+    public static PsiReference getReference(RobotArgumentDef element) {
+        PsiReference[] refs = ReferenceProvidersRegistry.getReferencesFromProviders(element);
+        if (refs.length <= 0) {
+            return null;
+        }
+        return refs[0];
+    }
+
+    @NotNull
+    public static PsiReference[] getReferences(RobotArgumentDef element) {
+        return ReferenceProvidersRegistry.getReferencesFromProviders(element);
+    }
+
+    public static PsiElement handleElementRename(RobotArgumentDef element, String name) {
+        return element.setName(name);
+    }
+
+    public static String toString(RobotArgumentDef element) {
+        return "RobotArgumentDef: " + element.getText();
     }
 
     /* Methods for RobotKeywordTitle type */

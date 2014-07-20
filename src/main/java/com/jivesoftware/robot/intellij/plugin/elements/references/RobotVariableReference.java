@@ -2,12 +2,9 @@ package com.jivesoftware.robot.intellij.plugin.elements.references;
 
 import com.google.common.base.Optional;
 import com.intellij.openapi.util.TextRange;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.jgoodies.common.base.Objects;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.search.VariablePsiUtil;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDefinition;
@@ -27,47 +24,27 @@ public class RobotVariableReference extends PsiReferenceBase<PsiElement> {
     @Override
     public PsiElement resolve() {
         final Optional<String> optVariableName = VariablePsiUtil.getVariableName(myElement);
-        final PsiFile myFile = myElement.getContainingFile();
-        final VirtualFile myVirtualFile = myFile != null ? myFile.getVirtualFile() : null;
-        final String myCanonicalPath = myVirtualFile != null ? myVirtualFile.getCanonicalPath() : null;
 
         if (!optVariableName.isPresent()) {
             return null;
         }
-        final String varName = optVariableName.get();
-        final String normalName = RobotPsiUtil.normalizeKeywordForIndex(varName);
 
         RobotTestCase containingTest = PsiTreeUtil.getParentOfType(myElement, RobotTestCase.class);
         if (containingTest != null) {
-            Optional<PsiElement> definition = VariablePsiUtil.findFirstDefinitionOfVariable(containingTest, normalName);
+            Optional<PsiElement> definition = VariablePsiUtil.findFirstDefinitionOfVariable(containingTest, myElement);
             if (definition.isPresent()) {
-                PsiFile containingFile = definition.get().getContainingFile();
-                VirtualFile virtualFile = containingFile != null ? containingFile.getVirtualFile() : null;
-                String canonicalPath = virtualFile != null ? virtualFile.getCanonicalPath() : null;
-
-                //If the variable resolved to itself, return null
-                if (canonicalPath != null && myCanonicalPath != null &&
-                        canonicalPath.equals(myCanonicalPath) &&
-                        Objects.equals(definition.get().getTextRange(), myElement.getTextRange())) {
+                if (RobotPsiUtil.areIdenticalTextualOccurrences(myElement, definition.get())) {
                     return null;
                 }
-
                 return definition.get();
             }
         }
 
         RobotKeywordDefinition containingKeywordDefinition = PsiTreeUtil.getParentOfType(myElement, RobotKeywordDefinition.class);
         if (containingKeywordDefinition != null) {
-            Optional<PsiElement> definition = VariablePsiUtil.findFirstDefinitionOfVariable(containingKeywordDefinition, normalName);
+            Optional<PsiElement> definition = VariablePsiUtil.findFirstDefinitionOfVariable(containingKeywordDefinition, myElement);
             if (definition.isPresent()) {
-                PsiFile containingFile = definition.get().getContainingFile();
-                VirtualFile virtualFile = containingFile != null ? containingFile.getVirtualFile() : null;
-                String canonicalPath = virtualFile != null ? virtualFile.getCanonicalPath() : null;
-
-                //If the variable resolved to itself, return null
-                if (canonicalPath != null && myCanonicalPath != null &&
-                        canonicalPath.equals(myCanonicalPath) &&
-                        Objects.equals(definition.get().getTextRange(), myElement.getTextRange())) {
+                if (RobotPsiUtil.areIdenticalTextualOccurrences(myElement, definition.get())) {
                     return null;
                 }
                 return definition.get();

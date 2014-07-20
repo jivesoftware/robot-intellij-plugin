@@ -11,6 +11,7 @@ import static com.jivesoftware.robot.intellij.plugin.parser.RobotTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
+import com.intellij.psi.PsiReference;
 
 public class RobotArgumentDefImpl extends ASTWrapperPsiElement implements RobotArgumentDef {
 
@@ -33,6 +34,39 @@ public class RobotArgumentDefImpl extends ASTWrapperPsiElement implements RobotA
   @Nullable
   public RobotVariable getVariable() {
     return findChildByClass(RobotVariable.class);
+  }
+
+  @Nullable
+  @NonNls
+  public String getName() {
+    return RobotImplUtil.getName(this);
+  }
+
+  public PsiElement setName(String newName) {
+    return RobotImplUtil.setName(this, newName);
+  }
+
+  @Nullable
+  public PsiElement getNameIdentifier() {
+    return RobotImplUtil.getNameIdentifier(this);
+  }
+
+  @Nullable
+  public PsiReference getReference() {
+    return RobotImplUtil.getReference(this);
+  }
+
+  @NotNull
+  public PsiReference[] getReferences() {
+    return RobotImplUtil.getReferences(this);
+  }
+
+  public PsiElement handleElementRename(String name) {
+    return RobotImplUtil.handleElementRename(this, name);
+  }
+
+  public String toString() {
+    return RobotImplUtil.toString(this);
   }
 
 }

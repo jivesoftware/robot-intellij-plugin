@@ -26,6 +26,8 @@ public interface RobotScalarVariable extends RobotNamedElement, StubBasedPsiElem
   @Nullable
   PsiElement getNameIdentifier();
 
+  PsiElement handleElementRename(String name);
+
   String toString();
 
 }

@@ -55,6 +55,10 @@ public class RobotScalarVariableImpl extends StubBasedPsiElementBase<RobotScalar
     return RobotImplUtil.getNameIdentifier(this);
   }
 
+  public PsiElement handleElementRename(String name) {
+    return RobotImplUtil.handleElementRename(this, name);
+  }
+
   public String toString() {
     return RobotImplUtil.toString(this);
   }

@@ -4,13 +4,34 @@ package com.jivesoftware.robot.intellij.plugin.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement;
+import com.intellij.psi.PsiReference;
 
-public interface RobotArgumentDef extends PsiElement {
+public interface RobotArgumentDef extends RobotNamedElement {
 
   @Nullable
   RobotScalarDefaultArgValue getScalarDefaultArgValue();
 
   @Nullable
   RobotVariable getVariable();
+
+  @Nullable
+  @NonNls
+  String getName();
+
+  PsiElement setName(String newName);
+
+  @Nullable
+  PsiElement getNameIdentifier();
+
+  @Nullable
+  PsiReference getReference();
+
+  @NotNull
+  PsiReference[] getReferences();
+
+  PsiElement handleElementRename(String name);
+
+  String toString();
 
 }

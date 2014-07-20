@@ -53,11 +53,7 @@ public class RobotScalarVariableElementType extends IStubElementType<RobotScalar
     public void indexStub(@NotNull RobotScalarVariableStub stub, @NotNull IndexSink sink) {
         final String name = stub.getName();
         if (name != null) {
-            Optional<String> optVariableName = VariablePsiUtil.getVariableName(name);
-            if (!optVariableName.isPresent()) {
-                return;
-            }
-            final String normalizedName = RobotPsiUtil.normalizeKeywordForIndex(optVariableName.get());
+            final String normalizedName = RobotPsiUtil.normalizeKeywordForIndex(name);
             sink.occurrence(RobotVariableNormalizedNameIndex.KEY, normalizedName);
         }
     }

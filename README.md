@@ -11,6 +11,13 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.4.0</h3>
+<ul>
+     <li>Rename refactoring for variables -- local variables and variables defined in Variables tables.</li>
+     <li>Find usages of variables.</li>
+     <li>Fix how variable scope is determined; a variable won't resolve to an assignment on a subsequent line of code.</li>
+</ul>
+
 <h3>Version 1.3.2</h3>
 <ul>
     <li>Bugfixes-- fixed a stack overflow if you included the current file as a Resource, or there was a loop in

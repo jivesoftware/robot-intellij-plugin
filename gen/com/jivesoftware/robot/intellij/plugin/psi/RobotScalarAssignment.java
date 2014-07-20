@@ -26,6 +26,8 @@ public interface RobotScalarAssignment extends RobotNamedElement, StubBasedPsiEl
   @Nullable
   PsiElement getNameIdentifier();
 
+  PsiElement handleElementRename(String name);
+
   String toString();
 
 }
