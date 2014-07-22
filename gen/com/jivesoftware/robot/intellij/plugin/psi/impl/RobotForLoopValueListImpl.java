@@ -25,8 +25,8 @@ public class RobotForLoopValueListImpl extends ASTWrapperPsiElement implements R
 
   @Override
   @NotNull
-  public List<RobotIndentedEllipsesForTestTable> getIndentedEllipsesForTestTableList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotIndentedEllipsesForTestTable.class);
+  public List<RobotEllipsesForTestTable> getEllipsesForTestTableList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotEllipsesForTestTable.class);
   }
 
   @Override

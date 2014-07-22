@@ -8,9 +8,15 @@ import com.intellij.psi.PsiElement;
 public interface RobotForLoopIn extends PsiElement {
 
   @NotNull
+  RobotEndOfLine getEndOfLine();
+
+  @NotNull
   RobotForLoopValueList getForLoopValueList();
 
   @NotNull
   RobotForVarIn getForVarIn();
+
+  @NotNull
+  List<RobotIndentedKeywordLine> getIndentedKeywordLineList();
 
 }

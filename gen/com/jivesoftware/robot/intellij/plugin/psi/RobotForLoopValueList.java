@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface RobotForLoopValueList extends PsiElement {
 
   @NotNull
-  List<RobotIndentedEllipsesForTestTable> getIndentedEllipsesForTestTableList();
+  List<RobotEllipsesForTestTable> getEllipsesForTestTableList();
 
   @NotNull
   List<RobotKeywordArgList> getKeywordArgListList();

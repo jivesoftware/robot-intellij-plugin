@@ -73,7 +73,7 @@ return;
         System.out.println(String.format("Bad syntax \"%s\" at line %d col %d", yytext(), yyline, yycolumn));
     }
     else if (toReturn == ROBOT_KEYWORD_TOKEN) {
-        if (keywordToLeft || onReturnLine) {
+        if (keywordToLeft || onReturnLine || onForLoopLine) {
             return ROBOT_KEYWORD_ARG_TOKEN;
         }
         if (onTagsLine) {
