@@ -120,7 +120,7 @@ TESTCASE_LINE ::= TEST_SETTING_LINE |
                   ELLIPSES_LINE_TEST |
                   FOR_LOOP_IN_RANGE  |
                   FOR_LOOP_IN |
-                  BAD_TEST_CASE_LINE
+                  COLUMN_SEP_TOKEN BAD_TEST_CASE_LINE
 
 /* Keywords table */
 KEYWORDS_TABLE ::= KEYWORDS_TABLE_HEADING (EMPTY_LINE | KEYWORD_DEFINITION)* { methods=[getNameIdentifier getPresentation]}
@@ -145,7 +145,7 @@ KEYWORD_LINE ::= EXECUTION_LINE |
                  ELLIPSES_LINE_TEST |
                  FOR_LOOP_IN_RANGE  |
                  FOR_LOOP_IN |
-                 BAD_KEYWORD_LINE
+                 COLUMN_SEP_TOKEN BAD_KEYWORD_LINE
 
 INDENTED_KEYWORD_LINE ::= COLUMN_SEP_TOKEN  EMPTY_CELL_TOKEN COLUMN_SEP_TOKEN ( INDENTED_KEYWORD_INVOCATION_TEST | INDENTED_VARIABLE_ASSIGN_TO_KEYWORD ) END_OF_LINE (NEWLINE_TOKEN | <<eof>>)  |
                  EMPTY_LINE |
@@ -192,7 +192,7 @@ INDENTED_VARIABLE_ASSIGN_TO_KEYWORD ::= ( MULTI_ASSIGNMENT_LHS | SINGLE_ASSIGNME
 
 
 // An argument to a keyword can be a variable, a literal, an empty cell (\), or an integer.
-KEYWORD_ARG ::= VARIABLE | ROBOT_KEYWORD_ARG_TOKEN | EMPTY_CELL_TOKEN | INTEGER_TOKEN
+KEYWORD_ARG ::= VARIABLE | ROBOT_KEYWORD_ARG_TOKEN | EMPTY_CELL_TOKEN | INTEGER_TOKEN | ARRAY_VARIABLE_ACCESS_TOKEN
 // Tags are tokenized specially by being after the [tags] setting or "Force Tags" setting.
 TAG ::= TAG_TOKEN
 
@@ -242,7 +242,7 @@ private TEST_TOKEN ::= COLUMN_SEP_TOKEN | ROBOT_KEYWORD_TOKEN | ROBOT_KEYWORD_AR
                        TIMEOUT_SETTING_TOKEN | TIMEOUT_VALUE_TOKEN | TAGS_SETTING_TOKEN | TEMPLATE_SETTING_TOKEN |
                        SUITE_SETUP_SETTING_TOKEN | SUITE_TEARDOWN_SETTING_TOKEN
 
-BAD_TEST_CASE_LINE ::= COLUMN_SEP_TOKEN TEST_TOKEN* NEWLINE_TOKEN {methods = [getErrorDescription]}
-BAD_KEYWORD_LINE ::= COLUMN_SEP_TOKEN TEST_TOKEN* NEWLINE_TOKEN {methods = [getErrorDescription]}
+BAD_TEST_CASE_LINE ::= TEST_TOKEN* NEWLINE_TOKEN {methods = [getErrorDescription]}
+BAD_KEYWORD_LINE ::= TEST_TOKEN* NEWLINE_TOKEN {methods = [getErrorDescription]}
 BAD_SETTINGS_LINE ::= TEST_TOKEN* NEWLINE_TOKEN {methods = [getErrorDescription]}
 BAD_VARIABLES_LINE ::= TEST_TOKEN* NEWLINE_TOKEN {methods = [getErrorDescription]}

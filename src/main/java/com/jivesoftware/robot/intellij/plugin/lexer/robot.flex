@@ -158,6 +158,7 @@ EmptyCell = "\\"
 
 /* integer literals */
 DecIntegerLiteral = 0 | "-"? [1-9][0-9]*
+NonNegativeIntegerLiteral = 0 | [1-9][0-9]*
 
 /* comments */
 Comment = "#" {InputCharacter}*
@@ -170,6 +171,7 @@ Assignment = {Variable} " "? "="
 AssignmentNoSpace = {Variable} "="
 
 ArrayVariable = "@{" " "? {VariableName} " "? "}"
+ArrayVariableAccess = {ArrayVariable} \[ " "? ({NonNegativeIntegerLiteral} | {Variable}) " "? \]
 ArrayAssignment = {ArrayVariable} " "? "="
 
 RobotKeyword = {RobotWord} ({SingleSpace} {RobotWord})*
@@ -271,6 +273,7 @@ In = "IN"
      {Ellipses}          { return next(ELLIPSES_TOKEN); }
      {Variable}          { return next(VARIABLE_TOKEN); }
      {ArrayVariable}     { return next(ARRAY_VARIABLE_TOKEN); }
+     {ArrayVariableAccess}     { return next(ARRAY_VARIABLE_ACCESS_TOKEN); }
      {TimeoutValue}      { if (onTimeoutLine) { return next(TIMEOUT_VALUE_TOKEN); } return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {ForceTags}         { if (startLine) {return next(FORCE_TAGS_SETTING_KEYWORD_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
      {ResourceSetting}     { if (startLine) {return next(RESOURCE_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
@@ -327,6 +330,7 @@ In = "IN"
      {ArrayAssignment}   { return ARRAY_ASSIGNMENT_TOKEN; }
      {Variable}          { return next(VARIABLE_TOKEN); }
      {ArrayVariable}     { return next(ARRAY_VARIABLE_TOKEN); }
+     {ArrayVariableAccess}     { return next(ARRAY_VARIABLE_ACCESS_TOKEN); }
      {TimeoutValue}      { if (onTimeoutLine) { return next(TIMEOUT_VALUE_TOKEN);} return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {DecIntegerLiteral}          {
                                     if (startLine) { return next(TEST_CASE_HEADER_TOKEN); }
@@ -374,6 +378,7 @@ In = "IN"
      {ArrayAssignment}   { return ARRAY_ASSIGNMENT_TOKEN; }
      {Variable}          { return next(VARIABLE_TOKEN); }
      {ArrayVariable}     { return next(ARRAY_VARIABLE_TOKEN); }
+     {ArrayVariableAccess}     { return next(ARRAY_VARIABLE_ACCESS_TOKEN); }
      {DecIntegerLiteral} { if (startLine) { return next(ROBOT_KEYWORD_TITLE_TOKEN); }
                            else if (firstRobotCell) { return next(ROBOT_KEYWORD_TOKEN); }
                            else if (onForLoopLine) { return next(INTEGER_TOKEN); }

@@ -104,6 +104,7 @@ public interface RobotTypes {
 
   IElementType ARGUMENTS_SETTING_TOKEN = new RobotToken("ARGUMENTS_SETTING_TOKEN");
   IElementType ARRAY_ASSIGNMENT_TOKEN = new RobotToken("ARRAY_ASSIGNMENT_TOKEN");
+  IElementType ARRAY_VARIABLE_ACCESS_TOKEN = new RobotToken("ARRAY_VARIABLE_ACCESS_TOKEN");
   IElementType ARRAY_VARIABLE_TOKEN = new RobotToken("ARRAY_VARIABLE_TOKEN");
   IElementType ASSIGNMENT_TOKEN = new RobotToken("ASSIGNMENT_TOKEN");
   IElementType BAD_SYNTAX_TOKEN = new RobotToken("BAD_SYNTAX_TOKEN");

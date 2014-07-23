@@ -11,6 +11,12 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.4.2</h3>
+<ul>
+    <li>Fix error handling so that the rest of the file parses correctly when there's a syntax error.</li>
+    <li>Tokenize array variable element access (e.g. @{foo}[0]) with a special token so that we can highlight it like a variable.</li>
+</ul>
+
 
 <h3>Version 1.4.1</h3>
 <ul>
