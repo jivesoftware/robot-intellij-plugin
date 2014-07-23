@@ -475,4 +475,21 @@ public class RobotImplUtil {
         return element;
     }
 
+    //-------------Helpers for Error elements--------------
+
+    public static String getErrorDescription(RobotBadTestCaseLine line) {
+        return "Invalid Test Case Line";
+    }
+
+    public static String getErrorDescription(RobotBadKeywordLine line) {
+        return "Invalid Keyword Definition Line";
+    }
+
+    public static String getErrorDescription(RobotBadVariablesLine line) {
+        return "Invalid Variables Table Line. Must be a variable assigned to a literal value.";
+    }
+
+    public static String getErrorDescription(RobotBadSettingsLine line) {
+        return "Invalid Settings Table Line. Must be a Setting followed by arguments.";
+    }
 }

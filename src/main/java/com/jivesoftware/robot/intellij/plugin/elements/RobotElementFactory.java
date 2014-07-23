@@ -21,10 +21,10 @@ public class RobotElementFactory {
         RobotTestCasesTable testCasesTable = table.getTestCasesTable();
         for (RobotTestCase robotTestCase : testCasesTable.getTestCaseList()) {
             for (RobotTestcaseLine robotTestcaseLine : robotTestCase.getTestcaseLineList()) {
-                if (robotTestcaseLine.getKeywordInvocationTest() == null) {
+                if (robotTestcaseLine.getExecutionLine() == null || robotTestcaseLine.getExecutionLine().getKeywordInvocationTest() == null) {
                     continue;
                 }
-                RobotKeywordInvocationTest invocation = robotTestcaseLine.getKeywordInvocationTest();
+                RobotKeywordInvocationTest invocation = robotTestcaseLine.getExecutionLine().getKeywordInvocationTest();
                 return invocation.getKeyword();
             }
         }

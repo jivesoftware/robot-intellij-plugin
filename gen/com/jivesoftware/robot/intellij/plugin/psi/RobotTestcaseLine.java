@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface RobotTestcaseLine extends PsiElement {
 
   @Nullable
+  RobotBadTestCaseLine getBadTestCaseLine();
+
+  @Nullable
   RobotEllipsesLineTest getEllipsesLineTest();
 
   @Nullable
@@ -15,6 +18,9 @@ public interface RobotTestcaseLine extends PsiElement {
 
   @Nullable
   RobotEndOfLine getEndOfLine();
+
+  @Nullable
+  RobotExecutionLine getExecutionLine();
 
   @Nullable
   RobotForLoopIn getForLoopIn();
@@ -26,12 +32,6 @@ public interface RobotTestcaseLine extends PsiElement {
   RobotKeywordArgList getKeywordArgList();
 
   @Nullable
-  RobotKeywordInvocationTest getKeywordInvocationTest();
-
-  @Nullable
   RobotTestSettingLine getTestSettingLine();
-
-  @Nullable
-  RobotVariableAssignToKeyword getVariableAssignToKeyword();
 
 }

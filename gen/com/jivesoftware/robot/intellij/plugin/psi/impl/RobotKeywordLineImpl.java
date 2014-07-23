@@ -25,6 +25,12 @@ public class RobotKeywordLineImpl extends ASTWrapperPsiElement implements RobotK
 
   @Override
   @Nullable
+  public RobotBadKeywordLine getBadKeywordLine() {
+    return findChildByClass(RobotBadKeywordLine.class);
+  }
+
+  @Override
+  @Nullable
   public RobotEllipsesLineTest getEllipsesLineTest() {
     return findChildByClass(RobotEllipsesLineTest.class);
   }
@@ -37,8 +43,8 @@ public class RobotKeywordLineImpl extends ASTWrapperPsiElement implements RobotK
 
   @Override
   @Nullable
-  public RobotEndOfLine getEndOfLine() {
-    return findChildByClass(RobotEndOfLine.class);
+  public RobotExecutionLine getExecutionLine() {
+    return findChildByClass(RobotExecutionLine.class);
   }
 
   @Override
@@ -55,20 +61,8 @@ public class RobotKeywordLineImpl extends ASTWrapperPsiElement implements RobotK
 
   @Override
   @Nullable
-  public RobotKeywordInvocationTest getKeywordInvocationTest() {
-    return findChildByClass(RobotKeywordInvocationTest.class);
-  }
-
-  @Override
-  @Nullable
   public RobotReturnLine getReturnLine() {
     return findChildByClass(RobotReturnLine.class);
-  }
-
-  @Override
-  @Nullable
-  public RobotVariableAssignToKeyword getVariableAssignToKeyword() {
-    return findChildByClass(RobotVariableAssignToKeyword.class);
   }
 
 }

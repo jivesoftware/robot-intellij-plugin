@@ -40,6 +40,12 @@
   implements("SCALAR_ASSIGNMENT_LHS")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
   implements("SCALAR_DEFAULT_ARG_VALUE")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
   implements("ARGUMENT_DEF")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
+
+  implements("BAD_TEST_CASE_LINE")="com.intellij.psi.PsiErrorElement"
+  implements("BAD_KEYWORD_LINE")="com.intellij.psi.PsiErrorElement"
+  implements("BAD_VARIABLES_LINE")="com.intellij.psi.PsiErrorElement"
+  implements("BAD_SETTINGS_LINE")="com.intellij.psi.PsiErrorElement"
+
 }
 
 //Top-level File. A sequence of Robot Tables or empty lines.
@@ -54,7 +60,8 @@ SETTINGS_TABLE_HEADING ::= SETTINGS_TABLE_HEADING_TOKEN END_OF_LINE (NEWLINE_TOK
 
 SETTINGS_LINE ::= WHITESPACE_TOKEN? SETTING END_OF_LINE (NEWLINE_TOKEN | <<eof>>) |
                   EMPTY_LINE |
-                  ELLIPSES_LINE_SETTINGS
+                  ELLIPSES_LINE_SETTINGS |
+                  BAD_SETTINGS_LINE
 
 SETTING ::= FORCE_TAGS_SETTING | RESOURCE_SETTING | TEST_SETUP_SETTING | GENERIC_SETTING
 
@@ -80,7 +87,8 @@ VARIABLES_TABLE_HEADING ::= VARIABLES_TABLE_HEADING_TOKEN END_OF_LINE (NEWLINE_T
 VARIABLES_LINE ::= SCALAR_ASSIGNMENT_LHS (ASSIGNABLE_IN_VARIABLES_TBL)? END_OF_LINE (NEWLINE_TOKEN | <<eof>>) |
                    ARRAY_ASSIGNMENT_LHS  (ARRAY_ASSIGNABLE_IN_VARIABLES_TBL)? END_OF_LINE  (NEWLINE_TOKEN | <<eof>>) |
                    EMPTY_LINE  |
-                   ELLIPSES_LINE_SETTINGS
+                   ELLIPSES_LINE_SETTINGS |
+                   BAD_VARIABLES_LINE
 
 /* Test cases table */
 TEST_CASES_TABLE ::= TEST_CASES_TABLE_HEADING EMPTY_LINE* TEST_CASE* { methods=[getNameIdentifier getPresentation]}
@@ -106,12 +114,13 @@ TEST_CASE_TEMPLATE_SETTING ::= TEMPLATE_SETTING_TOKEN COLUMN_SEP_TOKEN KEYWORD
 TEST_CASE_TIMEOUT_SETTING ::= TIMEOUT_SETTING_TOKEN COLUMN_SEP_TOKEN TIMEOUT_VALUE_TOKEN
 
 TESTCASE_LINE ::= TEST_SETTING_LINE |
-                  COLUMN_SEP_TOKEN (KEYWORD_INVOCATION_TEST | VARIABLE_ASSIGN_TO_KEYWORD) END_OF_LINE (NEWLINE_TOKEN | <<eof>>) |
+                  EXECUTION_LINE |
                   KEYWORD_ARG_LIST END_OF_LINE (NEWLINE_TOKEN | <<eof>>) |
                   EMPTY_LINE |
                   ELLIPSES_LINE_TEST |
                   FOR_LOOP_IN_RANGE  |
-                  FOR_LOOP_IN
+                  FOR_LOOP_IN |
+                  BAD_TEST_CASE_LINE
 
 /* Keywords table */
 KEYWORDS_TABLE ::= KEYWORDS_TABLE_HEADING (EMPTY_LINE | KEYWORD_DEFINITION)* { methods=[getNameIdentifier getPresentation]}
@@ -130,12 +139,13 @@ ARGUMENTS_SETTING ::= ARGUMENTS_SETTING_TOKEN (COLUMN_SEP_TOKEN ARGUMENT_DEF)*
 SCALAR_DEFAULT_ARG_VALUE ::= SCALAR_DEFAULT_ARG_VALUE_TOKEN {methods = [getName setName getNameIdentifier getReference getReferences handleElementRename toString]}
 ARGUMENT_DEF ::= VARIABLE | SCALAR_DEFAULT_ARG_VALUE {methods = [getName setName getNameIdentifier getReference getReferences handleElementRename toString]}
 
-KEYWORD_LINE ::= COLUMN_SEP_TOKEN ( KEYWORD_INVOCATION_TEST | VARIABLE_ASSIGN_TO_KEYWORD ) END_OF_LINE (NEWLINE_TOKEN | <<eof>>)  |
+KEYWORD_LINE ::= EXECUTION_LINE |
                  RETURN_LINE |
                  EMPTY_LINE |
                  ELLIPSES_LINE_TEST |
                  FOR_LOOP_IN_RANGE  |
-                 FOR_LOOP_IN
+                 FOR_LOOP_IN |
+                 BAD_KEYWORD_LINE
 
 INDENTED_KEYWORD_LINE ::= COLUMN_SEP_TOKEN  EMPTY_CELL_TOKEN COLUMN_SEP_TOKEN ( INDENTED_KEYWORD_INVOCATION_TEST | INDENTED_VARIABLE_ASSIGN_TO_KEYWORD ) END_OF_LINE (NEWLINE_TOKEN | <<eof>>)  |
                  EMPTY_LINE |
@@ -186,6 +196,8 @@ KEYWORD_ARG ::= VARIABLE | ROBOT_KEYWORD_ARG_TOKEN | EMPTY_CELL_TOKEN | INTEGER_
 // Tags are tokenized specially by being after the [tags] setting or "Force Tags" setting.
 TAG ::= TAG_TOKEN
 
+EXECUTION_LINE ::= COLUMN_SEP_TOKEN ( KEYWORD_INVOCATION_TEST | VARIABLE_ASSIGN_TO_KEYWORD ) END_OF_LINE (NEWLINE_TOKEN | <<eof>>)
+
 //Junk we can have at the end of any line.
 END_OF_LINE ::= WHITESPACE_TOKEN? COLUMN_SEP_TOKEN? COMMENT_TOKEN?
 ELLIPSES_LINE_TEST ::= COLUMN_SEP_TOKEN  ELLIPSES  END_OF_LINE
@@ -220,3 +232,17 @@ KEYWORD ::= ROBOT_KEYWORD_TOKEN { methods=[getName setName getNameIdentifier get
 KEYWORD_TITLE ::= ROBOT_KEYWORD_TITLE_TOKEN { methods=[getName setName getNameIdentifier getPresentation toString] }
 
 ERROR ::= BAD_SYNTAX_TOKEN
+
+private TEST_TOKEN ::= COLUMN_SEP_TOKEN | ROBOT_KEYWORD_TOKEN | ROBOT_KEYWORD_ARG_TOKEN | FOR_LOOP_START_TOKEN |
+                       IN_TOKEN | IN_RANGE_TOKEN | INTEGER_TOKEN | TEST_SETUP_TOKEN | ARGUMENTS_SETTING_TOKEN |
+                       ARRAY_ASSIGNMENT_TOKEN | ARRAY_VARIABLE_TOKEN | SCALAR_DEFAULT_ARG_VALUE_TOKEN | VARIABLE_TOKEN |
+                       ASSIGNMENT_TOKEN | BAD_SYNTAX_TOKEN | COMMENT_TOKEN | DOCUMENTATION_SETTING_TOKEN |
+                       ELLIPSES_TOKEN | EMPTY_CELL_TOKEN | FORCE_TAGS_SETTING_KEYWORD_TOKEN | RETURN_SETTING_TOKEN |
+                       RESOURCE_SETTING_TOKEN | TAG_TOKEN | WHITESPACE_TOKEN | DOCUMENTATION_TOKEN | ROBOT_FILE_TOKEN |
+                       TIMEOUT_SETTING_TOKEN | TIMEOUT_VALUE_TOKEN | TAGS_SETTING_TOKEN | TEMPLATE_SETTING_TOKEN |
+                       SUITE_SETUP_SETTING_TOKEN | SUITE_TEARDOWN_SETTING_TOKEN
+
+BAD_TEST_CASE_LINE ::= COLUMN_SEP_TOKEN TEST_TOKEN* NEWLINE_TOKEN {methods = [getErrorDescription]}
+BAD_KEYWORD_LINE ::= COLUMN_SEP_TOKEN TEST_TOKEN* NEWLINE_TOKEN {methods = [getErrorDescription]}
+BAD_SETTINGS_LINE ::= TEST_TOKEN* NEWLINE_TOKEN {methods = [getErrorDescription]}
+BAD_VARIABLES_LINE ::= TEST_TOKEN* NEWLINE_TOKEN {methods = [getErrorDescription]}

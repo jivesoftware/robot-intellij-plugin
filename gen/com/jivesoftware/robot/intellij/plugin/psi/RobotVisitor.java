@@ -5,6 +5,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiElement;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement;
+import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.StubBasedPsiElement;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordStub;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStub;
@@ -43,6 +44,22 @@ public class RobotVisitor extends PsiElementVisitor {
 
   public void visitAssignment(@NotNull RobotAssignment o) {
     visitPsiElement(o);
+  }
+
+  public void visitBadKeywordLine(@NotNull RobotBadKeywordLine o) {
+    visitPsiErrorElement(o);
+  }
+
+  public void visitBadSettingsLine(@NotNull RobotBadSettingsLine o) {
+    visitPsiErrorElement(o);
+  }
+
+  public void visitBadTestCaseLine(@NotNull RobotBadTestCaseLine o) {
+    visitPsiErrorElement(o);
+  }
+
+  public void visitBadVariablesLine(@NotNull RobotBadVariablesLine o) {
+    visitPsiErrorElement(o);
   }
 
   public void visitDocumentationSetting(@NotNull RobotDocumentationSetting o) {
@@ -86,6 +103,10 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitError(@NotNull RobotError o) {
+    visitPsiElement(o);
+  }
+
+  public void visitExecutionLine(@NotNull RobotExecutionLine o) {
     visitPsiElement(o);
   }
 
@@ -363,6 +384,10 @@ public class RobotVisitor extends PsiElementVisitor {
 
   public void visitVariableAssignToKeyword(@NotNull RobotVariableAssignToKeyword o) {
     visitPsiElement(o);
+  }
+
+  public void visitPsiErrorElement(@NotNull PsiErrorElement o) {
+    visitElement(o);
   }
 
   public void visitNamedElement(@NotNull RobotNamedElement o) {

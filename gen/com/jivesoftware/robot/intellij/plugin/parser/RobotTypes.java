@@ -17,6 +17,10 @@ public interface RobotTypes {
   IElementType ARRAY_VARIABLE = new RobotElementType("ARRAY_VARIABLE");
   IElementType ASSIGNABLE_IN_VARIABLES_TBL = new RobotElementType("ASSIGNABLE_IN_VARIABLES_TBL");
   IElementType ASSIGNMENT = new RobotElementType("ASSIGNMENT");
+  IElementType BAD_KEYWORD_LINE = new RobotElementType("BAD_KEYWORD_LINE");
+  IElementType BAD_SETTINGS_LINE = new RobotElementType("BAD_SETTINGS_LINE");
+  IElementType BAD_TEST_CASE_LINE = new RobotElementType("BAD_TEST_CASE_LINE");
+  IElementType BAD_VARIABLES_LINE = new RobotElementType("BAD_VARIABLES_LINE");
   IElementType DOCUMENTATION_SETTING = new RobotElementType("DOCUMENTATION_SETTING");
   IElementType DOUBLE_BOUND_FOR_LOOP = new RobotElementType("DOUBLE_BOUND_FOR_LOOP");
   IElementType DOUBLE_BOUND_FOR_LOOP_WITH_STEP = new RobotElementType("DOUBLE_BOUND_FOR_LOOP_WITH_STEP");
@@ -28,6 +32,7 @@ public interface RobotTypes {
   IElementType EMPTY_LINE = new RobotElementType("EMPTY_LINE");
   IElementType END_OF_LINE = new RobotElementType("END_OF_LINE");
   IElementType ERROR = new RobotElementType("ERROR");
+  IElementType EXECUTION_LINE = new RobotElementType("EXECUTION_LINE");
   IElementType FORCE_TAGS_SETTING = new RobotElementType("FORCE_TAGS_SETTING");
   IElementType FOR_LOOP_IN = new RobotElementType("FOR_LOOP_IN");
   IElementType FOR_LOOP_IN_RANGE = new RobotElementType("FOR_LOOP_IN_RANGE");
@@ -167,6 +172,18 @@ public interface RobotTypes {
       else if (type == ASSIGNMENT) {
         return new RobotAssignmentImpl(node);
       }
+      else if (type == BAD_KEYWORD_LINE) {
+        return new RobotBadKeywordLineImpl(node);
+      }
+      else if (type == BAD_SETTINGS_LINE) {
+        return new RobotBadSettingsLineImpl(node);
+      }
+      else if (type == BAD_TEST_CASE_LINE) {
+        return new RobotBadTestCaseLineImpl(node);
+      }
+      else if (type == BAD_VARIABLES_LINE) {
+        return new RobotBadVariablesLineImpl(node);
+      }
       else if (type == DOCUMENTATION_SETTING) {
         return new RobotDocumentationSettingImpl(node);
       }
@@ -199,6 +216,9 @@ public interface RobotTypes {
       }
       else if (type == ERROR) {
         return new RobotErrorImpl(node);
+      }
+      else if (type == EXECUTION_LINE) {
+        return new RobotExecutionLineImpl(node);
       }
       else if (type == FORCE_TAGS_SETTING) {
         return new RobotForceTagsSettingImpl(node);
