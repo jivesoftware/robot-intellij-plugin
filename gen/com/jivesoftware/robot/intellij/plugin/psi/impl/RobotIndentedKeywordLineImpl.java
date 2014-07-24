@@ -25,18 +25,6 @@ public class RobotIndentedKeywordLineImpl extends ASTWrapperPsiElement implement
 
   @Override
   @Nullable
-  public RobotEmptyLine getEmptyLine() {
-    return findChildByClass(RobotEmptyLine.class);
-  }
-
-  @Override
-  @Nullable
-  public RobotEndOfLine getEndOfLine() {
-    return findChildByClass(RobotEndOfLine.class);
-  }
-
-  @Override
-  @Nullable
   public RobotIndentedEllipsesLineTest getIndentedEllipsesLineTest() {
     return findChildByClass(RobotIndentedEllipsesLineTest.class);
   }

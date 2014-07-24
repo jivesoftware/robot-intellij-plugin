@@ -24,21 +24,9 @@ public class RobotKeywordSettingLineImpl extends ASTWrapperPsiElement implements
   }
 
   @Override
-  @Nullable
-  public RobotEmptyLine getEmptyLine() {
-    return findChildByClass(RobotEmptyLine.class);
-  }
-
-  @Override
-  @Nullable
-  public RobotEndOfLine getEndOfLine() {
-    return findChildByClass(RobotEndOfLine.class);
-  }
-
-  @Override
-  @Nullable
+  @NotNull
   public RobotKeywordSetting getKeywordSetting() {
-    return findChildByClass(RobotKeywordSetting.class);
+    return findNotNullChildByClass(RobotKeywordSetting.class);
   }
 
 }

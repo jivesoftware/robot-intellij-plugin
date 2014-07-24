@@ -61,12 +61,6 @@ public class RobotVariablesLineImpl extends ASTWrapperPsiElement implements Robo
 
   @Override
   @Nullable
-  public RobotEndOfLine getEndOfLine() {
-    return findChildByClass(RobotEndOfLine.class);
-  }
-
-  @Override
-  @Nullable
   public RobotScalarAssignmentLhs getScalarAssignmentLhs() {
     return findChildByClass(RobotScalarAssignmentLhs.class);
   }

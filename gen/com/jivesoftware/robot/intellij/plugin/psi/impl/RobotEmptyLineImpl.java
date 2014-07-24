@@ -23,10 +23,4 @@ public class RobotEmptyLineImpl extends ASTWrapperPsiElement implements RobotEmp
     else super.accept(visitor);
   }
 
-  @Override
-  @NotNull
-  public RobotEndOfLine getEndOfLine() {
-    return findNotNullChildByClass(RobotEndOfLine.class);
-  }
-
 }

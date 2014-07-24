@@ -37,14 +37,8 @@ public class RobotForLoopInRangeImpl extends ASTWrapperPsiElement implements Rob
 
   @Override
   @NotNull
-  public RobotEndOfLine getEndOfLine() {
-    return findNotNullChildByClass(RobotEndOfLine.class);
-  }
-
-  @Override
-  @NotNull
-  public List<RobotIndentedKeywordLine> getIndentedKeywordLineList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotIndentedKeywordLine.class);
+  public List<RobotForLoopExecutionLine> getForLoopExecutionLineList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotForLoopExecutionLine.class);
   }
 
   @Override

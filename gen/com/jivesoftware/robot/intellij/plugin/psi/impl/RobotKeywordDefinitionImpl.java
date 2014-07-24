@@ -35,10 +35,4 @@ public class RobotKeywordDefinitionImpl extends ASTWrapperPsiElement implements 
     return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotKeywordLine.class);
   }
 
-  @Override
-  @NotNull
-  public RobotKeywordSettings getKeywordSettings() {
-    return findNotNullChildByClass(RobotKeywordSettings.class);
-  }
-
 }

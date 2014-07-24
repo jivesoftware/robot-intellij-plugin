@@ -25,26 +25,8 @@ public class RobotTestcaseLineImpl extends ASTWrapperPsiElement implements Robot
 
   @Override
   @Nullable
-  public RobotBadTestCaseLine getBadTestCaseLine() {
-    return findChildByClass(RobotBadTestCaseLine.class);
-  }
-
-  @Override
-  @Nullable
   public RobotEllipsesLineTest getEllipsesLineTest() {
     return findChildByClass(RobotEllipsesLineTest.class);
-  }
-
-  @Override
-  @Nullable
-  public RobotEmptyLine getEmptyLine() {
-    return findChildByClass(RobotEmptyLine.class);
-  }
-
-  @Override
-  @Nullable
-  public RobotEndOfLine getEndOfLine() {
-    return findChildByClass(RobotEndOfLine.class);
   }
 
   @Override

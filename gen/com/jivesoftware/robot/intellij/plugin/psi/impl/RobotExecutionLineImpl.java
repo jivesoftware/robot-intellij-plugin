@@ -24,12 +24,6 @@ public class RobotExecutionLineImpl extends ASTWrapperPsiElement implements Robo
   }
 
   @Override
-  @NotNull
-  public RobotEndOfLine getEndOfLine() {
-    return findNotNullChildByClass(RobotEndOfLine.class);
-  }
-
-  @Override
   @Nullable
   public RobotKeywordInvocationTest getKeywordInvocationTest() {
     return findChildByClass(RobotKeywordInvocationTest.class);

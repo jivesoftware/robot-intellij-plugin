@@ -25,12 +25,6 @@ public class RobotReturnLineImpl extends ASTWrapperPsiElement implements RobotRe
 
   @Override
   @NotNull
-  public RobotEndOfLine getEndOfLine() {
-    return findNotNullChildByClass(RobotEndOfLine.class);
-  }
-
-  @Override
-  @NotNull
   public RobotReturnSetting getReturnSetting() {
     return findNotNullChildByClass(RobotReturnSetting.class);
   }

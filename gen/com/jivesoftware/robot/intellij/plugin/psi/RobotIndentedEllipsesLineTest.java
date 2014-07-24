@@ -10,7 +10,4 @@ public interface RobotIndentedEllipsesLineTest extends PsiElement {
   @NotNull
   RobotEllipses getEllipses();
 
-  @NotNull
-  RobotEndOfLine getEndOfLine();
-
 }

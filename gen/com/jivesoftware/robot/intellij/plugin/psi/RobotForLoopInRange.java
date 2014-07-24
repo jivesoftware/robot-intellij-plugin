@@ -14,10 +14,7 @@ public interface RobotForLoopInRange extends PsiElement {
   RobotDoubleBoundForLoopWithStep getDoubleBoundForLoopWithStep();
 
   @NotNull
-  RobotEndOfLine getEndOfLine();
-
-  @NotNull
-  List<RobotIndentedKeywordLine> getIndentedKeywordLineList();
+  List<RobotForLoopExecutionLine> getForLoopExecutionLineList();
 
   @Nullable
   RobotSingleBoundForLoop getSingleBoundForLoop();

@@ -23,10 +23,4 @@ public class RobotVariablesTableHeadingImpl extends ASTWrapperPsiElement impleme
     else super.accept(visitor);
   }
 
-  @Override
-  @NotNull
-  public RobotEndOfLine getEndOfLine() {
-    return findNotNullChildByClass(RobotEndOfLine.class);
-  }
-
 }

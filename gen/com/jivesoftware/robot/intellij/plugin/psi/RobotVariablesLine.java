@@ -26,9 +26,6 @@ public interface RobotVariablesLine extends PsiElement {
   RobotEmptyLine getEmptyLine();
 
   @Nullable
-  RobotEndOfLine getEndOfLine();
-
-  @Nullable
   RobotScalarAssignmentLhs getScalarAssignmentLhs();
 
 }

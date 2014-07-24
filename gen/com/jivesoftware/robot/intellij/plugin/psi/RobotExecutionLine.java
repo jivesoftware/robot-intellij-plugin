@@ -7,9 +7,6 @@ import com.intellij.psi.PsiElement;
 
 public interface RobotExecutionLine extends PsiElement {
 
-  @NotNull
-  RobotEndOfLine getEndOfLine();
-
   @Nullable
   RobotKeywordInvocationTest getKeywordInvocationTest();
 

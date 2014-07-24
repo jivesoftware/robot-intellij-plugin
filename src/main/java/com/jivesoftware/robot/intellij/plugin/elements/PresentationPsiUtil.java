@@ -2,7 +2,11 @@ package com.jivesoftware.robot.intellij.plugin.elements;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Created by charles on 6/11/14.
@@ -23,12 +27,9 @@ public class PresentationPsiUtil {
             return "";
         }
         RobotKeywordDefinition robotKeywordDefinition = (RobotKeywordDefinition) parentParent;
-        RobotKeywordSettings settings = robotKeywordDefinition.getKeywordSettings();
-        for (RobotKeywordSettingLine line: settings.getKeywordSettingLineList()) {
+        Collection<RobotKeywordSettingLine> settings = PsiTreeUtil.findChildrenOfType(robotKeywordDefinition, RobotKeywordSettingLine.class);
+        for (RobotKeywordSettingLine line: settings) {
             RobotKeywordSetting setting = line.getKeywordSetting();
-            if (setting == null) {
-                continue;
-            }
             RobotArgumentsSetting args = setting.getArgumentsSetting();
             if (args == null) {
                 continue;

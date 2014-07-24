@@ -29,10 +29,4 @@ public class RobotEllipsesLineSettingsImpl extends ASTWrapperPsiElement implemen
     return findNotNullChildByClass(RobotEllipses.class);
   }
 
-  @Override
-  @NotNull
-  public RobotEndOfLine getEndOfLine() {
-    return findNotNullChildByClass(RobotEndOfLine.class);
-  }
-
 }

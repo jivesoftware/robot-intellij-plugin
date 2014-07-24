@@ -5,6 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotEndOfLine extends PsiElement {
+public interface RobotForLoopExecutionLine extends PsiElement {
+
+  @NotNull
+  List<RobotEmptyForLoopLine> getEmptyForLoopLineList();
+
+  @NotNull
+  RobotNonEmptyForLoopLine getNonEmptyForLoopLine();
 
 }

@@ -8,9 +8,6 @@ import com.intellij.psi.PsiElement;
 public interface RobotTestSettingLine extends PsiElement {
 
   @NotNull
-  RobotEndOfLine getEndOfLine();
-
-  @NotNull
   RobotTestSetting getTestSetting();
 
 }

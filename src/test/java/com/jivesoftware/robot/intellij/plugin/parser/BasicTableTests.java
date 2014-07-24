@@ -74,7 +74,7 @@ public class BasicTableTests extends RobotParserTest {
     public void testTestCasesTable() {
         RobotPsiFile file = doTestParseSucceeds(TEST_CASES_TABLE);
         assertFileHasPsiElements(file, RobotTestCasesTable.class, 1);
-        assertFileHasPsiElements(file, RobotTestcaseLine.class, 3);
+        assertFileHasPsiElements(file, RobotTestcaseLine.class, 2);
         assertFileHasPsiElements(file, RobotKeyword.class, 2);
     }
 
@@ -98,7 +98,7 @@ public class BasicTableTests extends RobotParserTest {
     public void testJunkBeforeFirstTable() {
         RobotPsiFile file = doTestParseSucceeds(JUNK_BEFORE_FIRST_TABLE);
         assertFileHasPsiElements(file, RobotTestCasesTable.class, 1);
-        assertFileHasPsiElements(file, RobotTestcaseLine.class, 3);
+        assertFileHasPsiElements(file, RobotTestcaseLine.class, 2);
         assertFileHasPsiElements(file, RobotKeyword.class, 2);
         assertFileHasPsiElements(file, PsiComment.class, 3);
     }

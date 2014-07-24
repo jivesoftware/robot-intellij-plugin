@@ -8,13 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface RobotKeywordLine extends PsiElement {
 
   @Nullable
-  RobotBadKeywordLine getBadKeywordLine();
-
-  @Nullable
   RobotEllipsesLineTest getEllipsesLineTest();
-
-  @Nullable
-  RobotEmptyLine getEmptyLine();
 
   @Nullable
   RobotExecutionLine getExecutionLine();
@@ -24,6 +18,9 @@ public interface RobotKeywordLine extends PsiElement {
 
   @Nullable
   RobotForLoopInRange getForLoopInRange();
+
+  @Nullable
+  RobotKeywordSettingLine getKeywordSettingLine();
 
   @Nullable
   RobotReturnLine getReturnLine();

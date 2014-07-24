@@ -8,16 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface RobotTestcaseLine extends PsiElement {
 
   @Nullable
-  RobotBadTestCaseLine getBadTestCaseLine();
-
-  @Nullable
   RobotEllipsesLineTest getEllipsesLineTest();
-
-  @Nullable
-  RobotEmptyLine getEmptyLine();
-
-  @Nullable
-  RobotEndOfLine getEndOfLine();
 
   @Nullable
   RobotExecutionLine getExecutionLine();

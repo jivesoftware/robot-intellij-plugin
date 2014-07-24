@@ -5,10 +5,7 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotIndentedKeywordLine extends PsiElement {
-
-  @Nullable
-  RobotIndentedEllipsesLineTest getIndentedEllipsesLineTest();
+public interface RobotNonEmptyForLoopLine extends PsiElement {
 
   @Nullable
   RobotIndentedKeywordInvocationTest getIndentedKeywordInvocationTest();

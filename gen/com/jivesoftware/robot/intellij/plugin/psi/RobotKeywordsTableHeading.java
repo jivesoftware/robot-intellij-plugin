@@ -7,7 +7,4 @@ import com.intellij.psi.PsiElement;
 
 public interface RobotKeywordsTableHeading extends PsiElement {
 
-  @NotNull
-  RobotEndOfLine getEndOfLine();
-
 }

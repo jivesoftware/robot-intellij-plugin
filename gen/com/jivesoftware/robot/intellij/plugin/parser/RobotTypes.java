@@ -29,11 +29,12 @@ public interface RobotTypes {
   IElementType ELLIPSES_FOR_TEST_TABLE = new RobotElementType("ELLIPSES_FOR_TEST_TABLE");
   IElementType ELLIPSES_LINE_SETTINGS = new RobotElementType("ELLIPSES_LINE_SETTINGS");
   IElementType ELLIPSES_LINE_TEST = new RobotElementType("ELLIPSES_LINE_TEST");
+  IElementType EMPTY_FOR_LOOP_LINE = new RobotElementType("EMPTY_FOR_LOOP_LINE");
   IElementType EMPTY_LINE = new RobotElementType("EMPTY_LINE");
-  IElementType END_OF_LINE = new RobotElementType("END_OF_LINE");
   IElementType ERROR = new RobotElementType("ERROR");
   IElementType EXECUTION_LINE = new RobotElementType("EXECUTION_LINE");
   IElementType FORCE_TAGS_SETTING = new RobotElementType("FORCE_TAGS_SETTING");
+  IElementType FOR_LOOP_EXECUTION_LINE = new RobotElementType("FOR_LOOP_EXECUTION_LINE");
   IElementType FOR_LOOP_IN = new RobotElementType("FOR_LOOP_IN");
   IElementType FOR_LOOP_IN_RANGE = new RobotElementType("FOR_LOOP_IN_RANGE");
   IElementType FOR_LOOP_VALUE_LIST = new RobotElementType("FOR_LOOP_VALUE_LIST");
@@ -56,10 +57,10 @@ public interface RobotTypes {
   IElementType KEYWORD_INVOCATION_TEST = new RobotElementType("KEYWORD_INVOCATION_TEST");
   IElementType KEYWORD_LINE = new RobotElementType("KEYWORD_LINE");
   IElementType KEYWORD_SETTING = new RobotElementType("KEYWORD_SETTING");
-  IElementType KEYWORD_SETTINGS = new RobotElementType("KEYWORD_SETTINGS");
   IElementType KEYWORD_SETTING_LINE = new RobotElementType("KEYWORD_SETTING_LINE");
   IElementType KEYWORD_TITLE = new RobotKeywordTitleElementType("KEYWORD_TITLE");
   IElementType MULTI_ASSIGNMENT_LHS = new RobotElementType("MULTI_ASSIGNMENT_LHS");
+  IElementType NON_EMPTY_FOR_LOOP_LINE = new RobotElementType("NON_EMPTY_FOR_LOOP_LINE");
   IElementType RESOURCE_FILE = new RobotElementType("RESOURCE_FILE");
   IElementType RESOURCE_SETTING = new RobotElementType("RESOURCE_SETTING");
   IElementType RETURN_LINE = new RobotElementType("RETURN_LINE");
@@ -209,11 +210,11 @@ public interface RobotTypes {
       else if (type == ELLIPSES_LINE_TEST) {
         return new RobotEllipsesLineTestImpl(node);
       }
+      else if (type == EMPTY_FOR_LOOP_LINE) {
+        return new RobotEmptyForLoopLineImpl(node);
+      }
       else if (type == EMPTY_LINE) {
         return new RobotEmptyLineImpl(node);
-      }
-      else if (type == END_OF_LINE) {
-        return new RobotEndOfLineImpl(node);
       }
       else if (type == ERROR) {
         return new RobotErrorImpl(node);
@@ -223,6 +224,9 @@ public interface RobotTypes {
       }
       else if (type == FORCE_TAGS_SETTING) {
         return new RobotForceTagsSettingImpl(node);
+      }
+      else if (type == FOR_LOOP_EXECUTION_LINE) {
+        return new RobotForLoopExecutionLineImpl(node);
       }
       else if (type == FOR_LOOP_IN) {
         return new RobotForLoopInImpl(node);
@@ -290,9 +294,6 @@ public interface RobotTypes {
       else if (type == KEYWORD_SETTING) {
         return new RobotKeywordSettingImpl(node);
       }
-      else if (type == KEYWORD_SETTINGS) {
-        return new RobotKeywordSettingsImpl(node);
-      }
       else if (type == KEYWORD_SETTING_LINE) {
         return new RobotKeywordSettingLineImpl(node);
       }
@@ -301,6 +302,9 @@ public interface RobotTypes {
       }
       else if (type == MULTI_ASSIGNMENT_LHS) {
         return new RobotMultiAssignmentLhsImpl(node);
+      }
+      else if (type == NON_EMPTY_FOR_LOOP_LINE) {
+        return new RobotNonEmptyForLoopLineImpl(node);
       }
       else if (type == RESOURCE_FILE) {
         return new RobotResourceFileImpl(node);

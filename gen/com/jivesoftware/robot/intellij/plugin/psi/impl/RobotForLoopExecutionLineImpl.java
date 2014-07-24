@@ -12,21 +12,27 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotIndentedEllipsesLineTestImpl extends ASTWrapperPsiElement implements RobotIndentedEllipsesLineTest {
+public class RobotForLoopExecutionLineImpl extends ASTWrapperPsiElement implements RobotForLoopExecutionLine {
 
-  public RobotIndentedEllipsesLineTestImpl(ASTNode node) {
+  public RobotForLoopExecutionLineImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitIndentedEllipsesLineTest(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitForLoopExecutionLine(this);
     else super.accept(visitor);
   }
 
   @Override
   @NotNull
-  public RobotEllipses getEllipses() {
-    return findNotNullChildByClass(RobotEllipses.class);
+  public List<RobotEmptyForLoopLine> getEmptyForLoopLineList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotEmptyForLoopLine.class);
+  }
+
+  @Override
+  @NotNull
+  public RobotNonEmptyForLoopLine getNonEmptyForLoopLine() {
+    return findNotNullChildByClass(RobotNonEmptyForLoopLine.class);
   }
 
 }

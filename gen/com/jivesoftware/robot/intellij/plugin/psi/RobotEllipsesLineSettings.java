@@ -10,7 +10,4 @@ public interface RobotEllipsesLineSettings extends PsiElement {
   @NotNull
   RobotEllipses getEllipses();
 
-  @NotNull
-  RobotEndOfLine getEndOfLine();
-
 }

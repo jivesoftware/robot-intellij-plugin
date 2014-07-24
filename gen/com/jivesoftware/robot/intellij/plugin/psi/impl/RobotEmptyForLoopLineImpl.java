@@ -12,21 +12,15 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotKeywordSettingsImpl extends ASTWrapperPsiElement implements RobotKeywordSettings {
+public class RobotEmptyForLoopLineImpl extends ASTWrapperPsiElement implements RobotEmptyForLoopLine {
 
-  public RobotKeywordSettingsImpl(ASTNode node) {
+  public RobotEmptyForLoopLineImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitKeywordSettings(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitEmptyForLoopLine(this);
     else super.accept(visitor);
-  }
-
-  @Override
-  @NotNull
-  public List<RobotKeywordSettingLine> getKeywordSettingLineList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotKeywordSettingLine.class);
   }
 
 }

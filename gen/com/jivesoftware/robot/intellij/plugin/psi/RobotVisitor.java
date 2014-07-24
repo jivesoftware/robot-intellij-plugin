@@ -94,11 +94,11 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitEmptyLine(@NotNull RobotEmptyLine o) {
+  public void visitEmptyForLoopLine(@NotNull RobotEmptyForLoopLine o) {
     visitPsiElement(o);
   }
 
-  public void visitEndOfLine(@NotNull RobotEndOfLine o) {
+  public void visitEmptyLine(@NotNull RobotEmptyLine o) {
     visitPsiElement(o);
   }
 
@@ -111,6 +111,10 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitForceTagsSetting(@NotNull RobotForceTagsSetting o) {
+    visitPsiElement(o);
+  }
+
+  public void visitForLoopExecutionLine(@NotNull RobotForLoopExecutionLine o) {
     visitPsiElement(o);
   }
 
@@ -203,10 +207,6 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitKeywordSettings(@NotNull RobotKeywordSettings o) {
-    visitPsiElement(o);
-  }
-
   public void visitKeywordSettingLine(@NotNull RobotKeywordSettingLine o) {
     visitPsiElement(o);
   }
@@ -217,6 +217,10 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitMultiAssignmentLhs(@NotNull RobotMultiAssignmentLhs o) {
+    visitPsiElement(o);
+  }
+
+  public void visitNonEmptyForLoopLine(@NotNull RobotNonEmptyForLoopLine o) {
     visitPsiElement(o);
   }
 

@@ -12,15 +12,27 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotEndOfLineImpl extends ASTWrapperPsiElement implements RobotEndOfLine {
+public class RobotNonEmptyForLoopLineImpl extends ASTWrapperPsiElement implements RobotNonEmptyForLoopLine {
 
-  public RobotEndOfLineImpl(ASTNode node) {
+  public RobotNonEmptyForLoopLineImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitEndOfLine(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitNonEmptyForLoopLine(this);
     else super.accept(visitor);
+  }
+
+  @Override
+  @Nullable
+  public RobotIndentedKeywordInvocationTest getIndentedKeywordInvocationTest() {
+    return findChildByClass(RobotIndentedKeywordInvocationTest.class);
+  }
+
+  @Override
+  @Nullable
+  public RobotIndentedVariableAssignToKeyword getIndentedVariableAssignToKeyword() {
+    return findChildByClass(RobotIndentedVariableAssignToKeyword.class);
   }
 
 }
