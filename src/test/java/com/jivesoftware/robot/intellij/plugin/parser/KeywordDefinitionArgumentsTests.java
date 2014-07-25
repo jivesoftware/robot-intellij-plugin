@@ -92,12 +92,12 @@ public class KeywordDefinitionArgumentsTests extends RobotParserTest {
     @Test
     public void testKeywordWithInvalidSpaceInDefaultArg() {
         RobotPsiFile file = doTestParseFails(KEYWORD_WITH_INVALID_SPACE_IN_ARG_VALUE);
-        assertFileHasPsiElements(file, RobotArgumentsSetting.class, 0);
+        assertFileHasPsiElements(file, RobotArgumentsSetting.class, 1);
     }
 
     @Test
     public void testKeywordWithInvalidDefaultArrayValue() {
         RobotPsiFile file = doTestParseFails(KEYWORD_WITH_INVALID_DEFAULT_ARRAY_VALUE);
-        assertFileHasPsiElements(file, RobotArgumentsSetting.class, 0);
+        assertFileHasPsiElements(file, RobotArgumentsSetting.class, 1);
     }
 }

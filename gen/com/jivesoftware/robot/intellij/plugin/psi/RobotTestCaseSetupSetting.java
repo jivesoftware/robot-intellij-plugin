@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface RobotTestCaseSetupSetting extends PsiElement {
 
-  @NotNull
+  @Nullable
   RobotKeywordInvocationSettings getKeywordInvocationSettings();
 
 }

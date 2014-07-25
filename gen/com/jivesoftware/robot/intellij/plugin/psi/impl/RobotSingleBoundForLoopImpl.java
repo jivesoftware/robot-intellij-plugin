@@ -25,14 +25,14 @@ public class RobotSingleBoundForLoopImpl extends ASTWrapperPsiElement implements
 
   @Override
   @NotNull
-  public RobotForVarInRange getForVarInRange() {
-    return findNotNullChildByClass(RobotForVarInRange.class);
+  public List<RobotEllipses> getEllipsesList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotEllipses.class);
   }
 
   @Override
   @NotNull
-  public List<RobotIndentedEllipsesForTestTable> getIndentedEllipsesForTestTableList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotIndentedEllipsesForTestTable.class);
+  public RobotForVarInRange getForVarInRange() {
+    return findNotNullChildByClass(RobotForVarInRange.class);
   }
 
   @Override

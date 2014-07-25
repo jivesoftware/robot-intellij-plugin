@@ -25,14 +25,26 @@ public class RobotGenericSettingImpl extends ASTWrapperPsiElement implements Rob
 
   @Override
   @NotNull
+  public List<RobotEllipses> getEllipsesList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotEllipses.class);
+  }
+
+  @Override
+  @NotNull
+  public List<RobotEmptyLine> getEmptyLineList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotEmptyLine.class);
+  }
+
+  @Override
+  @NotNull
   public RobotKeyword getKeyword() {
     return findNotNullChildByClass(RobotKeyword.class);
   }
 
   @Override
   @NotNull
-  public List<RobotSettingListOrEllipses> getSettingListOrEllipsesList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotSettingListOrEllipses.class);
+  public List<RobotSettingList> getSettingListList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotSettingList.class);
   }
 
 }

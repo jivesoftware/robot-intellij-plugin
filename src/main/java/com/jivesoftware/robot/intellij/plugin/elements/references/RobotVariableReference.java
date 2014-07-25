@@ -7,6 +7,8 @@ import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.search.VariablePsiUtil;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotForLoopIn;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotForLoopInRange;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDefinition;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotTestCase;
 import org.jetbrains.annotations.NotNull;
@@ -27,6 +29,28 @@ public class RobotVariableReference extends PsiReferenceBase<PsiElement> {
 
         if (!optVariableName.isPresent()) {
             return null;
+        }
+
+        RobotForLoopIn containingLoop = PsiTreeUtil.getParentOfType(myElement, RobotForLoopIn.class);
+        if (containingLoop != null) {
+            Optional<PsiElement> definition = VariablePsiUtil.findFirstDefinitionOfVariableFromForLoopIn(containingLoop, myElement);
+            if (definition.isPresent()) {
+                if (RobotPsiUtil.areIdenticalTextualOccurrences(myElement, definition.get())) {
+                    return null;
+                }
+                return definition.get();
+            }
+        }
+
+        RobotForLoopInRange containingLoopInRange = PsiTreeUtil.getParentOfType(myElement, RobotForLoopInRange.class);
+        if (containingLoop != null) {
+            Optional<PsiElement> definition = VariablePsiUtil.findFirstDefinitionOfVariableFromForLoopInRange(containingLoopInRange, myElement);
+            if (definition.isPresent()) {
+                if (RobotPsiUtil.areIdenticalTextualOccurrences(myElement, definition.get())) {
+                    return null;
+                }
+                return definition.get();
+            }
         }
 
         RobotTestCase containingTest = PsiTreeUtil.getParentOfType(myElement, RobotTestCase.class);

@@ -7,7 +7,7 @@ import com.intellij.psi.PsiElement;
 
 public interface RobotTestCaseTemplateSetting extends PsiElement {
 
-  @NotNull
+  @Nullable
   RobotKeyword getKeyword();
 
 }

@@ -19,6 +19,7 @@ import com.jivesoftware.robot.intellij.plugin.elements.references.RobotVariableR
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotJavaPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.search.VariablePsiUtil;
+import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 

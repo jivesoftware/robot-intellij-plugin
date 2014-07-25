@@ -25,12 +25,6 @@ public class RobotForLoopInImpl extends ASTWrapperPsiElement implements RobotFor
 
   @Override
   @NotNull
-  public List<RobotForLoopExecutionLine> getForLoopExecutionLineList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotForLoopExecutionLine.class);
-  }
-
-  @Override
-  @NotNull
   public RobotForLoopValueList getForLoopValueList() {
     return findNotNullChildByClass(RobotForLoopValueList.class);
   }
@@ -39,6 +33,18 @@ public class RobotForLoopInImpl extends ASTWrapperPsiElement implements RobotFor
   @NotNull
   public RobotForVarIn getForVarIn() {
     return findNotNullChildByClass(RobotForVarIn.class);
+  }
+
+  @Override
+  @NotNull
+  public List<RobotIndentedKeywordInvocationTest> getIndentedKeywordInvocationTestList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotIndentedKeywordInvocationTest.class);
+  }
+
+  @Override
+  @NotNull
+  public List<RobotIndentedVariableAssignToKeyword> getIndentedVariableAssignToKeywordList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotIndentedVariableAssignToKeyword.class);
   }
 
 }

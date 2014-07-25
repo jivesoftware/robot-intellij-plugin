@@ -8,7 +8,10 @@ import com.intellij.psi.PsiElement;
 public interface RobotArrayAssignableInVariablesTbl extends PsiElement {
 
   @NotNull
-  List<RobotEllipsesForSettingsTable> getEllipsesForSettingsTableList();
+  List<RobotEllipses> getEllipsesList();
+
+  @NotNull
+  List<RobotEmptyLine> getEmptyLineList();
 
   @NotNull
   List<RobotKeywordArgList> getKeywordArgListList();

@@ -1,7 +1,9 @@
 package com.jivesoftware.robot.intellij.plugin.parser;
 
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotForceTagsSetting;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotTag;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotTestSetupSetting;
 import org.junit.Test;
 
@@ -42,6 +44,10 @@ public class SettingsTableTests extends RobotParserTest {
                     " S U I T E T E A R D O W N  Do more stuff\n" +
                     " S U I T E P O S T C O N D I T I O N  Do more stuff\n";
 
+    private static final String FORCE_TAGS_SETTING_NO_ENDLINE =
+            "*** Settings ***\n" +
+                    "Force Tags  foo  bar  baz";
+
     @Test
     public void testSetupSettings() {
         RobotPsiFile file = doTestParseSucceeds(TEST_SETUP_SETTINGS);
@@ -61,5 +67,12 @@ public class SettingsTableTests extends RobotParserTest {
         RobotPsiFile file = doTestParseSucceeds(TEST_SETUP_SETTINGS_WITH_SPACES_AND_CAPS);
         assertFileHasPsiElements(file, RobotTestSetupSetting.class, 8);
         assertFileHasPsiElements(file, RobotKeyword.class, 8);
+    }
+
+    @Test
+    public void testForceTagsSettingNoEndline() {
+        RobotPsiFile file = doTestParseSucceeds(FORCE_TAGS_SETTING_NO_ENDLINE);
+        assertFileHasPsiElements(file, RobotForceTagsSetting.class, 1);
+        assertFileHasPsiElements(file, RobotTag.class, 3);
     }
 }

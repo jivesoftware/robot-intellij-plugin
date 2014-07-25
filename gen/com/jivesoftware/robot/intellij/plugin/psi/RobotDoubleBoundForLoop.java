@@ -8,10 +8,10 @@ import com.intellij.psi.PsiElement;
 public interface RobotDoubleBoundForLoop extends PsiElement {
 
   @NotNull
-  RobotForVarInRange getForVarInRange();
+  List<RobotEllipses> getEllipsesList();
 
   @NotNull
-  List<RobotIndentedEllipsesForTestTable> getIndentedEllipsesForTestTableList();
+  RobotForVarInRange getForVarInRange();
 
   @NotNull
   List<RobotKeywordArg> getKeywordArgList();

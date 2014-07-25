@@ -24,9 +24,9 @@ public class RobotTestCaseTemplateSettingImpl extends ASTWrapperPsiElement imple
   }
 
   @Override
-  @NotNull
+  @Nullable
   public RobotKeyword getKeyword() {
-    return findNotNullChildByClass(RobotKeyword.class);
+    return findChildByClass(RobotKeyword.class);
   }
 
 }

@@ -8,7 +8,10 @@ import com.intellij.psi.PsiElement;
 public interface RobotTestSetupSetting extends PsiElement {
 
   @NotNull
-  List<RobotEllipsesForSettingsTable> getEllipsesForSettingsTableList();
+  List<RobotEllipses> getEllipsesList();
+
+  @NotNull
+  List<RobotEmptyLine> getEmptyLineList();
 
   @NotNull
   RobotKeywordInvocationSettings getKeywordInvocationSettings();

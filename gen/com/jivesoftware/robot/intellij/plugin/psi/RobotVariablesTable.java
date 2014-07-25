@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface RobotVariablesTable extends PsiElement {
 
   @NotNull
+  List<RobotEmptyLine> getEmptyLineList();
+
+  @NotNull
   List<RobotVariablesLine> getVariablesLineList();
 
   @NotNull

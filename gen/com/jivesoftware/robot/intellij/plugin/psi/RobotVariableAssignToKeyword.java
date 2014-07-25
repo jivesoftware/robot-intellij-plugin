@@ -8,7 +8,10 @@ import com.intellij.psi.PsiElement;
 public interface RobotVariableAssignToKeyword extends PsiElement {
 
   @NotNull
-  List<RobotEllipsesForTestTable> getEllipsesForTestTableList();
+  List<RobotEllipses> getEllipsesList();
+
+  @NotNull
+  List<RobotEmptyLine> getEmptyLineList();
 
   @NotNull
   RobotKeywordInvocationTest getKeywordInvocationTest();

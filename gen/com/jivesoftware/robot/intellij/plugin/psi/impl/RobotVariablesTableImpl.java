@@ -25,6 +25,12 @@ public class RobotVariablesTableImpl extends ASTWrapperPsiElement implements Rob
 
   @Override
   @NotNull
+  public List<RobotEmptyLine> getEmptyLineList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotEmptyLine.class);
+  }
+
+  @Override
+  @NotNull
   public List<RobotVariablesLine> getVariablesLineList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotVariablesLine.class);
   }

@@ -25,8 +25,14 @@ public class RobotKeywordInvocationSettingsImpl extends ASTWrapperPsiElement imp
 
   @Override
   @NotNull
-  public List<RobotEllipsesForSettingsTable> getEllipsesForSettingsTableList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotEllipsesForSettingsTable.class);
+  public List<RobotEllipses> getEllipsesList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotEllipses.class);
+  }
+
+  @Override
+  @NotNull
+  public List<RobotEmptyLine> getEmptyLineList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotEmptyLine.class);
   }
 
   @Override

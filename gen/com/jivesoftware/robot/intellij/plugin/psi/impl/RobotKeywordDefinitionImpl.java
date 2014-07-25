@@ -25,6 +25,12 @@ public class RobotKeywordDefinitionImpl extends ASTWrapperPsiElement implements 
 
   @Override
   @NotNull
+  public List<RobotEmptyLine> getEmptyLineList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotEmptyLine.class);
+  }
+
+  @Override
+  @NotNull
   public RobotKeywordDefinitionHeader getKeywordDefinitionHeader() {
     return findNotNullChildByClass(RobotKeywordDefinitionHeader.class);
   }

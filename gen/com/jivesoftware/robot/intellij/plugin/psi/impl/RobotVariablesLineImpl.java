@@ -43,20 +43,8 @@ public class RobotVariablesLineImpl extends ASTWrapperPsiElement implements Robo
 
   @Override
   @Nullable
-  public RobotBadVariablesLine getBadVariablesLine() {
-    return findChildByClass(RobotBadVariablesLine.class);
-  }
-
-  @Override
-  @Nullable
-  public RobotEllipsesLineSettings getEllipsesLineSettings() {
-    return findChildByClass(RobotEllipsesLineSettings.class);
-  }
-
-  @Override
-  @Nullable
-  public RobotEmptyLine getEmptyLine() {
-    return findChildByClass(RobotEmptyLine.class);
+  public RobotEllipses getEllipses() {
+    return findChildByClass(RobotEllipses.class);
   }
 
   @Override

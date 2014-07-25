@@ -20,53 +20,53 @@ import java.util.Set;
  * They must be annotated with @RobotKeyword and the containing class must be annotated with @RobotKeywords.
  */
 public class RobotTagFinder implements Processor<PsiFile> {
-  public static final String TAGS_SETTING = "[tags]";
-  public static final String FORCE_TAGS_SETTING = "Force tags";
-  public static final String FORCE_TAGS_SETTING2 = "Force Tags";
+    public static final String TAGS_SETTING = "[tags]";
+    public static final String FORCE_TAGS_SETTING = "Force tags";
+    public static final String FORCE_TAGS_SETTING2 = "Force Tags";
 
-  private final Project project;
-  private final Set<String> results;
+    private final Project project;
+    private final Set<String> results;
 
-  public RobotTagFinder(Project project) {
-    this.project = project;
-    results = Sets.newHashSet();
-  }
-
-  @Override
-  public boolean process(PsiFile file) {
-    return addResultsForRobotFile(file, results);
-  }
-
-  public void process() {
-
-    GlobalSearchScope robotFilesInProject = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.projectScope(project), RobotFileType.INSTANCE);
-    PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWordInLiterals(TAGS_SETTING, robotFilesInProject, this);
-    PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWordInLiterals(FORCE_TAGS_SETTING, robotFilesInProject, this);
-    PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWordInLiterals(FORCE_TAGS_SETTING2, robotFilesInProject, this);
-  }
-
-  private boolean addResultsForRobotFile(PsiFile psiFile, Set<String> resultsToAdd) {
-    if (psiFile instanceof RobotPsiFile) {
-      RobotTable[] tables = ((RobotPsiFile) psiFile).findChildrenByClass(RobotTable.class);
-      for (RobotTable table: tables) {
-          if (table.getTestCasesTable() != null) {
-              addResultsForTestCaseTable(table.getTestCasesTable(), resultsToAdd);
-          }
-          if (table.getSettingsTable() != null) {
-              addResultsForSettingsTable(table.getSettingsTable(), resultsToAdd);
-          }
-      }
-      RobotTag[] tags = ((RobotPsiFile) psiFile).findChildrenByClass(RobotTag.class);
-      for (RobotTag tag : tags) {
-        resultsToAdd.add(tag.getText());
-      }
+    public RobotTagFinder(Project project) {
+        this.project = project;
+        results = Sets.newHashSet();
     }
-    return true;
-  }
+
+    @Override
+    public boolean process(PsiFile file) {
+        return addResultsForRobotFile(file, results);
+    }
+
+    public void process() {
+
+        GlobalSearchScope robotFilesInProject = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.projectScope(project), RobotFileType.INSTANCE);
+        PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWordInLiterals(TAGS_SETTING, robotFilesInProject, this);
+        PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWordInLiterals(FORCE_TAGS_SETTING, robotFilesInProject, this);
+        PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWordInLiterals(FORCE_TAGS_SETTING2, robotFilesInProject, this);
+    }
+
+    private boolean addResultsForRobotFile(PsiFile psiFile, Set<String> resultsToAdd) {
+        if (psiFile instanceof RobotPsiFile) {
+            RobotTable[] tables = ((RobotPsiFile) psiFile).findChildrenByClass(RobotTable.class);
+            for (RobotTable table : tables) {
+                if (table.getTestCasesTable() != null) {
+                    addResultsForTestCaseTable(table.getTestCasesTable(), resultsToAdd);
+                }
+                if (table.getSettingsTable() != null) {
+                    addResultsForSettingsTable(table.getSettingsTable(), resultsToAdd);
+                }
+            }
+            RobotTag[] tags = ((RobotPsiFile) psiFile).findChildrenByClass(RobotTag.class);
+            for (RobotTag tag : tags) {
+                resultsToAdd.add(tag.getText());
+            }
+        }
+        return true;
+    }
 
     private void addResultsForSettingsTable(RobotSettingsTable settingsTable, Set<String> resultsToAdd) {
         List<RobotSettingsLine> lines = settingsTable.getSettingsLineList();
-        for (RobotSettingsLine line: lines) {
+        for (RobotSettingsLine line : lines) {
             RobotSetting setting = line.getSetting();
             if (setting == null) {
                 continue;
@@ -75,57 +75,43 @@ public class RobotTagFinder implements Processor<PsiFile> {
             if (tagsSetting == null) {
                 continue;
             }
-            List<RobotTagListOrEllipsesNoCol> tagsSettingLines = tagsSetting.getTagListOrEllipsesNoColList();
-            for (RobotTagListOrEllipsesNoCol tagSettingLine: tagsSettingLines) {
-                if (tagSettingLine.getTagList() == null) {
-                    continue;
-                }
-                for (RobotTag tag: tagSettingLine.getTagList().getTagList()) {
-                    resultsToAdd.add(tag.getText());
-                }
+            List<RobotTag> tags = tagsSetting.getTagList();
+            for (RobotTag tag : tags) {
+                resultsToAdd.add(tag.getText());
             }
         }
     }
 
     private void addResultsForTestCaseTable(RobotTestCasesTable testCasesTable, Set<String> resultsToAdd) {
-        for (RobotTestCase testCase: testCasesTable.getTestCaseList()) {
+        for (RobotTestCase testCase : testCasesTable.getTestCaseList()) {
             addResultsForTestCase(testCase, resultsToAdd);
         }
     }
 
     private void addResultsForTestCase(RobotTestCase testCase, Set<String> resultsToAdd) {
         List<RobotTestcaseLine> lines = testCase.getTestcaseLineList();
-        for (RobotTestcaseLine line: lines) {
+        for (RobotTestcaseLine line : lines) {
             if (line.getTestSettingLine() == null) {
                 continue;
             }
             RobotTestSetting setting = line.getTestSettingLine().getTestSetting();
-            if (setting == null) {
-                continue;
-            }
             RobotTagsSetting tagsSetting = setting.getTagsSetting();
             if (tagsSetting == null) {
                 continue;
             }
-            List<RobotTagListOrEllipses> tagLines = tagsSetting.getTagListOrEllipsesList();
-            for (RobotTagListOrEllipses tagLine: tagLines) {
-                if (tagLine.getTagList() == null) {
-                    continue;
-                }
-                for (RobotTag tag: tagLine.getTagList().getTagList()) {
-                    String tagString = tag.getText();
-                    resultsToAdd.add(tagString);
-                }
+            List<RobotTag> tags = tagsSetting.getTagList();
+            for (RobotTag tag : tags) {
+                String tagString = tag.getText();
+                resultsToAdd.add(tagString);
             }
         }
     }
 
 
-
-  public List<String> getResults() {
-    List<String> orderedResults = Lists.newArrayList(results);
-    Collections.sort(orderedResults);
-    return orderedResults;
-  }
+    public List<String> getResults() {
+        List<String> orderedResults = Lists.newArrayList(results);
+        Collections.sort(orderedResults);
+        return orderedResults;
+    }
 
 }

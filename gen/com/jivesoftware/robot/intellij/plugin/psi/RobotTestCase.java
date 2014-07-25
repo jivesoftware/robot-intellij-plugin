@@ -10,6 +10,9 @@ import com.intellij.navigation.ItemPresentation;
 public interface RobotTestCase extends RobotNamedElement {
 
   @NotNull
+  List<RobotEmptyLine> getEmptyLineList();
+
+  @NotNull
   List<RobotTestcaseLine> getTestcaseLineList();
 
   @NotNull

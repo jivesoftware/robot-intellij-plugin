@@ -25,6 +25,12 @@ public class RobotSettingsTableImpl extends ASTWrapperPsiElement implements Robo
 
   @Override
   @NotNull
+  public List<RobotEmptyLine> getEmptyLineList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotEmptyLine.class);
+  }
+
+  @Override
+  @NotNull
   public List<RobotSettingsLine> getSettingsLineList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotSettingsLine.class);
   }

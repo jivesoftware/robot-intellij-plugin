@@ -25,8 +25,14 @@ public class RobotTestSetupSettingImpl extends ASTWrapperPsiElement implements R
 
   @Override
   @NotNull
-  public List<RobotEllipsesForSettingsTable> getEllipsesForSettingsTableList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotEllipsesForSettingsTable.class);
+  public List<RobotEllipses> getEllipsesList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotEllipses.class);
+  }
+
+  @Override
+  @NotNull
+  public List<RobotEmptyLine> getEmptyLineList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotEmptyLine.class);
   }
 
   @Override

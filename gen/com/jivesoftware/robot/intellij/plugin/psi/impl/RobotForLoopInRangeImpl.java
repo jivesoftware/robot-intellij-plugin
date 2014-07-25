@@ -37,8 +37,14 @@ public class RobotForLoopInRangeImpl extends ASTWrapperPsiElement implements Rob
 
   @Override
   @NotNull
-  public List<RobotForLoopExecutionLine> getForLoopExecutionLineList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotForLoopExecutionLine.class);
+  public List<RobotIndentedKeywordInvocationTest> getIndentedKeywordInvocationTestList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotIndentedKeywordInvocationTest.class);
+  }
+
+  @Override
+  @NotNull
+  public List<RobotIndentedVariableAssignToKeyword> getIndentedVariableAssignToKeywordList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotIndentedVariableAssignToKeyword.class);
   }
 
   @Override

@@ -8,13 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface RobotSettingsLine extends PsiElement {
 
   @Nullable
-  RobotBadSettingsLine getBadSettingsLine();
-
-  @Nullable
-  RobotEllipsesLineSettings getEllipsesLineSettings();
-
-  @Nullable
-  RobotEmptyLine getEmptyLine();
+  RobotEllipses getEllipses();
 
   @Nullable
   RobotSetting getSetting();

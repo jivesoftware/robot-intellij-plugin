@@ -11,6 +11,13 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.4.3</h3>
+<ul>
+    <li>Rewrite parser BNF file, so that it handles errors more gracefully with the "recoverWhile" syntax.</li>
+    <li>Simplify AST as much as possible to improve performance.</li>
+    <li>Fix resolving a variable reference to a variable in a FOR loop bound.</li>
+</ul>
+
 <h3>Version 1.4.2</h3>
 <ul>
     <li>Fix error handling so that the rest of the file parses correctly when there's a syntax error.</li>

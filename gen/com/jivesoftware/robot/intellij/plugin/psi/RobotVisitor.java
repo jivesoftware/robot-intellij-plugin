@@ -5,7 +5,6 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiElement;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement;
-import com.intellij.psi.PsiErrorElement;
 import com.intellij.psi.StubBasedPsiElement;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordStub;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStub;
@@ -46,22 +45,6 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitBadKeywordLine(@NotNull RobotBadKeywordLine o) {
-    visitPsiErrorElement(o);
-  }
-
-  public void visitBadSettingsLine(@NotNull RobotBadSettingsLine o) {
-    visitPsiErrorElement(o);
-  }
-
-  public void visitBadTestCaseLine(@NotNull RobotBadTestCaseLine o) {
-    visitPsiErrorElement(o);
-  }
-
-  public void visitBadVariablesLine(@NotNull RobotBadVariablesLine o) {
-    visitPsiErrorElement(o);
-  }
-
   public void visitDocumentationSetting(@NotNull RobotDocumentationSetting o) {
     visitPsiElement(o);
   }
@@ -78,23 +61,7 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitEllipsesForSettingsTable(@NotNull RobotEllipsesForSettingsTable o) {
-    visitPsiElement(o);
-  }
-
-  public void visitEllipsesForTestTable(@NotNull RobotEllipsesForTestTable o) {
-    visitPsiElement(o);
-  }
-
-  public void visitEllipsesLineSettings(@NotNull RobotEllipsesLineSettings o) {
-    visitPsiElement(o);
-  }
-
   public void visitEllipsesLineTest(@NotNull RobotEllipsesLineTest o) {
-    visitPsiElement(o);
-  }
-
-  public void visitEmptyForLoopLine(@NotNull RobotEmptyForLoopLine o) {
     visitPsiElement(o);
   }
 
@@ -111,10 +78,6 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitForceTagsSetting(@NotNull RobotForceTagsSetting o) {
-    visitPsiElement(o);
-  }
-
-  public void visitForLoopExecutionLine(@NotNull RobotForLoopExecutionLine o) {
     visitPsiElement(o);
   }
 
@@ -142,19 +105,7 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitIndentedEllipsesForTestTable(@NotNull RobotIndentedEllipsesForTestTable o) {
-    visitPsiElement(o);
-  }
-
-  public void visitIndentedEllipsesLineTest(@NotNull RobotIndentedEllipsesLineTest o) {
-    visitPsiElement(o);
-  }
-
   public void visitIndentedKeywordInvocationTest(@NotNull RobotIndentedKeywordInvocationTest o) {
-    visitPsiElement(o);
-  }
-
-  public void visitIndentedKeywordLine(@NotNull RobotIndentedKeywordLine o) {
     visitPsiElement(o);
   }
 
@@ -220,10 +171,6 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitNonEmptyForLoopLine(@NotNull RobotNonEmptyForLoopLine o) {
-    visitPsiElement(o);
-  }
-
   public void visitResourceFile(@NotNull RobotResourceFile o) {
     visitPsiElement(o);
   }
@@ -278,10 +225,6 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitSettingListOrEllipses(@NotNull RobotSettingListOrEllipses o) {
-    visitPsiElement(o);
-  }
-
   public void visitSingleAssignmentLhs(@NotNull RobotSingleAssignmentLhs o) {
     visitPsiElement(o);
   }
@@ -303,18 +246,6 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitTagsSetting(@NotNull RobotTagsSetting o) {
-    visitPsiElement(o);
-  }
-
-  public void visitTagList(@NotNull RobotTagList o) {
-    visitPsiElement(o);
-  }
-
-  public void visitTagListOrEllipses(@NotNull RobotTagListOrEllipses o) {
-    visitPsiElement(o);
-  }
-
-  public void visitTagListOrEllipsesNoCol(@NotNull RobotTagListOrEllipsesNoCol o) {
     visitPsiElement(o);
   }
 
@@ -388,10 +319,6 @@ public class RobotVisitor extends PsiElementVisitor {
 
   public void visitVariableAssignToKeyword(@NotNull RobotVariableAssignToKeyword o) {
     visitPsiElement(o);
-  }
-
-  public void visitPsiErrorElement(@NotNull PsiErrorElement o) {
-    visitElement(o);
   }
 
   public void visitNamedElement(@NotNull RobotNamedElement o) {

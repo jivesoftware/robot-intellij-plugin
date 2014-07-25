@@ -1,10 +1,7 @@
 package com.jivesoftware.robot.intellij.plugin.parser;
 
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotArrayAssignmentLhs;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotScalarAssignment;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotVariablesLine;
+import com.jivesoftware.robot.intellij.plugin.psi.*;
 import org.junit.Test;
 
 /**
@@ -32,6 +29,10 @@ public class VariableTableTests extends RobotParserTest {
             "*** Variables ***\n" +
                     "@{fooBar}=\n";
 
+    private static final String ASSIGN_VARIABLE_NO_ENDLINE =
+            "*** Variables ***\n" +
+                    "${foo}=  123";
+
     @Test
     public void testValidVariableNames() {
         RobotPsiFile file = doTestParseSucceeds(VALID_VARIABLE_NAMES);
@@ -53,5 +54,12 @@ public class VariableTableTests extends RobotParserTest {
         assertFileHasPsiElements(file, RobotVariablesLine.class, 1);
         assertFileHasPsiElements(file, RobotKeyword.class, 0);
         assertFileHasPsiElements(file, RobotArrayAssignmentLhs.class, 1);
+    }
+
+    @Test
+    public void testAssignVariableNoEndline() {
+        RobotPsiFile file = doTestParseSucceeds(ASSIGN_VARIABLE_NO_ENDLINE);
+        assertFileHasPsiElements(file, RobotVariablesLine.class, 1);
+        assertFileHasPsiElements(file, RobotScalarAssignmentLhs.class, 1);
     }
 }

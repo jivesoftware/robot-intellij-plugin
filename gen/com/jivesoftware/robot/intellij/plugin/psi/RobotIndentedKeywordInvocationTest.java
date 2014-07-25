@@ -8,7 +8,7 @@ import com.intellij.psi.PsiElement;
 public interface RobotIndentedKeywordInvocationTest extends PsiElement {
 
   @NotNull
-  List<RobotIndentedEllipsesForTestTable> getIndentedEllipsesForTestTableList();
+  List<RobotEllipses> getEllipsesList();
 
   @NotNull
   RobotKeyword getKeyword();

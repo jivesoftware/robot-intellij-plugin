@@ -46,6 +46,15 @@ public class VariablePsiUtil {
         return Optional.absent();
     }
 
+    public static boolean matchesExpectedNormalName(PsiElement element, String expectedNormalName) {
+        Optional<String> optName = getVariableName(element);
+        if (!optName.isPresent()) {
+            return false;
+        }
+        String normalName = RobotPsiUtil.normalizeKeywordForIndex(optName.get());
+        return expectedNormalName.equals(normalName);
+    }
+
     public static Map<String, VariableInfo> getVariableEnvironment(@NotNull RobotPsiFile file) {
         return getVariableEnvironment(file, Maps.<String, VariableInfo>newHashMap(), Sets.<String>newHashSet());
     }
@@ -162,12 +171,7 @@ public class VariablePsiUtil {
                 }
                 continue;
             }
-            Optional<String> optVarName = getVariableName(assignment);
-            if (!optVarName.isPresent()) {
-                continue;
-            }
-            String foundNormalName = RobotPsiUtil.normalizeKeywordForIndex(optVarName.get());
-            if (normalName.equals(foundNormalName)) {
+            if (matchesExpectedNormalName(assignment, normalName)) {
                 return Optional.<PsiElement>of(assignment);
             }
         }
@@ -177,6 +181,85 @@ public class VariablePsiUtil {
         VariableInfo foundVar = env.get(normalName);
         if (foundVar != null) {
             return Optional.of(foundVar.getDefinition());
+        }
+        return Optional.absent();
+    }
+
+    public static Optional<PsiElement> findFirstDefinitionOfVariableFromForLoopIn(RobotForLoopIn forLoopIn, PsiElement variableUsage) {
+        Optional<String> optName = getVariableName(variableUsage);
+        if (!optName.isPresent()) {
+            return Optional.absent();
+        }
+        final String usageNormalName = RobotPsiUtil.normalizeKeywordForIndex(optName.get());
+
+        List<RobotScalarVariable> bounds = forLoopIn.getForVarIn().getSingleVariableList().getScalarVariableList();
+
+        for (RobotScalarVariable bound: bounds) {
+            if (matchesExpectedNormalName(bound, usageNormalName)) {
+                return Optional.<PsiElement>of(bound);
+            }
+        }
+
+        final TextRange usageTextRange = variableUsage.getTextRange();
+        Collection<RobotScalarAssignmentLhs> assignments = PsiTreeUtil.findChildrenOfType(forLoopIn, RobotScalarAssignmentLhs.class);
+
+        for (RobotScalarAssignmentLhs assignment: assignments) {
+            TextRange textRange = assignment.getTextRange();
+            // Skip assignments after the usage. A variable can't be defined in a future line of code!
+            if (textRange != null && usageTextRange != null && textRange.getStartOffset() >= usageTextRange.getStartOffset()) {
+                if (textRange.equals(usageTextRange)) {
+                    // If the usage is an assignment and there are no previous assignments of this variable,
+                    // then don't look further for its definition since it is a definition!
+                    return Optional.absent();
+                }
+                break;
+            }
+            if (matchesExpectedNormalName(assignment, usageNormalName)) {
+                return Optional.<PsiElement>of(assignment);
+            }
+        }
+        return Optional.absent();
+    }
+
+    public static Optional<PsiElement> findFirstDefinitionOfVariableFromForLoopInRange(RobotForLoopInRange forLoopInRange, PsiElement variableUsage) {
+        Optional<String> optName = getVariableName(variableUsage);
+        if (!optName.isPresent()) {
+            return Optional.absent();
+        }
+        final String usageNormalName = RobotPsiUtil.normalizeKeywordForIndex(optName.get());
+
+        RobotScalarVariable var;
+        if (forLoopInRange.getSingleBoundForLoop() != null) {
+            var = forLoopInRange.getSingleBoundForLoop().getForVarInRange().getScalarVariable();
+        } else if (forLoopInRange.getDoubleBoundForLoop() != null) {
+            var = forLoopInRange.getDoubleBoundForLoop().getForVarInRange().getScalarVariable();
+        } else if (forLoopInRange.getDoubleBoundForLoopWithStep() != null) {
+            var = forLoopInRange.getDoubleBoundForLoopWithStep().getForVarInRange().getScalarVariable();
+        } else {
+            return Optional.absent();
+        }
+
+        if (matchesExpectedNormalName(var, usageNormalName)) {
+            return Optional.<PsiElement>of(var);
+        }
+
+        final TextRange usageTextRange = variableUsage.getTextRange();
+        Collection<RobotScalarAssignmentLhs> assignments = PsiTreeUtil.findChildrenOfType(forLoopInRange, RobotScalarAssignmentLhs.class);
+
+        for (RobotScalarAssignmentLhs assignment: assignments) {
+            TextRange textRange = assignment.getTextRange();
+            // Skip assignments after the usage. A variable can't be defined in a future line of code!
+            if (textRange != null && usageTextRange != null && textRange.getStartOffset() >= usageTextRange.getStartOffset()) {
+                if (textRange.equals(usageTextRange)) {
+                    // If the usage is an assignment and there are no previous assignments of this variable,
+                    // then don't look further for its definition since it is a definition!
+                    return Optional.absent();
+                }
+                break;
+            }
+            if (matchesExpectedNormalName(assignment, usageNormalName)) {
+                return Optional.<PsiElement>of(assignment);
+            }
         }
         return Optional.absent();
     }

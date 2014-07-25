@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.jivesoftware.robot.intellij.plugin</id>
     <name>Robot Plugin</name>
-    <version>1.4.2</version>
+    <version>1.4.3</version>
     <vendor email="charles.capps@jivesoftware.com" url="http://www.jiveosftware.com">Jive Software</vendor>
 
     <description><![CDATA[
@@ -29,6 +29,13 @@
     ]]></description>
 
     <change-notes><![CDATA[
+
+    <h3>Version 1.4.3</h3>
+    <ul>
+        <li>Rewrite parser BNF file, so that it handles errors more gracefully with the "recoverWhile" syntax.</li>
+        <li>Simplify AST as much as possible to improve performance.</li>
+        <li>Fix resolving a variable reference to a variable in a FOR loop bound.</li>
+    </ul>
 
     <h3>Version 1.4.2</h3>
     <ul>
