@@ -45,8 +45,7 @@ public class RobotImplUtil {
         if (element == null) {
             return null;
         }
-        RobotTestCaseHeader header = element.getTestCaseHeader();
-        return header;
+        return element.getTestCaseHeader();
     }
 
 

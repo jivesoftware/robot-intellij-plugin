@@ -12,8 +12,7 @@ import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.search.VariableInfo;
 import com.jivesoftware.robot.intellij.plugin.elements.search.VariablePsiUtil;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotVariable;
+import com.jivesoftware.robot.intellij.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -27,6 +26,9 @@ public class RenameRobotVariableProcessor extends RenamePsiElementProcessor {
     public boolean canProcessElement(@NotNull PsiElement element) {
         PsiFile file = element.getContainingFile();
         if (!(file instanceof RobotPsiFile)) {
+            return false;
+        }
+        if (element instanceof RobotPsiFile || element instanceof RobotTestCaseHeader) {
             return false;
         }
         Optional<String> optVariableName = VariablePsiUtil.getVariableName(element);

@@ -11,6 +11,11 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.4.4</h3>
+<ul>
+    <li>Quick fix for bug with renaming Robot files.</li>
+</ul>
+
 <h3>Version 1.4.3</h3>
 <ul>
     <li>Rewrite parser BNF file, so that it handles errors more gracefully with the "recoverWhile" syntax.</li>

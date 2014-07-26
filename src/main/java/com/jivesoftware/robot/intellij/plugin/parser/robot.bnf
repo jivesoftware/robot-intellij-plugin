@@ -44,7 +44,7 @@
 }
 
 //Top-level File. A sequence of Robot Tables or empty lines.
-robotFile ::= (TABLE | EMPTY_LINE )* END_OF_LINE* { methods=[getNameIdentifier getPresentation] }
+robotFile ::= (TABLE | EMPTY_LINE )* END_OF_LINE*
 
 TABLE ::= (SETTINGS_TABLE|VARIABLES_TABLE|TEST_CASES_TABLE|KEYWORDS_TABLE)
 

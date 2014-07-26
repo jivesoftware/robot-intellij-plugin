@@ -7,6 +7,7 @@ import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.TokenSet;
 import com.jivesoftware.robot.intellij.plugin.elements.search.VariablePsiUtil;
+import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.lexer.RobotScannerAdapter;
 import com.jivesoftware.robot.intellij.plugin.parser.RobotTypes;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
@@ -71,6 +72,9 @@ public class RobotKeywordUsagesProvider implements FindUsagesProvider {
             if (optVariableName.isPresent()) {
                 return "${" + optVariableName.get() + "}";
             }
+        }
+        if (element instanceof RobotPsiFile) {
+            return ((RobotPsiFile) element).getName();
         }
         return element.getText();
     }

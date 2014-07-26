@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.jivesoftware.robot.intellij.plugin</id>
     <name>Robot Plugin</name>
-    <version>1.4.3</version>
+    <version>1.4.4</version>
     <vendor email="charles.capps@jivesoftware.com" url="http://www.jiveosftware.com">Jive Software</vendor>
 
     <description><![CDATA[
@@ -29,6 +29,11 @@
     ]]></description>
 
     <change-notes><![CDATA[
+
+    <h3>Version 1.4.4</h3>
+    <ul>
+        <li>Quick fix for bug with renaming Robot files.</li>
+    </ul>
 
     <h3>Version 1.4.3</h3>
     <ul>
@@ -298,6 +303,8 @@
                              implementationClass="com.jivesoftware.robot.intellij.plugin.elements.refactoring.RobotNamesValidator"/>
 
         <renamePsiElementProcessor implementation="com.jivesoftware.robot.intellij.plugin.elements.refactoring.RenameRobotVariableProcessor" />
+
+        <renamePsiElementProcessor implementation="com.jivesoftware.robot.intellij.plugin.elements.refactoring.RenameRobotPsiFileProcessor" />
 
         <!-- Structure view -->
         <lang.psiStructureViewFactory language="RobotTestFile"
