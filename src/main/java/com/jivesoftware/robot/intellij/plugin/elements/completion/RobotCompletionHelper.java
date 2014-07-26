@@ -6,7 +6,7 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Created by charles on 7/12/14.
+ * Interface for helpers that do all the real work for Autocompletion.
  */
 public interface RobotCompletionHelper {
 

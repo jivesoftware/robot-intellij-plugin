@@ -327,7 +327,7 @@ In = "IN"
      {InRange}                    { return next(IN_RANGE_TOKEN); }
      {In}                         { return next(IN_TOKEN); }
      {Assignment}        { return next(ASSIGNMENT_TOKEN); }
-     {ArrayAssignment}   { return ARRAY_ASSIGNMENT_TOKEN; }
+     {ArrayAssignment}   { return next(ARRAY_ASSIGNMENT_TOKEN); }
      {Variable}          { return next(VARIABLE_TOKEN); }
      {ArrayVariable}     { return next(ARRAY_VARIABLE_TOKEN); }
      {ArrayVariableAccess}     { return next(ARRAY_VARIABLE_ACCESS_TOKEN); }
@@ -374,8 +374,8 @@ In = "IN"
      {InRange}                    { return next(IN_RANGE_TOKEN); }
      {In}                         { return next(IN_TOKEN); }
      {ScalarDefaultArgumentValue}    { if (onArgumentsLine) { return next(SCALAR_DEFAULT_ARG_VALUE_TOKEN); } return next(ROBOT_KEYWORD_ARG_TOKEN); }
-     {Assignment}        { return ASSIGNMENT_TOKEN; }
-     {ArrayAssignment}   { return ARRAY_ASSIGNMENT_TOKEN; }
+     {Assignment}        { return next(ASSIGNMENT_TOKEN); }
+     {ArrayAssignment}   { return next(ARRAY_ASSIGNMENT_TOKEN); }
      {Variable}          { return next(VARIABLE_TOKEN); }
      {ArrayVariable}     { return next(ARRAY_VARIABLE_TOKEN); }
      {ArrayVariableAccess}     { return next(ARRAY_VARIABLE_ACCESS_TOKEN); }

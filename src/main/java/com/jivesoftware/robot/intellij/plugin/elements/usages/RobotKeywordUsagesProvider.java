@@ -36,7 +36,8 @@ public class RobotKeywordUsagesProvider implements FindUsagesProvider {
                 psiElement instanceof RobotScalarAssignment ||
                 psiElement instanceof RobotScalarAssignmentLhs ||
                 psiElement instanceof RobotArgumentDef ||
-                psiElement instanceof RobotScalarDefaultArgValue;
+                psiElement instanceof RobotScalarDefaultArgValue ||
+                psiElement instanceof RobotPsiFile;
     }
 
     @Nullable
@@ -56,6 +57,10 @@ public class RobotKeywordUsagesProvider implements FindUsagesProvider {
                 element instanceof RobotArgumentDef ||
                 element instanceof RobotScalarDefaultArgValue) {
             return "Robot Variable";
+        } else if (element instanceof RobotResourceFile) {
+            return "Robot Resource Setting";
+        } else if (element instanceof RobotPsiFile) {
+            return "Robot File";
         }
         return "";
     }

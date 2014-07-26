@@ -90,6 +90,13 @@ public class RobotElementFactory {
         return PsiTreeUtil.findChildOfType(file, RobotArgumentDef.class);
     }
 
+    public static RobotResourceFile createRobotResourceFile(Project project, String fileName) {
+        String template = "*** Settings ***\n" +
+                "Resource  %s\n";
+        RobotPsiFile file = createFile(project, format(template, fileName));
+        return PsiTreeUtil.findChildOfType(file, RobotResourceFile.class);
+    }
+
     public static RobotPsiFile createFile(Project project, String text) {
 
         String name = "dummy.robot";

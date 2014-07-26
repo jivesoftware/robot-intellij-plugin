@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by charles on 7/12/14.
+ * Does the real work for autocompletion of Tags.
  */
 public class RobotTagCompletionHelper implements RobotCompletionHelper {
     public static final RobotTagCompletionHelper INSTANCE = new RobotTagCompletionHelper();

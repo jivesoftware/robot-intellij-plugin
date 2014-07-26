@@ -1,14 +1,18 @@
 package com.jivesoftware.robot.intellij.plugin.parser;
 
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotMultiAssignmentLhs;
+import com.jivesoftware.robot.intellij.plugin.psi.*;
 import org.junit.Test;
 
 /**
  * Created by charles on 7/2/14.
  */
 public class AssignmentTests extends RobotParserTest {
+    private static final String SINGLE_ASSIGN =
+            "*** Test Cases ***\n" +
+                    "Test Single Assign\n" +
+                    "  ${var1}=  Foo Bar Keyword";
+
     private static final String MULTI_ASSIGN =
             "*** Test Cases ***\n" +
             "Test Multi Assign\n" +
@@ -28,6 +32,15 @@ public class AssignmentTests extends RobotParserTest {
             "*** Test Cases ***\n" +
                     "Test Multi Assign Invalid 2\n" +
                     "  ${var1}=  ${var2}=  Foo Bar Keyword\n";
+
+    @Test
+    public void testSingleAssign() {
+        RobotPsiFile file = doTestParseSucceeds(SINGLE_ASSIGN);
+        assertFileHasPsiElements(file, RobotScalarAssignmentLhs.class, 1);
+        assertFileHasPsiElements(file, RobotScalarAssignment.class, 1);
+        assertFileHasPsiElements(file, RobotVariableAssignToKeyword.class, 1);
+        assertFileHasPsiElements(file, RobotKeyword.class, 1);
+    }
 
     @Test
     public void testMultiAssign() {

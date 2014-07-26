@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 /**
- * Created by charles on 6/5/14.
+ * Defines the pretty presentation in various contexts of a KeywordTitle (the title line of a user-defined Keyword)
  */
 public class KeywordTitlePresentation implements ItemPresentation {
     private final RobotKeywordTitle robotKeywordTitle;

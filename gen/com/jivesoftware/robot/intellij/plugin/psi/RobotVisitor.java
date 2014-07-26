@@ -172,7 +172,7 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitResourceFile(@NotNull RobotResourceFile o) {
-    visitPsiElement(o);
+    visitNamedElement(o);
   }
 
   public void visitResourceSetting(@NotNull RobotResourceSetting o) {

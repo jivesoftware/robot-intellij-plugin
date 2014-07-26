@@ -20,7 +20,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 
 /**
- * Created by charles on 7/12/14.
+ * Does the real work for autocompletion of variables.
  */
 public class RobotVariableCompletionHelper implements RobotCompletionHelper {
     public static final RobotVariableCompletionHelper INSTANCE = new RobotVariableCompletionHelper();

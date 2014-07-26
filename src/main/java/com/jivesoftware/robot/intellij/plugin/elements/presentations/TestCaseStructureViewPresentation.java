@@ -9,24 +9,19 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 /**
- * Created by charles on 6/5/14.
+ * Defines the presentation for a Test Case when displayed in Structure View.
  */
-public class TestCasePresentationStructureView implements ItemPresentation {
+public class TestCaseStructureViewPresentation implements ItemPresentation {
     private final RobotTestCase robotTestCase;
 
-    public TestCasePresentationStructureView(RobotTestCase robotTestCase) {
+    public TestCaseStructureViewPresentation(RobotTestCase robotTestCase) {
         this.robotTestCase = robotTestCase;
     }
 
     @Nullable
     @Override
     public String getPresentableText() {
-        PsiElement nameIdentifier = robotTestCase.getNameIdentifier();
-        if (nameIdentifier != null) {
-            return nameIdentifier.getText();
-        } else {
-            return robotTestCase.getName();
-        }
+        return robotTestCase.getName();
     }
 
     @Nullable

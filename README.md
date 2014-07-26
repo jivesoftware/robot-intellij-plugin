@@ -11,6 +11,13 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.4.5</h3>
+<ul>
+    <li>Added support for Rename refactoring for Robot Files. Any Resource Setting that includes a
+    Robot File will be renamed when the file is renamed.
+    </li>
+</ul>
+    
 <h3>Version 1.4.4</h3>
 <ul>
     <li>Quick fix for bug with renaming Robot files.</li>

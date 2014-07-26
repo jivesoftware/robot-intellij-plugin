@@ -6,6 +6,11 @@ import com.intellij.patterns.PlatformPatterns;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotLanguage;
 import com.jivesoftware.robot.intellij.plugin.parser.RobotTypes;
 
+/**
+ * Registers the RobotCompletionProvider to perform Autocomplete when certain tokens are under the cursor.
+ *
+ * Autocompletion for Robot Keywords, Variables, and Tags.
+ */
 public class RobotCompletionContributor extends CompletionContributor {
   public RobotCompletionContributor() {
     extend(CompletionType.BASIC,

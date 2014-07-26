@@ -1396,13 +1396,11 @@ public class RobotParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "KEYWORD_INVOCATION_TEST")) return false;
     if (!nextTokenIs(builder_, ROBOT_KEYWORD_TOKEN)) return false;
     boolean result_;
-    boolean pinned_;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    Marker marker_ = enter_section_(builder_);
     result_ = KEYWORD(builder_, level_ + 1);
-    pinned_ = result_; // pin = 1
     result_ = result_ && KEYWORD_INVOCATION_TEST_1(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, KEYWORD_INVOCATION_TEST, result_, pinned_, null);
-    return result_ || pinned_;
+    exit_section_(builder_, marker_, KEYWORD_INVOCATION_TEST, result_);
+    return result_;
   }
 
   // (KEYWORD_ARG_LIST | ELLIPSES_FOR_TEST_TABLE)*
@@ -2488,14 +2486,12 @@ public class RobotParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "TEST_CASE")) return false;
     if (!nextTokenIs(builder_, TEST_CASE_HEADER_TOKEN)) return false;
     boolean result_;
-    boolean pinned_;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    Marker marker_ = enter_section_(builder_);
     result_ = TEST_CASE_HEADER(builder_, level_ + 1);
     result_ = result_ && TEST_CASE_1(builder_, level_ + 1);
-    pinned_ = result_; // pin = 2
     result_ = result_ && TEST_CASE_2(builder_, level_ + 1);
-    exit_section_(builder_, level_, marker_, TEST_CASE, result_, pinned_, null);
-    return result_ || pinned_;
+    exit_section_(builder_, marker_, TEST_CASE, result_);
+    return result_;
   }
 
   // ( TESTCASE_LINE EMPTY_LINE | EMPTY_LINE )*
@@ -2569,14 +2565,12 @@ public class RobotParser implements PsiParser {
     if (!recursion_guard_(builder_, level_, "TEST_CASES_TABLE")) return false;
     if (!nextTokenIs(builder_, TEST_CASES_TABLE_HEADING_TOKEN)) return false;
     boolean result_;
-    boolean pinned_;
-    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    Marker marker_ = enter_section_(builder_);
     result_ = TEST_CASES_TABLE_HEADING(builder_, level_ + 1);
-    pinned_ = result_; // pin = 1
-    result_ = result_ && report_error_(builder_, TEST_CASES_TABLE_1(builder_, level_ + 1));
-    result_ = pinned_ && TEST_CASES_TABLE_2(builder_, level_ + 1) && result_;
-    exit_section_(builder_, level_, marker_, TEST_CASES_TABLE, result_, pinned_, null);
-    return result_ || pinned_;
+    result_ = result_ && TEST_CASES_TABLE_1(builder_, level_ + 1);
+    result_ = result_ && TEST_CASES_TABLE_2(builder_, level_ + 1);
+    exit_section_(builder_, marker_, TEST_CASES_TABLE, result_);
+    return result_;
   }
 
   // EMPTY_LINE*

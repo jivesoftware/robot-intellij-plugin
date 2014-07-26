@@ -11,6 +11,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.refactoring.rename.RenameDialog;
 import com.intellij.refactoring.rename.RenamePsiElementProcessor;
 import com.intellij.util.containers.MultiMap;
+import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiFileUtil;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotFileType;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotResourceFile;
@@ -32,22 +33,14 @@ public class RenameRobotPsiFileProcessor extends RenamePsiElementProcessor {
     }
 
     @Override
-    public RenameDialog createRenameDialog(Project project, PsiElement element, PsiElement nameSuggestionContext, Editor editor) {
-        return new RenameDialog(project, element, nameSuggestionContext, editor);
-    }
-
-    @Override
     public void prepareRenaming(final PsiElement element, final String newName,
                                 final Map<PsiElement, String> allRenames) {
-        Collection<PsiReference> refs = findReferences(element, true);
-        for (PsiReference ref: refs) {
-            PsiElement referringElement = ref.getElement();
-            if (referringElement instanceof RobotResourceFile) {
-                String text = ((RobotResourceFile) referringElement).getText();
-                int indexOfLastSlash = text.lastIndexOf(File.separator);
-                String replaced = text.substring(0, indexOfLastSlash + 1) + newName;
-                allRenames.put(referringElement, replaced);
-            }
+        if (!(element instanceof RobotPsiFile)) {
+            return;
+        }
+        Collection<RobotResourceFile> resourceFiles = RobotPsiFileUtil.findAllReferencesToFileBeforeVariableSubstitution((RobotPsiFile) element);
+        for (RobotResourceFile resourceFile: resourceFiles) {
+            allRenames.put(resourceFile, newName);
         }
     }
 
@@ -61,5 +54,10 @@ public class RenameRobotPsiFileProcessor extends RenamePsiElementProcessor {
                 conflicts.put(file, Lists.newArrayList(newName));
             }
         }
+    }
+
+    @Override
+    public boolean forcesShowPreview() {
+        return true;
     }
 }

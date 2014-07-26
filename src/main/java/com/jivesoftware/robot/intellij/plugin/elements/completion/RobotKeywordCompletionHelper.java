@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by charles on 7/12/14.
+ * Does the real work for Autocompletion of Keywords.
  */
 public class RobotKeywordCompletionHelper implements RobotCompletionHelper {
     public static final RobotKeywordCompletionHelper INSTANCE = new RobotKeywordCompletionHelper();

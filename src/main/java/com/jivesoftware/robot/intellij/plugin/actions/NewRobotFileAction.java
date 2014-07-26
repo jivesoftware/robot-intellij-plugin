@@ -8,6 +8,9 @@ import com.jivesoftware.robot.intellij.plugin.icons.RobotIcons;
 
 import javax.swing.*;
 
+/**
+ * Action to create a new Robot file from a simple template file.
+ */
 public class NewRobotFileAction extends CreateFileFromTemplateAction {
   public NewRobotFileAction() {
     super("NewRobotFile.robot", "Create a new robot test case file", RobotIcons.ROBOT);

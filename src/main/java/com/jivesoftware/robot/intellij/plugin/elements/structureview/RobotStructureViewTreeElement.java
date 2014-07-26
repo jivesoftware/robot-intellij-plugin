@@ -7,8 +7,8 @@ import com.intellij.ide.util.treeView.smartTree.TreeElement;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.navigation.NavigationItem;
 import com.intellij.psi.PsiElement;
-import com.jivesoftware.robot.intellij.plugin.elements.presentations.KeywordDefPresentationStructureView;
-import com.jivesoftware.robot.intellij.plugin.elements.presentations.TestCasePresentationStructureView;
+import com.jivesoftware.robot.intellij.plugin.elements.presentations.KeywordTitleStructureViewPresentation;
+import com.jivesoftware.robot.intellij.plugin.elements.presentations.TestCaseStructureViewPresentation;
 import com.jivesoftware.robot.intellij.plugin.icons.RobotIcons;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
@@ -56,10 +56,10 @@ public class RobotStructureViewTreeElement implements StructureViewTreeElement, 
     @Override
     public ItemPresentation getPresentation() {
         if (myElement instanceof RobotTestCase) {
-            return new TestCasePresentationStructureView((RobotTestCase) myElement);
+            return new TestCaseStructureViewPresentation((RobotTestCase) myElement);
         }
         if (myElement instanceof RobotKeywordTitle) {
-            return new KeywordDefPresentationStructureView((RobotKeywordTitle) myElement);
+            return new KeywordTitleStructureViewPresentation((RobotKeywordTitle) myElement);
         }
         if (myElement instanceof RobotKeywordsTable) {
             return ((RobotKeywordsTable) myElement).getPresentation();

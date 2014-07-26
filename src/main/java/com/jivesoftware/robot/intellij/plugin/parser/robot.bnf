@@ -40,6 +40,7 @@
   implements("SCALAR_ASSIGNMENT_LHS")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
   implements("SCALAR_DEFAULT_ARG_VALUE")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
   implements("ARGUMENT_DEF")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
+  implements("RESOURCE_FILE")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
 
 }
 
@@ -68,7 +69,7 @@ TEST_SETUP_TOKEN ::=  (TEST_SETUP_SETTING_TOKEN | TEST_TEARDOWN_SETTING_TOKEN | 
 TEST_SETUP_SETTING ::= TEST_SETUP_TOKEN ELLIPSES_FOR_SETTINGS_TABLE+ COLUMN_SEP_TOKEN KEYWORD_INVOCATION_SETTINGS |
                        TEST_SETUP_TOKEN COLUMN_SEP_TOKEN KEYWORD_INVOCATION_SETTINGS {pin = 1 }
 
-RESOURCE_FILE ::= ROBOT_FILE_TOKEN { methods=[getReference getReferences]}
+RESOURCE_FILE ::= ROBOT_FILE_TOKEN { methods=[getReference getReferences getName setName getNameIdentifier handleElementRename getPresentation toString]}
 RESOURCE_SETTING ::= RESOURCE_SETTING_TOKEN  ELLIPSES_FOR_SETTINGS_TABLE* COLUMN_SEP_TOKEN  RESOURCE_FILE { pin = 1 }
 
 
@@ -82,11 +83,11 @@ VARIABLES_LINE ::= SCALAR_ASSIGNMENT_LHS (ASSIGNABLE_IN_VARIABLES_TBL)? END_OF_L
                    ELLIPSES_LINE_SETTINGS END_OF_LINE* {recoverWhile="not_a_newline_token"}
 
 /* Test cases table */
-TEST_CASES_TABLE ::= TEST_CASES_TABLE_HEADING EMPTY_LINE* TEST_CASE* { pin = 1 methods=[getNameIdentifier getPresentation]}
+TEST_CASES_TABLE ::= TEST_CASES_TABLE_HEADING EMPTY_LINE* TEST_CASE* { pin = 3 methods=[getNameIdentifier getPresentation]}
 
 TEST_CASES_TABLE_HEADING ::= TEST_CASES_TABLE_HEADING_TOKEN END_OF_LINE* (NEWLINE_TOKEN | <<eof>>)
 
-TEST_CASE ::= TEST_CASE_HEADER ( TESTCASE_LINE EMPTY_LINE | EMPTY_LINE )* (TESTCASE_LINE END_OF_LINE* <<eof>>)?   { pin = 2 methods=[getName setName getNameIdentifier getPresentation]}
+TEST_CASE ::= TEST_CASE_HEADER ( TESTCASE_LINE EMPTY_LINE | EMPTY_LINE )* (TESTCASE_LINE END_OF_LINE* <<eof>>)?   { pin = 3 methods=[getName setName getNameIdentifier getPresentation]}
 
 TEST_CASE_HEADER ::= TEST_CASE_HEADER_TOKEN
 
@@ -166,7 +167,7 @@ MULTI_ASSIGNMENT_LHS  ::= VARIABLE (COLUMN_SEP_TOKEN VARIABLE)*  COLUMN_SEP_TOKE
 //Arguments to a keyword, not including line continuation
 KEYWORD_ARG_LIST ::= (COLUMN_SEP_TOKEN KEYWORD_ARG)+
 //Invoking a keyword, possibly over multiple lines with ellipses -- for the Test Cases or Keywords tables
-KEYWORD_INVOCATION_TEST ::= KEYWORD (KEYWORD_ARG_LIST | ELLIPSES_FOR_TEST_TABLE)* {pin=1}
+KEYWORD_INVOCATION_TEST ::= KEYWORD (KEYWORD_ARG_LIST | ELLIPSES_FOR_TEST_TABLE)* {pin=2}
 //Invoking a keyword when indented inside a FOR loop.
 INDENTED_KEYWORD_INVOCATION_TEST ::= KEYWORD (KEYWORD_ARG_LIST | INDENTED_ELLIPSES_FOR_TEST_TABLE)+ | KEYWORD
 //Invoking a keyword, possibly over multiple lines with ellipses -- for the Settings table and variables table (no column separator at start of each line)

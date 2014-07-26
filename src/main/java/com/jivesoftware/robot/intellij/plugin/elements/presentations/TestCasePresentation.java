@@ -1,6 +1,7 @@
 package com.jivesoftware.robot.intellij.plugin.elements.presentations;
 
 import com.intellij.navigation.ItemPresentation;
+import com.intellij.psi.PsiElement;
 import com.jivesoftware.robot.intellij.plugin.icons.RobotIcons;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotTestCase;
 import org.jetbrains.annotations.Nullable;
@@ -8,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 /**
- * Created by charles on 6/5/14.
+ * Defines the pretty presentation for various contexts of a Robot Test Case.
  */
 public class TestCasePresentation implements ItemPresentation {
     private final RobotTestCase robotTestCase;
@@ -20,7 +21,7 @@ public class TestCasePresentation implements ItemPresentation {
     @Nullable
     @Override
     public String getPresentableText() {
-        return String.format("Robot Test: %s", robotTestCase.getNameIdentifier().getText());
+        return String.format("Robot Test: %s", robotTestCase.getName());
     }
 
     @Nullable

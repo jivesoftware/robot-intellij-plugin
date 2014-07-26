@@ -8,6 +8,7 @@ import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.jivesoftware.robot.intellij.plugin.elements.presentations.KeywordTitlePresentation;
+import com.jivesoftware.robot.intellij.plugin.elements.presentations.RobotResourceFilePresentation;
 import com.jivesoftware.robot.intellij.plugin.elements.presentations.TestCasePresentation;
 import com.jivesoftware.robot.intellij.plugin.elements.search.VariablePsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStub;
@@ -21,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
+import java.io.File;
 
 public class RobotImplUtil {
 
@@ -108,6 +110,40 @@ public class RobotImplUtil {
             return null;
         }
         return refs[0];
+    }
+
+    @Nullable
+    @NonNls
+    public static String getName(RobotResourceFile element) {
+        final String text = element.getText();
+        final int indexOfLastSlash = text.lastIndexOf(File.separatorChar);
+        return text.substring(indexOfLastSlash + 1);
+    }
+
+    public static PsiElement setName(RobotResourceFile element, @NonNls @NotNull String newName) throws com.intellij.util.IncorrectOperationException {
+        final String oldText = element.getText();
+        final int indexOfLastSlash = oldText.lastIndexOf(File.separatorChar);
+        final String fullPathOfNewResourceName = oldText.substring(0, indexOfLastSlash + 1) + newName;
+        RobotResourceFile replacement = RobotElementFactory.createRobotResourceFile(element.getProject(), fullPathOfNewResourceName);
+        element.getParent().getNode().replaceChild(element.getNode(), replacement.getNode());
+        return replacement;
+    }
+
+    @Nullable
+    public static PsiElement getNameIdentifier(RobotResourceFile element) {
+        return element;
+    }
+
+    public static PsiElement handleElementRename(RobotResourceFile element, String name) {
+        return element.setName(name);
+    }
+
+    public static ItemPresentation getPresentation(final RobotResourceFile element) {
+        return new RobotResourceFilePresentation(element);
+    }
+
+    public static String toString(RobotResourceFile element) {
+        return "Resource Setting: " + element.getText();
     }
 
      /* Methods for RobotScalarVariable */

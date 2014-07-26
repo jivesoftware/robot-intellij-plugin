@@ -9,19 +9,19 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 /**
- * Created by charles on 6/5/14.
+ * Defines the presentation of a KeywordTitle (the title line of a user-defined Keyword) for Structure View.
  */
-public class KeywordDefPresentationStructureView implements ItemPresentation {
+public class KeywordTitleStructureViewPresentation implements ItemPresentation {
     private final RobotKeywordTitle title;
 
-    public KeywordDefPresentationStructureView(@NotNull RobotKeywordTitle title) {
+    public KeywordTitleStructureViewPresentation(@NotNull RobotKeywordTitle title) {
         this.title = title;
     }
 
     @Nullable
     @Override
     public String getPresentableText() {
-        return String.format("%s", title.getText());
+        return title.getText();
     }
 
     @Nullable

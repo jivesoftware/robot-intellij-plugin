@@ -10,8 +10,10 @@ import com.jivesoftware.robot.intellij.plugin.parser.RobotTypes;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Handles auto-completion of Java-defined keywords when writing Robot Code.
- * Apparently, the RobotKeywordUsagesProvider already handles auto-completing robot-defined keywords.
+ * Handles auto-completion of Keywords, Tags, and Variables.
+ *
+ * Variables are auto-completed when there's a RobotKeyword token or RobotKeywordArg token,
+ * because you won't have a Variable token until after you complete the last '}' in "${someVariable}".
  */
 public class RobotCompletionProvider extends CompletionProvider<CompletionParameters> {
 
