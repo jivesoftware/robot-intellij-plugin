@@ -25,7 +25,10 @@
   extends("KEYWORD_TITLE")="com.intellij.extapi.psi.StubBasedPsiElementBase<com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStub>"
   elementTypeClass("KEYWORD_TITLE")="com.jivesoftware.robot.intellij.plugin.parser.RobotKeywordTitleElementType"
 
-  implements("TEST_CASE")="com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
+  implements("TEST_CASE")=["com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
+                           "com.intellij.psi.StubBasedPsiElement<com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotTestCaseStub>"]
+  extends("TEST_CASE")="com.intellij.extapi.psi.StubBasedPsiElementBase<com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotTestCaseStub>"
+  elementTypeClass("TEST_CASE")="com.jivesoftware.robot.intellij.plugin.parser.RobotTestCaseElementType"
 
   implements("SCALAR_VARIABLE")=["com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
                                   "com.intellij.psi.StubBasedPsiElement<com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotScalarVariableStub>"]

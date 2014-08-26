@@ -68,7 +68,7 @@ public interface RobotTypes {
   IElementType TAG = new RobotElementType("TAG");
   IElementType TAGS_SETTING = new RobotElementType("TAGS_SETTING");
   IElementType TESTCASE_LINE = new RobotElementType("TESTCASE_LINE");
-  IElementType TEST_CASE = new RobotElementType("TEST_CASE");
+  IElementType TEST_CASE = new RobotTestCaseElementType("TEST_CASE");
   IElementType TEST_CASES_TABLE = new RobotElementType("TEST_CASES_TABLE");
   IElementType TEST_CASES_TABLE_HEADING = new RobotElementType("TEST_CASES_TABLE_HEADING");
   IElementType TEST_CASE_HEADER = new RobotElementType("TEST_CASE_HEADER");

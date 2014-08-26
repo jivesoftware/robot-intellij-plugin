@@ -5,9 +5,11 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement;
+import com.intellij.psi.StubBasedPsiElement;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotTestCaseStub;
 import com.intellij.navigation.ItemPresentation;
 
-public interface RobotTestCase extends RobotNamedElement {
+public interface RobotTestCase extends RobotNamedElement, StubBasedPsiElement<RobotTestCaseStub> {
 
   @NotNull
   List<RobotEmptyLine> getEmptyLineList();

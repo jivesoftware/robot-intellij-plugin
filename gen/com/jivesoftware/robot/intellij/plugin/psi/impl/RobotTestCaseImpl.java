@@ -8,15 +8,21 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static com.jivesoftware.robot.intellij.plugin.parser.RobotTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
+import com.intellij.extapi.psi.StubBasedPsiElementBase;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotTestCaseStub;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 import com.intellij.navigation.ItemPresentation;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class RobotTestCaseImpl extends ASTWrapperPsiElement implements RobotTestCase {
+public class RobotTestCaseImpl extends StubBasedPsiElementBase<RobotTestCaseStub> implements RobotTestCase {
 
   public RobotTestCaseImpl(ASTNode node) {
     super(node);
+  }
+
+  public RobotTestCaseImpl(RobotTestCaseStub stub, IStubElementType nodeType) {
+    super(stub, nodeType);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

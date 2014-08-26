@@ -55,6 +55,10 @@ public class RobotImplUtil {
         return new TestCasePresentation(element);
     }
 
+    public static String toString(RobotTestCase element) {
+        return element.getClass().getSimpleName() + ": " + element.getText();
+    }
+
     /* Methods for RobotKeyword type */
 
     @Nullable

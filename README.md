@@ -11,6 +11,13 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.4.6</h3>
+<ul>
+    <li>Added an index for Test Cases, so that searching for a Robot Test Case by name is much faster.
+    I found this could be slow for large projects. You may need to invalidate you cache and restart
+    Intellij after getting this update.</li>
+</ul>
+
 <h3>Version 1.4.5</h3>
 <ul>
     <li>Added support for Rename refactoring for Robot Files. Any Resource Setting that includes a

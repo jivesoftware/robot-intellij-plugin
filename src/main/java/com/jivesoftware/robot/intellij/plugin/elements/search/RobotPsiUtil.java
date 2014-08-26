@@ -138,13 +138,12 @@ public class RobotPsiUtil {
     }
 
     public static List<RobotTestCase> findTestCasesByName(String name, Project project) {
-        Collection<VirtualFile> robotFiles = FileBasedIndex.getInstance().getContainingFiles(FileTypeIndex.NAME, RobotFileType.INSTANCE,
-                GlobalSearchScope.projectScope(project));
+        final StubIndex STUB_INDEX = StubIndex.getInstance();
+        final String normalizedName = normalizeKeywordForIndex(name);
         List<RobotTestCase> results = Lists.newArrayList();
-        for (VirtualFile f : robotFiles) {
-            PsiFile psiFile = PsiManager.getInstance(project).findFile(f);
-            findTestCasesInFileByName(psiFile, name, results);
-        }
+        RobotTestCaseProcessor processor = new RobotTestCaseProcessor(results, SearchType.EXACT_MATCH, name);
+        STUB_INDEX.processElements(RobotTestCaseNormalizedNameIndex.KEY, normalizedName, project,
+                GlobalSearchScope.allScope(project), RobotTestCase.class, processor);
         return results;
     }
 

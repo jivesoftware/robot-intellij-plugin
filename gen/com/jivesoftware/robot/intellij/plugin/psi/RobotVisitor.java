@@ -10,6 +10,7 @@ import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordStu
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStub;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotScalarAssignmentStub;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotScalarVariableStub;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotTestCaseStub;
 
 public class RobotVisitor extends PsiElementVisitor {
 
@@ -255,6 +256,7 @@ public class RobotVisitor extends PsiElementVisitor {
 
   public void visitTestCase(@NotNull RobotTestCase o) {
     visitNamedElement(o);
+    // visitTestCaseStub>(o);
   }
 
   public void visitTestCasesTable(@NotNull RobotTestCasesTable o) {
