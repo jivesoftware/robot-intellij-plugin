@@ -11,6 +11,11 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.4.7</h3>
+<ul>
+    <li>Enable autocomplete for Java Robot Keywords in project dependencies.</li>
+</ul>
+
 <h3>Version 1.4.6</h3>
 <ul>
     <li>Added an index for Test Cases, so that searching for a Robot Test Case by name is much faster.
