@@ -6,7 +6,6 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 
 import java.util.Collection;
-import java.util.List;
 
 /**
  * Created by charles on 6/11/14.

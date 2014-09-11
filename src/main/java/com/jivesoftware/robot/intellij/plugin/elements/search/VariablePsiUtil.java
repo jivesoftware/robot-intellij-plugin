@@ -13,8 +13,6 @@ import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotFileReference;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotVariableReference;
-import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotAssignmentNormalizedNameIndex;
-import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordTitleNormalizedNameIndex;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotVariableNormalizedNameIndex;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.*;

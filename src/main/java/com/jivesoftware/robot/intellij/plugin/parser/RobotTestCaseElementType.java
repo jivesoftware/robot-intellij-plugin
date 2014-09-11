@@ -3,15 +3,11 @@ package com.jivesoftware.robot.intellij.plugin.parser;
 import com.intellij.psi.stubs.*;
 import com.intellij.util.io.StringRef;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
-import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStub;
-import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStubImpl;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotTestCaseStub;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotTestCaseStubImpl;
-import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.*;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotTestCaseNormalizedNameIndex;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotLanguage;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordTitle;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotTestCase;
-import com.jivesoftware.robot.intellij.plugin.psi.impl.RobotKeywordTitleImpl;
 import com.jivesoftware.robot.intellij.plugin.psi.impl.RobotTestCaseImpl;
 import org.jetbrains.annotations.NotNull;
 

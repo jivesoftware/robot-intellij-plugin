@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.jivesoftware.robot.intellij.plugin</id>
     <name>Robot Plugin</name>
-    <version>1.4.7</version>
+    <version>1.4.8</version>
     <vendor email="charles.capps@jivesoftware.com" url="http://www.jiveosftware.com">Jive Software</vendor>
 
     <description><![CDATA[
@@ -29,6 +29,11 @@
     ]]></description>
 
     <change-notes><![CDATA[
+
+    <h3>Version 1.4.8</h3>
+    <ul>
+        <li>Enable autocomplete for Java Robot Keywords from Java class files, even if you don't have sources attached.</li>
+    </ul>
 
     <h3>Version 1.4.7</h3>
     <ul>

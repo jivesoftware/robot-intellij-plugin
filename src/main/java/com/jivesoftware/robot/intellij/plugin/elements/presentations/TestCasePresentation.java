@@ -1,7 +1,6 @@
 package com.jivesoftware.robot.intellij.plugin.elements.presentations;
 
 import com.intellij.navigation.ItemPresentation;
-import com.intellij.psi.PsiElement;
 import com.jivesoftware.robot.intellij.plugin.icons.RobotIcons;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotTestCase;
 import org.jetbrains.annotations.Nullable;

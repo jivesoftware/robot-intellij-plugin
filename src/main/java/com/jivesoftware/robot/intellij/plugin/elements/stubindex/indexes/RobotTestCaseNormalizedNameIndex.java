@@ -2,7 +2,6 @@ package com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes;
 
 import com.intellij.psi.stubs.StringStubIndexExtension;
 import com.intellij.psi.stubs.StubIndexKey;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotTestCase;
 import org.jetbrains.annotations.NotNull;
 

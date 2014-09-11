@@ -4,7 +4,6 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiMethod;
 import com.intellij.refactoring.rename.RenamePsiElementProcessor;
 import com.intellij.util.containers.MultiMap;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotVariableReference;
@@ -12,7 +11,7 @@ import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.search.VariableInfo;
 import com.jivesoftware.robot.intellij.plugin.elements.search.VariablePsiUtil;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
-import com.jivesoftware.robot.intellij.plugin.psi.*;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotTestCaseHeader;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

@@ -1,8 +1,6 @@
 package com.jivesoftware.robot.intellij.plugin.elements.search;
 
-import com.intellij.psi.PsiElement;
 import com.intellij.util.Processor;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordTitle;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotTestCase;
 
 import java.util.List;

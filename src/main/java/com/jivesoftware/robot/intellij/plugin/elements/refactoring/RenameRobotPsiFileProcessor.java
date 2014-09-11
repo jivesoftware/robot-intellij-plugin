@@ -1,14 +1,11 @@
 package com.jivesoftware.robot.intellij.plugin.elements.refactoring;
 
 import com.google.common.collect.Lists;
-import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileSystemItem;
-import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.refactoring.rename.RenameDialog;
 import com.intellij.refactoring.rename.RenamePsiElementProcessor;
 import com.intellij.util.containers.MultiMap;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiFileUtil;
@@ -17,7 +14,6 @@ import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotResourceFile;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.util.Collection;
 import java.util.Map;
 

@@ -1,10 +1,8 @@
 package com.jivesoftware.robot.intellij.plugin.parser;
 
-import com.google.common.base.Optional;
 import com.intellij.psi.stubs.*;
 import com.intellij.util.io.StringRef;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
-import com.jivesoftware.robot.intellij.plugin.elements.search.VariablePsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotScalarVariableStub;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotScalarVariableStubImpl;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotVariableNormalizedNameIndex;

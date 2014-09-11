@@ -15,8 +15,6 @@ import java.util.List;
  */
 public class RobotKeywordDefinitionFinder {
 
-    public static final String ROBOT_KEYWORD_ANNOTATION = "org.robotframework.javalib.annotation.RobotKeyword";
-
     private final Project project;
     private final String searchTerm;
     private final String methodText;

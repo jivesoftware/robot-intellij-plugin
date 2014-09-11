@@ -1,23 +1,23 @@
 package com.jivesoftware.robot.intellij.plugin.elements.search;
 
 import com.google.common.base.Optional;
-import com.intellij.psi.*;
-import com.intellij.psi.search.TextOccurenceProcessor;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiMethod;
+import com.intellij.util.Processor;
 
 import java.util.List;
 
 /**
- * Created by charles.capps on 9/9/14.
+ * Created by charles.capps on 6/24/14.
  */
-public class RobotAnnotationTextOccurrenceProcessor implements TextOccurenceProcessor {
-
+public class RobotKeywordJavaMethodProcessor implements Processor<PsiMethod> {
     private final List<PsiElement> results;
     private final SearchType searchType;
     private final Optional<String> searchTerm;
     private final boolean wrapPsiMethods;
     private String normalizedSearchTerm;
 
-    public RobotAnnotationTextOccurrenceProcessor(List<PsiElement> results, SearchType searchType, Optional<String> searchTerm, boolean wrapPsiMethods) {
+    public RobotKeywordJavaMethodProcessor(List<PsiElement> results, SearchType searchType, Optional<String> searchTerm, boolean wrapPsiMethods) {
         this.results = results;
         this.searchType = searchType;
         this.searchTerm = searchTerm;
@@ -28,22 +28,9 @@ public class RobotAnnotationTextOccurrenceProcessor implements TextOccurenceProc
     }
 
     @Override
-    public boolean execute(PsiElement element, int offsetInElement) {
-        if (!(element instanceof PsiAnnotation)) {
-            return true;
-        }
-        PsiAnnotation psiAnnotation = (PsiAnnotation) element;
-        PsiAnnotationOwner owner = psiAnnotation.getOwner();
-        if (!(owner instanceof PsiModifierList)) {
-            return doContinue();
-        }
-        PsiElement parent = ((PsiModifierList) owner).getParent();
-        if (!(parent instanceof PsiMethod)) {
-            return doContinue();
-        }
-        PsiMethod method = (PsiMethod)parent;
-        if (include(method)) {
-            results.add(RobotJavaPsiUtil.wrap(method, wrapPsiMethods));
+    public boolean process(PsiMethod psiMethod) {
+        if (include(psiMethod)) {
+            results.add(RobotJavaPsiUtil.wrap(psiMethod, wrapPsiMethods));
             return doContinue();
         }
         return doContinue();
@@ -65,4 +52,5 @@ public class RobotAnnotationTextOccurrenceProcessor implements TextOccurenceProc
         }
         return false;
     }
+
 }

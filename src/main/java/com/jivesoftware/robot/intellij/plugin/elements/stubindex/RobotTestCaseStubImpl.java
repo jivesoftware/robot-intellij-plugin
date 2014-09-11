@@ -4,7 +4,6 @@ import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.StubBase;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.io.StringRef;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordTitle;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotTestCase;
 import org.jetbrains.annotations.Nullable;
 
