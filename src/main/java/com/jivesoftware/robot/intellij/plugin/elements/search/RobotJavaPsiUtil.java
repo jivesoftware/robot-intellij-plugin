@@ -7,15 +7,14 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.compiled.ClsMethodImpl;
 import com.intellij.psi.impl.java.stubs.index.JavaStubIndexKeys;
-import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.search.ProjectScope;
-import com.intellij.psi.search.PsiSearchHelper;
+import com.intellij.psi.search.*;
 import com.intellij.psi.search.searches.AnnotatedElementsSearch;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.util.Processor;
 import com.intellij.util.Query;
 import com.jivesoftware.robot.intellij.plugin.elements.references.PsiMethodWithRobotName;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -24,6 +23,7 @@ import java.util.List;
  * Created by charles.capps on 6/24/14.
  */
 public class RobotJavaPsiUtil {
+    public static final String ROBOT_KEYWORD_ANNOTATION_SHORT = "RobotKeyword";
     public static final String ROBOT_KEYWORD_ANNOTATION_LONG = "org.robotframework.javalib.annotation.RobotKeyword";
 
     public static boolean isJavaRobotKeyword(PsiElement element) {
@@ -39,28 +39,50 @@ public class RobotJavaPsiUtil {
         return psiModifierList.findAnnotation(ROBOT_KEYWORD_ANNOTATION_LONG) != null;
     }
 
-    @NotNull
     public static void findAllJavaRobotKeywords(Project project, List<PsiElement> results, boolean wrapPsiMethods) {
         // Search for all methods annotated with @RobotKeyword
         GlobalSearchScope allScope = ProjectScope.getAllScope(project);
         PsiClass robotKeywordAnnotation = getRobotKeywordPsiClass(project);
+        if (robotKeywordAnnotation == null) {
+            return; // If @RobotKeyword isn't on the classpath, just return.
+        }
         Query<PsiMethod> query = AnnotatedElementsSearch.searchPsiMethods(robotKeywordAnnotation, allScope);
         Processor<PsiMethod> methodProcessor = new RobotKeywordJavaMethodProcessor(results, SearchType.FIND_ALL, Optional.<String>absent(), wrapPsiMethods);
         query.forEach(methodProcessor);
     }
 
-    @NotNull
     public static void findAllJavaRobotKeywordsStartingWith(Project project, List<PsiElement> results, String startsWith, boolean wrapPsiMethods) {
         // Search for all methods annotated with @RobotKeyword that start with the given text
         GlobalSearchScope allScope = ProjectScope.getAllScope(project);
         PsiClass robotKeywordAnnotation = getRobotKeywordPsiClass(project);
+        if (robotKeywordAnnotation == null) {
+            // If @RobotKeyword isn't on the classpath, fall back to using word index.
+            findAllJavaKeywordsStartingWithUsingWordIndex(project, results, startsWith, wrapPsiMethods);
+            return;
+        }
         Query<PsiMethod> query = AnnotatedElementsSearch.searchPsiMethods(robotKeywordAnnotation, allScope);
         Processor<PsiMethod> methodProcessor = new RobotKeywordJavaMethodProcessor(results, SearchType.STARTS_WITH, Optional.of(startsWith), wrapPsiMethods);
         query.forEach(methodProcessor);
     }
 
+    public static void findAllJavaKeywordsStartingWithUsingWordIndex(Project project, List<PsiElement> results, String startsWith, boolean wrapPsiMethods) {
+        // First process the stub index that has all Java files in the current project
+        final StubIndex STUB_INDEX = StubIndex.getInstance();
+        GlobalSearchScope javaFiles = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.projectScope(project), JavaFileType.INSTANCE);
+        RobotKeywordPsiAnnotationProcessor processor = new RobotKeywordPsiAnnotationProcessor(results, SearchType.STARTS_WITH, Optional.of(startsWith), wrapPsiMethods);
+        STUB_INDEX.processElements(JavaStubIndexKeys.ANNOTATIONS, ROBOT_KEYWORD_ANNOTATION_SHORT, project, javaFiles, PsiAnnotation.class, processor);
+
+        // Next, attempt to find Keywords from external sources using the Word Index on the word "RobotKeyword".
+        PsiSearchHelper PSI_SEARCH_HELPER = PsiSearchHelper.SERVICE.getInstance(project);
+        GlobalSearchScope outsideProjectScope = GlobalSearchScope.allScope(project).intersectWith(GlobalSearchScope.notScope(GlobalSearchScope.projectScope(project)));
+        GlobalSearchScope javaOutsideProjectScope = GlobalSearchScope.getScopeRestrictedByFileTypes(outsideProjectScope, JavaFileType.INSTANCE);
+        TextOccurenceProcessor textOccurenceProcessor = new RobotAnnotationTextOccurrenceProcessor(results, SearchType.FIND_ALL, Optional.of(startsWith), wrapPsiMethods);
+        PSI_SEARCH_HELPER.processElementsWithWord(textOccurenceProcessor, javaOutsideProjectScope, ROBOT_KEYWORD_ANNOTATION_SHORT, UsageSearchContext.IN_CODE, true);
+    }
+
+    @Nullable
     public static PsiClass getRobotKeywordPsiClass(Project project) {
-        return JavaPsiFacade.getInstance(project).findClass(ROBOT_KEYWORD_ANNOTATION_LONG, ProjectScope.getLibrariesScope(project));
+        return JavaPsiFacade.getInstance(project).findClass(ROBOT_KEYWORD_ANNOTATION_LONG, ProjectScope.getAllScope(project));
     }
 
     @NotNull
