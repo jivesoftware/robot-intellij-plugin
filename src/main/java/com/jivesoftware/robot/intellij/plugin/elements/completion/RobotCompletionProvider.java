@@ -37,6 +37,8 @@ public class RobotCompletionProvider extends CompletionProvider<CompletionParame
             RobotVariableCompletionHelper.INSTANCE.handleCompletions(leaf, parameters, result, text);
         } else if (leaf.getElementType() == RobotTypes.ROBOT_KEYWORD_ARG_TOKEN) {
             RobotVariableCompletionHelper.INSTANCE.handleCompletions(leaf, parameters, result, text);
+        } else if (leaf.getElementType() == RobotTypes.VARIABLE_TOKEN || leaf.getElementType() == RobotTypes.ASSIGNMENT_TOKEN){
+            RobotVariableCompletionHelper.INSTANCE.handleCompletions(leaf, parameters, result, text);
         }
     }
 

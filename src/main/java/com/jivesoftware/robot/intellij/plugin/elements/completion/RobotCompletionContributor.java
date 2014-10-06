@@ -16,6 +16,8 @@ public class RobotCompletionContributor extends CompletionContributor {
     extend(CompletionType.BASIC,
            PlatformPatterns.or(PlatformPatterns.psiElement(RobotTypes.ROBOT_KEYWORD_TOKEN).withLanguage(RobotLanguage.INSTANCE),
                                PlatformPatterns.psiElement(RobotTypes.ROBOT_KEYWORD_ARG_TOKEN).withLanguage(RobotLanguage.INSTANCE),
+                               PlatformPatterns.psiElement(RobotTypes.ASSIGNMENT_TOKEN).withLanguage(RobotLanguage.INSTANCE),
+                               PlatformPatterns.psiElement(RobotTypes.VARIABLE_TOKEN).withLanguage(RobotLanguage.INSTANCE),
                                PlatformPatterns.psiElement(RobotTypes.TAG_TOKEN).withLanguage(RobotLanguage.INSTANCE)),
            new RobotCompletionProvider());
   }

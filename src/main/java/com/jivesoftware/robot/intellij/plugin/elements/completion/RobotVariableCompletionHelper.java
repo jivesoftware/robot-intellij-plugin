@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Does the real work for autocompletion of variables.
@@ -36,16 +37,21 @@ public class RobotVariableCompletionHelper implements RobotCompletionHelper {
     }
 
     private void handleScalarVariableAutocomplete(LeafPsiElement leaf, CompletionParameters parameters, CompletionResultSet result, String text) {
-        Preconditions.checkArgument(text.startsWith("${"), "Expected text to start with '${' for autocompleting variables!");
-
-        String variableText = text.substring(2).trim();
-
-        if (variableText.contains("}")) {
-            return; // Do nothing if the user already completed the variable.
+        // Check if the variable text matches the regex
+        Pattern variableRegEx = Pattern.compile("\\$\\{([^\\}]*)(\\}?|\\} ?\\=)");
+        Matcher m = variableRegEx.matcher(text);
+        if(!m.matches()){
+            return;
         }
+
+        // Obtain the actual variable string
+        String variableText = m.group(1).trim();
+
+        // Normalize the variable text in order to perform lookup
         final String normalizedVariableText = RobotPsiUtil.normalizeKeywordForIndex(variableText);
         final Set<String> includedNormalNames = Sets.newHashSet();
 
+        // Look up the variable
         Set<LookupElement> lookupsFromScalarVariables = getLookupElementsFromScalarVariables(leaf, normalizedVariableText,
                 RobotScalarVariable.class, includedNormalNames);
         Set<LookupElement> lookupsFromScalarAssignments = getLookupElementsFromScalarVariables(leaf, normalizedVariableText,
