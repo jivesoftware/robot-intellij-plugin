@@ -141,7 +141,7 @@ public class RobotPsiUtil {
         final StubIndex STUB_INDEX = StubIndex.getInstance();
         final String normalizedName = normalizeKeywordForIndex(name);
         List<RobotTestCase> results = Lists.newArrayList();
-        RobotTestCaseProcessor processor = new RobotTestCaseProcessor(results, SearchType.EXACT_MATCH, name);
+        RobotTestCaseProcessor processor = new RobotTestCaseProcessor(results, SearchType.FIND_ALL, name);
         STUB_INDEX.processElements(RobotTestCaseNormalizedNameIndex.KEY, normalizedName, project,
                 GlobalSearchScope.allScope(project), RobotTestCase.class, processor);
         return results;

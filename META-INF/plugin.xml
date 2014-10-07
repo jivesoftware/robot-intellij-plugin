@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.jivesoftware.robot.intellij.plugin</id>
     <name>Robot Plugin</name>
-    <version>1.4.9</version>
+    <version>1.5.0</version>
     <vendor email="charles.capps@jivesoftware.com" url="http://www.jiveosftware.com">Jive Software</vendor>
 
     <description><![CDATA[
@@ -29,6 +29,14 @@
     ]]></description>
 
     <change-notes><![CDATA[
+
+
+    <h3>Version 1.5.0</h3>
+    <ul>
+        <li>Fixed autocomplete Robot Keywords so it works with substrings, not just prefixes.</li>
+        <li>Fixed autocomplete Robot Variables, so it works if you already included the closing curly brace '}'</li>
+        <li>Fixed a bug where searching for 2 Test Cases with the same name in different file only returned 1 of the 2 Test Cases</li>
+    </ul>
 
     <h3>Version 1.4.9</h3>
     <ul>

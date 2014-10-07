@@ -11,6 +11,13 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.5.0</h3>
+<ul>
+    <li>Fixed autocomplete Robot Keywords so it works with substrings, not just prefixes.</li>
+    <li>Fixed autocomplete Robot Variables, so it works if you already included the closing curly brace '}'</li>
+    <li>Fixed a bug where searching for 2 Test Cases with the same name in different file only returned 1 of the 2 Test Cases</li>
+</ul>
+
 <h3>Version 1.4.9</h3>
 <ul>
     <li>Better error handling than previous version. If the RobotKeyword class isn't on the classpath, shouldn't
