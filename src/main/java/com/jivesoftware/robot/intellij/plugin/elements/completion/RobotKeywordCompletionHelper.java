@@ -45,13 +45,14 @@ public class RobotKeywordCompletionHelper implements RobotCompletionHelper {
 
     private void populateKeywords(Project project, Collection<LookupElement> populateMe, String text) {
         RobotKeywordDefinitionFinder robotKeywordDefinitionFinder =
-                new RobotKeywordDefinitionFinder(project, text, KeywordScope.ROBOT_AND_JAVA_KEYWORDS, SearchType.STARTS_WITH, true);
+                new RobotKeywordDefinitionFinder(project, text, KeywordScope.ROBOT_AND_JAVA_KEYWORDS, SearchType.FIND_ALL, true);
         robotKeywordDefinitionFinder.process();
         List<PsiElement> results = robotKeywordDefinitionFinder.getResults();
         Set<String> includedNames = Sets.newHashSet();
         for (PsiElement el : results) {
             if (el instanceof PsiMethod) {
                 PsiMethod method = (PsiMethod) el;
+                // Remove duplicates
                 if (includedNames.contains(method.getName())) {
                     continue;
                 }

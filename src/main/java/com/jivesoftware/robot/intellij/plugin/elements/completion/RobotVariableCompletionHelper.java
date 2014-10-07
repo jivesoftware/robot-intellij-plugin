@@ -68,6 +68,7 @@ public class RobotVariableCompletionHelper implements RobotCompletionHelper {
                                                                                            String normalizedVariableText,
                                                                                            Class<T> variableClass,
                                                                                            Set<String> includedNormalNames) {
+        // List of all scalar elements in scope
         List<T> scalarsInScope = RobotPsiUtil.findVariablesInScope(element, variableClass);
         Set<LookupElement> lookupElements = Sets.newHashSet();
         for (T var: scalarsInScope) {
@@ -75,14 +76,13 @@ public class RobotVariableCompletionHelper implements RobotCompletionHelper {
             if (matcher.find()) {
                 String variableName = matcher.group(1);
                 String normalizedVariableName = RobotPsiUtil.normalizeKeywordForIndex(variableName);
+                // Remove duplicates
                 if (includedNormalNames.contains(normalizedVariableName)) {
                     continue;
                 }
-                if (normalizedVariableName.startsWith(normalizedVariableText)) {
-                    LookupElement lookupElement = createLookupElementFromVariableName(variableName);
-                    lookupElements.add(lookupElement);
-                    includedNormalNames.add(normalizedVariableName);
-                }
+                LookupElement lookupElement = createLookupElementFromVariableName(variableName);
+                lookupElements.add(lookupElement);
+                includedNormalNames.add(normalizedVariableName);
             }
         }
         return lookupElements;

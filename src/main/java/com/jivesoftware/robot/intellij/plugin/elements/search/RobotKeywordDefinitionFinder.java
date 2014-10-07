@@ -44,7 +44,7 @@ public class RobotKeywordDefinitionFinder {
     }
 
     public void process() {
-        //Find Java methods for the keyword
+        // Find Java methods for the keyword
         if (scope == KeywordScope.ROBOT_AND_JAVA_KEYWORDS || scope == KeywordScope.JAVA_KEYWORDS) {
             switch (searchType) {
                 case FIND_ALL:
