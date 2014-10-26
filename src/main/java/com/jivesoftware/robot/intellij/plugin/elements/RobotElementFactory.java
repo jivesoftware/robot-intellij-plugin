@@ -42,8 +42,7 @@ public class RobotElementFactory {
         }
         RobotKeywordsTable keywordsTable = table.getKeywordsTable();
         for (RobotKeywordDefinition robotKeywordDefinition : keywordsTable.getKeywordDefinitionList()) {
-            RobotKeywordDefinitionHeader header = robotKeywordDefinition.getKeywordDefinitionHeader();
-            return header.getKeywordTitle();
+            return robotKeywordDefinition.getKeywordTitle();
         }
         return null;
     }

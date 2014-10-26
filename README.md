@@ -11,6 +11,16 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.5.1</h3>
+<ul>
+    <li>Fixed issue filed on github where you should be able to have the [Arguments] for a Keyword
+    on the same line as the title of the keyword.
+    </li>
+    <li>
+    Generally fixed all cases where you should be able to have any line of the Keyword code after the title.
+    </li>
+</ul>
+
 <h3>Version 1.5.0</h3>
 <ul>
     <li>Fixed autocomplete Robot Keywords so it works with substrings, not just prefixes.</li>

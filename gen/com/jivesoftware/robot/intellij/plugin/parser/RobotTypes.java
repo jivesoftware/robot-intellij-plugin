@@ -40,7 +40,6 @@ public interface RobotTypes {
   IElementType KEYWORD_ARG = new RobotElementType("KEYWORD_ARG");
   IElementType KEYWORD_ARG_LIST = new RobotElementType("KEYWORD_ARG_LIST");
   IElementType KEYWORD_DEFINITION = new RobotElementType("KEYWORD_DEFINITION");
-  IElementType KEYWORD_DEFINITION_HEADER = new RobotElementType("KEYWORD_DEFINITION_HEADER");
   IElementType KEYWORD_INVOCATION_SETTINGS = new RobotElementType("KEYWORD_INVOCATION_SETTINGS");
   IElementType KEYWORD_INVOCATION_TEST = new RobotElementType("KEYWORD_INVOCATION_TEST");
   IElementType KEYWORD_LINE = new RobotElementType("KEYWORD_LINE");
@@ -225,9 +224,6 @@ public interface RobotTypes {
       }
       else if (type == KEYWORD_DEFINITION) {
         return new RobotKeywordDefinitionImpl(node);
-      }
-      else if (type == KEYWORD_DEFINITION_HEADER) {
-        return new RobotKeywordDefinitionHeaderImpl(node);
       }
       else if (type == KEYWORD_INVOCATION_SETTINGS) {
         return new RobotKeywordInvocationSettingsImpl(node);

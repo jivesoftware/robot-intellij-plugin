@@ -31,14 +31,14 @@ public class RobotKeywordDefinitionImpl extends ASTWrapperPsiElement implements 
 
   @Override
   @NotNull
-  public RobotKeywordDefinitionHeader getKeywordDefinitionHeader() {
-    return findNotNullChildByClass(RobotKeywordDefinitionHeader.class);
+  public List<RobotKeywordLine> getKeywordLineList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotKeywordLine.class);
   }
 
   @Override
   @NotNull
-  public List<RobotKeywordLine> getKeywordLineList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotKeywordLine.class);
+  public RobotKeywordTitle getKeywordTitle() {
+    return findNotNullChildByClass(RobotKeywordTitle.class);
   }
 
 }

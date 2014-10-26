@@ -11,9 +11,9 @@ public interface RobotKeywordDefinition extends PsiElement {
   List<RobotEmptyLine> getEmptyLineList();
 
   @NotNull
-  RobotKeywordDefinitionHeader getKeywordDefinitionHeader();
+  List<RobotKeywordLine> getKeywordLineList();
 
   @NotNull
-  List<RobotKeywordLine> getKeywordLineList();
+  RobotKeywordTitle getKeywordTitle();
 
 }

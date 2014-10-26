@@ -113,9 +113,6 @@ public class RobotParser implements PsiParser {
     else if (root_ == KEYWORD_DEFINITION) {
       result_ = KEYWORD_DEFINITION(builder_, 0);
     }
-    else if (root_ == KEYWORD_DEFINITION_HEADER) {
-      result_ = KEYWORD_DEFINITION_HEADER(builder_, 0);
-    }
     else if (root_ == KEYWORD_INVOCATION_SETTINGS) {
       result_ = KEYWORD_INVOCATION_SETTINGS(builder_, 0);
     }
@@ -1233,14 +1230,14 @@ public class RobotParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // KEYWORD_DEFINITION_HEADER  (KEYWORD_LINE EMPTY_LINE | EMPTY_LINE )* (KEYWORD_LINE END_OF_LINE* <<eof>>)?
+  // KEYWORD_TITLE  (KEYWORD_LINE EMPTY_LINE | EMPTY_LINE )* (KEYWORD_LINE END_OF_LINE* <<eof>>)?
   public static boolean KEYWORD_DEFINITION(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "KEYWORD_DEFINITION")) return false;
     if (!nextTokenIs(builder_, ROBOT_KEYWORD_TITLE_TOKEN)) return false;
     boolean result_;
     boolean pinned_;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
-    result_ = KEYWORD_DEFINITION_HEADER(builder_, level_ + 1);
+    result_ = KEYWORD_TITLE(builder_, level_ + 1);
     pinned_ = result_; // pin = 1
     result_ = result_ && report_error_(builder_, KEYWORD_DEFINITION_1(builder_, level_ + 1));
     result_ = pinned_ && KEYWORD_DEFINITION_2(builder_, level_ + 1) && result_;
@@ -1308,32 +1305,6 @@ public class RobotParser implements PsiParser {
     while (true) {
       if (!END_OF_LINE(builder_, level_ + 1)) break;
       if (!empty_element_parsed_guard_(builder_, "KEYWORD_DEFINITION_2_0_1", pos_)) break;
-      pos_ = current_position_(builder_);
-    }
-    return true;
-  }
-
-  /* ********************************************************** */
-  // KEYWORD_TITLE END_OF_LINE* NEWLINE_TOKEN
-  public static boolean KEYWORD_DEFINITION_HEADER(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "KEYWORD_DEFINITION_HEADER")) return false;
-    if (!nextTokenIs(builder_, ROBOT_KEYWORD_TITLE_TOKEN)) return false;
-    boolean result_;
-    Marker marker_ = enter_section_(builder_);
-    result_ = KEYWORD_TITLE(builder_, level_ + 1);
-    result_ = result_ && KEYWORD_DEFINITION_HEADER_1(builder_, level_ + 1);
-    result_ = result_ && consumeToken(builder_, NEWLINE_TOKEN);
-    exit_section_(builder_, marker_, KEYWORD_DEFINITION_HEADER, result_);
-    return result_;
-  }
-
-  // END_OF_LINE*
-  private static boolean KEYWORD_DEFINITION_HEADER_1(PsiBuilder builder_, int level_) {
-    if (!recursion_guard_(builder_, level_, "KEYWORD_DEFINITION_HEADER_1")) return false;
-    int pos_ = current_position_(builder_);
-    while (true) {
-      if (!END_OF_LINE(builder_, level_ + 1)) break;
-      if (!empty_element_parsed_guard_(builder_, "KEYWORD_DEFINITION_HEADER_1", pos_)) break;
       pos_ = current_position_(builder_);
     }
     return true;

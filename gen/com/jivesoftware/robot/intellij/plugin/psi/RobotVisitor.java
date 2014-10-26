@@ -139,10 +139,6 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitKeywordDefinitionHeader(@NotNull RobotKeywordDefinitionHeader o) {
-    visitPsiElement(o);
-  }
-
   public void visitKeywordInvocationSettings(@NotNull RobotKeywordInvocationSettings o) {
     visitPsiElement(o);
   }

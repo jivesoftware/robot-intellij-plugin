@@ -18,7 +18,7 @@ public class PresentationPsiUtil {
 
     public static String getRobotKeywordArgumentTest(RobotKeywordTitle def) {
         PsiElement parent = def.getParent();
-        if (!(parent instanceof RobotKeywordDefinitionHeader)) {
+        if (!(parent instanceof RobotKeywordDefinition)) {
             return "";
         }
         PsiElement parentParent = parent.getParent();

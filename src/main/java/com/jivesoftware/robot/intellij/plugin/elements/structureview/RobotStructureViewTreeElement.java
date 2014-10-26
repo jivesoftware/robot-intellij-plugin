@@ -142,8 +142,7 @@ public class RobotStructureViewTreeElement implements StructureViewTreeElement, 
         List<TreeElement> children = Lists.newArrayList();
 
         for (RobotKeywordDefinition robotKeywordDefinition: table.getKeywordDefinitionList()) {
-            RobotKeywordDefinitionHeader header = robotKeywordDefinition.getKeywordDefinitionHeader();
-            children.add(new RobotStructureViewTreeElement(header.getKeywordTitle()));
+            children.add(new RobotStructureViewTreeElement(robotKeywordDefinition.getKeywordTitle()));
         }
 
         return children.toArray(new TreeElement[children.size()]);

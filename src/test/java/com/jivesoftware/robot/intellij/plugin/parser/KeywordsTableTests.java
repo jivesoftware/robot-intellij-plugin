@@ -1,6 +1,7 @@
 package com.jivesoftware.robot.intellij.plugin.parser;
 
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotArgumentDef;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordTitle;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDefinition;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotReturnLine;
@@ -70,6 +71,11 @@ public class KeywordsTableTests extends RobotParserTest {
     private static final String INVALID_KEYWORD_WITHOUT_A_TITLE_2 =
             "*** Keywords ***\n" +
                     "  [arguments]  ${foo}  ${bar}\n";
+
+    private static final String KEYWORD_WITH_ARGUMENTS_ON_TITLE_LINE =
+            "*** Keywords ***\n" +
+                    "My Foo Keyword  [Arguments]  ${foo}  ${bar}\n" +
+                    "  Log  ${foo} ${bar} abc  WARN\n";
 
     @Test
     public void testKeywordWithSingleReturnValue() {
@@ -150,5 +156,12 @@ public class KeywordsTableTests extends RobotParserTest {
     public void testInvalidKeywordWithoutATitle2() {
         RobotPsiFile file = doTestParseFails(INVALID_KEYWORD_WITHOUT_A_TITLE_2);
         assertFileHasPsiElements(file, RobotKeywordDefinition.class, 0);
+    }
+
+    @Test
+    public void testKeywordWithArgumentsOnTitleLine() {
+        RobotPsiFile file = doTestParseSucceeds(KEYWORD_WITH_ARGUMENTS_ON_TITLE_LINE);
+        assertFileHasPsiElements(file, RobotKeywordDefinition.class, 1);
+        assertFileHasPsiElements(file, RobotArgumentDef.class, 2);
     }
 }
