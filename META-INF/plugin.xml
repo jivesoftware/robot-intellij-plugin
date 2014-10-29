@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.jivesoftware.robot.intellij.plugin</id>
     <name>Robot Plugin</name>
-    <version>1.5.1</version>
+    <version>1.5.2</version>
     <vendor email="charles.capps@jivesoftware.com" url="http://www.jiveosftware.com">Jive Software</vendor>
 
     <description><![CDATA[
@@ -29,6 +29,17 @@
     ]]></description>
 
     <change-notes><![CDATA[
+
+    <h3>Version 1.5.2</h3>
+    <ul>
+        <li>Fixed issue filed on github where Java methods that use underscores, e.g. "foo_java_keyword()" should
+        autocomplete in Robot as "Foo Java Keyword".
+        </li>
+        <li>
+        Also fixed so that finding usages of Java methods correctly removes underscores before searching the
+        normalized index for Robot Keywords, so now it works to find usages of java methods with underscores.
+        </li>
+    </ul>
 
     <h3>Version 1.5.1</h3>
     <ul>

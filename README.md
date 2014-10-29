@@ -11,6 +11,17 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.5.2</h3>
+<ul>
+    <li>Fixed issue filed on the github page where Java methods that use underscores, e.g. "foo_java_keyword()" should
+    autocomplete in Robot as "Foo Java Keyword".
+    </li>
+    <li>
+    Also fixed so that finding usages of Java methods correctly removes underscores before searching the
+    normalized index for Robot Keywords, so now it works to find usages of java methods with underscores.
+    </li>
+</ul>
+
 <h3>Version 1.5.1</h3>
 <ul>
     <li>Fixed issue filed on github where you should be able to have the [Arguments] for a Keyword

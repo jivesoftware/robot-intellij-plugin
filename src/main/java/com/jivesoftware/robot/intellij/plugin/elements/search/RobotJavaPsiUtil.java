@@ -102,14 +102,24 @@ public class RobotJavaPsiUtil {
             }
         }
 
-        //If no results are found, attempt to search the words index by the method name (since it is case insensitive, we might get results that we didn't get above.)
         GlobalSearchScope javaFilesInProject = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.allScope(project), JavaFileType.INSTANCE);
         List<PsiElement> results = Lists.newArrayList();
+
+        //If no results are found, attempt to search the words index by the method name (since it is case insensitive, we might get results that we didn't get above.)
         RobotJavaKeywordProcessor processor = new RobotJavaKeywordProcessor(results, SearchType.EXACT_MATCH, Optional.of(methodName), wrapPsiMethods);
         PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWord(methodName, javaFilesInProject, processor, false);
         if (results.size() > 0) {
             return Optional.of((PsiMethod)results.get(0));
         }
+
+        //If still no results are found, assume the Java method has the "underscore" style and search with words index again
+        final String underscoreMethod = RobotPsiUtil.robotKeywordToUnderscoreStyleMethod(robotKeywordName);
+        RobotJavaKeywordProcessor underscoreProcessor = new RobotJavaKeywordProcessor(results, SearchType.EXACT_MATCH, Optional.of(underscoreMethod), wrapPsiMethods);
+        PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWord(underscoreMethod, javaFilesInProject, underscoreProcessor, false);
+        if (results.size() > 0) {
+            return Optional.of((PsiMethod)results.get(0));
+        }
+
         return Optional.absent();
     }
 

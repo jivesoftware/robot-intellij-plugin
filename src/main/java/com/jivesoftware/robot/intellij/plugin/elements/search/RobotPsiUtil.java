@@ -35,6 +35,12 @@ public class RobotPsiUtil {
                 .toLowerCase();
     }
 
+    public static String normalizeJavaMethodForIndex(String methodName) {
+        Preconditions.checkArgument(!methodName.contains(" "), "A Java method can't contain a space!");
+        return methodName.replace("_", "")
+                .toLowerCase();
+    }
+
     public static String robotKeywordToMethodFast(String keyword) {
         String noSpaces = keyword.replace(" ", "");
         if (noSpaces.isEmpty()) {
@@ -43,20 +49,45 @@ public class RobotPsiUtil {
         return noSpaces.substring(0, 1).toLowerCase() + noSpaces.substring(1);
     }
 
+    public static String robotKeywordToUnderscoreStyleMethod(String keyword) {
+        String withUnderscores = keyword.replace(" ", "_");
+        return withUnderscores.toLowerCase();
+    }
+
+    /**
+     * Convert a Java method name into a Robot Keyword name.
+     *
+     * e.g. convert "fooBarMethod" to "Foo Bar Method".
+     *
+     * Throw out underscores as well, so convert "foo_bar_method" to "Foo Bar Method".
+     *
+     * @param method - valid name of a Java method
+     * @return - standard Robot Keyword name for the input Java method
+     */
     public static String methodToRobotKeyword(String method) {
         StringBuilder sb = new StringBuilder();
         int prev = 0;
         int current;
+        boolean capitalizeNext = false;
         for (int i = 1; i <= method.length(); i++) {
             Character c;
             if (i < method.length()) {
                 c = method.charAt(i);
+                if (capitalizeNext) {
+                    c = Character.toUpperCase(c);
+                    capitalizeNext = false;
+                }
             } else {
                 c = null;
             }
+            if (Objects.equals(c, '_')) {
+                capitalizeNext = true;
+                continue;
+            }
             if (i == method.length() || Character.isUpperCase(c)) {
                 current = i;
-                String sub = method.substring(prev, current);
+                String sub = method.substring(prev, current)
+                                    .replace("_", ""); // remove underscores.
                 String cap = sub.substring(0, 1).toUpperCase() + sub.substring(1);
                 if (!sb.toString().isEmpty()) { //Append the single space separator for robot keywords
                     char lastSoFar = sb.toString().charAt(sb.length() - 1);
@@ -209,8 +240,7 @@ public class RobotPsiUtil {
     }
 
     public static List<RobotKeyword> findKeywordUsagesByJavaMethodName(String javaMethodName, Project project) {
-        Preconditions.checkArgument(!javaMethodName.contains(" "), "RobotPsiUtil: A Java method name can't contain space!");
-        final String normalizedKeywordName = javaMethodName.toLowerCase();
+        final String normalizedKeywordName = normalizeJavaMethodForIndex(javaMethodName);
         final StubIndex STUB_INDEX = StubIndex.getInstance();
         GlobalSearchScope robotFileScope = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.projectScope(project), RobotFileType.INSTANCE);
         RobotKeywordProcessor processor = new RobotKeywordProcessor(normalizedKeywordName, true);
