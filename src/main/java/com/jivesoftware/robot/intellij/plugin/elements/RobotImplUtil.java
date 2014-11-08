@@ -100,6 +100,20 @@ public class RobotImplUtil {
         return element.getClass().getSimpleName() + ": " + element.getText();
     }
 
+    /* Methods for RobotKeywordArg */
+
+    public static PsiReference getReference(RobotKeywordArg element) {
+        PsiReference[] refs = ReferenceProvidersRegistry.getReferencesFromProviders(element);
+        if (refs.length <= 0) {
+            return null;
+        }
+        return refs[0];
+    }
+
+    public static PsiReference[] getReferences(RobotKeywordArg element) {
+        return ReferenceProvidersRegistry.getReferencesFromProviders(element);
+    }
+
     /* Methods for RobotResourceFile */
 
     @NotNull

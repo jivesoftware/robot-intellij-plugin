@@ -140,32 +140,9 @@ public class RobotPsiUtil {
         }
     }
 
-    private static void findTestCasesInFileByName(PsiFile file, String name, List<RobotTestCase> results) {
-        if (!(file instanceof RobotPsiFile)) {
-            return;
-        }
-        RobotTable[] tables = ((RobotPsiFile) file).findChildrenByClass(RobotTable.class);
-        for (RobotTable table : tables) {
-            if (table.getTestCasesTable() != null) {
-                addAllTestCasesInTableByName(table.getTestCasesTable(), name, results);
-            }
-        }
-    }
-
     private static void addAllTestCasesInTable(RobotTestCasesTable table, List<RobotTestCase> results) {
         List<RobotTestCase> testCases = table.getTestCaseList();
         results.addAll(testCases);
-    }
-
-    private static void addAllTestCasesInTableByName(RobotTestCasesTable table, String name, List<RobotTestCase> results) {
-        List<RobotTestCase> testCases = table.getTestCaseList();
-        for (RobotTestCase testCase : testCases) {
-            String squashedTestCase = robotKeywordToMethodFast(testCase.getName());
-            String squashedName = robotKeywordToMethodFast(name);
-            if (squashedName.equalsIgnoreCase(squashedTestCase)) {
-                results.add(testCase);
-            }
-        }
     }
 
     public static List<RobotTestCase> findTestCasesByName(String name, Project project) {

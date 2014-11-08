@@ -11,6 +11,7 @@ import static com.jivesoftware.robot.intellij.plugin.parser.RobotTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
+import com.intellij.psi.PsiReference;
 
 public class RobotKeywordArgImpl extends ASTWrapperPsiElement implements RobotKeywordArg {
 
@@ -27,6 +28,14 @@ public class RobotKeywordArgImpl extends ASTWrapperPsiElement implements RobotKe
   @Nullable
   public RobotVariable getVariable() {
     return findChildByClass(RobotVariable.class);
+  }
+
+  public PsiReference getReference() {
+    return RobotImplUtil.getReference(this);
+  }
+
+  public PsiReference[] getReferences() {
+    return RobotImplUtil.getReferences(this);
   }
 
 }

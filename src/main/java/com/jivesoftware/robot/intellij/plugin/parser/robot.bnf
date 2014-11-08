@@ -15,6 +15,7 @@
   tokenTypeClass="com.jivesoftware.robot.intellij.plugin.lexer.RobotToken"
 
   psiImplUtilClass="com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil"
+
   implements("KEYWORD")=["com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement"
                          "com.intellij.psi.StubBasedPsiElement<com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordStub>"]
   extends("KEYWORD")="com.intellij.extapi.psi.StubBasedPsiElementBase<com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordStub>"
@@ -185,7 +186,7 @@ INDENTED_VARIABLE_ASSIGN_TO_KEYWORD ::= ( MULTI_ASSIGNMENT_LHS | SINGLE_ASSIGNME
 
 // An argument to a keyword can be a variable, a literal, an empty cell (\), or an integer.
 // Also allow ROBOT_KEYWORD_TOKEN, for cases where we can't tokenize correctly, like a Templated Test Case that starts with an empty cell.
-KEYWORD_ARG ::= VARIABLE | ROBOT_KEYWORD_ARG_TOKEN | EMPTY_CELL_TOKEN | INTEGER_TOKEN | ARRAY_VARIABLE_ACCESS_TOKEN | ROBOT_KEYWORD_TOKEN
+KEYWORD_ARG ::= VARIABLE | ROBOT_KEYWORD_ARG_TOKEN | EMPTY_CELL_TOKEN | INTEGER_TOKEN | ARRAY_VARIABLE_ACCESS_TOKEN | ROBOT_KEYWORD_TOKEN { methods=[getReference getReferences] }
 // Tags are tokenized specially by being after the [tags] setting or "Force Tags" setting.
 TAG ::= TAG_TOKEN
 
