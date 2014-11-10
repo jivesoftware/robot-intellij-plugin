@@ -22,10 +22,21 @@ public class RobotVariableReference extends PsiReferenceBase<PsiElement> {
         super(element);
     }
 
+    /**
+     * @param element PSI element
+     * @param range range relatively to the element's start offset
+     */
+    public RobotVariableReference(PsiElement element, TextRange range) {
+        super(element, range);
+    }
+
     @Nullable
     @Override
     public PsiElement resolve() {
-        final Optional<String> optVariableName = VariablePsiUtil.getVariableName(myElement);
+        TextRange range = getRangeInElement();
+        final Optional<String> optVariableName;
+
+        optVariableName = VariablePsiUtil.getVariableName(myElement, range);
 
         if (!optVariableName.isPresent()) {
             return null;
@@ -33,7 +44,7 @@ public class RobotVariableReference extends PsiReferenceBase<PsiElement> {
 
         RobotForLoopIn containingLoop = PsiTreeUtil.getParentOfType(myElement, RobotForLoopIn.class);
         if (containingLoop != null) {
-            Optional<PsiElement> definition = VariablePsiUtil.findFirstDefinitionOfVariableFromForLoopIn(containingLoop, myElement);
+            Optional<PsiElement> definition = VariablePsiUtil.findFirstDefinitionOfVariableFromForLoopIn(containingLoop, myElement, range);
             if (definition.isPresent()) {
                 if (RobotPsiUtil.areIdenticalTextualOccurrences(myElement, definition.get())) {
                     return null;
@@ -44,7 +55,7 @@ public class RobotVariableReference extends PsiReferenceBase<PsiElement> {
 
         RobotForLoopInRange containingLoopInRange = PsiTreeUtil.getParentOfType(myElement, RobotForLoopInRange.class);
         if (containingLoop != null) {
-            Optional<PsiElement> definition = VariablePsiUtil.findFirstDefinitionOfVariableFromForLoopInRange(containingLoopInRange, myElement);
+            Optional<PsiElement> definition = VariablePsiUtil.findFirstDefinitionOfVariableFromForLoopInRange(containingLoopInRange, myElement, range);
             if (definition.isPresent()) {
                 if (RobotPsiUtil.areIdenticalTextualOccurrences(myElement, definition.get())) {
                     return null;
@@ -55,7 +66,7 @@ public class RobotVariableReference extends PsiReferenceBase<PsiElement> {
 
         RobotTestCase containingTest = PsiTreeUtil.getParentOfType(myElement, RobotTestCase.class);
         if (containingTest != null) {
-            Optional<PsiElement> definition = VariablePsiUtil.findFirstDefinitionOfVariable(containingTest, myElement);
+            Optional<PsiElement> definition = VariablePsiUtil.findFirstDefinitionOfVariable(containingTest, myElement, range);
             if (definition.isPresent()) {
                 if (RobotPsiUtil.areIdenticalTextualOccurrences(myElement, definition.get())) {
                     return null;
@@ -66,13 +77,21 @@ public class RobotVariableReference extends PsiReferenceBase<PsiElement> {
 
         RobotKeywordDefinition containingKeywordDefinition = PsiTreeUtil.getParentOfType(myElement, RobotKeywordDefinition.class);
         if (containingKeywordDefinition != null) {
-            Optional<PsiElement> definition = VariablePsiUtil.findFirstDefinitionOfVariable(containingKeywordDefinition, myElement);
+            Optional<PsiElement> definition = VariablePsiUtil.findFirstDefinitionOfVariable(containingKeywordDefinition, myElement, range);
             if (definition.isPresent()) {
                 if (RobotPsiUtil.areIdenticalTextualOccurrences(myElement, definition.get())) {
                     return null;
                 }
                 return definition.get();
             }
+        }
+
+        Optional<PsiElement> definition = VariablePsiUtil.findFirstDefinitionOfVariableNotInKeywordOrTestCase(myElement, range);
+        if (definition.isPresent()) {
+            if (RobotPsiUtil.areIdenticalTextualOccurrences(myElement, definition.get())) {
+                return null;
+            }
+            return definition.get();
         }
 
         return null;

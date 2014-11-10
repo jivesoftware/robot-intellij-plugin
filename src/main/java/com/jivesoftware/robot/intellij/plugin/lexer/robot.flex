@@ -51,6 +51,7 @@ return;
   private boolean onArgumentsLine = false;
   private boolean onForLoopLine = false;
   private boolean onResourceSettingLine = false;
+  private boolean onLibrarySettingLine = false;
   private int previous_state = YYINITIAL;
 
   private IElementType next(IElementType toReturn) {
@@ -64,7 +65,7 @@ return;
             yybegin(DOCS_SETTING);
         } else if (toReturn != ELLIPSES_TOKEN) {
            keywordToLeft = onTagsLine = onTimeoutLine = onDocsLine = onReturnLine
-                         = onArgumentsLine = onForLoopLine = onResourceSettingLine = false;
+                         = onArgumentsLine = onForLoopLine = onResourceSettingLine = onLibrarySettingLine = false;
         }
         firstRobotCell = false;
     }
@@ -85,6 +86,9 @@ return;
         if (onResourceSettingLine) {
             return ROBOT_FILE_TOKEN;
         }
+        if (onLibrarySettingLine) {
+            return JAVA_CLASS_TOKEN;
+        }
         keywordToLeft = true;
         return ROBOT_KEYWORD_TOKEN;
     }
@@ -101,6 +105,9 @@ return;
          if (onResourceSettingLine) {
              return ROBOT_FILE_TOKEN;
          }
+         if (onLibrarySettingLine) {
+              return JAVA_CLASS_TOKEN;
+          }
          return ROBOT_KEYWORD_ARG_TOKEN;
     }
     else if (toReturn == FOR_LOOP_START_TOKEN) {
@@ -128,6 +135,9 @@ return;
     else if (toReturn == RESOURCE_SETTING_TOKEN) {
         onResourceSettingLine = true;
     }
+    else if (toReturn == LIBRARY_SETTING_TOKEN) {
+            onLibrarySettingLine = true;
+        }
     return toReturn;
   }
   private IElementType newLine() {
@@ -175,7 +185,7 @@ ArrayVariableAccess = {ArrayVariable} \[ " "? ({NonNegativeIntegerLiteral} | {Va
 ArrayAssignment = {ArrayVariable} " "? "="
 
 RobotKeyword = {RobotWord} ({SingleSpace} {RobotWord})*
-RobotWord = [a-zA-Z0-9\-_\$\{\}]+
+RobotWord = [a-zA-Z0-9\-_\$\{\}\\#@%=\|\\]+
 
 TestCaseHeaderWord = {TestCaseHeaderChar}+
 TestCaseHeader = {TestCaseHeaderWord} ({SingleSpace} {TestCaseHeaderWord})*
@@ -201,6 +211,7 @@ SuiteTeardownSetting = {Suite} " "? ({Teardown} | {Postcondition})
 ForceTags = [Ff] " "? [Oo] " "? [Rr] " "? [Cc] " "? [Ee] " "? [Tt] " "? [Aa] " "? [Gg] " "? [Ss]
 ResourceSetting = [Rr] " "? [Ee] " "? [Ss] " "? [Oo] " "? [Uu] " "? [Rr] " "? [Cc] " "? [Ee]
 Documentation = [Dd] " "? [Oo] " "? [Cc] " "? [Uu] " "? [Mm] " "? [Ee] " "? [Nn] " "? [Tt] " "? [Aa] " "? [Tt] " "? [Ii] " "? [Oo] " "? [Nn]
+LibrarySetting = [Ll] " "? [Ii] " "? [Bb] " "? [Rr] " "? [Aa] " "? [Rr] " "? [Yy]
 
 /* Settings for robot test cases */
 TagsMeta = "[" {WhiteSpace}* [Tt] " "? [Aa] " "? [Gg] " "? [Ss] {WhiteSpace}* "]"
@@ -281,6 +292,7 @@ In = "IN"
      {TestTeardownSetting}  { if (startLine) {return next(TEST_TEARDOWN_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
      {SuiteSetupSetting}    { if (startLine) {return next(SUITE_SETUP_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
      {SuiteTeardownSetting}    { if (startLine) {return next(SUITE_TEARDOWN_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
+     {LibrarySetting}    { if (startLine) {return next(LIBRARY_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
      {RobotKeyword}      { return next(ROBOT_KEYWORD_TOKEN); }
      {KeywordArgument}   { return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }

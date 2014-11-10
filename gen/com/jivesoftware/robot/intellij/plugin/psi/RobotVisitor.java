@@ -114,6 +114,10 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitJavaClassReference(@NotNull RobotJavaClassReference o) {
+    visitPsiElement(o);
+  }
+
   public void visitKeyword(@NotNull RobotKeyword o) {
     visitNamedElement(o);
     // visitKeywordStub>(o);
@@ -162,6 +166,10 @@ public class RobotVisitor extends PsiElementVisitor {
   public void visitKeywordTitle(@NotNull RobotKeywordTitle o) {
     visitNamedElement(o);
     // visitKeywordTitleStub>(o);
+  }
+
+  public void visitLibrarySetting(@NotNull RobotLibrarySetting o) {
+    visitPsiElement(o);
   }
 
   public void visitMultiAssignmentLhs(@NotNull RobotMultiAssignmentLhs o) {

@@ -79,7 +79,7 @@ public class RobotCustomUsagesSearcher extends CustomUsageSearcher {
                 return;
             }
             String name = methodToFindUsages.getName();
-            List<RobotKeyword> robotKeywords = RobotPsiUtil.findKeywordUsagesByJavaMethodName(name, methodToFindUsages.getProject());
+            List<RobotKeyword> robotKeywords = RobotPsiUtil.findJavaDefinedKeywordUsages(methodToFindUsages);
             for (RobotKeyword keyword : robotKeywords) {
                 UsageInfo usageInfo = new UsageInfo(keyword, false);
                 usages.add(new UsageInfo2UsageAdapter(usageInfo));
@@ -103,8 +103,7 @@ public class RobotCustomUsagesSearcher extends CustomUsageSearcher {
         @Override
         public void run() {
             usages = Lists.newArrayList();
-            String name = keywordToFindUsages.getName();
-            List<RobotKeyword> robotKeywords = RobotPsiUtil.findKeywordUsagesByName(name, keywordToFindUsages.getProject());
+            List<RobotKeyword> robotKeywords = RobotPsiUtil.findRobotDefinedKeywordUsages(keywordToFindUsages);
             for (RobotKeyword keyword : robotKeywords) {
                 PsiReference ref = new RobotKeywordReference(keyword);
                 TextRange rangeInElement = ref.getRangeInElement();

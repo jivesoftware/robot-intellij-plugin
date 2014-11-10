@@ -36,12 +36,34 @@ public class VariablePsiUtil {
         return getVariableName(text);
     }
 
+    public static Optional<String> getVariableName(@NotNull PsiElement element, TextRange rangeInElement) {
+        if (rangeInElement == null) {
+            return getVariableName(element);
+        }
+        String text = element.getText().substring(rangeInElement.getStartOffset(), rangeInElement.getEndOffset());
+        return getVariableName(text);
+    }
+
     public static Optional<String> getVariableName(String codeText) {
         Matcher matcher = VARIABLE_PATTERN.matcher(codeText);
         if (matcher.find()) {
             return Optional.of(matcher.group(1));
         }
         return Optional.absent();
+    }
+
+    public static List<TextRange> getOccurrencesOfVariablesInElement(PsiElement el) {
+        String text = el.getText();
+        return getOccurrencesOfVariablesInString(text);
+    }
+
+    public static List<TextRange> getOccurrencesOfVariablesInString(String text) {
+        Matcher matcher = VARIABLE_PATTERN.matcher(text);
+        List<TextRange> ranges = Lists.newArrayList();
+        while (matcher.find()) {
+            ranges.add(new TextRange(matcher.start(), matcher.end()));
+        }
+        return ranges;
     }
 
     public static boolean matchesExpectedNormalName(PsiElement element, String expectedNormalName) {
@@ -149,8 +171,26 @@ public class VariablePsiUtil {
     }
 
     //----------Helpers for finding the definition of a Variable from the point of use----------
-    public static Optional<PsiElement> findFirstDefinitionOfVariable(RobotTestCase test, PsiElement variableUsage) {
-        Optional<String> optVariableName = getVariableName(variableUsage);
+    public static Optional<PsiElement> findFirstDefinitionOfVariableNotInKeywordOrTestCase(PsiElement variableUsage, TextRange rangeInElement) {
+        Optional<String> optVariableName = getVariableName(variableUsage, rangeInElement);
+        if (!optVariableName.isPresent()) {
+            return Optional.absent();
+        }
+        final String normalName = RobotPsiUtil.normalizeKeywordForIndex(optVariableName.get());
+        RobotPsiFile file = (RobotPsiFile) variableUsage.getContainingFile();
+        if (file == null) {
+            return Optional.absent();
+        }
+        Map<String, VariableInfo> env = getVariableEnvironment(file);
+        VariableInfo foundVar = env.get(normalName);
+        if (foundVar != null) {
+            return Optional.of(foundVar.getDefinition());
+        }
+        return Optional.absent();
+    }
+
+    public static Optional<PsiElement> findFirstDefinitionOfVariable(RobotTestCase test, PsiElement variableUsage, TextRange rangeInElement) {
+        Optional<String> optVariableName = getVariableName(variableUsage, rangeInElement);
         if (!optVariableName.isPresent()) {
             return Optional.absent();
         }
@@ -183,8 +223,8 @@ public class VariablePsiUtil {
         return Optional.absent();
     }
 
-    public static Optional<PsiElement> findFirstDefinitionOfVariableFromForLoopIn(RobotForLoopIn forLoopIn, PsiElement variableUsage) {
-        Optional<String> optName = getVariableName(variableUsage);
+    public static Optional<PsiElement> findFirstDefinitionOfVariableFromForLoopIn(RobotForLoopIn forLoopIn, PsiElement variableUsage, TextRange rangeInElement) {
+        Optional<String> optName = getVariableName(variableUsage, rangeInElement);
         if (!optName.isPresent()) {
             return Optional.absent();
         }
@@ -219,8 +259,8 @@ public class VariablePsiUtil {
         return Optional.absent();
     }
 
-    public static Optional<PsiElement> findFirstDefinitionOfVariableFromForLoopInRange(RobotForLoopInRange forLoopInRange, PsiElement variableUsage) {
-        Optional<String> optName = getVariableName(variableUsage);
+    public static Optional<PsiElement> findFirstDefinitionOfVariableFromForLoopInRange(RobotForLoopInRange forLoopInRange, PsiElement variableUsage, TextRange rangeInElement) {
+        Optional<String> optName = getVariableName(variableUsage, rangeInElement);
         if (!optName.isPresent()) {
             return Optional.absent();
         }
@@ -262,8 +302,8 @@ public class VariablePsiUtil {
         return Optional.absent();
     }
 
-    public static Optional<PsiElement> findFirstDefinitionOfVariable(RobotKeywordDefinition keywordDefinition, PsiElement variableUsage) {
-        Optional<String> optVariableName = getVariableName(variableUsage);
+    public static Optional<PsiElement> findFirstDefinitionOfVariable(RobotKeywordDefinition keywordDefinition, PsiElement variableUsage, TextRange rangeInElement) {
+        Optional<String> optVariableName = getVariableName(variableUsage, rangeInElement);
         if (!optVariableName.isPresent()) {
             return Optional.absent();
         }

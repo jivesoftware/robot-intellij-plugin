@@ -24,7 +24,7 @@ public class RobotKeywordProcessor implements Processor<RobotKeyword> {
 
     @Override
     public boolean process(RobotKeyword robotKeyword) {
-        final String normalized = RobotPsiUtil.normalizeKeywordForIndex(robotKeyword.getName());
+        final String normalized = RobotPsiUtil.normalizeRobotDefinedKeywordForIndex(robotKeyword.getName());
         if (normalized.equals(expectedNormalizedName)) {
             results.add(robotKeyword);
         } else {

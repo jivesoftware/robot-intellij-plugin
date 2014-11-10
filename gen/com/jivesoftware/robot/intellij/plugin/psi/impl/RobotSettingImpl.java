@@ -37,6 +37,12 @@ public class RobotSettingImpl extends ASTWrapperPsiElement implements RobotSetti
 
   @Override
   @Nullable
+  public RobotLibrarySetting getLibrarySetting() {
+    return findChildByClass(RobotLibrarySetting.class);
+  }
+
+  @Override
+  @Nullable
   public RobotResourceSetting getResourceSetting() {
     return findChildByClass(RobotResourceSetting.class);
   }

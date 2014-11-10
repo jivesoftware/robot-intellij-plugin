@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.jivesoftware.robot.intellij.plugin</id>
     <name>Robot Plugin</name>
-    <version>1.5.2</version>
+    <version>1.5.3</version>
     <vendor email="charles.capps@jivesoftware.com" url="http://www.jiveosftware.com">Jive Software</vendor>
 
     <description><![CDATA[
@@ -29,6 +29,16 @@
     ]]></description>
 
     <change-notes><![CDATA[
+
+    <h3>Version 1.5.3</h3>
+    <ul>
+        <li>Made two improvements that were filed on Github</li>
+        <li>Keywords with "embedded arguments" can now be resolved at the point of use, and find usages works.</li>
+        <li>Any String argument to a Keyword can resolve to a file in a resources folder, if it refers to a valid file.</li>
+        <li>You can now ctrl+click the Library Java class in a Settings table</li>
+        <li>You can now resolve references to variables embedded in text, e.g. in the keyword execution "Log   My text ${foo} and ${bar}",
+        can now resolve ${foo} and ${bar} correctly.</li>
+    </ul>
 
     <h3>Version 1.5.2</h3>
     <ul>

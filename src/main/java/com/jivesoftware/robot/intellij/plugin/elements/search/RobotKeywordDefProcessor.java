@@ -17,7 +17,7 @@ public class RobotKeywordDefProcessor implements Processor<RobotKeywordTitle> {
     public RobotKeywordDefProcessor(List<PsiElement> results, SearchType searchType, String searchTerm) {
         this.results = results;
         this.searchType = searchType;
-        this.normalizedSearchTerm = RobotPsiUtil.normalizeKeywordForIndex(searchTerm);
+        this.normalizedSearchTerm = RobotPsiUtil.normalizeRobotDefinedKeywordForIndex(searchTerm);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class RobotKeywordDefProcessor implements Processor<RobotKeywordTitle> {
         if (searchType == SearchType.FIND_ALL) {
             return true;
         }
-        final String normalizedName = RobotPsiUtil.normalizeKeywordForIndex(robotKeywordTitle.getName());
+        final String normalizedName = RobotPsiUtil.normalizeRobotDefinedKeywordForIndex(robotKeywordTitle.getName());
         if (searchType == SearchType.EXACT_MATCH) {
             return normalizedName.equals(normalizedSearchTerm);
         } else if (searchType == SearchType.STARTS_WITH) {

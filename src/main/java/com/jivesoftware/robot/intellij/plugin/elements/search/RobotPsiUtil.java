@@ -9,6 +9,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiMethod;
 import com.intellij.psi.search.FileTypeIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
@@ -26,13 +27,33 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
 
 public class RobotPsiUtil {
 
+    /**
+     * This method just removes spaces and underscores, and lowercases the string.
+     *
+     * This is useful for normalizing Java-defined Robot Keywords for indexing.
+     * It's also used to normalize Robot Variables and Test Case Titles.
+     *
+     * @param keywordOrMethod
+     * @return
+     */
     public static String normalizeKeywordForIndex(String keywordOrMethod) {
         return keywordOrMethod.replace(" ", "")
                 .replace("_", "")
                 .toLowerCase();
+    }
+
+    public static String normalizeRobotDefinedKeywordForIndex(String keywordOrMethod) {
+        String normalized = keywordOrMethod.replace(" ", "")
+                .replace("_", "")
+                .toLowerCase();
+        // Normalize the arguments for arguments embedded in keyword name. See Robot Guide:
+        // http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#arguments-embedded-to-keyword-names
+        return VariablePsiUtil.VARIABLE_PATTERN.matcher(normalized)
+                .replaceAll(Matcher.quoteReplacement("${arg}"));
     }
 
     public static String normalizeJavaMethodForIndex(String methodName) {
@@ -168,7 +189,7 @@ public class RobotPsiUtil {
 
     public static void findAllRobotKeywordDefsInRobotFilesStartingWith(Project project, List<PsiElement> results, String startsWith) {
         final StubIndex STUB_INDEX = StubIndex.getInstance();
-        final String normalizedStartsWith = RobotPsiUtil.normalizeKeywordForIndex(startsWith);
+        final String normalizedStartsWith = RobotPsiUtil.normalizeRobotDefinedKeywordForIndex(startsWith);
         String keyValue;
         StubIndexKey<String, RobotKeywordTitle> indexKey;
         if (normalizedStartsWith.length() >= 3) {
@@ -191,7 +212,7 @@ public class RobotPsiUtil {
 
     public static void findKeywordDefsByName(String name, Project project, List<PsiElement> results) {
         final StubIndex STUB_INDEX = StubIndex.getInstance();
-        final String normalizedName = normalizeKeywordForIndex(name);
+        final String normalizedName = normalizeRobotDefinedKeywordForIndex(name);
         RobotKeywordDefProcessor processor = new RobotKeywordDefProcessor(results, SearchType.EXACT_MATCH, name);
         STUB_INDEX.processElements(RobotKeywordTitleNormalizedNameIndex.KEY, normalizedName, project,
                 GlobalSearchScope.allScope(project), RobotKeywordTitle.class, processor);
@@ -199,7 +220,7 @@ public class RobotPsiUtil {
 
     public static Optional<RobotKeywordTitle> findUniqueKeywordDefByName(String name, Project project) {
         final StubIndex STUB_INDEX = StubIndex.getInstance();
-        final String normalizedName = normalizeKeywordForIndex(name);
+        final String normalizedName = normalizeRobotDefinedKeywordForIndex(name);
         List<PsiElement> results = Lists.newArrayList();
         RobotKeywordDefProcessor processor = new RobotKeywordDefProcessor(results, SearchType.EXACT_MATCH, name);
         STUB_INDEX.processElements(RobotKeywordTitleNormalizedNameIndex.KEY, normalizedName, project,
@@ -211,13 +232,18 @@ public class RobotPsiUtil {
     }
 
     //--------------Helpers to find Keyword usages------------
-    public static List<RobotKeyword> findKeywordUsagesByName(String keywordName, Project project) {
-        final String robotKeywordAsMethod = RobotPsiUtil.robotKeywordToMethodFast(keywordName);
-        return findKeywordUsagesByJavaMethodName(robotKeywordAsMethod, project);
+    public static List<RobotKeyword> findRobotDefinedKeywordUsages(RobotKeywordTitle robotKeywordTitle) {
+        final String keywordTitle = robotKeywordTitle.getText();
+        final String normalizedKeywordName = normalizeRobotDefinedKeywordForIndex(keywordTitle);
+        return findKeywordUsagesByNormalizedName(normalizedKeywordName, robotKeywordTitle.getProject());
     }
 
-    public static List<RobotKeyword> findKeywordUsagesByJavaMethodName(String javaMethodName, Project project) {
-        final String normalizedKeywordName = normalizeJavaMethodForIndex(javaMethodName);
+    public static List<RobotKeyword> findJavaDefinedKeywordUsages(PsiMethod javaMethod) {
+        final String normalizedName = normalizeJavaMethodForIndex(javaMethod.getName());
+        return findKeywordUsagesByNormalizedName(normalizedName, javaMethod.getProject());
+    }
+
+    private static List<RobotKeyword> findKeywordUsagesByNormalizedName(String normalizedKeywordName, Project project) {
         final StubIndex STUB_INDEX = StubIndex.getInstance();
         GlobalSearchScope robotFileScope = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.projectScope(project), RobotFileType.INSTANCE);
         RobotKeywordProcessor processor = new RobotKeywordProcessor(normalizedKeywordName, true);

@@ -34,6 +34,7 @@ public interface RobotTypes {
   IElementType GENERIC_SETTING = new RobotElementType("GENERIC_SETTING");
   IElementType INDENTED_KEYWORD_INVOCATION_TEST = new RobotElementType("INDENTED_KEYWORD_INVOCATION_TEST");
   IElementType INDENTED_VARIABLE_ASSIGN_TO_KEYWORD = new RobotElementType("INDENTED_VARIABLE_ASSIGN_TO_KEYWORD");
+  IElementType JAVA_CLASS_REFERENCE = new RobotElementType("JAVA_CLASS_REFERENCE");
   IElementType KEYWORD = new RobotKeywordElementType("KEYWORD");
   IElementType KEYWORDS_TABLE = new RobotElementType("KEYWORDS_TABLE");
   IElementType KEYWORDS_TABLE_HEADING = new RobotElementType("KEYWORDS_TABLE_HEADING");
@@ -46,6 +47,7 @@ public interface RobotTypes {
   IElementType KEYWORD_SETTING = new RobotElementType("KEYWORD_SETTING");
   IElementType KEYWORD_SETTING_LINE = new RobotElementType("KEYWORD_SETTING_LINE");
   IElementType KEYWORD_TITLE = new RobotKeywordTitleElementType("KEYWORD_TITLE");
+  IElementType LIBRARY_SETTING = new RobotElementType("LIBRARY_SETTING");
   IElementType MULTI_ASSIGNMENT_LHS = new RobotElementType("MULTI_ASSIGNMENT_LHS");
   IElementType RESOURCE_FILE = new RobotElementType("RESOURCE_FILE");
   IElementType RESOURCE_SETTING = new RobotElementType("RESOURCE_SETTING");
@@ -102,7 +104,9 @@ public interface RobotTypes {
   IElementType INTEGER_TOKEN = new RobotToken("INTEGER_TOKEN");
   IElementType IN_RANGE_TOKEN = new RobotToken("IN_RANGE_TOKEN");
   IElementType IN_TOKEN = new RobotToken("IN_TOKEN");
+  IElementType JAVA_CLASS_TOKEN = new RobotToken("JAVA_CLASS_TOKEN");
   IElementType KEYWORDS_TABLE_HEADING_TOKEN = new RobotToken("KEYWORDS_TABLE_HEADING_TOKEN");
+  IElementType LIBRARY_SETTING_TOKEN = new RobotToken("LIBRARY_SETTING_TOKEN");
   IElementType NEWLINE_TOKEN = new RobotToken("NEWLINE_TOKEN");
   IElementType RESOURCE_SETTING_TOKEN = new RobotToken("RESOURCE_SETTING_TOKEN");
   IElementType RETURN_SETTING_TOKEN = new RobotToken("RETURN_SETTING_TOKEN");
@@ -207,6 +211,9 @@ public interface RobotTypes {
       else if (type == INDENTED_VARIABLE_ASSIGN_TO_KEYWORD) {
         return new RobotIndentedVariableAssignToKeywordImpl(node);
       }
+      else if (type == JAVA_CLASS_REFERENCE) {
+        return new RobotJavaClassReferenceImpl(node);
+      }
       else if (type == KEYWORD) {
         return new RobotKeywordImpl(node);
       }
@@ -242,6 +249,9 @@ public interface RobotTypes {
       }
       else if (type == KEYWORD_TITLE) {
         return new RobotKeywordTitleImpl(node);
+      }
+      else if (type == LIBRARY_SETTING) {
+        return new RobotLibrarySettingImpl(node);
       }
       else if (type == MULTI_ASSIGNMENT_LHS) {
         return new RobotMultiAssignmentLhsImpl(node);

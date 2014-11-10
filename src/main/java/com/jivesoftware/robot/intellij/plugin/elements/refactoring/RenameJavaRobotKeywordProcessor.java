@@ -28,8 +28,7 @@ public class RenameJavaRobotKeywordProcessor extends RenamePsiElementProcessor {
     public void prepareRenaming(final PsiElement element, final String newName,
                                 final Map<PsiElement, String> allRenames) {
         PsiMethod psiMethod = (PsiMethod) element;
-        String name = psiMethod.getName();
-        List<RobotKeyword> robotKeywords = RobotPsiUtil.findKeywordUsagesByJavaMethodName(name, psiMethod.getProject());
+        List<RobotKeyword> robotKeywords = RobotPsiUtil.findJavaDefinedKeywordUsages(psiMethod);
         final String robotName = RobotPsiUtil.methodToRobotKeyword(newName);
         for (RobotKeyword robotKeyword : robotKeywords) {
             allRenames.put(robotKeyword, robotName);

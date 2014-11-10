@@ -51,7 +51,7 @@ public class RobotKeywordElementType extends IStubElementType<RobotKeywordStub, 
     public void indexStub(@NotNull RobotKeywordStub stub, @NotNull IndexSink sink) {
         final String name = stub.getName();
         if (name != null) {
-            final String normalizedName = RobotPsiUtil.normalizeKeywordForIndex(name);
+            final String normalizedName = RobotPsiUtil.normalizeRobotDefinedKeywordForIndex(name);
             sink.occurrence(RobotKeywordNormalizedNameIndex.KEY, normalizedName);
         }
     }

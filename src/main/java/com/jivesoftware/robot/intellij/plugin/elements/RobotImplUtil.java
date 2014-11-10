@@ -114,6 +114,22 @@ public class RobotImplUtil {
         return ReferenceProvidersRegistry.getReferencesFromProviders(element);
     }
 
+      /* Methods for RobotJavaClassReference */
+
+    @NotNull
+    public static PsiReference[] getReferences(RobotJavaClassReference element) {
+        return ReferenceProvidersRegistry.getReferencesFromProviders(element);
+    }
+
+    @Nullable
+    public static PsiReference getReference(RobotJavaClassReference element) {
+        PsiReference[] refs = ReferenceProvidersRegistry.getReferencesFromProviders(element);
+        if (refs.length <= 0) {
+            return null;
+        }
+        return refs[0];
+    }
+
     /* Methods for RobotResourceFile */
 
     @NotNull

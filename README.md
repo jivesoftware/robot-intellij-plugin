@@ -11,6 +11,16 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.5.3</h3>
+<ul>
+    <li>Made two improvements that were filed on Github</li>
+    <li>Keywords with "embedded arguments" can now be resolved at the point of use, and find usages works.</li>
+    <li>Any String argument to a Keyword can resolve to a file in a resources folder, if it refers to a valid file.</li>
+    <li>You can now ctrl+click the Library Java class in a Settings table</li>
+    <li>You can now resolve references to variables embedded in text, e.g. in the keyword execution "Log   My text ${foo} and ${bar}",
+    can now resolve ${foo} and ${bar} correctly.</li>
+</ul>
+
 <h3>Version 1.5.2</h3>
 <ul>
     <li>Fixed issue filed on the github page where Java methods that use underscores, e.g. "foo_java_keyword()" should

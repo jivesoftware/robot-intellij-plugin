@@ -95,6 +95,9 @@ public class RobotParser implements PsiParser {
     else if (root_ == INDENTED_VARIABLE_ASSIGN_TO_KEYWORD) {
       result_ = INDENTED_VARIABLE_ASSIGN_TO_KEYWORD(builder_, 0);
     }
+    else if (root_ == JAVA_CLASS_REFERENCE) {
+      result_ = JAVA_CLASS_REFERENCE(builder_, 0);
+    }
     else if (root_ == KEYWORD) {
       result_ = KEYWORD(builder_, 0);
     }
@@ -130,6 +133,9 @@ public class RobotParser implements PsiParser {
     }
     else if (root_ == KEYWORD_TITLE) {
       result_ = KEYWORD_TITLE(builder_, 0);
+    }
+    else if (root_ == LIBRARY_SETTING) {
+      result_ = LIBRARY_SETTING(builder_, 0);
     }
     else if (root_ == MULTI_ASSIGNMENT_LHS) {
       result_ = MULTI_ASSIGNMENT_LHS(builder_, 0);
@@ -1109,6 +1115,18 @@ public class RobotParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // JAVA_CLASS_TOKEN
+  public static boolean JAVA_CLASS_REFERENCE(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "JAVA_CLASS_REFERENCE")) return false;
+    if (!nextTokenIs(builder_, JAVA_CLASS_TOKEN)) return false;
+    boolean result_;
+    Marker marker_ = enter_section_(builder_);
+    result_ = consumeToken(builder_, JAVA_CLASS_TOKEN);
+    exit_section_(builder_, marker_, JAVA_CLASS_REFERENCE, result_);
+    return result_;
+  }
+
+  /* ********************************************************** */
   // ROBOT_KEYWORD_TOKEN
   public static boolean KEYWORD(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "KEYWORD")) return false;
@@ -1598,6 +1616,34 @@ public class RobotParser implements PsiParser {
   }
 
   /* ********************************************************** */
+  // LIBRARY_SETTING_TOKEN  COLUMN_SEP_TOKEN  JAVA_CLASS_REFERENCE   SETTING_LIST_OR_ELLIPSES*
+  public static boolean LIBRARY_SETTING(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "LIBRARY_SETTING")) return false;
+    if (!nextTokenIs(builder_, LIBRARY_SETTING_TOKEN)) return false;
+    boolean result_;
+    boolean pinned_;
+    Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
+    result_ = consumeTokens(builder_, 0, LIBRARY_SETTING_TOKEN, COLUMN_SEP_TOKEN);
+    result_ = result_ && JAVA_CLASS_REFERENCE(builder_, level_ + 1);
+    pinned_ = result_; // pin = 3
+    result_ = result_ && LIBRARY_SETTING_3(builder_, level_ + 1);
+    exit_section_(builder_, level_, marker_, LIBRARY_SETTING, result_, pinned_, null);
+    return result_ || pinned_;
+  }
+
+  // SETTING_LIST_OR_ELLIPSES*
+  private static boolean LIBRARY_SETTING_3(PsiBuilder builder_, int level_) {
+    if (!recursion_guard_(builder_, level_, "LIBRARY_SETTING_3")) return false;
+    int pos_ = current_position_(builder_);
+    while (true) {
+      if (!SETTING_LIST_OR_ELLIPSES(builder_, level_ + 1)) break;
+      if (!empty_element_parsed_guard_(builder_, "LIBRARY_SETTING_3", pos_)) break;
+      pos_ = current_position_(builder_);
+    }
+    return true;
+  }
+
+  /* ********************************************************** */
   // VARIABLE (COLUMN_SEP_TOKEN VARIABLE)*  COLUMN_SEP_TOKEN ASSIGNMENT
   //                        |  VARIABLE (COLUMN_SEP_TOKEN  VARIABLE)+
   public static boolean MULTI_ASSIGNMENT_LHS(PsiBuilder builder_, int level_) {
@@ -1868,7 +1914,7 @@ public class RobotParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // FORCE_TAGS_SETTING | RESOURCE_SETTING | TEST_SETUP_SETTING | GENERIC_SETTING
+  // FORCE_TAGS_SETTING | RESOURCE_SETTING | TEST_SETUP_SETTING | LIBRARY_SETTING | GENERIC_SETTING
   public static boolean SETTING(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "SETTING")) return false;
     boolean result_;
@@ -1876,6 +1922,7 @@ public class RobotParser implements PsiParser {
     result_ = FORCE_TAGS_SETTING(builder_, level_ + 1);
     if (!result_) result_ = RESOURCE_SETTING(builder_, level_ + 1);
     if (!result_) result_ = TEST_SETUP_SETTING(builder_, level_ + 1);
+    if (!result_) result_ = LIBRARY_SETTING(builder_, level_ + 1);
     if (!result_) result_ = GENERIC_SETTING(builder_, level_ + 1);
     exit_section_(builder_, level_, marker_, SETTING, result_, false, null);
     return result_;

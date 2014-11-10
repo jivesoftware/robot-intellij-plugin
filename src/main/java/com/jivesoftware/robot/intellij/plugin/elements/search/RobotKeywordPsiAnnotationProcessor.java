@@ -12,14 +12,12 @@ import java.util.List;
 public class RobotKeywordPsiAnnotationProcessor implements Processor<PsiAnnotation> {
     private final List<PsiElement> results;
     private final SearchType searchType;
-    private final Optional<String> searchTerm;
     private final boolean wrapPsiMethods;
     private String normalizedSearchTerm;
 
     public RobotKeywordPsiAnnotationProcessor(List<PsiElement> results, SearchType searchType, Optional<String> searchTerm, boolean wrapPsiMethods) {
         this.results = results;
         this.searchType = searchType;
-        this.searchTerm = searchTerm;
         if (searchTerm.isPresent()) {
             this.normalizedSearchTerm = RobotPsiUtil.normalizeKeywordForIndex(searchTerm.get());
         }

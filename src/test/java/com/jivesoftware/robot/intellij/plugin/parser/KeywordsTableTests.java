@@ -1,10 +1,7 @@
 package com.jivesoftware.robot.intellij.plugin.parser;
 
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotArgumentDef;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordTitle;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordDefinition;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotReturnLine;
+import com.jivesoftware.robot.intellij.plugin.psi.*;
 import org.junit.Test;
 
 /**
@@ -76,6 +73,17 @@ public class KeywordsTableTests extends RobotParserTest {
             "*** Keywords ***\n" +
                     "My Foo Keyword  [Arguments]  ${foo}  ${bar}\n" +
                     "  Log  ${foo} ${bar} abc  WARN\n";
+
+    private static final String KEYWORD_WITH_ARGUMENTS_EMBEDDED_IN_NAME =
+            "*** Keywords ***\n" +
+                    "My Foo ${foo} Keyword ${bar}\n" +
+                    "  Log  ${foo} ${bar} abc  WARN\n";
+
+    private static final String KEYWORD_WITH_SPECIAL_CHARACTERS =
+            "*** Keywords ***\n" +
+                    "My \\${foo} \\#@%=|keyword\n" +
+                    "  [Arguments]  ${x}  ${y}\n" +
+                    "  Log  $did it!\n";
 
     @Test
     public void testKeywordWithSingleReturnValue() {
@@ -163,5 +171,22 @@ public class KeywordsTableTests extends RobotParserTest {
         RobotPsiFile file = doTestParseSucceeds(KEYWORD_WITH_ARGUMENTS_ON_TITLE_LINE);
         assertFileHasPsiElements(file, RobotKeywordDefinition.class, 1);
         assertFileHasPsiElements(file, RobotArgumentDef.class, 2);
+        assertFileHasPsiElements(file, RobotKeywordLine.class, 2);
+    }
+
+    @Test
+    public void testKeywordWithArgumentsEmbeddedInName() {
+        RobotPsiFile file = doTestParseSucceeds(KEYWORD_WITH_ARGUMENTS_EMBEDDED_IN_NAME);
+        assertFileHasPsiElements(file, RobotKeywordDefinition.class, 1);
+        assertFileHasPsiElements(file, RobotArgumentDef.class, 0);
+        assertFileHasPsiElements(file, RobotKeywordLine.class, 1);
+    }
+
+    @Test
+    public void testKeywordWithSpecialCharacters() {
+        RobotPsiFile file = doTestParseSucceeds(KEYWORD_WITH_SPECIAL_CHARACTERS);
+        assertFileHasPsiElements(file, RobotKeywordDefinition.class, 1);
+        assertFileHasPsiElements(file, RobotArgumentDef.class, 2);
+        assertFileHasPsiElements(file, RobotKeywordLine.class, 2);
     }
 }
