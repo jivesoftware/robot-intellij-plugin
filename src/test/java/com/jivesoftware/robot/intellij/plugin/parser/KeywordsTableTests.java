@@ -81,7 +81,7 @@ public class KeywordsTableTests extends RobotParserTest {
 
     private static final String KEYWORD_WITH_SPECIAL_CHARACTERS =
             "*** Keywords ***\n" +
-                    "My \\${foo} \\#@%=|keyword\n" +
+                    "My \\${foo} \\#@%=|.*()[]-_\"'keyword\n" +
                     "  [Arguments]  ${x}  ${y}\n" +
                     "  Log  $did it!\n";
 

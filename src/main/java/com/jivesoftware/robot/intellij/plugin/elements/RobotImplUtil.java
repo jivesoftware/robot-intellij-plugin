@@ -1,6 +1,7 @@
 package com.jivesoftware.robot.intellij.plugin.elements;
 
 import com.google.common.base.Optional;
+import com.google.common.base.Strings;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
@@ -10,6 +11,7 @@ import com.intellij.util.IncorrectOperationException;
 import com.jivesoftware.robot.intellij.plugin.elements.presentations.KeywordTitlePresentation;
 import com.jivesoftware.robot.intellij.plugin.elements.presentations.RobotResourceFilePresentation;
 import com.jivesoftware.robot.intellij.plugin.elements.presentations.TestCasePresentation;
+import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.search.VariablePsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStub;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotScalarAssignmentStub;
@@ -17,12 +19,15 @@ import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotScalarVari
 import com.jivesoftware.robot.intellij.plugin.icons.RobotIcons;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
+import com.jivesoftware.robot.intellij.plugin.util.RegexUtils;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RobotImplUtil {
 
@@ -454,6 +459,33 @@ public class RobotImplUtil {
     @Nullable
     public static PsiElement getNameIdentifier(RobotKeywordTitle element) {
         return element;
+    }
+
+    /**
+     * Return a regex for matching the usage of a Keyword that has embedded keyword args
+     * @param element
+     * @return
+     */
+    public static String getRegex(RobotKeywordTitle element) {
+        final String text = element.getText();
+        if (Strings.isNullOrEmpty(text)) {
+            return null;
+        }
+        // Normalize the keyword, so that embedded arguments become "${arg}"
+        String normalText = RobotPsiUtil.normalizeRobotDefinedKeywordForIndex(text);
+
+        final Matcher matcher = VariablePsiUtil.VARIABLE_PATTERN.matcher(normalText);
+        StringBuilder sb = new StringBuilder();
+        int lastChar = 0;
+        while (matcher.find()) {
+            String sub = normalText.substring(lastChar, matcher.start());
+            sb.append(RegexUtils.escapeStringForRegex(sub));
+            sb.append("(.*)"); // Match any value inside the embedded argument ${arg}
+            lastChar = matcher.end();
+        }
+        String finalSubstring = normalText.substring(lastChar, normalText.length());
+        sb.append(RegexUtils.escapeStringForRegex(finalSubstring));
+        return sb.toString();
     }
 
     /*   Robot Test Case Table   */

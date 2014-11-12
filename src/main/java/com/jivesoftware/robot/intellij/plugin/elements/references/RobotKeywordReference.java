@@ -30,6 +30,7 @@ public class RobotKeywordReference extends PsiReferenceBase<RobotKeyword> {
                     SearchType.EXACT_MATCH);
     robotKeywordDefinitionFinder.process();
     List<PsiElement> results = robotKeywordDefinitionFinder.getResults();
+
     if (results.isEmpty()) {
       return null;
     }

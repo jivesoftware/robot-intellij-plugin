@@ -228,7 +228,7 @@ private EMPTY_FOR_LOOP_LINE ::=     NEWLINE_TOKEN END_OF_LINE* & NEWLINE_TOKEN
 
 KEYWORD ::= ROBOT_KEYWORD_TOKEN { methods=[getName setName getNameIdentifier getReference getReferences handleElementRename toString]}
 
-KEYWORD_TITLE ::= ROBOT_KEYWORD_TITLE_TOKEN { methods=[getName setName getNameIdentifier getPresentation toString] }
+KEYWORD_TITLE ::= ROBOT_KEYWORD_TITLE_TOKEN { methods=[getName setName getNameIdentifier getPresentation toString getRegex] }
 
 ERROR ::= BAD_SYNTAX_TOKEN
 

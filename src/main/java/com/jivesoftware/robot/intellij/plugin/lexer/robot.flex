@@ -185,7 +185,7 @@ ArrayVariableAccess = {ArrayVariable} \[ " "? ({NonNegativeIntegerLiteral} | {Va
 ArrayAssignment = {ArrayVariable} " "? "="
 
 RobotKeyword = {RobotWord} ({SingleSpace} {RobotWord})*
-RobotWord = [a-zA-Z0-9\-_\$\{\}\\#@%=\|\\]+
+RobotWord = [a-zA-Z0-9\.\*\(\)\[\]\"\'\-_\$\{\}\\#&@%=\|\\]+
 
 TestCaseHeaderWord = {TestCaseHeaderChar}+
 TestCaseHeader = {TestCaseHeaderWord} ({SingleSpace} {TestCaseHeaderWord})*

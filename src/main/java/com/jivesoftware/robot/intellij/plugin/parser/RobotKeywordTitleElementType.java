@@ -3,12 +3,10 @@ package com.jivesoftware.robot.intellij.plugin.parser;
 import com.intellij.psi.stubs.*;
 import com.intellij.util.io.StringRef;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
+import com.jivesoftware.robot.intellij.plugin.elements.search.VariablePsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStub;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStubImpl;
-import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefFirstCharIndex;
-import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefFirstThreeCharsIndex;
-import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordTitleFirstTwoCharsIndex;
-import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordTitleNormalizedNameIndex;
+import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.*;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotLanguage;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordTitle;
 import com.jivesoftware.robot.intellij.plugin.psi.impl.RobotKeywordTitleImpl;
@@ -68,6 +66,10 @@ public class RobotKeywordTitleElementType extends IStubElementType<RobotKeywordT
             if (normalizedName.length() >= 3) {
                 String firstThreeCharacters = normalizedName.substring(0, 3);
                 sink.occurrence(RobotKeywordDefFirstThreeCharsIndex.KEY, firstThreeCharacters);
+            }
+
+            if (VariablePsiUtil.VARIABLE_PATTERN.matcher(name).find()) {
+                sink.occurrence(RobotKeywordTitleEmbeddedArgsIndex.KEY, normalizedName);
             }
         }
     }

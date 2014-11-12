@@ -28,6 +28,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class RobotPsiUtil {
 
@@ -46,14 +47,33 @@ public class RobotPsiUtil {
                 .toLowerCase();
     }
 
-    public static String normalizeRobotDefinedKeywordForIndex(String keywordOrMethod) {
-        String normalized = keywordOrMethod.replace(" ", "")
+    /**
+     * More advanced normalization for Robot-defined keywords
+     * Handles special case of "embedded arguments"
+     * See Robot Guide:
+     * http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#arguments-embedded-to-keyword-names
+     * @param keywordName
+     * @return
+     */
+    public static String normalizeRobotDefinedKeywordForIndex(String keywordName) {
+        final Matcher hasVariableMatcher = VariablePsiUtil.VARIABLE_PATTERN.matcher(keywordName);
+        if (hasVariableMatcher.find()) {
+            // Normalize a Keyword name for "embedded arguments" in keyword name.
+            return hasVariableMatcher.replaceAll(Matcher.quoteReplacement("${arg}"))
+                                     .toLowerCase();
+        }
+
+        // For Keywords not containing embedded arguments, ' ' and '_' are ignored
+        return keywordName.replace(" ", "")
                 .replace("_", "")
                 .toLowerCase();
-        // Normalize the arguments for arguments embedded in keyword name. See Robot Guide:
-        // http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#arguments-embedded-to-keyword-names
-        return VariablePsiUtil.VARIABLE_PATTERN.matcher(normalized)
-                .replaceAll(Matcher.quoteReplacement("${arg}"));
+
+    }
+
+    public static String normalizeEmbeddedArgKeyword(String keywordName) {
+        final Matcher hasVariableMatcher = VariablePsiUtil.VARIABLE_PATTERN.matcher(keywordName);
+        return hasVariableMatcher.replaceAll(Matcher.quoteReplacement("${arg}"))
+                .toLowerCase();
     }
 
     public static String normalizeJavaMethodForIndex(String methodName) {
@@ -218,7 +238,7 @@ public class RobotPsiUtil {
                 GlobalSearchScope.allScope(project), RobotKeywordTitle.class, processor);
     }
 
-    public static Optional<RobotKeywordTitle> findUniqueKeywordDefByName(String name, Project project) {
+    public static Optional<RobotKeywordTitle> findUniqueKeywordDefByName(String name, Project project, boolean isSearchTextFromRobotFile) {
         final StubIndex STUB_INDEX = StubIndex.getInstance();
         final String normalizedName = normalizeRobotDefinedKeywordForIndex(name);
         List<PsiElement> results = Lists.newArrayList();
@@ -228,12 +248,35 @@ public class RobotPsiUtil {
         if (results.size() > 0) {
             return Optional.of((RobotKeywordTitle) results.get(0));
         }
+        if (!isSearchTextFromRobotFile) {
+            return Optional.absent();
+        }
+        return findFirstMatchInEmbeddedArgsIndex(name, project);
+    }
+
+    private static Optional<RobotKeywordTitle> findFirstMatchInEmbeddedArgsIndex(String name, Project project) {
+        final String normalizedKeyword = normalizeEmbeddedArgKeyword(name);
+        final StubIndex STUB_INDEX = StubIndex.getInstance();
+        final Collection<String> KEYS = STUB_INDEX.getAllKeys(RobotKeywordTitleEmbeddedArgsIndex.KEY, project);
+        for (String key: KEYS) {
+            Collection<RobotKeywordTitle> keywordsWithEmbeddedArgs = StubIndex.getElements(RobotKeywordTitleEmbeddedArgsIndex.KEY, key, project, GlobalSearchScope.allScope(project), RobotKeywordTitle.class);
+            for (RobotKeywordTitle keyword: keywordsWithEmbeddedArgs) {
+                String regex = keyword.getRegex();
+                Pattern pattern = Pattern.compile(regex);
+                if (pattern.matcher(normalizedKeyword).matches()) {
+                    return Optional.of(keyword);
+                }
+            }
+        }
         return Optional.absent();
     }
 
     //--------------Helpers to find Keyword usages------------
     public static List<RobotKeyword> findRobotDefinedKeywordUsages(RobotKeywordTitle robotKeywordTitle) {
         final String keywordTitle = robotKeywordTitle.getText();
+        if (VariablePsiUtil.VARIABLE_PATTERN.matcher(keywordTitle).find()) {
+            return findKeywordUsagesOfKeywordWithEmbeddedArgs(robotKeywordTitle);
+        }
         final String normalizedKeywordName = normalizeRobotDefinedKeywordForIndex(keywordTitle);
         return findKeywordUsagesByNormalizedName(normalizedKeywordName, robotKeywordTitle.getProject());
     }
@@ -250,6 +293,22 @@ public class RobotPsiUtil {
         STUB_INDEX.processElements(RobotKeywordNormalizedNameIndex.KEY, normalizedKeywordName, project, robotFileScope,
                 RobotKeyword.class, processor);
 
+        return processor.getResults();
+    }
+
+    public static List<RobotKeyword> findKeywordUsagesOfKeywordWithEmbeddedArgs(RobotKeywordTitle robotKeywordTitle) {
+        final StubIndex STUB_INDEX = StubIndex.getInstance();
+        final Project project = robotKeywordTitle.getProject();
+        final Pattern REGEX = Pattern.compile(robotKeywordTitle.getRegex());
+
+        final Collection<String> allKeywords = STUB_INDEX.getAllKeys(RobotKeywordNormalizedNameIndex.KEY, project);
+        final GlobalSearchScope PROJECT_ROBOT_FILES = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.projectScope(project), RobotFileType.INSTANCE);
+        final RobotKeywordEmbeddedArgsProcessor processor = new RobotKeywordEmbeddedArgsProcessor(REGEX, true);
+
+        for (String keyword: allKeywords) {
+            STUB_INDEX.processElements(RobotKeywordNormalizedNameIndex.KEY,
+                    keyword, project, PROJECT_ROBOT_FILES, RobotKeyword.class, processor);
+        }
         return processor.getResults();
     }
 

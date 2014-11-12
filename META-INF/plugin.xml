@@ -389,6 +389,8 @@
         <stubIndex
                 implementation="com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordTitleNormalizedNameIndex"/>
         <stubIndex
+                implementation="com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordTitleEmbeddedArgsIndex"/>
+        <stubIndex
                 implementation="com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordDefFirstCharIndex"/>
         <stubIndex
                 implementation="com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordTitleFirstTwoCharsIndex"/>

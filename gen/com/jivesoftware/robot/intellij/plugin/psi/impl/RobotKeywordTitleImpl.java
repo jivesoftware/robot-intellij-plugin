@@ -53,4 +53,8 @@ public class RobotKeywordTitleImpl extends StubBasedPsiElementBase<RobotKeywordT
     return RobotImplUtil.toString(this);
   }
 
+  public String getRegex() {
+    return RobotImplUtil.getRegex(this);
+  }
+
 }

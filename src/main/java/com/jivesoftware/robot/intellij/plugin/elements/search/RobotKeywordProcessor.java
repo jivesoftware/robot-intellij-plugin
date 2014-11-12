@@ -16,7 +16,6 @@ public class RobotKeywordProcessor implements Processor<RobotKeyword> {
     private final boolean findAll;
 
     public RobotKeywordProcessor(String expectedNormalizedName, boolean findAll) {
-        Preconditions.checkArgument(!expectedNormalizedName.contains(" "), "Normalized Keyword name cannot contain spaces!");
         Preconditions.checkArgument(expectedNormalizedName.equals(expectedNormalizedName.toLowerCase()), "Normalized keyword name cannot contain uppercase letters!");
         this.expectedNormalizedName = expectedNormalizedName;
         this.findAll = findAll;

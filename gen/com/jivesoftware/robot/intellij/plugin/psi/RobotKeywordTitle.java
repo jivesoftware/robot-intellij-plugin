@@ -24,4 +24,6 @@ public interface RobotKeywordTitle extends RobotNamedElement, StubBasedPsiElemen
 
   String toString();
 
+  String getRegex();
+
 }

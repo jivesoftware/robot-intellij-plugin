@@ -23,6 +23,7 @@ public class RobotKeywordDefinitionFinder {
     private final List<PsiElement> results;
     private final SearchType searchType;
     private final boolean wrapPsiMethods;
+    private final boolean isSeachTextFromRobotFile;
 
     public RobotKeywordDefinitionFinder(Project project, String searchTerm, KeywordScope scope) {
         this(project, searchTerm, scope, SearchType.EXACT_MATCH);
@@ -33,6 +34,11 @@ public class RobotKeywordDefinitionFinder {
     }
 
     public RobotKeywordDefinitionFinder(Project project, String searchTerm, KeywordScope scope, SearchType searchType, boolean wrapPsiMethods) {
+        this(project, searchTerm, scope, searchType, wrapPsiMethods, true);
+    }
+
+    public RobotKeywordDefinitionFinder(Project project, String searchTerm, KeywordScope scope, SearchType searchType, boolean wrapPsiMethods,
+                                        boolean isSearchTextFromRobotFile) {
         this.project = project;
         this.searchTerm = searchTerm;
         this.methodText = RobotPsiUtil.robotKeywordToMethodFast(searchTerm);
@@ -40,12 +46,13 @@ public class RobotKeywordDefinitionFinder {
         this.scope = scope;
         this.searchType = searchType;
         this.wrapPsiMethods = wrapPsiMethods;
+        this.isSeachTextFromRobotFile = isSearchTextFromRobotFile;
         results = Lists.newArrayList();
     }
 
     public void process() {
         // Find Java methods for the keyword
-        if (scope == KeywordScope.ROBOT_AND_JAVA_KEYWORDS || scope == KeywordScope.JAVA_KEYWORDS) {
+        if (scope.includesJavaFiles()) {
             switch (searchType) {
                 case FIND_ALL:
                     RobotJavaPsiUtil.findAllJavaRobotKeywords(project, results, wrapPsiMethods);
@@ -54,6 +61,7 @@ public class RobotKeywordDefinitionFinder {
                     Optional<PsiMethod> result = RobotJavaPsiUtil.findUniqueJavaKeywordForRobotKeyword(project, searchTerm, wrapPsiMethods);
                     if (result.isPresent()) {
                         results.add(result.get());
+                        return;
                     }
                     break;
                 case STARTS_WITH:
@@ -62,12 +70,8 @@ public class RobotKeywordDefinitionFinder {
             }
         }
 
-        if (searchType == SearchType.EXACT_MATCH && results.size() > 0) {
-            return;
-        }
-
         //Find Robot keyword definitions from robot files
-        if (scope == KeywordScope.ROBOT_AND_JAVA_KEYWORDS || scope == KeywordScope.ROBOT_KEYWORDS) {
+        if (scope.includesRobotFiles()) {
             switch (searchType) {
                 case STARTS_WITH:
                     RobotPsiUtil.findAllRobotKeywordDefsInRobotFilesStartingWith(project, results, normalizedText);
@@ -77,7 +81,7 @@ public class RobotKeywordDefinitionFinder {
                     break;
                 case EXACT_MATCH:
                 default:
-                    Optional<RobotKeywordTitle> result = RobotPsiUtil.findUniqueKeywordDefByName(searchTerm, project);
+                    Optional<RobotKeywordTitle> result = RobotPsiUtil.findUniqueKeywordDefByName(searchTerm, project, isSeachTextFromRobotFile);
                     if (result.isPresent()) {
                         results.add(result.get());
                     }
