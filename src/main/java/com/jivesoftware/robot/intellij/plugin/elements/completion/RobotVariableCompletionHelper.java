@@ -62,16 +62,33 @@ public class RobotVariableCompletionHelper implements RobotCompletionHelper {
                 RobotScalarAssignment.class, includedNormalNames);
         Set<LookupElement> lookupsFromScalarDefaultArgs = getLookupElementsFromScalarVariables(leaf,
                 RobotScalarDefaultArgValue.class, includedNormalNames);
+        Set<LookupElement> lookupsFromEmbeddedArgs = getLookupElementsFromEmbeddedArgsInKeywordTitle(leaf, includedNormalNames);
 
         result.addAllElements(lookupsFromScalarVariables);
         result.addAllElements(lookupsFromScalarAssignments);
         result.addAllElements(lookupsFromScalarDefaultArgs);
+        result.addAllElements(lookupsFromEmbeddedArgs);
+    }
+
+    private Set<LookupElement> getLookupElementsFromEmbeddedArgsInKeywordTitle(LeafPsiElement element, Set<String> includedNormalNames) {
+        List<String> embeddedArgs = RobotVariableUtil.getEmbeddedArgsFromContainingKeyword(element);
+
+        Set<LookupElement> lookupElements = Sets.newHashSet();
+
+        for (String embeddedArg: embeddedArgs) {
+            if (includedNormalNames.contains(embeddedArg)) {
+                continue;
+            }
+            LookupElement lookupElement = createLookupElementFromVariableName(embeddedArg);
+            lookupElements.add(lookupElement);
+            includedNormalNames.add(embeddedArg);
+        }
+        return lookupElements;
     }
 
     private <T extends PsiElement> Set<LookupElement> getLookupElementsFromScalarVariables(LeafPsiElement element,
                                                                                            Class<T> variableClass,
                                                                                            Set<String> includedNormalNames) {
-
         // List of all scalar elements in scope
         List<T> scalarsInScope = RobotPsiUtil.findVariablesInScope(element, variableClass);
         Set<LookupElement> lookupElements = Sets.newHashSet();

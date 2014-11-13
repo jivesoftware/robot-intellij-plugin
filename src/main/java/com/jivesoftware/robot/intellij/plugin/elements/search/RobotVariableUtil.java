@@ -8,6 +8,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -526,5 +527,14 @@ public class RobotVariableUtil {
             }
         }
         return usages;
+    }
+
+    public static List<String> getEmbeddedArgsFromContainingKeyword(PsiElement element) {
+        RobotKeywordDefinition robotKeywordDefinition = PsiTreeUtil.getParentOfType(element, RobotKeywordDefinition.class);
+        if (robotKeywordDefinition == null) {
+            return Lists.newArrayList();
+        }
+        RobotKeywordTitle title = robotKeywordDefinition.getKeywordTitle();
+        return getUnescapedVariableNamesInText(title.getText());
     }
 }
