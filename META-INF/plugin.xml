@@ -403,6 +403,7 @@
 
         <stubIndex implementation="com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotTestCaseNormalizedNameIndex"/>
 
+        <annotator language="RobotTestFile" implementationClass="com.jivesoftware.robot.intellij.plugin.elements.annotators.RobotAnnotator" />
     </extensions>
 
     <application-components>

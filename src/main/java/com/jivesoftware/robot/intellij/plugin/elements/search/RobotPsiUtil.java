@@ -276,18 +276,27 @@ public class RobotPsiUtil {
             return findKeywordUsagesOfKeywordWithEmbeddedArgs(robotKeywordTitle);
         }
         final String normalizedKeywordName = normalizeRobotDefinedKeywordForIndex(keywordTitle);
-        return findKeywordUsagesByNormalizedName(normalizedKeywordName, robotKeywordTitle.getProject());
+        return findKeywordUsagesByNormalizedName(normalizedKeywordName, robotKeywordTitle.getProject(), true);
     }
 
     public static List<RobotKeyword> findJavaDefinedKeywordUsages(PsiMethod javaMethod) {
         final String normalizedName = normalizeJavaMethodForIndex(javaMethod.getName());
-        return findKeywordUsagesByNormalizedName(normalizedName, javaMethod.getProject());
+        return findKeywordUsagesByNormalizedName(normalizedName, javaMethod.getProject(), true);
     }
 
-    private static List<RobotKeyword> findKeywordUsagesByNormalizedName(String normalizedKeywordName, Project project) {
+    public static Optional<RobotKeyword> findFirstJavaDefinedKeywordUsage(PsiMethod javaMethod) {
+        final String normalizedName = normalizeJavaMethodForIndex(javaMethod.getName());
+        List<RobotKeyword> usages = findKeywordUsagesByNormalizedName(normalizedName, javaMethod.getProject(), false);
+        if (usages.isEmpty()) {
+            return Optional.absent();
+        }
+        return Optional.of(usages.get(0));
+    }
+
+    private static List<RobotKeyword> findKeywordUsagesByNormalizedName(String normalizedKeywordName, Project project, boolean findAll) {
         final StubIndex STUB_INDEX = StubIndex.getInstance();
         GlobalSearchScope robotFileScope = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.projectScope(project), RobotFileType.INSTANCE);
-        RobotKeywordProcessor processor = new RobotKeywordProcessor(normalizedKeywordName, true);
+        RobotKeywordProcessor processor = new RobotKeywordProcessor(normalizedKeywordName, findAll);
         STUB_INDEX.processElements(RobotKeywordNormalizedNameIndex.KEY, normalizedKeywordName, project, robotFileScope,
                 RobotKeyword.class, processor);
 

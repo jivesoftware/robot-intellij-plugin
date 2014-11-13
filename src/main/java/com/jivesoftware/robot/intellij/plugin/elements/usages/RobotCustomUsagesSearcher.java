@@ -78,7 +78,6 @@ public class RobotCustomUsagesSearcher extends CustomUsageSearcher {
             if (!RobotJavaPsiUtil.isPsiMethodRobotKeyword(methodToFindUsages)) {
                 return;
             }
-            String name = methodToFindUsages.getName();
             List<RobotKeyword> robotKeywords = RobotPsiUtil.findJavaDefinedKeywordUsages(methodToFindUsages);
             for (RobotKeyword keyword : robotKeywords) {
                 UsageInfo usageInfo = new UsageInfo(keyword, false);
