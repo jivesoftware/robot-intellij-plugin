@@ -8,8 +8,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReferenceBase;
+import com.jivesoftware.robot.intellij.plugin.elements.search.RobotVariableUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.search.VariableInfo;
-import com.jivesoftware.robot.intellij.plugin.elements.search.VariablePsiUtil;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotResourceFile;
 import org.jetbrains.annotations.NotNull;
@@ -35,25 +35,27 @@ public class RobotFileReference extends PsiReferenceBase<RobotResourceFile> {
             return null;
         }
         RobotPsiFile robotPsiFile = (RobotPsiFile) file;
-        Map<String, VariableInfo> env = VariablePsiUtil.getVariableEnvironment(robotPsiFile);
+        Map<String, VariableInfo> env = RobotVariableUtil.getVariableEnvironment(robotPsiFile);
         return resolve(env);
     }
 
     @Nullable
     public PsiElement resolve(Map<String, VariableInfo> environment) {
-        final String fileName = VariablePsiUtil.substitute(myElement.getText(), environment);
+        final String fileName = RobotVariableUtil.substitute(myElement.getText(), environment);
         final Project project = myElement.getProject();
         final File file = new File(fileName);
 
         if (!file.isAbsolute()) {
             PsiFile currentPsiFile = myElement.getContainingFile();
             VirtualFile currentVirtualFile = currentPsiFile.getVirtualFile();
-            VirtualFile containingDir = currentVirtualFile.getParent();
+            if (currentVirtualFile != null) {
+                VirtualFile containingDir = currentVirtualFile.getParent();
 
-            VirtualFile virtualResourceFile = containingDir.findFileByRelativePath(fileName);
+                VirtualFile virtualResourceFile = containingDir.findFileByRelativePath(fileName);
 
-            if (virtualResourceFile != null) {
-                return PsiManager.getInstance(project).findFile(virtualResourceFile);
+                if (virtualResourceFile != null) {
+                    return PsiManager.getInstance(project).findFile(virtualResourceFile);
+                }
             }
         }
 

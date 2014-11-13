@@ -56,24 +56,22 @@ public class RobotPsiUtil {
      * @return
      */
     public static String normalizeRobotDefinedKeywordForIndex(String keywordName) {
-        final Matcher hasVariableMatcher = VariablePsiUtil.VARIABLE_PATTERN.matcher(keywordName);
-        if (hasVariableMatcher.find()) {
+        if (RobotVariableUtil.hasUnescapedVariable(keywordName)) {
             // Normalize a Keyword name for "embedded arguments" in keyword name.
-            return hasVariableMatcher.replaceAll(Matcher.quoteReplacement("${arg}"))
-                                     .toLowerCase();
+            // For embedded keywords, ' ' and '_' aren't ignored, but they are case-insensitive.
+            return RobotVariableUtil.replaceUnescapedVariables(keywordName, "${arg}")
+                                    .toLowerCase();
         }
 
         // For Keywords not containing embedded arguments, ' ' and '_' are ignored
         return keywordName.replace(" ", "")
-                .replace("_", "")
-                .toLowerCase();
-
+                          .replace("_", "")
+                          .toLowerCase();
     }
 
     public static String normalizeEmbeddedArgKeyword(String keywordName) {
-        final Matcher hasVariableMatcher = VariablePsiUtil.VARIABLE_PATTERN.matcher(keywordName);
-        return hasVariableMatcher.replaceAll(Matcher.quoteReplacement("${arg}"))
-                .toLowerCase();
+        return RobotVariableUtil.replaceUnescapedVariables(keywordName, "${arg}")
+                                .toLowerCase();
     }
 
     public static String normalizeJavaMethodForIndex(String methodName) {
@@ -274,7 +272,7 @@ public class RobotPsiUtil {
     //--------------Helpers to find Keyword usages------------
     public static List<RobotKeyword> findRobotDefinedKeywordUsages(RobotKeywordTitle robotKeywordTitle) {
         final String keywordTitle = robotKeywordTitle.getText();
-        if (VariablePsiUtil.VARIABLE_PATTERN.matcher(keywordTitle).find()) {
+        if (RobotVariableUtil.hasUnescapedVariable(keywordTitle)) {
             return findKeywordUsagesOfKeywordWithEmbeddedArgs(robotKeywordTitle);
         }
         final String normalizedKeywordName = normalizeRobotDefinedKeywordForIndex(keywordTitle);

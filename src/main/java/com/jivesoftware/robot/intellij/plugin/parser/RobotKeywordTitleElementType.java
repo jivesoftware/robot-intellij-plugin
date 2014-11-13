@@ -3,7 +3,7 @@ package com.jivesoftware.robot.intellij.plugin.parser;
 import com.intellij.psi.stubs.*;
 import com.intellij.util.io.StringRef;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
-import com.jivesoftware.robot.intellij.plugin.elements.search.VariablePsiUtil;
+import com.jivesoftware.robot.intellij.plugin.elements.search.RobotVariableUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStub;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStubImpl;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.*;
@@ -68,7 +68,7 @@ public class RobotKeywordTitleElementType extends IStubElementType<RobotKeywordT
                 sink.occurrence(RobotKeywordDefFirstThreeCharsIndex.KEY, firstThreeCharacters);
             }
 
-            if (VariablePsiUtil.VARIABLE_PATTERN.matcher(name).find()) {
+            if (RobotVariableUtil.VARIABLE_PATTERN.matcher(name).find()) {
                 sink.occurrence(RobotKeywordTitleEmbeddedArgsIndex.KEY, normalizedName);
             }
         }

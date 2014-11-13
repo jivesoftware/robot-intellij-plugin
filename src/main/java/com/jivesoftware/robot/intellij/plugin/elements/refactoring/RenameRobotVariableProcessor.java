@@ -8,8 +8,8 @@ import com.intellij.refactoring.rename.RenamePsiElementProcessor;
 import com.intellij.util.containers.MultiMap;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotVariableReference;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
+import com.jivesoftware.robot.intellij.plugin.elements.search.RobotVariableUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.search.VariableInfo;
-import com.jivesoftware.robot.intellij.plugin.elements.search.VariablePsiUtil;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotTestCaseHeader;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +30,7 @@ public class RenameRobotVariableProcessor extends RenamePsiElementProcessor {
         if (element instanceof RobotPsiFile || element instanceof RobotTestCaseHeader) {
             return false;
         }
-        Optional<String> optVariableName = VariablePsiUtil.getVariableName(element);
+        Optional<String> optVariableName = RobotVariableUtil.getVariableName(element);
         return optVariableName.isPresent();
     }
 
@@ -43,7 +43,7 @@ public class RenameRobotVariableProcessor extends RenamePsiElementProcessor {
         if (resolvesTo == null) {
             resolvesTo = element;
         }
-        List<PsiElement> usages = VariablePsiUtil.findVariableUsages(resolvesTo);
+        List<PsiElement> usages = RobotVariableUtil.findVariableUsages(resolvesTo);
 
         for (PsiElement usage : usages) {
             allRenames.put(usage, newName);
@@ -54,7 +54,7 @@ public class RenameRobotVariableProcessor extends RenamePsiElementProcessor {
     public void findExistingNameConflicts(PsiElement element, String newName, MultiMap<PsiElement, String> conflicts) {
         final String newNormalName = RobotPsiUtil.normalizeKeywordForIndex(newName);
 
-        Map<String, VariableInfo> env = VariablePsiUtil.getVariableEnvironment((RobotPsiFile)element.getContainingFile());
+        Map<String, VariableInfo> env = RobotVariableUtil.getVariableEnvironment((RobotPsiFile) element.getContainingFile());
 
         VariableInfo existingDef = env.get(newNormalName);
 

@@ -4,7 +4,7 @@ import com.google.common.base.Optional;
 import com.intellij.psi.stubs.*;
 import com.intellij.util.io.StringRef;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
-import com.jivesoftware.robot.intellij.plugin.elements.search.VariablePsiUtil;
+import com.jivesoftware.robot.intellij.plugin.elements.search.RobotVariableUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotScalarAssignmentStub;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotScalarAssignmentStubImpl;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotAssignmentNormalizedNameIndex;
@@ -53,7 +53,7 @@ public class RobotScalarAssignmentElementType extends IStubElementType<RobotScal
     public void indexStub(@NotNull RobotScalarAssignmentStub stub, @NotNull IndexSink sink) {
         final String name = stub.getName();
         if (name != null) {
-            Optional<String> optVariableName = VariablePsiUtil.getVariableName(name);
+            Optional<String> optVariableName = RobotVariableUtil.getVariableName(name);
             if (!optVariableName.isPresent()) {
                 return;
             }

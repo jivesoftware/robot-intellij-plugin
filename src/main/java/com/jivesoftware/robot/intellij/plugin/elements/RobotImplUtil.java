@@ -3,6 +3,7 @@ package com.jivesoftware.robot.intellij.plugin.elements;
 import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.intellij.navigation.ItemPresentation;
+import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.resolve.reference.ReferenceProvidersRegistry;
@@ -12,7 +13,7 @@ import com.jivesoftware.robot.intellij.plugin.elements.presentations.KeywordTitl
 import com.jivesoftware.robot.intellij.plugin.elements.presentations.RobotResourceFilePresentation;
 import com.jivesoftware.robot.intellij.plugin.elements.presentations.TestCasePresentation;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
-import com.jivesoftware.robot.intellij.plugin.elements.search.VariablePsiUtil;
+import com.jivesoftware.robot.intellij.plugin.elements.search.RobotVariableUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStub;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotScalarAssignmentStub;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotScalarVariableStub;
@@ -26,8 +27,8 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.io.File;
+import java.util.List;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class RobotImplUtil {
 
@@ -193,7 +194,7 @@ public class RobotImplUtil {
          if (stub != null) {
              return stub.getName();
          }
-         Optional<String> optVariableName = VariablePsiUtil.getVariableName(element);
+         Optional<String> optVariableName = RobotVariableUtil.getVariableName(element);
          if (optVariableName.isPresent()) {
              return optVariableName.get();
          }
@@ -241,7 +242,7 @@ public class RobotImplUtil {
         if (stub != null) {
             return stub.getName();
         }
-        Optional<String> optVariableName = VariablePsiUtil.getVariableName(element);
+        Optional<String> optVariableName = RobotVariableUtil.getVariableName(element);
         if (optVariableName.isPresent()) {
             return optVariableName.get();
         }
@@ -285,7 +286,7 @@ public class RobotImplUtil {
     @Nullable
     @NonNls
     public static String getName(RobotScalarAssignmentLhs element) {
-        Optional<String> optVariableName = VariablePsiUtil.getVariableName(element);
+        Optional<String> optVariableName = RobotVariableUtil.getVariableName(element);
         if (optVariableName.isPresent()) {
             return optVariableName.get();
         }
@@ -337,7 +338,7 @@ public class RobotImplUtil {
     @Nullable
     @NonNls
     public static String getName(RobotScalarDefaultArgValue element) {
-        Optional<String> optVariableName = VariablePsiUtil.getVariableName(element);
+        Optional<String> optVariableName = RobotVariableUtil.getVariableName(element);
         if (optVariableName.isPresent()) {
             return optVariableName.get();
         }
@@ -382,7 +383,7 @@ public class RobotImplUtil {
     @Nullable
     @NonNls
     public static String getName(RobotArgumentDef element) {
-        Optional<String> optVariableName = VariablePsiUtil.getVariableName(element);
+        Optional<String> optVariableName = RobotVariableUtil.getVariableName(element);
         if (optVariableName.isPresent()) {
             return optVariableName.get();
         }
@@ -471,20 +472,21 @@ public class RobotImplUtil {
         if (Strings.isNullOrEmpty(text)) {
             return null;
         }
-        // Normalize the keyword, so that embedded arguments become "${arg}"
-        String normalText = RobotPsiUtil.normalizeRobotDefinedKeywordForIndex(text);
+        // Get occurrences of embedded arguments
+        List<TextRange> unescapedVars = RobotVariableUtil.getOccurrencesOfUnescapedVariablesInText(text);
 
-        final Matcher matcher = VariablePsiUtil.VARIABLE_PATTERN.matcher(normalText);
         StringBuilder sb = new StringBuilder();
         int lastChar = 0;
-        while (matcher.find()) {
-            String sub = normalText.substring(lastChar, matcher.start());
-            sb.append(RegexUtils.escapeStringForRegex(sub));
+        for (TextRange textRange: unescapedVars) {
+            String between = text.substring(lastChar, textRange.getStartOffset());
+            // Replace the embedded arg with wildcard regex (.*)
+            sb.append(RegexUtils.escapeStringForRegex(between.toLowerCase()));
             sb.append("(.*)"); // Match any value inside the embedded argument ${arg}
-            lastChar = matcher.end();
+            lastChar = textRange.getEndOffset();
         }
-        String finalSubstring = normalText.substring(lastChar, normalText.length());
-        sb.append(RegexUtils.escapeStringForRegex(finalSubstring));
+
+        String remaining = text.substring(lastChar, text.length());
+        sb.append(RegexUtils.escapeStringForRegex(remaining.toLowerCase()));
         return sb.toString();
     }
 

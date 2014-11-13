@@ -18,7 +18,7 @@ import com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordRe
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotVariableReference;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotJavaPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
-import com.jivesoftware.robot.intellij.plugin.elements.search.VariablePsiUtil;
+import com.jivesoftware.robot.intellij.plugin.elements.search.RobotVariableUtil;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -129,7 +129,7 @@ public class RobotCustomUsagesSearcher extends CustomUsageSearcher {
         @Override
         public void run() {
             usages = Lists.newArrayList();
-            List<PsiElement> variableUsages = VariablePsiUtil.findVariableUsages(robotVariable);
+            List<PsiElement> variableUsages = RobotVariableUtil.findVariableUsages(robotVariable);
             for (PsiElement variableUsage : variableUsages) {
                 RobotVariableReference ref = new RobotVariableReference(variableUsage);
                 TextRange rangeInElement = ref.getRangeInElement();

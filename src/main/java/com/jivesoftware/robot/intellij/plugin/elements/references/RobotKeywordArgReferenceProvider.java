@@ -10,7 +10,7 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FilePathReferenceProvider;
 import com.intellij.util.ProcessingContext;
-import com.jivesoftware.robot.intellij.plugin.elements.search.VariablePsiUtil;
+import com.jivesoftware.robot.intellij.plugin.elements.search.RobotVariableUtil;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordArg;
 import org.jetbrains.annotations.NotNull;
 
@@ -51,7 +51,7 @@ public class RobotKeywordArgReferenceProvider extends PsiReferenceProvider {
     }
 
     private PsiReference[] getReferencesToVariables(PsiElement psiElement) {
-        List<TextRange> ranges = VariablePsiUtil.getOccurrencesOfVariablesInElement(psiElement);
+        List<TextRange> ranges = RobotVariableUtil.getOccurrencesOfVariablesInElement(psiElement);
         List<PsiReference> references = Lists.newArrayList();
         for (TextRange range: ranges) {
             PsiReference reference = new RobotVariableReference(psiElement, range);

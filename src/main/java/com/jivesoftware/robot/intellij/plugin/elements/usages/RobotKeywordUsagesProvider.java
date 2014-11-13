@@ -6,7 +6,7 @@ import com.intellij.lang.cacheBuilder.WordsScanner;
 import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.TokenSet;
-import com.jivesoftware.robot.intellij.plugin.elements.search.VariablePsiUtil;
+import com.jivesoftware.robot.intellij.plugin.elements.search.RobotVariableUtil;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.lexer.RobotScannerAdapter;
 import com.jivesoftware.robot.intellij.plugin.parser.RobotTypes;
@@ -73,7 +73,7 @@ public class RobotKeywordUsagesProvider implements FindUsagesProvider {
                 element instanceof RobotScalarAssignmentLhs ||
                 element instanceof RobotArgumentDef ||
                 element instanceof RobotScalarDefaultArgValue) {
-            Optional<String> optVariableName = VariablePsiUtil.getVariableName(element);
+            Optional<String> optVariableName = RobotVariableUtil.getVariableName(element);
             if (optVariableName.isPresent()) {
                 return "${" + optVariableName.get() + "}";
             }

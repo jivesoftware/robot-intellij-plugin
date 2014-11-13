@@ -28,8 +28,45 @@ import java.util.regex.Pattern;
 /**
  * Created by charles on 7/13/14.
  */
-public class VariablePsiUtil {
+public class RobotVariableUtil {
     public static final Pattern VARIABLE_PATTERN = Pattern.compile("\\$\\{ ?([^\\{\\}]+) ?\\}");
+
+    /**
+     * Return true if the psi element's text has an unescaped Robot variable reference.
+     * E.G. Unescaped variable: <code>My ${foo} Embedded Keyword</code>
+     * E.G. Escaped variable:   <code>My \${foo} Embedded Keyword</code>
+     * @param element
+     * @return - true IFF the psi element's text has an unescaped Robot variable reference
+     */
+    public static boolean hasUnescapedVariable(@NotNull PsiElement element) {
+        return hasUnescapedVariable(element.getText());
+    }
+
+    public static boolean hasUnescapedVariable(@NotNull String codeText) {
+        final Matcher matcher = VARIABLE_PATTERN.matcher(codeText);
+        while (matcher.find()) {
+            int start = matcher.start();
+            if (start == 0 || codeText.charAt(start - 1) != '\\') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static String replaceUnescapedVariables(String codeText, String replaceText) {
+        List<TextRange> occurrences = getOccurrencesOfUnescapedVariablesInText(codeText);
+        int maxChar = 0;
+        StringBuilder sb = new StringBuilder();
+        for (TextRange textRange: occurrences) {
+            String between = codeText.substring(maxChar, textRange.getStartOffset());
+            sb.append(between)
+              .append(replaceText);
+            maxChar = textRange.getEndOffset();
+        }
+        String remaining = codeText.substring(maxChar, codeText.length());
+        sb.append(remaining);
+        return sb.toString();
+    }
 
     public static Optional<String> getVariableName(@NotNull PsiElement element) {
         String text = element.getText();
@@ -54,16 +91,42 @@ public class VariablePsiUtil {
 
     public static List<TextRange> getOccurrencesOfVariablesInElement(PsiElement el) {
         String text = el.getText();
-        return getOccurrencesOfVariablesInString(text);
+        return getOccurrencesOfVariablesInText(text);
     }
 
-    public static List<TextRange> getOccurrencesOfVariablesInString(String text) {
+    public static List<TextRange> getOccurrencesOfVariablesInText(String text) {
         Matcher matcher = VARIABLE_PATTERN.matcher(text);
         List<TextRange> ranges = Lists.newArrayList();
         while (matcher.find()) {
             ranges.add(new TextRange(matcher.start(), matcher.end()));
         }
         return ranges;
+    }
+
+    public static List<TextRange> getOccurrencesOfUnescapedVariablesInText(String text) {
+        Matcher matcher = VARIABLE_PATTERN.matcher(text);
+        List<TextRange> ranges = Lists.newArrayList();
+        while (matcher.find()) {
+            int start = matcher.start();
+            if (start == 0 || text.charAt(start - 1) != '\\') {
+                ranges.add(new TextRange(matcher.start(), matcher.end()));
+            }
+        }
+        return ranges;
+    }
+
+    public static List<String> getUnescapedVariableNamesInText(String text) {
+        List<TextRange> occurrences = getOccurrencesOfUnescapedVariablesInText(text);
+        List<String> normalNames = Lists.newArrayList();
+        for (TextRange textRange: occurrences) {
+            String variableOccurrence = text.substring(textRange.getStartOffset(), textRange.getEndOffset());
+            Optional<String> variableOpt = getVariableName(variableOccurrence);
+            if (variableOpt.isPresent()) {
+                String normalName = RobotPsiUtil.normalizeKeywordForIndex(variableOpt.get());
+                normalNames.add(normalName);
+            }
+        }
+        return normalNames;
     }
 
     public static boolean matchesExpectedNormalName(PsiElement element, String expectedNormalName) {
@@ -309,6 +372,14 @@ public class VariablePsiUtil {
         }
         final String normalName = RobotPsiUtil.normalizeKeywordForIndex(optVariableName.get());
         final TextRange usageTextRange = variableUsage.getTextRange();
+
+        // If the keyword title has an embedded variable of the same name, then resolve to the Keyword Title.
+        RobotKeywordTitle robotKeywordTitle = keywordDefinition.getKeywordTitle();
+        List<String> variableNamesInKeyword = getUnescapedVariableNamesInText(robotKeywordTitle.getText());
+
+        if (variableNamesInKeyword.contains(normalName)) {
+            return Optional.<PsiElement>of(robotKeywordTitle);
+        }
 
         Collection<RobotScalarAssignmentLhs> assignments = PsiTreeUtil.findChildrenOfType(keywordDefinition, RobotScalarAssignmentLhs.class);
         Collection<RobotArgumentDef> arguments = PsiTreeUtil.findChildrenOfType(keywordDefinition, RobotArgumentDef.class);

@@ -1,6 +1,8 @@
 package com.jivesoftware.robot.intellij.plugin.elements.completion;
 
 import com.intellij.codeInsight.completion.CompletionContributor;
+import com.intellij.codeInsight.completion.CompletionParameters;
+import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.patterns.PlatformPatterns;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotLanguage;
@@ -21,4 +23,9 @@ public class RobotCompletionContributor extends CompletionContributor {
                                PlatformPatterns.psiElement(RobotTypes.TAG_TOKEN).withLanguage(RobotLanguage.INSTANCE)),
            new RobotCompletionProvider());
   }
+
+    @Override
+    public void fillCompletionVariants(final CompletionParameters parameters, CompletionResultSet result) {
+        super.fillCompletionVariants(parameters, result);
+    }
 }
