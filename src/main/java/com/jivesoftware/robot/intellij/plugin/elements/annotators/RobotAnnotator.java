@@ -1,14 +1,13 @@
 package com.jivesoftware.robot.intellij.plugin.elements.annotators;
 
-import com.intellij.codeInsight.daemon.impl.HighlightInfoType;
-import com.intellij.codeInspection.ProblemHighlightType;
+import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.lang.annotation.Annotation;
 import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
-import com.intellij.openapi.editor.SyntaxHighlighterColors;
 import com.intellij.psi.PsiElement;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotBuiltInKeywords;
+import com.jivesoftware.robot.intellij.plugin.elements.options.RobotErrorOptionsProvider;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordReference;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
@@ -33,8 +32,11 @@ public class RobotAnnotator implements Annotator {
                     Annotation annotation = holder.createInfoAnnotation(robotKeyword, "Built-in Robot Keyword");
                     annotation.setTextAttributes(DefaultLanguageHighlighterColors.GLOBAL_VARIABLE);
                 } else {
-                    holder.createErrorAnnotation(robotKeyword,
-                            String.format("No Keyword found with name \"%s\"", robotKeyword.getText()));
+                    PropertiesComponent pc = PropertiesComponent.getInstance();
+                    if (pc.getBoolean(RobotErrorOptionsProvider.HIGHLIGHT_INVALID_KEYWORDS, false)) {
+                        holder.createErrorAnnotation(robotKeyword,
+                                String.format("No Keyword found with name \"%s\"", robotKeyword.getText()));
+                    }
                 }
             }
         }
