@@ -56,8 +56,7 @@ public class RobotReferenceContributor extends PsiReferenceContributor {
         // Register Robot Keyword Arguments so they can point to files in resource folders, and have embedded variables.
         registrar.registerReferenceProvider(
             PlatformPatterns.psiElement(RobotKeywordArg.class),
-            new RobotKeywordArgReferenceProvider()
-            ,
+            new RobotKeywordArgReferenceProvider(),
             PsiReferenceRegistrar.HIGHER_PRIORITY
         );
 

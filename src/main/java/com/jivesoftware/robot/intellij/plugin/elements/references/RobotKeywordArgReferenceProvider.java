@@ -28,9 +28,12 @@ public class RobotKeywordArgReferenceProvider extends PsiReferenceProvider {
         if (!(element instanceof RobotKeywordArg)) {
             return PsiReference.EMPTY_ARRAY;
         }
+        RobotKeywordReference keywordReference = new RobotKeywordReference(element);
         PsiReference[] fileReferences = getReferencesToResourceFiles(element);
         PsiReference[] varReferences = getReferencesToVariables(element);
-        List<PsiReference> allRefs = Lists.newArrayList(fileReferences);
+        List<PsiReference> allRefs = Lists.newArrayList();
+        allRefs.add(keywordReference);
+        allRefs.addAll(Lists.newArrayList(fileReferences));
         allRefs.addAll(Lists.newArrayList(varReferences));
         return allRefs.toArray(new PsiReference[allRefs.size()]);
     }

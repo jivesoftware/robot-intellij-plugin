@@ -20,7 +20,6 @@ package com.jivesoftware.robot.intellij.plugin.lexer;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
-import com.jivesoftware.robot.intellij.plugin.parser.RobotTypes;
 
 import static com.jivesoftware.robot.intellij.plugin.parser.RobotTypes.*;
 

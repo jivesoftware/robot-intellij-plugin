@@ -3,20 +3,20 @@ package com.jivesoftware.robot.intellij.plugin.elements.references;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiNamedElement;
 import com.intellij.psi.PsiReferenceBase;
 import com.jivesoftware.robot.intellij.plugin.elements.search.KeywordScope;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotKeywordDefinitionFinder;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.search.SearchType;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class RobotKeywordReference extends PsiReferenceBase<RobotKeyword> {
+public class RobotKeywordReference extends PsiReferenceBase<PsiElement> {
 
-  public RobotKeywordReference(RobotKeyword element) {
+  public RobotKeywordReference(PsiElement element) {
     super(element);
   }
 
@@ -59,7 +59,11 @@ public class RobotKeywordReference extends PsiReferenceBase<RobotKeyword> {
 
   @Override
   public PsiElement handleElementRename(String name) {
-      return myElement.setName(RobotPsiUtil.methodToRobotKeyword(name));
+      if (myElement instanceof PsiNamedElement) {
+          PsiNamedElement psiNamedElement = (PsiNamedElement) myElement;
+          return psiNamedElement.setName(RobotPsiUtil.methodToRobotKeyword(name));
+      }
+      return myElement;
   }
 
 }

@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import com.intellij.lang.refactoring.NamesValidator;
 import com.intellij.openapi.project.Project;
 import com.jgoodies.common.base.Objects;
+import com.jivesoftware.robot.intellij.plugin.elements.RobotBuiltInKeywords;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotElementFactory;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
@@ -19,7 +20,8 @@ public class RobotNamesValidator implements NamesValidator {
   private final static Set<String> buildInKeywords = Sets.newHashSet("callmethod", "catenate", "comment", "continueforloop");
   @Override
   public boolean isKeyword(@NotNull String s, Project project) {
-    return buildInKeywords.contains(RobotPsiUtil.robotKeywordToMethodFast(s).toLowerCase());
+      String normalName = RobotPsiUtil.normalizeKeywordForIndex(s);
+      return RobotBuiltInKeywords.isBuiltInKeyword(normalName);
   }
 
   @Override

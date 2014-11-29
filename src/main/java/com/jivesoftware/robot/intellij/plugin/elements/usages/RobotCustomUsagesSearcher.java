@@ -15,6 +15,7 @@ import com.intellij.usages.UsageInfo2UsageAdapter;
 import com.intellij.util.CollectionQuery;
 import com.intellij.util.Processor;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordReference;
+import com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotVariableReference;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotJavaPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
@@ -78,9 +79,9 @@ public class RobotCustomUsagesSearcher extends CustomUsageSearcher {
             if (!RobotJavaPsiUtil.isPsiMethodRobotKeyword(methodToFindUsages)) {
                 return;
             }
-            List<RobotKeyword> robotKeywords = RobotPsiUtil.findJavaDefinedKeywordUsages(methodToFindUsages);
-            for (RobotKeyword keyword : robotKeywords) {
-                UsageInfo usageInfo = new UsageInfo(keyword, false);
+            List<RobotNamedElement> usagesInRobot = RobotPsiUtil.findJavaDefinedKeywordUsages(methodToFindUsages);
+            for (RobotNamedElement usage : usagesInRobot) {
+                UsageInfo usageInfo = new UsageInfo(usage, false);
                 usages.add(new UsageInfo2UsageAdapter(usageInfo));
             }
         }
@@ -102,12 +103,12 @@ public class RobotCustomUsagesSearcher extends CustomUsageSearcher {
         @Override
         public void run() {
             usages = Lists.newArrayList();
-            List<RobotKeyword> robotKeywords = RobotPsiUtil.findRobotDefinedKeywordUsages(keywordToFindUsages);
-            for (RobotKeyword keyword : robotKeywords) {
-                PsiReference ref = new RobotKeywordReference(keyword);
+            List<RobotNamedElement> usages = RobotPsiUtil.findRobotDefinedKeywordUsages(keywordToFindUsages);
+            for (RobotNamedElement usage : usages) {
+                PsiReference ref = new RobotKeywordReference(usage);
                 TextRange rangeInElement = ref.getRangeInElement();
-                UsageInfo usageInfo = new UsageInfo(keyword, rangeInElement.getStartOffset(), rangeInElement.getEndOffset());
-                usages.add(new UsageInfo2UsageAdapter(usageInfo));
+                UsageInfo usageInfo = new UsageInfo(usage, rangeInElement.getStartOffset(), rangeInElement.getEndOffset());
+                this.usages.add(new UsageInfo2UsageAdapter(usageInfo));
             }
         }
 

@@ -7,6 +7,8 @@ import com.jivesoftware.robot.intellij.plugin.lang.RobotFileType;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 
+import java.util.Collection;
+
 import static java.lang.String.format;
 
 public class RobotElementFactory {
@@ -29,6 +31,13 @@ public class RobotElementFactory {
             }
         }
         return null;
+    }
+
+    public static RobotKeywordArg createKeywordArg(Project project, String text) {
+        String template = "*** Test Cases ***\nSome Test Case\n  Some Keyword  %s\n";
+        RobotPsiFile file = createFile(project, format(template, text));
+        Collection<RobotKeywordArg> results = PsiTreeUtil.findChildrenOfType(file, RobotKeywordArg.class);
+        return results.isEmpty() ? null : results.iterator().next();
     }
 
     public static RobotKeywordTitle createKeywordTitle(Project project, String keywordDefName) {

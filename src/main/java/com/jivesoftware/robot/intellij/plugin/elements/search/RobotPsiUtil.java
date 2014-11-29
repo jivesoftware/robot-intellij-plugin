@@ -18,6 +18,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.indexing.FileBasedIndex;
 import com.jgoodies.common.base.Objects;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotFileReference;
+import com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.*;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotFileType;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
@@ -27,7 +28,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RobotPsiUtil {
@@ -270,18 +270,28 @@ public class RobotPsiUtil {
     }
 
     //--------------Helpers to find Keyword usages------------
-    public static List<RobotKeyword> findRobotDefinedKeywordUsages(RobotKeywordTitle robotKeywordTitle) {
+    public static List<RobotNamedElement> findRobotDefinedKeywordUsages(RobotKeywordTitle robotKeywordTitle) {
         final String keywordTitle = robotKeywordTitle.getText();
         if (RobotVariableUtil.hasUnescapedVariable(keywordTitle)) {
-            return findKeywordUsagesOfKeywordWithEmbeddedArgs(robotKeywordTitle);
+            return Lists.<RobotNamedElement>newArrayList(findKeywordUsagesOfKeywordWithEmbeddedArgs(robotKeywordTitle));
         }
         final String normalizedKeywordName = normalizeRobotDefinedKeywordForIndex(keywordTitle);
-        return findKeywordUsagesByNormalizedName(normalizedKeywordName, robotKeywordTitle.getProject(), true);
+        List<RobotKeyword> keywordUsages = findKeywordUsagesByNormalizedName(normalizedKeywordName, robotKeywordTitle.getProject(), true);
+        List<RobotKeywordArg> keywordArgUsages = findKeywordUsagesInKeywordArgs(robotKeywordTitle, true);
+        List<RobotNamedElement> allUsages = Lists.newArrayListWithCapacity(keywordUsages.size() + keywordArgUsages.size());
+        allUsages.addAll(keywordUsages);
+        allUsages.addAll(keywordArgUsages);
+        return allUsages;
     }
 
-    public static List<RobotKeyword> findJavaDefinedKeywordUsages(PsiMethod javaMethod) {
+    public static List<RobotNamedElement> findJavaDefinedKeywordUsages(PsiMethod javaMethod) {
         final String normalizedName = normalizeJavaMethodForIndex(javaMethod.getName());
-        return findKeywordUsagesByNormalizedName(normalizedName, javaMethod.getProject(), true);
+        List<RobotKeyword> keywordUsages = findKeywordUsagesByNormalizedName(normalizedName, javaMethod.getProject(), true);
+        List<RobotKeywordArg> keywordArgUsages = findKeywordUsagesInKeywordArgs(javaMethod, true);
+        List<RobotNamedElement> allUsages = Lists.newArrayListWithCapacity(keywordUsages.size() + keywordArgUsages.size());
+        allUsages.addAll(keywordUsages);
+        allUsages.addAll(keywordArgUsages);
+        return allUsages;
     }
 
     public static Optional<RobotKeyword> findFirstJavaDefinedKeywordUsage(PsiMethod javaMethod) {
@@ -301,6 +311,31 @@ public class RobotPsiUtil {
                 RobotKeyword.class, processor);
 
         return processor.getResults();
+    }
+
+    public static List<RobotKeywordArg> findKeywordUsagesInKeywordArgs(RobotKeywordTitle sourceElement, boolean findAll) {
+        String keywordName = sourceElement.getName();
+        String normalizedKeywordName = normalizeRobotDefinedKeywordForIndex(keywordName);
+        return findKeywordUsagesInKeywordArgs(normalizedKeywordName, sourceElement.getProject(), findAll);
+    }
+
+    public static List<RobotKeywordArg> findKeywordUsagesInKeywordArgs(PsiMethod sourceElement, boolean findAll) {
+        String keywordName = sourceElement.getName();
+        String normalizedKeywordName = normalizeJavaMethodForIndex(keywordName);
+        return findKeywordUsagesInKeywordArgs(normalizedKeywordName, sourceElement.getProject(), findAll);
+    }
+
+    public static List<RobotKeywordArg> findKeywordUsagesInKeywordArgs(String normalizedKeywordName, Project project, boolean findAll) {
+
+        final StubIndex STUB_INDEX = StubIndex.getInstance();
+        GlobalSearchScope robotFileScope = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.projectScope(project), RobotFileType.INSTANCE);
+
+        // Find usages of Robot Keywords in Robot Keyword Args
+        RobotKeywordArgProcessor keywordArgProcessor = new RobotKeywordArgProcessor(normalizedKeywordName, findAll);
+        STUB_INDEX.processElements(RobotKeywordArgNormalizedNameIndex.KEY, normalizedKeywordName, project, robotFileScope,
+                RobotKeywordArg.class, keywordArgProcessor);
+
+        return keywordArgProcessor.getResults();
     }
 
     public static List<RobotKeyword> findKeywordUsagesOfKeywordWithEmbeddedArgs(RobotKeywordTitle robotKeywordTitle) {

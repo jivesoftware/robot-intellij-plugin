@@ -2,6 +2,7 @@ package com.jivesoftware.robot.intellij.plugin.elements.refactoring;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.rename.RenamePsiElementProcessor;
+import com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordTitle;
@@ -25,11 +26,10 @@ public class RenameRobotRobotKeywordProcessor extends RenamePsiElementProcessor 
     public void prepareRenaming(final PsiElement element, final String newName,
                                 final Map<PsiElement, String> allRenames) {
         final RobotKeywordTitle robotKeywordTitle = (RobotKeywordTitle) element;
-        final String name = robotKeywordTitle.getName();
-        final List<RobotKeyword> robotKeywords = RobotPsiUtil.findRobotDefinedKeywordUsages(robotKeywordTitle);
+        final List<RobotNamedElement> usages = RobotPsiUtil.findRobotDefinedKeywordUsages(robotKeywordTitle);
         final String robotName = RobotPsiUtil.methodToRobotKeyword(newName);
-        for (RobotKeyword robotKeyword : robotKeywords) {
-            allRenames.put(robotKeyword, robotName);
+        for (RobotNamedElement usage : usages) {
+            allRenames.put(usage, robotName);
         }
     }
 }

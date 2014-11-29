@@ -12,7 +12,6 @@ import com.intellij.util.IncorrectOperationException;
 import com.jivesoftware.robot.intellij.plugin.elements.presentations.KeywordTitlePresentation;
 import com.jivesoftware.robot.intellij.plugin.elements.presentations.RobotResourceFilePresentation;
 import com.jivesoftware.robot.intellij.plugin.elements.presentations.TestCasePresentation;
-import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotVariableUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordTitleStub;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotScalarAssignmentStub;
@@ -28,7 +27,6 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 import java.io.File;
 import java.util.List;
-import java.util.regex.Matcher;
 
 public class RobotImplUtil {
 
@@ -107,6 +105,28 @@ public class RobotImplUtil {
     }
 
     /* Methods for RobotKeywordArg */
+
+    @Nullable
+    @NonNls
+    public static String getName(RobotKeywordArg element) {
+        return element.getText();
+    }
+
+    public static PsiElement setName(RobotKeywordArg element, @NonNls @NotNull String newName) throws IncorrectOperationException {
+        RobotKeywordArg replacement = RobotElementFactory.createKeywordArg(element.getProject(), newName);
+        element.getParent().getNode().replaceChild(element.getNode(), replacement.getNode());
+        return replacement;
+    }
+
+    @Nullable
+    public static PsiElement getNameIdentifier(RobotKeywordArg element) {
+        return element;
+    }
+
+    public static PsiElement handleElementRename(RobotKeywordArg element, String name) {
+        return element.setName(name);
+    }
+
 
     public static PsiReference getReference(RobotKeywordArg element) {
         PsiReference[] refs = ReferenceProvidersRegistry.getReferencesFromProviders(element);

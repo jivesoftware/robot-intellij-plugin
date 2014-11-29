@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.refactoring.rename.RenamePsiElementProcessor;
 import com.intellij.util.containers.MultiMap;
+import com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotJavaPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
@@ -28,10 +29,10 @@ public class RenameJavaRobotKeywordProcessor extends RenamePsiElementProcessor {
     public void prepareRenaming(final PsiElement element, final String newName,
                                 final Map<PsiElement, String> allRenames) {
         PsiMethod psiMethod = (PsiMethod) element;
-        List<RobotKeyword> robotKeywords = RobotPsiUtil.findJavaDefinedKeywordUsages(psiMethod);
+        List<RobotNamedElement> usagesInRobot = RobotPsiUtil.findJavaDefinedKeywordUsages(psiMethod);
         final String robotName = RobotPsiUtil.methodToRobotKeyword(newName);
-        for (RobotKeyword robotKeyword : robotKeywords) {
-            allRenames.put(robotKeyword, robotName);
+        for (RobotNamedElement usage : usagesInRobot) {
+            allRenames.put(usage, robotName);
         }
     }
 
