@@ -105,6 +105,7 @@ public interface RobotTypes {
   IElementType EMPTY_CELL_TOKEN = new RobotToken("EMPTY_CELL_TOKEN");
   IElementType FORCE_TAGS_SETTING_KEYWORD_TOKEN = new RobotToken("FORCE_TAGS_SETTING_KEYWORD_TOKEN");
   IElementType FOR_LOOP_START_TOKEN = new RobotToken("FOR_LOOP_START_TOKEN");
+  IElementType GENERIC_SETTING_TOKEN = new RobotToken("GENERIC_SETTING_TOKEN");
   IElementType INTEGER_TOKEN = new RobotToken("INTEGER_TOKEN");
   IElementType IN_RANGE_TOKEN = new RobotToken("IN_RANGE_TOKEN");
   IElementType IN_TOKEN = new RobotToken("IN_TOKEN");

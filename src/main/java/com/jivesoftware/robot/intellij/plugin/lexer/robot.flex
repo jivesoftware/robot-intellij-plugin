@@ -300,7 +300,7 @@ In = "IN"
      {LibrarySetting}    { if (startLine) {return next(LIBRARY_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
      {TestTimeoutSetting}    { if (startLine) {return next(TEST_TIMEOUT_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
      {DocumentationSetting}    { if (startLine) {previous_state = yystate(); yybegin(DOCS_SETTING); return next(DOCUMENTATION_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
-     {RobotKeyword}      { return next(ROBOT_KEYWORD_TOKEN); }
+     {RobotKeyword}      { if (startLine) {return next(GENERIC_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
      {KeywordArgument}   { return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }
      {WhiteSpace}        { return next(WHITESPACE_TOKEN); }

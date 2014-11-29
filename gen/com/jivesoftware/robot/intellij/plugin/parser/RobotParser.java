@@ -1036,7 +1036,7 @@ public class RobotParser implements PsiParser {
   // GENERIC_SETTING_NAME SETTING_LIST_OR_ELLIPSES*
   public static boolean GENERIC_SETTING(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "GENERIC_SETTING")) return false;
-    if (!nextTokenIs(builder_, ROBOT_KEYWORD_TOKEN)) return false;
+    if (!nextTokenIs(builder_, GENERIC_SETTING_TOKEN)) return false;
     boolean result_;
     boolean pinned_;
     Marker marker_ = enter_section_(builder_, level_, _NONE_, null);
@@ -1060,13 +1060,13 @@ public class RobotParser implements PsiParser {
   }
 
   /* ********************************************************** */
-  // ROBOT_KEYWORD_TOKEN
+  // GENERIC_SETTING_TOKEN
   public static boolean GENERIC_SETTING_NAME(PsiBuilder builder_, int level_) {
     if (!recursion_guard_(builder_, level_, "GENERIC_SETTING_NAME")) return false;
-    if (!nextTokenIs(builder_, ROBOT_KEYWORD_TOKEN)) return false;
+    if (!nextTokenIs(builder_, GENERIC_SETTING_TOKEN)) return false;
     boolean result_;
     Marker marker_ = enter_section_(builder_);
-    result_ = consumeToken(builder_, ROBOT_KEYWORD_TOKEN);
+    result_ = consumeToken(builder_, GENERIC_SETTING_TOKEN);
     exit_section_(builder_, marker_, GENERIC_SETTING_NAME, result_);
     return result_;
   }

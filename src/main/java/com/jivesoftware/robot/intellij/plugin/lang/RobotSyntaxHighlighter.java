@@ -66,7 +66,7 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
             DefaultLanguageHighlighterColors.KEYWORD);
 
     static final TextAttributesKey ROBOT_SETTING_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.SETTING",
-            DefaultLanguageHighlighterColors.KEYWORD);
+            DefaultLanguageHighlighterColors.STATIC_FIELD);
 
     static final TextAttributesKey ROBOT_VARIABLE_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.VARIABLE",
             DefaultLanguageHighlighterColors.INSTANCE_FIELD);
@@ -118,14 +118,16 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
         keys1.put(RobotTypes.ROBOT_KEYWORD_TOKEN, ROBOT_KEYWORD_KEY);
 
         //Settings table
-        keys1.put(RobotTypes.TEST_SETUP_SETTING_TOKEN, ROBOT_KEYWORD_KEY);
-        keys1.put(RobotTypes.TEST_TEARDOWN_SETTING_TOKEN, ROBOT_KEYWORD_KEY);
-        keys1.put(RobotTypes.SUITE_SETUP_SETTING_TOKEN, ROBOT_KEYWORD_KEY);
-        keys1.put(RobotTypes.SUITE_TEARDOWN_SETTING_TOKEN, ROBOT_KEYWORD_KEY);
-        keys1.put(RobotTypes.FORCE_TAGS_SETTING_KEYWORD_TOKEN, ROBOT_KEYWORD_KEY);
-        keys1.put(RobotTypes.RESOURCE_SETTING_TOKEN, ROBOT_KEYWORD_KEY);
-        keys1.put(RobotTypes.TEST_TIMEOUT_SETTING_TOKEN, ROBOT_KEYWORD_KEY);
-        keys1.put(RobotTypes.DOCUMENTATION_SETTING_TOKEN, ROBOT_KEYWORD_KEY);
+        keys1.put(RobotTypes.TEST_SETUP_SETTING_TOKEN, ROBOT_SETTING_KEY);
+        keys1.put(RobotTypes.TEST_TEARDOWN_SETTING_TOKEN, ROBOT_SETTING_KEY);
+        keys1.put(RobotTypes.SUITE_SETUP_SETTING_TOKEN, ROBOT_SETTING_KEY);
+        keys1.put(RobotTypes.SUITE_TEARDOWN_SETTING_TOKEN, ROBOT_SETTING_KEY);
+        keys1.put(RobotTypes.FORCE_TAGS_SETTING_KEYWORD_TOKEN, ROBOT_SETTING_KEY);
+        keys1.put(RobotTypes.RESOURCE_SETTING_TOKEN, ROBOT_SETTING_KEY);
+        keys1.put(RobotTypes.TEST_TIMEOUT_SETTING_TOKEN, ROBOT_SETTING_KEY);
+        keys1.put(RobotTypes.DOCUMENTATION_SETTING_TOKEN, ROBOT_SETTING_KEY);
+        keys1.put(RobotTypes.LIBRARY_SETTING_TOKEN, ROBOT_SETTING_KEY);
+        keys1.put(RobotTypes.GENERIC_SETTING_TOKEN, ROBOT_SETTING_KEY);
 
         //Variables
         keys1.put(RobotTypes.VARIABLE_TOKEN, ROBOT_VARIABLE_KEY);
