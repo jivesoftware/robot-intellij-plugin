@@ -8,21 +8,21 @@ import com.intellij.psi.PsiElement;
 public interface RobotTestSetting extends PsiElement {
 
   @Nullable
-  RobotDocumentationSetting getDocumentationSetting();
+  RobotDocumentationMeta getDocumentationMeta();
 
   @Nullable
-  RobotTagsSetting getTagsSetting();
+  RobotTagsMeta getTagsMeta();
 
   @Nullable
-  RobotTestCaseSetupSetting getTestCaseSetupSetting();
+  RobotTestCaseSetupMeta getTestCaseSetupMeta();
 
   @Nullable
-  RobotTestCaseTeardownSetting getTestCaseTeardownSetting();
+  RobotTestCaseTeardownMeta getTestCaseTeardownMeta();
 
   @Nullable
-  RobotTestCaseTemplateSetting getTestCaseTemplateSetting();
+  RobotTestCaseTemplateMeta getTestCaseTemplateMeta();
 
   @Nullable
-  RobotTestCaseTimeoutSetting getTestCaseTimeoutSetting();
+  RobotTestCaseTimeoutMeta getTestCaseTimeoutMeta();
 
 }

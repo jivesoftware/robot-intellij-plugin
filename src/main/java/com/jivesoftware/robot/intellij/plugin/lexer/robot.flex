@@ -38,6 +38,7 @@ return;
 %line
 %column
 %char
+%caseless
 
 %{
   int yyline, yycolumn, yychar;
@@ -114,16 +115,16 @@ return;
         onForLoopLine = true;
         return FOR_LOOP_START_TOKEN;
     }
-    else if (toReturn == TAGS_SETTING_TOKEN) {
+    else if (toReturn == TAGS_META_TOKEN) {
         onTagsLine = true;
     }
-    else if (toReturn == TIMEOUT_SETTING_TOKEN) {
+    else if (toReturn == TIMEOUT_META_TOKEN || toReturn == TEST_TIMEOUT_SETTING_TOKEN) {
         onTimeoutLine = true;
     }
     else if (toReturn == FORCE_TAGS_SETTING_KEYWORD_TOKEN) {
         onTagsLine = true;
     }
-    else if (toReturn == DOCUMENTATION_SETTING_TOKEN) {
+    else if (toReturn == DOCUMENTATION_META_TOKEN || toReturn == DOCUMENTATION_SETTING_TOKEN) {
         onDocsLine = true;
     }
     else if (toReturn == RETURN_SETTING_TOKEN) {
@@ -161,6 +162,7 @@ ColumnSep = " " " "+ | [ \t]* "\t" [ \t]* | [ \t]+ \| [ \t]+
 SingleSpace = " "
 WhiteSpace = [ \t]
 NonWhiteSpace = [^ \t\r\n]
+S = " "?
 
 EndOfLine = {WhiteSpace}* {LineTerminator}
 Ellipses = \.\.\.
@@ -176,13 +178,13 @@ Comment = "#" {InputCharacter}*
 /* identifiers */
 VariableWord = {VariableChar}+
 VariableName = {VariableWord} ({SingleSpace} {VariableWord})*
-Variable = "${" " "? {VariableName} " "? "}"
-Assignment = {Variable} " "? "="
+Variable = "${" {S} {VariableName} {S} "}"
+Assignment = {Variable} {S} "="
 AssignmentNoSpace = {Variable} "="
 
-ArrayVariable = "@{" " "? {VariableName} " "? "}"
-ArrayVariableAccess = {ArrayVariable} \[ " "? ({NonNegativeIntegerLiteral} | {Variable}) " "? \]
-ArrayAssignment = {ArrayVariable} " "? "="
+ArrayVariable = "@{" {S} {VariableName} {S} "}"
+ArrayVariableAccess = {ArrayVariable} \[ {S} ({NonNegativeIntegerLiteral} | {Variable}) {S} \]
+ArrayAssignment = {ArrayVariable} {S} "="
 
 RobotKeyword = {RobotWord} ({SingleSpace} {RobotWord})*
 RobotWord = [a-zA-Z0-9\.\*\(\)\[\]\"\'\-_\$\{\}\\#&@%=\|\\]+
@@ -194,55 +196,58 @@ KeywordArgumentWord = {KeywordArgumentChar}+
 KeywordArgument = ({KeywordArgumentWord} ({SingleSpace} {KeywordArgumentWord})*) | {Variable} | {EmptyCell}
 
 /* For Keyword definition argument lists: */
-ScalarDefaultArgumentValue = {AssignmentNoSpace} " "? {KeywordArgument}
+ScalarDefaultArgumentValue = {AssignmentNoSpace} {S} {KeywordArgument}
+
+/* Common words */
+Setup = s {S} e {S} t {S} u {S} p
+Teardown = t {S} e {S} a {S} r {S} d {S} o {S} w {S} n
+Test = t {S} e {S} s {S} t
+Precondition = p {S} r {S} e {S} c {S} o {S} n {S} d {S} i {S} t {S} i {S} o {S} n
+Postcondition = p {S} o {S} s {S} t {S} c {S} o {S} n {S} d {S} i {S} t {S} i {S} o {S} n
+Suite = s {S} u {S} i {S}  t {S}  e
+Documentation = d {S} o {S} c {S} u {S} m {S} e {S} n {S} t {S} a {S} t {S} i {S} o {S} n
 
 /* Settings for the ***Settings*** Table*/
-Setup = [Ss] " "? [Ee] " "? [Tt] " "? [Uu] " "? [Pp]
-Teardown = [Tt] " "? [Ee] " "? [Aa] " "? [Rr] " "? [Dd] " "? [Oo] " "? [Ww] " "? [Nn]
-Test = [Tt] " "? [Ee] " "? [Ss] " "? [Tt]
-Precondition = [Pp] " "? [Rr] " "? [Ee] " "? [Cc] " "? [Oo] " "? [Nn] " "? [Dd] " "? [Ii] " "? [Tt] " "? [Ii] " "? [Oo] " "? [Nn]
-Postcondition = [Pp] " "? [Oo] " "? [Ss] " "? [Tt] " "? [Cc] " "? [Oo] " "? [Nn] " "? [Dd] " "? [Ii] " "? [Tt] " "? [Ii] " "? [Oo] " "? [Nn]
-Suite = [Ss] " "?  [Uu] " "?  [Ii] " "?  [Tt] " "?  [Ee]
-
-TestSetupSetting = {Test} " "? ({Setup} | {Precondition})
-TestTeardownSetting = {Test} " "? ({Teardown} | {Postcondition})
-SuiteSetupSetting = {Suite} " "? ({Setup} | {Precondition})
-SuiteTeardownSetting = {Suite} " "? ({Teardown} | {Postcondition})
-ForceTags = [Ff] " "? [Oo] " "? [Rr] " "? [Cc] " "? [Ee] " "? [Tt] " "? [Aa] " "? [Gg] " "? [Ss]
-ResourceSetting = [Rr] " "? [Ee] " "? [Ss] " "? [Oo] " "? [Uu] " "? [Rr] " "? [Cc] " "? [Ee]
-Documentation = [Dd] " "? [Oo] " "? [Cc] " "? [Uu] " "? [Mm] " "? [Ee] " "? [Nn] " "? [Tt] " "? [Aa] " "? [Tt] " "? [Ii] " "? [Oo] " "? [Nn]
-LibrarySetting = [Ll] " "? [Ii] " "? [Bb] " "? [Rr] " "? [Aa] " "? [Rr] " "? [Yy]
+TestSetupSetting = {Test} {S} ({Setup} | {Precondition})
+TestTeardownSetting = {Test} {S} ({Teardown} | {Postcondition})
+SuiteSetupSetting = {Suite} {S} ({Setup} | {Precondition})
+SuiteTeardownSetting = {Suite} {S} ({Teardown} | {Postcondition})
+ForceTags = f {S} o {S} r {S} c {S} e {S} t {S} a {S} g {S} s
+ResourceSetting = r {S} e {S} s {S} o {S} u {S} r {S} c {S} e
+LibrarySetting = l {S} i {S} b {S} r {S} a {S} r {S} y
+TestTimeoutSetting = {Test} {S} t {S} i {S} m {S} e {S} o {S} u {S} t
+DocumentationSetting = {Documentation}
 
 /* Settings for robot test cases */
-TagsMeta = "[" {WhiteSpace}* [Tt] " "? [Aa] " "? [Gg] " "? [Ss] {WhiteSpace}* "]"
+TagsMeta = "[" {WhiteSpace}* t {S} a {S} g {S} s {WhiteSpace}* "]"
 DocsMeta = "[" {WhiteSpace}* {Documentation} {WhiteSpace}* "]"
 DocsArgument = {NonWhiteSpace} {InputCharacter}*
 
-SetupMeta = ("[" " "? {Setup} " "? "]")
+SetupMeta = ("[" {S} {Setup} {S} "]")
           | ("[" {WhiteSpace}* {Precondition} {WhiteSpace}* "]")
 TeardownMeta = ("[" {WhiteSpace}* {Teardown} {WhiteSpace}* "]")
              | ("[" {WhiteSpace}* {Postcondition} {WhiteSpace}* "]")
-TimeoutMeta = "[" {WhiteSpace}* [Tt] " "? [Ii] " "? [Mm] " "? [Ee] " "? [Oo] " "? [Uu] " "? [Tt] {WhiteSpace}* "]"
-TemplateMeta = "[" {WhiteSpace}* [Tt] " "? [Ee] " "? [Mm] " "? [Pp] " "? [Ll] " "? [Aa] " "? [Tt] " "? [Ee] {WhiteSpace}* "]"
+TimeoutMeta = "[" {WhiteSpace}* t {S} i {S} m {S} e {S} o {S} u {S} t {WhiteSpace}* "]"
+TemplateMeta = "[" {WhiteSpace}* t {S} e {S} m {S} p {S} l {S} a {S} t {S} e {WhiteSpace}* "]"
 
-HourTime =  {DecIntegerLiteral} {SingleSpace}? [Hh] "our" ("s")?
-MinuteTime= {DecIntegerLiteral} {SingleSpace}? ([Mm] "inute" | [Mm] "in") ("s")?
-SecondTime = {DecIntegerLiteral} {SingleSpace}? ([Ss] "econd" | [Ss] "ec") ("s")?
+HourTime =  {DecIntegerLiteral} {SingleSpace}? "hour" "s"?
+MinuteTime= {DecIntegerLiteral} {SingleSpace}?  ("minute"  | "min") ("s")?
+SecondTime = {DecIntegerLiteral} {SingleSpace}? ("second"  | "sec") ("s")?
 
 TimeoutValue = {HourTime} {SingleSpace} {MinuteTime} {SingleSpace} {SecondTime} | {HourTime} | {HourTime} {SingleSpace} {MinuteTime} |
 {HourTime} {SingleSpace} {SecondTime} | {MinuteTime} {SingleSpace} {SecondTime} | {MinuteTime} | {SecondTime}
 
 /* Settings for Robot Keywords table */
-ArgumentsMeta = "[" " "? [Aa] " "? [Rr] " "? [Gg] " "? [Uu] " "? [Mm] " "? [Ee] " "? [Nn] " "? [Tt] " "? [Ss] " "? "]"
-ReturnMeta = "[" " "? [Rr] " "? [Ee] " "? [Tt] " "? [Uu] " "? [Rr] " "? [Nn] " "? "]"
+ArgumentsMeta = "[" {S} a {S} r {S} g {S} u {S} m {S} e {S} n {S} t {S} s {S} "]"
+ReturnMeta = "[" {S} r {S} e {S} t {S} u {S} r {S} n {S} "]"
 
 /* Table headings */
 Junk = {InputCharacter}*
-SettingsTableHeading  = " "? "*"+ " "? (([Ss] " "? [Ee] " "? [Tt] " "? [Tt] " "? [Ii] " "? [Nn] " "? [Gg] " "? [Ss]?)
-                                 | ([Mm] " "? [Ee] " "? [Tt] " "? [Aa] " "? [Dd] " "? [Aa] " "? [Tt] " "? [Aa])) " "? ("*")* {Junk}
-VariablesTableHeading = " "? "*"+ " "? ([Vv] " "? [Aa] " "? [Rr] " "? [Ii] " "? [Aa] " "? [Bb] " "? [Ll] " "? [Ee] " "? [Ss]?) " "? "*"* {Junk}
-TestCasesTableHeading = " "? "*"+ " "? [Tt] " "? [Ee] " "? [Ss] " "? [Tt] " "? [Cc] " "? [Aa] " "? [Ss] " "? [Ee] " "? [Ss]? " "? "*"* {Junk}
-KeywordsTableHeading = " "? "*"+ " "? ([Uu] " "? [Ss] " "? [Ee] " "? [Rr] " "?)? [Kk] " "? [Ee] " "? [Yy] " "? [Ww] " "? [Oo] " "? [Rr] " "? [Dd] " "? [Ss]? {WhiteSpace}? "*"* {Junk}
+SettingsTableHeading  = {S} "*"+ {S} ((s {S} e {S} t {S} t {S} i {S} n {S} g {S} s?)
+                                 | (m {S} e {S} t {S} a {S} d {S} a {S} t {S} a)) {S} ("*")* {Junk}
+VariablesTableHeading = {S} "*"+ {S} (v {S} a {S} r {S} i {S} a {S} b {S} l {S} e {S} s?) {S} "*"* {Junk}
+TestCasesTableHeading = {S} "*"+ {S} t {S} e {S} s {S} t {S} c {S} a {S} s {S} e {S} s? {S} "*"* {Junk}
+KeywordsTableHeading = {S} "*"+ {S} (u {S} s {S} e {S} r {S})? k {S} e {S} y {S} w {S} o {S} r {S} d {S} s? {WhiteSpace}? "*"* {Junk}
 
 /* For loops */
 ForLoopStart = ":FOR"
@@ -293,6 +298,8 @@ In = "IN"
      {SuiteSetupSetting}    { if (startLine) {return next(SUITE_SETUP_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
      {SuiteTeardownSetting}    { if (startLine) {return next(SUITE_TEARDOWN_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
      {LibrarySetting}    { if (startLine) {return next(LIBRARY_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
+     {TestTimeoutSetting}    { if (startLine) {return next(TEST_TIMEOUT_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
+     {DocumentationSetting}    { if (startLine) {previous_state = yystate(); yybegin(DOCS_SETTING); return next(DOCUMENTATION_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
      {RobotKeyword}      { return next(ROBOT_KEYWORD_TOKEN); }
      {KeywordArgument}   { return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }
@@ -328,11 +335,11 @@ In = "IN"
      {KeywordsTableHeading}      { yybegin(KEYWORDS); return next(KEYWORDS_TABLE_HEADING_TOKEN); }
      {TestCasesTableHeading}      { return next(TEST_CASES_TABLE_HEADING_TOKEN); }
      {Ellipses}          { return next(ELLIPSES_TOKEN); }
-     {TagsMeta}          { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return next(TAGS_SETTING_TOKEN); }
-     {DocsMeta}          { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } previous_state = yystate(); yybegin(DOCS_SETTING); return next(DOCUMENTATION_SETTING_TOKEN); }
-     {SetupMeta}         { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return next(SETUP_SETTING_TOKEN); }
-     {TeardownMeta}      { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return next(TEARDOWN_SETTING_TOKEN); }
-     {TimeoutMeta}       { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return next(TIMEOUT_SETTING_TOKEN); }
+     {TagsMeta}          { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return next(TAGS_META_TOKEN); }
+     {DocsMeta}          { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } previous_state = yystate(); yybegin(DOCS_SETTING); return next(DOCUMENTATION_META_TOKEN); }
+     {SetupMeta}         { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return next(SETUP_META_TOKEN); }
+     {TeardownMeta}      { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return next(TEARDOWN_META_TOKEN); }
+     {TimeoutMeta}       { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return next(TIMEOUT_META_TOKEN); }
      {TemplateMeta}      { if (startLine) { return next(TEST_CASE_HEADER_TOKEN); } return next(TEMPLATE_SETTING_TOKEN); }
      {EmptyCell}                  { return next(EMPTY_CELL_TOKEN); }
      {ForLoopStart}               { return next(FOR_LOOP_START_TOKEN); }
@@ -374,11 +381,11 @@ In = "IN"
      {TestCasesTableHeading}     { yybegin(TEST_CASES); return next(TEST_CASES_TABLE_HEADING_TOKEN); }
      {KeywordsTableHeading}      { yybegin(BAD_SYNTAX); return next(BAD_SYNTAX_TOKEN); }
      {Ellipses}          { return next(ELLIPSES_TOKEN); }
-     {DocsMeta}          { previous_state = yystate(); yybegin(DOCS_SETTING); return next(DOCUMENTATION_SETTING_TOKEN); }
+     {DocsMeta}          { previous_state = yystate(); yybegin(DOCS_SETTING); return next(DOCUMENTATION_META_TOKEN); }
      {ArgumentsMeta}     { return next(ARGUMENTS_SETTING_TOKEN); }
-     {SetupMeta}         { return next(SETUP_SETTING_TOKEN); }
-     {TeardownMeta}      { return next(TEARDOWN_SETTING_TOKEN); }
-     {TimeoutMeta}       { return next(TIMEOUT_SETTING_TOKEN); }
+     {SetupMeta}         { return next(SETUP_META_TOKEN); }
+     {TeardownMeta}      { return next(TEARDOWN_META_TOKEN); }
+     {TimeoutMeta}       { return next(TIMEOUT_META_TOKEN); }
      {ReturnMeta}        { return next(RETURN_SETTING_TOKEN); }
      {TimeoutValue}      { if (onTimeoutLine) { return next(TIMEOUT_VALUE_TOKEN);} return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {EmptyCell}                  { return next(EMPTY_CELL_TOKEN); }

@@ -8,7 +8,6 @@ import com.intellij.util.containers.MultiMap;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotJavaPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

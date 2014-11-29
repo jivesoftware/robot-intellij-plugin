@@ -5,15 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotTagsSetting extends PsiElement {
+public interface RobotTestTimeoutSetting extends PsiElement {
 
   @NotNull
   List<RobotEllipses> getEllipsesList();
 
   @NotNull
   List<RobotEmptyLine> getEmptyLineList();
-
-  @NotNull
-  List<RobotTag> getTagList();
 
 }

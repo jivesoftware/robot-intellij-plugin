@@ -12,14 +12,14 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotTestCaseSetupSettingImpl extends ASTWrapperPsiElement implements RobotTestCaseSetupSetting {
+public class RobotTestCaseTeardownMetaImpl extends ASTWrapperPsiElement implements RobotTestCaseTeardownMeta {
 
-  public RobotTestCaseSetupSettingImpl(ASTNode node) {
+  public RobotTestCaseTeardownMetaImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitTestCaseSetupSetting(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitTestCaseTeardownMeta(this);
     else super.accept(visitor);
   }
 

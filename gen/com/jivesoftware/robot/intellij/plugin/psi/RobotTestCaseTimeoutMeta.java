@@ -5,9 +5,6 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotTestCaseTeardownSetting extends PsiElement {
-
-  @Nullable
-  RobotKeywordInvocationSettings getKeywordInvocationSettings();
+public interface RobotTestCaseTimeoutMeta extends PsiElement {
 
 }

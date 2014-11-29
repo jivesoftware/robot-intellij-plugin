@@ -8,6 +8,9 @@ import com.intellij.psi.PsiElement;
 public interface RobotSetting extends PsiElement {
 
   @Nullable
+  RobotDocumentationSetting getDocumentationSetting();
+
+  @Nullable
   RobotForceTagsSetting getForceTagsSetting();
 
   @Nullable
@@ -21,5 +24,8 @@ public interface RobotSetting extends PsiElement {
 
   @Nullable
   RobotTestSetupSetting getTestSetupSetting();
+
+  @Nullable
+  RobotTestTimeoutSetting getTestTimeoutSetting();
 
 }

@@ -5,18 +5,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotGenericSetting extends PsiElement {
+public interface RobotDocumentationMeta extends PsiElement {
 
   @NotNull
   List<RobotEllipses> getEllipsesList();
 
   @NotNull
   List<RobotEmptyLine> getEmptyLineList();
-
-  @NotNull
-  RobotGenericSettingName getGenericSettingName();
-
-  @NotNull
-  List<RobotSettingList> getSettingListList();
 
 }

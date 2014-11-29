@@ -12,14 +12,14 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotGenericSettingImpl extends ASTWrapperPsiElement implements RobotGenericSetting {
+public class RobotTestTimeoutSettingImpl extends ASTWrapperPsiElement implements RobotTestTimeoutSetting {
 
-  public RobotGenericSettingImpl(ASTNode node) {
+  public RobotTestTimeoutSettingImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitGenericSetting(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitTestTimeoutSetting(this);
     else super.accept(visitor);
   }
 
@@ -33,18 +33,6 @@ public class RobotGenericSettingImpl extends ASTWrapperPsiElement implements Rob
   @NotNull
   public List<RobotEmptyLine> getEmptyLineList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotEmptyLine.class);
-  }
-
-  @Override
-  @NotNull
-  public RobotGenericSettingName getGenericSettingName() {
-    return findNotNullChildByClass(RobotGenericSettingName.class);
-  }
-
-  @Override
-  @NotNull
-  public List<RobotSettingList> getSettingListList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotSettingList.class);
   }
 
 }

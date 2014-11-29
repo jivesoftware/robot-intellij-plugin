@@ -65,7 +65,7 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
     static final TextAttributesKey ROBOT_KEYWORD_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.KEYWORD",
             DefaultLanguageHighlighterColors.KEYWORD);
 
-    static final TextAttributesKey ROBOT_SETTING_KEYWORD_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.SETTING",
+    static final TextAttributesKey ROBOT_SETTING_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.SETTING",
             DefaultLanguageHighlighterColors.KEYWORD);
 
     static final TextAttributesKey ROBOT_VARIABLE_KEY = TextAttributesKey.createTextAttributesKey("ROBOT.VARIABLE",
@@ -116,12 +116,16 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
 
         //Robot keyword usage
         keys1.put(RobotTypes.ROBOT_KEYWORD_TOKEN, ROBOT_KEYWORD_KEY);
+
+        //Settings table
         keys1.put(RobotTypes.TEST_SETUP_SETTING_TOKEN, ROBOT_KEYWORD_KEY);
         keys1.put(RobotTypes.TEST_TEARDOWN_SETTING_TOKEN, ROBOT_KEYWORD_KEY);
         keys1.put(RobotTypes.SUITE_SETUP_SETTING_TOKEN, ROBOT_KEYWORD_KEY);
         keys1.put(RobotTypes.SUITE_TEARDOWN_SETTING_TOKEN, ROBOT_KEYWORD_KEY);
-        keys1.put(RobotTypes.FORCE_TAGS_SETTING_KEYWORD_TOKEN, ROBOT_SETTING_KEYWORD_KEY);
-        keys1.put(RobotTypes.RESOURCE_SETTING_TOKEN, ROBOT_SETTING_KEYWORD_KEY);
+        keys1.put(RobotTypes.FORCE_TAGS_SETTING_KEYWORD_TOKEN, ROBOT_KEYWORD_KEY);
+        keys1.put(RobotTypes.RESOURCE_SETTING_TOKEN, ROBOT_KEYWORD_KEY);
+        keys1.put(RobotTypes.TEST_TIMEOUT_SETTING_TOKEN, ROBOT_KEYWORD_KEY);
+        keys1.put(RobotTypes.DOCUMENTATION_SETTING_TOKEN, ROBOT_KEYWORD_KEY);
 
         //Variables
         keys1.put(RobotTypes.VARIABLE_TOKEN, ROBOT_VARIABLE_KEY);
@@ -142,12 +146,12 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
         keys1.put(RobotTypes.INTEGER_TOKEN, ROBOT_NUMBER_KEY);
 
         //Table settings tokens for settings like [tags]
-        keys1.put(RobotTypes.TAGS_SETTING_TOKEN, ROBOT_TABLE_SETTING_KEY);
-        keys1.put(RobotTypes.TIMEOUT_SETTING_TOKEN, ROBOT_TABLE_SETTING_KEY);
+        keys1.put(RobotTypes.TAGS_META_TOKEN, ROBOT_TABLE_SETTING_KEY);
+        keys1.put(RobotTypes.TIMEOUT_META_TOKEN, ROBOT_TABLE_SETTING_KEY);
         keys1.put(RobotTypes.ARGUMENTS_SETTING_TOKEN, ROBOT_TABLE_SETTING_KEY);
-        keys1.put(RobotTypes.DOCUMENTATION_SETTING_TOKEN, ROBOT_TABLE_SETTING_KEY);
-        keys1.put(RobotTypes.SETUP_SETTING_TOKEN, ROBOT_TABLE_SETTING_KEY);
-        keys1.put(RobotTypes.TEARDOWN_SETTING_TOKEN, ROBOT_TABLE_SETTING_KEY);
+        keys1.put(RobotTypes.DOCUMENTATION_META_TOKEN, ROBOT_TABLE_SETTING_KEY);
+        keys1.put(RobotTypes.SETUP_META_TOKEN, ROBOT_TABLE_SETTING_KEY);
+        keys1.put(RobotTypes.TEARDOWN_META_TOKEN, ROBOT_TABLE_SETTING_KEY);
 
         //Bad characters
         keys1.put(RobotTypes.BAD_SYNTAX_TOKEN, ROBOT_BAD_SYNTAX_KEY);

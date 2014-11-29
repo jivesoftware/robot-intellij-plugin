@@ -31,20 +31,20 @@ public class RobotKeywordSettingImpl extends ASTWrapperPsiElement implements Rob
 
   @Override
   @Nullable
-  public RobotDocumentationSetting getDocumentationSetting() {
-    return findChildByClass(RobotDocumentationSetting.class);
+  public RobotDocumentationMeta getDocumentationMeta() {
+    return findChildByClass(RobotDocumentationMeta.class);
   }
 
   @Override
   @Nullable
-  public RobotTestCaseTeardownSetting getTestCaseTeardownSetting() {
-    return findChildByClass(RobotTestCaseTeardownSetting.class);
+  public RobotTestCaseTeardownMeta getTestCaseTeardownMeta() {
+    return findChildByClass(RobotTestCaseTeardownMeta.class);
   }
 
   @Override
   @Nullable
-  public RobotTestCaseTimeoutSetting getTestCaseTimeoutSetting() {
-    return findChildByClass(RobotTestCaseTimeoutSetting.class);
+  public RobotTestCaseTimeoutMeta getTestCaseTimeoutMeta() {
+    return findChildByClass(RobotTestCaseTimeoutMeta.class);
   }
 
 }

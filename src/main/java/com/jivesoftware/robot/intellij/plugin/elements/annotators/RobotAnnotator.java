@@ -10,6 +10,7 @@ import com.jivesoftware.robot.intellij.plugin.elements.RobotBuiltInKeywords;
 import com.jivesoftware.robot.intellij.plugin.elements.options.RobotErrorOptionsProvider;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordReference;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotGenericSettingName;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,13 +33,22 @@ public class RobotAnnotator implements Annotator {
                     Annotation annotation = holder.createInfoAnnotation(robotKeyword, "Built-in Robot Keyword");
                     annotation.setTextAttributes(DefaultLanguageHighlighterColors.GLOBAL_VARIABLE);
                 } else {
-                    PropertiesComponent pc = PropertiesComponent.getInstance();
-                    if (pc.getBoolean(RobotErrorOptionsProvider.HIGHLIGHT_INVALID_KEYWORDS, false)) {
+                    if (isHighlightInvalidKeywordsEnabled()) {
                         holder.createErrorAnnotation(robotKeyword,
                                 String.format("No Keyword found with name \"%s\"", robotKeyword.getText()));
                     }
                 }
             }
+        } else if (element instanceof RobotGenericSettingName) {
+            if (isHighlightInvalidKeywordsEnabled()) {
+                holder.createErrorAnnotation(element,
+                        String.format("No Robot Setting exists with name \"%s\"", element.getText()));
+            }
         }
+    }
+
+    private static boolean isHighlightInvalidKeywordsEnabled() {
+        PropertiesComponent pc = PropertiesComponent.getInstance();
+        return pc.getBoolean(RobotErrorOptionsProvider.HIGHLIGHT_INVALID_KEYWORDS, false);
     }
 }

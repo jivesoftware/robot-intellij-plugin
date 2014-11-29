@@ -25,6 +25,12 @@ public class RobotSettingImpl extends ASTWrapperPsiElement implements RobotSetti
 
   @Override
   @Nullable
+  public RobotDocumentationSetting getDocumentationSetting() {
+    return findChildByClass(RobotDocumentationSetting.class);
+  }
+
+  @Override
+  @Nullable
   public RobotForceTagsSetting getForceTagsSetting() {
     return findChildByClass(RobotForceTagsSetting.class);
   }
@@ -51,6 +57,12 @@ public class RobotSettingImpl extends ASTWrapperPsiElement implements RobotSetti
   @Nullable
   public RobotTestSetupSetting getTestSetupSetting() {
     return findChildByClass(RobotTestSetupSetting.class);
+  }
+
+  @Override
+  @Nullable
+  public RobotTestTimeoutSetting getTestTimeoutSetting() {
+    return findChildByClass(RobotTestTimeoutSetting.class);
   }
 
 }

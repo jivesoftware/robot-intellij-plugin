@@ -12,33 +12,15 @@ import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import com.jivesoftware.robot.intellij.plugin.psi.*;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotImplUtil;
 
-public class RobotTagsSettingImpl extends ASTWrapperPsiElement implements RobotTagsSetting {
+public class RobotTestCaseTimeoutMetaImpl extends ASTWrapperPsiElement implements RobotTestCaseTimeoutMeta {
 
-  public RobotTagsSettingImpl(ASTNode node) {
+  public RobotTestCaseTimeoutMetaImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitTagsSetting(this);
+    if (visitor instanceof RobotVisitor) ((RobotVisitor)visitor).visitTestCaseTimeoutMeta(this);
     else super.accept(visitor);
-  }
-
-  @Override
-  @NotNull
-  public List<RobotEllipses> getEllipsesList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotEllipses.class);
-  }
-
-  @Override
-  @NotNull
-  public List<RobotEmptyLine> getEmptyLineList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotEmptyLine.class);
-  }
-
-  @Override
-  @NotNull
-  public List<RobotTag> getTagList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, RobotTag.class);
   }
 
 }

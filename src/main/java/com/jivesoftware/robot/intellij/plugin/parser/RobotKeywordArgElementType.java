@@ -5,15 +5,10 @@ import com.intellij.util.io.StringRef;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordArgStub;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordArgStubImpl;
-import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordStub;
-import com.jivesoftware.robot.intellij.plugin.elements.stubindex.RobotKeywordStubImpl;
 import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordArgNormalizedNameIndex;
-import com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotKeywordNormalizedNameIndex;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotLanguage;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordArg;
 import com.jivesoftware.robot.intellij.plugin.psi.impl.RobotKeywordArgImpl;
-import com.jivesoftware.robot.intellij.plugin.psi.impl.RobotKeywordImpl;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

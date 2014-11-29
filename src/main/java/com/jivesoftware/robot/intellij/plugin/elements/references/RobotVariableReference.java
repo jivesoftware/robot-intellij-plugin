@@ -54,7 +54,7 @@ public class RobotVariableReference extends PsiReferenceBase<PsiElement> {
         }
 
         RobotForLoopInRange containingLoopInRange = PsiTreeUtil.getParentOfType(myElement, RobotForLoopInRange.class);
-        if (containingLoop != null) {
+        if (containingLoopInRange != null) {
             Optional<PsiElement> definition = RobotVariableUtil.findFirstDefinitionOfVariableFromForLoopInRange(containingLoopInRange, myElement, range);
             if (definition.isPresent()) {
                 if (RobotPsiUtil.areIdenticalTextualOccurrences(myElement, definition.get())) {

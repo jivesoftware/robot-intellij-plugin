@@ -5,9 +5,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface RobotTestCaseSetupSetting extends PsiElement {
+public interface RobotTagsMeta extends PsiElement {
 
-  @Nullable
-  RobotKeywordInvocationSettings getKeywordInvocationSettings();
+  @NotNull
+  List<RobotEllipses> getEllipsesList();
+
+  @NotNull
+  List<RobotEmptyLine> getEmptyLineList();
+
+  @NotNull
+  List<RobotTag> getTagList();
 
 }

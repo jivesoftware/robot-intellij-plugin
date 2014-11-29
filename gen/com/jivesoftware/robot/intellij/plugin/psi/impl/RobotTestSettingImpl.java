@@ -25,38 +25,38 @@ public class RobotTestSettingImpl extends ASTWrapperPsiElement implements RobotT
 
   @Override
   @Nullable
-  public RobotDocumentationSetting getDocumentationSetting() {
-    return findChildByClass(RobotDocumentationSetting.class);
+  public RobotDocumentationMeta getDocumentationMeta() {
+    return findChildByClass(RobotDocumentationMeta.class);
   }
 
   @Override
   @Nullable
-  public RobotTagsSetting getTagsSetting() {
-    return findChildByClass(RobotTagsSetting.class);
+  public RobotTagsMeta getTagsMeta() {
+    return findChildByClass(RobotTagsMeta.class);
   }
 
   @Override
   @Nullable
-  public RobotTestCaseSetupSetting getTestCaseSetupSetting() {
-    return findChildByClass(RobotTestCaseSetupSetting.class);
+  public RobotTestCaseSetupMeta getTestCaseSetupMeta() {
+    return findChildByClass(RobotTestCaseSetupMeta.class);
   }
 
   @Override
   @Nullable
-  public RobotTestCaseTeardownSetting getTestCaseTeardownSetting() {
-    return findChildByClass(RobotTestCaseTeardownSetting.class);
+  public RobotTestCaseTeardownMeta getTestCaseTeardownMeta() {
+    return findChildByClass(RobotTestCaseTeardownMeta.class);
   }
 
   @Override
   @Nullable
-  public RobotTestCaseTemplateSetting getTestCaseTemplateSetting() {
-    return findChildByClass(RobotTestCaseTemplateSetting.class);
+  public RobotTestCaseTemplateMeta getTestCaseTemplateMeta() {
+    return findChildByClass(RobotTestCaseTemplateMeta.class);
   }
 
   @Override
   @Nullable
-  public RobotTestCaseTimeoutSetting getTestCaseTimeoutSetting() {
-    return findChildByClass(RobotTestCaseTimeoutSetting.class);
+  public RobotTestCaseTimeoutMeta getTestCaseTimeoutMeta() {
+    return findChildByClass(RobotTestCaseTimeoutMeta.class);
   }
 
 }

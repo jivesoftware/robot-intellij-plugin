@@ -47,6 +47,10 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitDocumentationMeta(@NotNull RobotDocumentationMeta o) {
+    visitPsiElement(o);
+  }
+
   public void visitDocumentationSetting(@NotNull RobotDocumentationSetting o) {
     visitPsiElement(o);
   }
@@ -104,6 +108,10 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitGenericSetting(@NotNull RobotGenericSetting o) {
+    visitPsiElement(o);
+  }
+
+  public void visitGenericSettingName(@NotNull RobotGenericSettingName o) {
     visitPsiElement(o);
   }
 
@@ -252,7 +260,7 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitTagsSetting(@NotNull RobotTagsSetting o) {
+  public void visitTagsMeta(@NotNull RobotTagsMeta o) {
     visitPsiElement(o);
   }
 
@@ -277,19 +285,19 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitTestCaseSetupSetting(@NotNull RobotTestCaseSetupSetting o) {
+  public void visitTestCaseSetupMeta(@NotNull RobotTestCaseSetupMeta o) {
     visitPsiElement(o);
   }
 
-  public void visitTestCaseTeardownSetting(@NotNull RobotTestCaseTeardownSetting o) {
+  public void visitTestCaseTeardownMeta(@NotNull RobotTestCaseTeardownMeta o) {
     visitPsiElement(o);
   }
 
-  public void visitTestCaseTemplateSetting(@NotNull RobotTestCaseTemplateSetting o) {
+  public void visitTestCaseTemplateMeta(@NotNull RobotTestCaseTemplateMeta o) {
     visitPsiElement(o);
   }
 
-  public void visitTestCaseTimeoutSetting(@NotNull RobotTestCaseTimeoutSetting o) {
+  public void visitTestCaseTimeoutMeta(@NotNull RobotTestCaseTimeoutMeta o) {
     visitPsiElement(o);
   }
 
@@ -306,6 +314,10 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitTestSetupToken(@NotNull RobotTestSetupToken o) {
+    visitPsiElement(o);
+  }
+
+  public void visitTestTimeoutSetting(@NotNull RobotTestTimeoutSetting o) {
     visitPsiElement(o);
   }
 

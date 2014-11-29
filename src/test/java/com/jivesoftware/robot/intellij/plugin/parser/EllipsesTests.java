@@ -41,7 +41,7 @@ public class EllipsesTests extends RobotParserTest {
     @Test
     public void testDocumentationWithEllipses() {
         RobotPsiFile file = doTestParseSucceeds(DOCUMENTATION_ELLIPSES);
-        assertFileHasPsiElements(file, RobotDocumentationSetting.class, 1);
+        assertFileHasPsiElements(file, RobotDocumentationMeta.class, 1);
     }
 
     @Test

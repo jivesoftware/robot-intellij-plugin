@@ -45,7 +45,9 @@ public class RobotCustomUsagesSearcher extends CustomUsageSearcher {
         FindJavaUsagesRunnable findJavaUsagesRunnable = new FindJavaUsagesRunnable(method);
         app.runReadAction(findJavaUsagesRunnable);
         List<Usage> usages = findJavaUsagesRunnable.getUsages();
-        new CollectionQuery<Usage>(usages).forEach(processor);
+        for (Usage usage: usages) {
+            processor.process(usage);
+        }
     }
 
     private void processKeywordUsages(RobotKeywordTitle keywordTitle, Processor<Usage> processor) {
@@ -53,7 +55,9 @@ public class RobotCustomUsagesSearcher extends CustomUsageSearcher {
         FindRobotUsagesRunnable findRobotUsagesRunnable = new FindRobotUsagesRunnable(keywordTitle);
         app.runReadAction(findRobotUsagesRunnable);
         List<Usage> usages = findRobotUsagesRunnable.getUsages();
-        new CollectionQuery<Usage>(usages).forEach(processor);
+        for (Usage usage: usages) {
+            processor.process(usage);
+        }
     }
 
     private void processVariableUsages(PsiElement variable, Processor<Usage> processor) {
@@ -61,7 +65,9 @@ public class RobotCustomUsagesSearcher extends CustomUsageSearcher {
         FindVariableUsagesRunnable findVariableUsagesRunnable = new FindVariableUsagesRunnable(variable);
         app.runReadAction(findVariableUsagesRunnable);
         List<Usage> usages = findVariableUsagesRunnable.getUsages();
-        new CollectionQuery<Usage>(usages).forEach(processor);
+        for (Usage usage: usages) {
+            processor.process(usage);
+        }
     }
 
     private static class FindJavaUsagesRunnable implements Runnable {

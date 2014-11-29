@@ -95,7 +95,7 @@ public class RobotTagFinder implements Processor<PsiFile> {
                 continue;
             }
             RobotTestSetting setting = line.getTestSettingLine().getTestSetting();
-            RobotTagsSetting tagsSetting = setting.getTagsSetting();
+            RobotTagsMeta tagsSetting = setting.getTagsMeta();
             if (tagsSetting == null) {
                 continue;
             }

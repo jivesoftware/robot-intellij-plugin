@@ -4,7 +4,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.refactoring.rename.RenamePsiElementProcessor;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotNamedElement;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordTitle;
 import org.jetbrains.annotations.NotNull;
 

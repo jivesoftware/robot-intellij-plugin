@@ -1,10 +1,7 @@
 package com.jivesoftware.robot.intellij.plugin.parser;
 
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotForceTagsSetting;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotKeyword;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotTag;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotTestSetupSetting;
+import com.jivesoftware.robot.intellij.plugin.psi.*;
 import org.junit.Test;
 
 /**
@@ -35,18 +32,25 @@ public class SettingsTableTests extends RobotParserTest {
 
     private static final String TEST_SETUP_SETTINGS_WITH_SPACES_AND_CAPS =
             "*** Settings ***\n" +
-                    " T E S T S E T U P      Foo Bar  ${baz}\n" +
-                    " T E S T P R E C O N D I T I O N      Foo Bar  ${baz}\n" +
-                    " T E S T T E A R D O W N   Abc Def\n" +
-                    " T E S T P O S T C O N D I T I O N   Abc Def\n" +
-                    " S U I T E S E T U P     Do Stuff  ${bar}  ${baz}\n" +
-                    " S U I T E P R E C O N D I T I O N     Do Stuff  ${bar}  ${baz}\n" +
-                    " S U I T E T E A R D O W N  Do more stuff\n" +
-                    " S U I T E P O S T C O N D I T I O N  Do more stuff\n";
+            " T E S T S E T U P      Foo Bar  ${baz}\n" +
+            " T E S T P R E C O N D I T I O N      Foo Bar  ${baz}\n" +
+            " T E S T T E A R D O W N   Abc Def\n" +
+            " T E S T P O S T C O N D I T I O N   Abc Def\n" +
+            " S U I T E S E T U P     Do Stuff  ${bar}  ${baz}\n" +
+            " S U I T E P R E C O N D I T I O N     Do Stuff  ${bar}  ${baz}\n" +
+            " S U I T E T E A R D O W N  Do more stuff\n" +
+            " S U I T E P O S T C O N D I T I O N  Do more stuff\n";
 
     private static final String FORCE_TAGS_SETTING_NO_ENDLINE =
             "*** Settings ***\n" +
-                    "Force Tags  foo  bar  baz";
+            "Force Tags  foo  bar  baz";
+
+    private static final String DOCUMENTATION_SETTING_WITH_ELLIPSES =
+            "*** Settings ***\n" +
+            "Documentation   Foo bar  foo foo\n" +
+            "...\n" +
+            "...             More documentation\n" +
+            "Test Setup      Foo Robot Setup";
 
     @Test
     public void testSetupSettings() {
@@ -74,5 +78,13 @@ public class SettingsTableTests extends RobotParserTest {
         RobotPsiFile file = doTestParseSucceeds(FORCE_TAGS_SETTING_NO_ENDLINE);
         assertFileHasPsiElements(file, RobotForceTagsSetting.class, 1);
         assertFileHasPsiElements(file, RobotTag.class, 3);
+    }
+
+    @Test
+    public void testDocumentationWithEllipses() {
+        RobotPsiFile file = doTestParseSucceeds(DOCUMENTATION_SETTING_WITH_ELLIPSES);
+        assertFileHasPsiElements(file, RobotDocumentationSetting.class, 1);
+        assertFileHasPsiElements(file, RobotEllipses.class, 2);
+        assertFileHasPsiElements(file, RobotTestSetupSetting.class, 1);
     }
 }
