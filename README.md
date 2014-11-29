@@ -11,6 +11,14 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<ul>
+    <li>Can now find usages of Robot Keywords in text, e.g. in strings that are arguments to Keywords.</li>
+    <li>Can now go to definition of Keyword from a usage in text.</li>
+    <li>Parse all settings correctly, e.g. the Variables setting takes a relative file as its argument.</li>
+    <li>If you have the "Highlight invalid Robot keywords?" setting enabled in Editor settings, then now
+        invalid settings in the ***Settings*** table will be underlined in red.</li>
+</ul>
+
 <h3>Version 1.6.0</h3>
 <ul>
     <li>Keywords with "Embedded arguments" are now handled correctly for resolving references, finding usages, etc.</li>
