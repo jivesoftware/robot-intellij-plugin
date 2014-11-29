@@ -133,7 +133,7 @@ return;
     else if (toReturn == ARGUMENTS_SETTING_TOKEN) {
         onArgumentsLine = true;
     }
-    else if (toReturn == RESOURCE_SETTING_TOKEN) {
+    else if (toReturn == RESOURCE_SETTING_TOKEN || toReturn == VARIABLE_SETTING_TOKEN) {
         onResourceSettingLine = true;
     }
     else if (toReturn == LIBRARY_SETTING_TOKEN) {
@@ -206,17 +206,21 @@ Precondition = p {S} r {S} e {S} c {S} o {S} n {S} d {S} i {S} t {S} i {S} o {S}
 Postcondition = p {S} o {S} s {S} t {S} c {S} o {S} n {S} d {S} i {S} t {S} i {S} o {S} n
 Suite = s {S} u {S} i {S}  t {S}  e
 Documentation = d {S} o {S} c {S} u {S} m {S} e {S} n {S} t {S} a {S} t {S} i {S} o {S} n
+OptColon = ({S} ":")?
 
 /* Settings for the ***Settings*** Table*/
-TestSetupSetting = {Test} {S} ({Setup} | {Precondition})
-TestTeardownSetting = {Test} {S} ({Teardown} | {Postcondition})
-SuiteSetupSetting = {Suite} {S} ({Setup} | {Precondition})
-SuiteTeardownSetting = {Suite} {S} ({Teardown} | {Postcondition})
-ForceTags = f {S} o {S} r {S} c {S} e {S} t {S} a {S} g {S} s
-ResourceSetting = r {S} e {S} s {S} o {S} u {S} r {S} c {S} e
-LibrarySetting = l {S} i {S} b {S} r {S} a {S} r {S} y
-TestTimeoutSetting = {Test} {S} t {S} i {S} m {S} e {S} o {S} u {S} t
-DocumentationSetting = {Documentation}
+TestSetupSetting = {Test} {S} ({Setup} | {Precondition}) {OptColon}
+TestTeardownSetting = {Test} {S} ({Teardown} | {Postcondition}) {OptColon}
+SuiteSetupSetting = {Suite} {S} ({Setup} | {Precondition}) {OptColon}
+SuiteTeardownSetting = {Suite} {S} ({Teardown} | {Postcondition}) {OptColon}
+ForceTags = (f {S} o {S} r {S} c {S} e | d {S} e {S} f {S} a {S} u {S} l {S} t) {S} t {S} a {S} g {S} s {OptColon}
+ResourceSetting = r {S} e {S} s {S} o {S} u {S} r {S} c {S} e {OptColon}
+VariableSetting = v {S} a {S} r {S} i {S} a {S} b {S} l {S} e {S} s {OptColon}
+LibrarySetting = l {S} i {S} b {S} r {S} a {S} r {S} y {OptColon}
+TestTimeoutSetting = {Test} {S} t {S} i {S} m {S} e {S} o {S} u {S} t {OptColon}
+DocumentationSetting = {Documentation} {OptColon}
+MetadataSetting = m {S} e {S} t {S} a {S} d {S} a {S} t {S} a {OptColon}
+TestTemplateSetting = {Test} {S} t {S} e {S} m {S} p {S} l {S} a {S} t {S} e {OptColon}
 
 /* Settings for robot test cases */
 TagsMeta = "[" {WhiteSpace}* t {S} a {S} g {S} s {WhiteSpace}* "]"
@@ -300,6 +304,9 @@ In = "IN"
      {LibrarySetting}    { if (startLine) {return next(LIBRARY_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
      {TestTimeoutSetting}    { if (startLine) {return next(TEST_TIMEOUT_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
      {DocumentationSetting}    { if (startLine) {previous_state = yystate(); yybegin(DOCS_SETTING); return next(DOCUMENTATION_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
+     {MetadataSetting}    { if (startLine) {return next(METADATA_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
+     {VariableSetting}    { if (startLine) {return next(VARIABLE_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
+     {TestTemplateSetting}    { if (startLine) {return next(TEST_TEMPLATE_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
      {RobotKeyword}      { if (startLine) {return next(GENERIC_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
      {KeywordArgument}   { return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {ColumnSep}         { return next(COLUMN_SEP_TOKEN); }

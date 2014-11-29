@@ -19,6 +19,13 @@ public class SettingsTableTests extends RobotParserTest {
                     " Suite Teardown  Do more stuff\n" +
                     " Suite Postcondition  Do more stuff\n";
 
+    private static final String TEST_SETTINGS_MISC =
+            "*** Settings ***\n" +
+                    " Test Template      Foo Bar Keyword\n" +
+                    " Default Tags       foo-1   bar-2  baz-3\n" +
+                    " Variables          ../${foo}.py\n" +
+                    " Metadata           Test foo foo\n";
+
     private static final String SETUP_KEYWORDS_SAME_AS_SETTING_NAME =
             "*** Settings ***\n" +
                     " Test Setup      Test Setup  123\n" +
@@ -57,6 +64,15 @@ public class SettingsTableTests extends RobotParserTest {
         RobotPsiFile file = doTestParseSucceeds(TEST_SETUP_SETTINGS);
         assertFileHasPsiElements(file, RobotTestSetupSetting.class, 8);
         assertFileHasPsiElements(file, RobotKeyword.class, 8);
+    }
+
+    @Test
+    public void testSettingsMisc() {
+        RobotPsiFile file = doTestParseSucceeds(TEST_SETTINGS_MISC);
+        assertFileHasPsiElements(file, RobotTestTemplateSetting.class, 1);
+        assertFileHasPsiElements(file, RobotForceTagsSetting.class, 1);
+        assertFileHasPsiElements(file, RobotVariableSetting.class, 1);
+        assertFileHasPsiElements(file, RobotMetadataSetting.class, 1);
     }
 
     @Test

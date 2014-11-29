@@ -127,6 +127,9 @@ public class RobotSyntaxHighlighter extends SyntaxHighlighterBase {
         keys1.put(RobotTypes.TEST_TIMEOUT_SETTING_TOKEN, ROBOT_SETTING_KEY);
         keys1.put(RobotTypes.DOCUMENTATION_SETTING_TOKEN, ROBOT_SETTING_KEY);
         keys1.put(RobotTypes.LIBRARY_SETTING_TOKEN, ROBOT_SETTING_KEY);
+        keys1.put(RobotTypes.TEST_TEMPLATE_SETTING_TOKEN, ROBOT_SETTING_KEY);
+        keys1.put(RobotTypes.VARIABLE_SETTING_TOKEN, ROBOT_SETTING_KEY);
+        keys1.put(RobotTypes.METADATA_SETTING_TOKEN, ROBOT_SETTING_KEY);
         keys1.put(RobotTypes.GENERIC_SETTING_TOKEN, ROBOT_SETTING_KEY);
 
         //Variables

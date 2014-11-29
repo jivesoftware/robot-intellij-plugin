@@ -182,6 +182,10 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitMetadataSetting(@NotNull RobotMetadataSetting o) {
+    visitPsiElement(o);
+  }
+
   public void visitMultiAssignmentLhs(@NotNull RobotMultiAssignmentLhs o) {
     visitPsiElement(o);
   }
@@ -317,6 +321,10 @@ public class RobotVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitTestTemplateSetting(@NotNull RobotTestTemplateSetting o) {
+    visitPsiElement(o);
+  }
+
   public void visitTestTimeoutSetting(@NotNull RobotTestTimeoutSetting o) {
     visitPsiElement(o);
   }
@@ -338,6 +346,10 @@ public class RobotVisitor extends PsiElementVisitor {
   }
 
   public void visitVariableAssignToKeyword(@NotNull RobotVariableAssignToKeyword o) {
+    visitPsiElement(o);
+  }
+
+  public void visitVariableSetting(@NotNull RobotVariableSetting o) {
     visitPsiElement(o);
   }
 

@@ -20,12 +20,21 @@ public interface RobotSetting extends PsiElement {
   RobotLibrarySetting getLibrarySetting();
 
   @Nullable
+  RobotMetadataSetting getMetadataSetting();
+
+  @Nullable
   RobotResourceSetting getResourceSetting();
 
   @Nullable
   RobotTestSetupSetting getTestSetupSetting();
 
   @Nullable
+  RobotTestTemplateSetting getTestTemplateSetting();
+
+  @Nullable
   RobotTestTimeoutSetting getTestTimeoutSetting();
+
+  @Nullable
+  RobotVariableSetting getVariableSetting();
 
 }

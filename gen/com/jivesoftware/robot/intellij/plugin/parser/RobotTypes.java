@@ -50,6 +50,7 @@ public interface RobotTypes {
   IElementType KEYWORD_SETTING_LINE = new RobotElementType("KEYWORD_SETTING_LINE");
   IElementType KEYWORD_TITLE = new RobotKeywordTitleElementType("KEYWORD_TITLE");
   IElementType LIBRARY_SETTING = new RobotElementType("LIBRARY_SETTING");
+  IElementType METADATA_SETTING = new RobotElementType("METADATA_SETTING");
   IElementType MULTI_ASSIGNMENT_LHS = new RobotElementType("MULTI_ASSIGNMENT_LHS");
   IElementType RESOURCE_FILE = new RobotElementType("RESOURCE_FILE");
   IElementType RESOURCE_SETTING = new RobotElementType("RESOURCE_SETTING");
@@ -83,12 +84,14 @@ public interface RobotTypes {
   IElementType TEST_SETTING_LINE = new RobotElementType("TEST_SETTING_LINE");
   IElementType TEST_SETUP_SETTING = new RobotElementType("TEST_SETUP_SETTING");
   IElementType TEST_SETUP_TOKEN = new RobotElementType("TEST_SETUP_TOKEN");
+  IElementType TEST_TEMPLATE_SETTING = new RobotElementType("TEST_TEMPLATE_SETTING");
   IElementType TEST_TIMEOUT_SETTING = new RobotElementType("TEST_TIMEOUT_SETTING");
   IElementType VARIABLE = new RobotElementType("VARIABLE");
   IElementType VARIABLES_LINE = new RobotElementType("VARIABLES_LINE");
   IElementType VARIABLES_TABLE = new RobotElementType("VARIABLES_TABLE");
   IElementType VARIABLES_TABLE_HEADING = new RobotElementType("VARIABLES_TABLE_HEADING");
   IElementType VARIABLE_ASSIGN_TO_KEYWORD = new RobotElementType("VARIABLE_ASSIGN_TO_KEYWORD");
+  IElementType VARIABLE_SETTING = new RobotElementType("VARIABLE_SETTING");
 
   IElementType ARGUMENTS_SETTING_TOKEN = new RobotToken("ARGUMENTS_SETTING_TOKEN");
   IElementType ARRAY_ASSIGNMENT_TOKEN = new RobotToken("ARRAY_ASSIGNMENT_TOKEN");
@@ -112,6 +115,7 @@ public interface RobotTypes {
   IElementType JAVA_CLASS_TOKEN = new RobotToken("JAVA_CLASS_TOKEN");
   IElementType KEYWORDS_TABLE_HEADING_TOKEN = new RobotToken("KEYWORDS_TABLE_HEADING_TOKEN");
   IElementType LIBRARY_SETTING_TOKEN = new RobotToken("LIBRARY_SETTING_TOKEN");
+  IElementType METADATA_SETTING_TOKEN = new RobotToken("METADATA_SETTING_TOKEN");
   IElementType NEWLINE_TOKEN = new RobotToken("NEWLINE_TOKEN");
   IElementType RESOURCE_SETTING_TOKEN = new RobotToken("RESOURCE_SETTING_TOKEN");
   IElementType RETURN_SETTING_TOKEN = new RobotToken("RETURN_SETTING_TOKEN");
@@ -132,10 +136,12 @@ public interface RobotTypes {
   IElementType TEST_CASE_HEADER_TOKEN = new RobotToken("TEST_CASE_HEADER_TOKEN");
   IElementType TEST_SETUP_SETTING_TOKEN = new RobotToken("TEST_SETUP_SETTING_TOKEN");
   IElementType TEST_TEARDOWN_SETTING_TOKEN = new RobotToken("TEST_TEARDOWN_SETTING_TOKEN");
+  IElementType TEST_TEMPLATE_SETTING_TOKEN = new RobotToken("TEST_TEMPLATE_SETTING_TOKEN");
   IElementType TEST_TIMEOUT_SETTING_TOKEN = new RobotToken("TEST_TIMEOUT_SETTING_TOKEN");
   IElementType TIMEOUT_META_TOKEN = new RobotToken("TIMEOUT_META_TOKEN");
   IElementType TIMEOUT_VALUE_TOKEN = new RobotToken("TIMEOUT_VALUE_TOKEN");
   IElementType VARIABLES_TABLE_HEADING_TOKEN = new RobotToken("VARIABLES_TABLE_HEADING_TOKEN");
+  IElementType VARIABLE_SETTING_TOKEN = new RobotToken("VARIABLE_SETTING_TOKEN");
   IElementType VARIABLE_TOKEN = new RobotToken("VARIABLE_TOKEN");
   IElementType WHITESPACE_TOKEN = new RobotToken("WHITESPACE_TOKEN");
 
@@ -265,6 +271,9 @@ public interface RobotTypes {
       else if (type == LIBRARY_SETTING) {
         return new RobotLibrarySettingImpl(node);
       }
+      else if (type == METADATA_SETTING) {
+        return new RobotMetadataSettingImpl(node);
+      }
       else if (type == MULTI_ASSIGNMENT_LHS) {
         return new RobotMultiAssignmentLhsImpl(node);
       }
@@ -364,6 +373,9 @@ public interface RobotTypes {
       else if (type == TEST_SETUP_TOKEN) {
         return new RobotTestSetupTokenImpl(node);
       }
+      else if (type == TEST_TEMPLATE_SETTING) {
+        return new RobotTestTemplateSettingImpl(node);
+      }
       else if (type == TEST_TIMEOUT_SETTING) {
         return new RobotTestTimeoutSettingImpl(node);
       }
@@ -381,6 +393,9 @@ public interface RobotTypes {
       }
       else if (type == VARIABLE_ASSIGN_TO_KEYWORD) {
         return new RobotVariableAssignToKeywordImpl(node);
+      }
+      else if (type == VARIABLE_SETTING) {
+        return new RobotVariableSettingImpl(node);
       }
       throw new AssertionError("Unknown element type: " + type);
     }
