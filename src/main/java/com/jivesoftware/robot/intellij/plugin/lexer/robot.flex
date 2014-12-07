@@ -170,6 +170,7 @@ EmptyCell = "\\"
 
 /* integer literals */
 DecIntegerLiteral = 0 | "-"? [1-9][0-9]*
+FloatNumberLiteral= [0-9]+ \.? [0-9]* | [0-9]* \.? [0-9]+
 NonNegativeIntegerLiteral = 0 | [1-9][0-9]*
 
 /* comments */
@@ -234,12 +235,20 @@ TeardownMeta = ("[" {WhiteSpace}* {Teardown} {WhiteSpace}* "]")
 TimeoutMeta = "[" {WhiteSpace}* t {S} i {S} m {S} e {S} o {S} u {S} t {WhiteSpace}* "]"
 TemplateMeta = "[" {WhiteSpace}* t {S} e {S} m {S} p {S} l {S} a {S} t {S} e {WhiteSpace}* "]"
 
-HourTime =  {DecIntegerLiteral} {SingleSpace}? "hour" "s"?
-MinuteTime= {DecIntegerLiteral} {SingleSpace}?  ("minute"  | "min") ("s")?
-SecondTime = {DecIntegerLiteral} {SingleSpace}? ("second"  | "sec") ("s")?
+RobotDays = {FloatNumberLiteral} {S} ("days" | "day" | "d")
+RobotHours =  {FloatNumberLiteral} {S} ("hours" | "hour" | "h")
+RobotMinutes =  {FloatNumberLiteral} {S} ("minutes" | "minute" | "mins" | "min" | "m")
+RobotSeconds =  {FloatNumberLiteral} {S} ("seconds" | "second" | "secs" | "sec" | "s")
+RobotSecondsNumber = ("-" {S})? {FloatNumberLiteral}
+RobotMillis = {FloatNumberLiteral} {S} ("milliseconds" | "millisecond" | "millis" | "ms")
 
-TimeoutValue = {HourTime} {SingleSpace} {MinuteTime} {SingleSpace} {SecondTime} | {HourTime} | {HourTime} {SingleSpace} {MinuteTime} |
-{HourTime} {SingleSpace} {SecondTime} | {MinuteTime} {SingleSpace} {SecondTime} | {MinuteTime} | {SecondTime}
+TimeoutValue = "none" |
+               {RobotSecondsNumber} |
+               ("-")? {S} {RobotDays} ({S} {RobotHours})? ({S} {RobotMinutes})? ({S} {RobotSeconds})? ({S} {RobotMillis})? |
+               ("-")? {S} {RobotHours} ({S} {RobotMinutes})? ({S} {RobotSeconds})? ({S} {RobotMillis})? |
+               ("-")? {S} {RobotMinutes} ({S} {RobotSeconds})? ({S} {RobotMillis})? |
+               ("-")? {S} {RobotSeconds} ({S} {RobotMillis})? |
+               ("-")? {S} {RobotMillis}
 
 /* Settings for Robot Keywords table */
 ArgumentsMeta = "[" {S} a {S} r {S} g {S} u {S} m {S} e {S} n {S} t {S} s {S} "]"
@@ -394,7 +403,9 @@ In = "IN"
      {TeardownMeta}      { return next(TEARDOWN_META_TOKEN); }
      {TimeoutMeta}       { return next(TIMEOUT_META_TOKEN); }
      {ReturnMeta}        { return next(RETURN_SETTING_TOKEN); }
-     {TimeoutValue}      { if (onTimeoutLine) { return next(TIMEOUT_VALUE_TOKEN);} return next(ROBOT_KEYWORD_ARG_TOKEN); }
+     {TimeoutValue}      { if (startLine) { return next(ROBOT_KEYWORD_TITLE_TOKEN); }
+                           if (onTimeoutLine) { return next(TIMEOUT_VALUE_TOKEN); }
+                           return next(ROBOT_KEYWORD_ARG_TOKEN); }
      {EmptyCell}                  { return next(EMPTY_CELL_TOKEN); }
      {ForLoopStart}               { return next(FOR_LOOP_START_TOKEN); }
      {InRange}                    { return next(IN_RANGE_TOKEN); }
