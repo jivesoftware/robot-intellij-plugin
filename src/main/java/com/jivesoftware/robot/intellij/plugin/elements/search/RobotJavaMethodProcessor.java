@@ -45,7 +45,7 @@ public class RobotJavaMethodProcessor implements Processor<PsiMethod> {
         if (searchType == SearchType.FIND_ALL) {
             return true;
         }
-        final String normalizedMethodName = method.getName().toLowerCase();
+        final String normalizedMethodName = RobotPsiUtil.normalizeJavaMethodForIndex(method.getName());
         if (searchType == SearchType.FIRST_EXACT_MATCH || searchType == SearchType.FIND_ALL_EXACT_MATCHES) {
             return normalizedSearchTerm.equals(normalizedMethodName);
         } else if (searchType == SearchType.STARTS_WITH) {

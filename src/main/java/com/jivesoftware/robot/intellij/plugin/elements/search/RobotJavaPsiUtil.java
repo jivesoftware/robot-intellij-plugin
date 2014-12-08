@@ -139,8 +139,8 @@ public class RobotJavaPsiUtil {
             if (!isPsiMethodRobotKeyword(method)) {
                 continue;
             }
-            String methodNameLower = method.getName().toLowerCase();
-            if (methodNameLower.equals(normalizedName)) {
+            String normalizedMethod = RobotPsiUtil.normalizeJavaMethodForIndex(method.getName());
+            if (normalizedMethod.equals(normalizedName)) {
                 results.add(method);
             }
         }

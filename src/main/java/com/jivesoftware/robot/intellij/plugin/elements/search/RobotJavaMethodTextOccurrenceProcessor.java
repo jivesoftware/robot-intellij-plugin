@@ -50,7 +50,7 @@ public class RobotJavaMethodTextOccurrenceProcessor implements TextOccurenceProc
             return true;
         }
         PsiMethod method = (PsiMethod) el;
-        final String normalizedMethodName = method.getName().toLowerCase();
+        final String normalizedMethodName = RobotPsiUtil.normalizeJavaMethodForIndex(method.getName());
         if (searchType == SearchType.FIRST_EXACT_MATCH || searchType == SearchType.FIND_ALL_EXACT_MATCHES) {
             return normalizedSearchTerm.equals(normalizedMethodName);
         } else if (searchType == SearchType.STARTS_WITH) {

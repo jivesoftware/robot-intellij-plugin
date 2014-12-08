@@ -11,6 +11,11 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.6.3</h3>
+<ul>
+    <li>Minor hotfix for a bug with resolving references to Java methods with underscores.</li>
+</ul>
+
 <h3>Version 1.6.2</h3>
 <ul>
     <li>Multi-resolve keywords when there are multiple keywords with the same name.</li>
