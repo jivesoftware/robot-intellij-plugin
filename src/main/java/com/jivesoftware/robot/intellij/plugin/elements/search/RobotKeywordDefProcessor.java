@@ -30,7 +30,8 @@ public class RobotKeywordDefProcessor implements Processor<RobotKeywordTitle> {
     }
 
     private boolean doContinue() {
-        return searchType == SearchType.FIND_ALL || searchType == SearchType.STARTS_WITH || results.isEmpty();
+        return searchType == SearchType.FIND_ALL || searchType == SearchType.FIND_ALL_EXACT_MATCHES ||
+               searchType == SearchType.STARTS_WITH || results.isEmpty();
     }
 
     private boolean include(RobotKeywordTitle robotKeywordTitle) {
@@ -38,7 +39,7 @@ public class RobotKeywordDefProcessor implements Processor<RobotKeywordTitle> {
             return true;
         }
         final String normalizedName = RobotPsiUtil.normalizeRobotDefinedKeywordForIndex(robotKeywordTitle.getName());
-        if (searchType == SearchType.EXACT_MATCH) {
+        if (searchType == SearchType.FIRST_EXACT_MATCH || searchType == SearchType.FIND_ALL_EXACT_MATCHES) {
             return normalizedName.equals(normalizedSearchTerm);
         } else if (searchType == SearchType.STARTS_WITH) {
             return normalizedName.startsWith(normalizedSearchTerm);

@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.jivesoftware.robot.intellij.plugin</id>
     <name>Robot Plugin</name>
-    <version>1.6.1</version>
+    <version>1.6.2</version>
     <vendor email="charles.capps@jivesoftware.com" url="http://www.jiveosftware.com">Jive Software</vendor>
 
     <description><![CDATA[
@@ -29,6 +29,12 @@
     ]]></description>
 
     <change-notes><![CDATA[
+
+    <h3>Version 1.6.2</h3>
+    <ul>
+        <li>Multi-resolve keywords when there are multiple keywords with the same name.</li>
+        <li>Fix regex for test timeout values to be correct for all possible Robot time formats.</li>
+    </ul>
 
     <h3>Version 1.6.1</h3>
     <ul>

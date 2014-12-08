@@ -231,7 +231,7 @@ public class RobotPsiUtil {
     public static void findKeywordDefsByName(String name, Project project, List<PsiElement> results) {
         final StubIndex STUB_INDEX = StubIndex.getInstance();
         final String normalizedName = normalizeRobotDefinedKeywordForIndex(name);
-        RobotKeywordDefProcessor processor = new RobotKeywordDefProcessor(results, SearchType.EXACT_MATCH, name);
+        RobotKeywordDefProcessor processor = new RobotKeywordDefProcessor(results, SearchType.FIRST_EXACT_MATCH, name);
         STUB_INDEX.processElements(RobotKeywordTitleNormalizedNameIndex.KEY, normalizedName, project,
                 GlobalSearchScope.allScope(project), RobotKeywordTitle.class, processor);
     }
@@ -240,7 +240,7 @@ public class RobotPsiUtil {
         final StubIndex STUB_INDEX = StubIndex.getInstance();
         final String normalizedName = normalizeRobotDefinedKeywordForIndex(name);
         List<PsiElement> results = Lists.newArrayList();
-        RobotKeywordDefProcessor processor = new RobotKeywordDefProcessor(results, SearchType.EXACT_MATCH, name);
+        RobotKeywordDefProcessor processor = new RobotKeywordDefProcessor(results, SearchType.FIRST_EXACT_MATCH, name);
         STUB_INDEX.processElements(RobotKeywordTitleNormalizedNameIndex.KEY, normalizedName, project,
                 GlobalSearchScope.allScope(project), RobotKeywordTitle.class, processor);
         if (results.size() > 0) {
@@ -250,6 +250,28 @@ public class RobotPsiUtil {
             return Optional.absent();
         }
         return findFirstMatchInEmbeddedArgsIndex(name, project);
+    }
+
+    public static List<RobotKeywordTitle> findMatchingKeywordDefsByName(String name, Project project, boolean isSearchTextFromRobotFile) {
+        final StubIndex STUB_INDEX = StubIndex.getInstance();
+        final String normalizedName = normalizeRobotDefinedKeywordForIndex(name);
+        List<PsiElement> results = Lists.newArrayList();
+        RobotKeywordDefProcessor processor = new RobotKeywordDefProcessor(results, SearchType.FIND_ALL_EXACT_MATCHES, name);
+        STUB_INDEX.processElements(RobotKeywordTitleNormalizedNameIndex.KEY, normalizedName, project,
+                GlobalSearchScope.allScope(project), RobotKeywordTitle.class, processor);
+        if (isSearchTextFromRobotFile) {
+            Optional<RobotKeywordTitle> embeddedKeywordTitle = findFirstMatchInEmbeddedArgsIndex(name, project);
+            if (embeddedKeywordTitle.isPresent()) {
+                results.add(embeddedKeywordTitle.get());
+            }
+        }
+        List<RobotKeywordTitle> keywordTitleResults = Lists.newArrayList();
+        for (PsiElement result: results) {
+            if (result instanceof RobotKeywordTitle) {
+                keywordTitleResults.add((RobotKeywordTitle)result);
+            }
+        }
+        return keywordTitleResults;
     }
 
     private static Optional<RobotKeywordTitle> findFirstMatchInEmbeddedArgsIndex(String name, Project project) {

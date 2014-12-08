@@ -12,24 +12,22 @@ import java.util.List;
 /**
  * Created by charles.capps on 6/24/14.
  */
-public class RobotJavaKeywordProcessor implements Processor<PsiFile> {
+public class RobotJavaFileProcessor implements Processor<PsiFile> {
     private final List<PsiElement> populateMe;
     private final SearchType searchType;
     private final Optional<String> searchTerm;
     private String normalizedSearch;
-    private String methodName;
     private final boolean wrapPsiMethods;
 
-    public RobotJavaKeywordProcessor(@NotNull List<PsiElement> populateMe, @NotNull SearchType searchType, @NotNull Optional<String> robotKeywordName, boolean wrapPsiMethods) {
+    public RobotJavaFileProcessor(@NotNull List<PsiElement> populateMe, @NotNull SearchType searchType, @NotNull Optional<String> robotKeywordName, boolean wrapPsiMethods) {
         this.populateMe = populateMe;
         this.searchType = searchType;
         this.searchTerm = robotKeywordName;
         this.wrapPsiMethods = wrapPsiMethods;
-        if (searchType == SearchType.EXACT_MATCH || searchType == SearchType.STARTS_WITH) {
+        if (searchType == SearchType.FIRST_EXACT_MATCH || searchType == SearchType.FIND_ALL_EXACT_MATCHES || searchType == SearchType.STARTS_WITH) {
             Preconditions.checkArgument(robotKeywordName.isPresent(),
                     "A search string must be specified when searching by exact match or starts with.");
             normalizedSearch = RobotPsiUtil.normalizeKeywordForIndex(robotKeywordName.get());
-            methodName = RobotPsiUtil.robotKeywordToMethodFast(robotKeywordName.get());
         }
     }
 
@@ -45,7 +43,7 @@ public class RobotJavaKeywordProcessor implements Processor<PsiFile> {
                 for (PsiMethod psiMethod : psiClass.getMethods()) {
                     if (include(psiMethod)) {
                         resultsToAdd.add(wrap(psiMethod));
-                        if (searchType == SearchType.EXACT_MATCH) {
+                        if (searchType == SearchType.FIRST_EXACT_MATCH) {
                             return false;
                         }
                     }
@@ -69,7 +67,7 @@ public class RobotJavaKeywordProcessor implements Processor<PsiFile> {
         final String normalizedName = RobotPsiUtil.normalizeKeywordForIndex(method.getName());
         if (searchType == SearchType.FIND_ALL) {
             return true;
-        } else if (searchType == SearchType.EXACT_MATCH) {
+        } else if (searchType == SearchType.FIRST_EXACT_MATCH || searchType == SearchType.FIND_ALL_EXACT_MATCHES) {
             return normalizedSearch.equals(normalizedName);
         } else if (searchType == SearchType.STARTS_WITH) {
             return normalizedName.startsWith(normalizedSearch);

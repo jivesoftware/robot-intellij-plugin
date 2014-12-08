@@ -37,7 +37,7 @@ public class RobotTestCaseProcessor implements Processor<RobotTestCase> {
             return true;
         }
         final String normalizedName = RobotPsiUtil.normalizeKeywordForIndex(robotTestCase.getName());
-        if (searchType == SearchType.EXACT_MATCH) {
+        if (searchType == SearchType.FIRST_EXACT_MATCH) {
             return normalizedName.equals(normalizedSearchTerm);
         } else if (searchType == SearchType.STARTS_WITH) {
             return normalizedName.startsWith(normalizedSearchTerm);

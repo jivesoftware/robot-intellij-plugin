@@ -11,6 +11,13 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.6.2</h3>
+<ul>
+    <li>Multi-resolve keywords when there are multiple keywords with the same name.</li>
+    <li>Fix regex for test timeout values to be correct for all possible Robot time formats.</li>
+</ul>
+
+<h3>Version 1.6.1</h3>
 <ul>
     <li>Can now find usages of Robot Keywords in text, e.g. in strings that are arguments to Keywords.</li>
     <li>Can now go to definition of Keyword from a usage in text.</li>

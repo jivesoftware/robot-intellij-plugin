@@ -16,7 +16,7 @@ public class RobotReferenceContributor extends PsiReferenceContributor {
                     @Override
                     public PsiReference[] getReferencesByElement(@NotNull PsiElement element, @NotNull ProcessingContext context) {
                         if (element instanceof RobotKeyword) {
-                            return new PsiReference[]{new RobotKeywordReference((RobotKeyword) element)};
+                            return new PsiReference[]{new RobotKeywordReference(element)};
                         }
                         return PsiReference.EMPTY_ARRAY;
                     }

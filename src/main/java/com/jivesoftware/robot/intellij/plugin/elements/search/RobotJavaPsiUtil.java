@@ -47,7 +47,7 @@ public class RobotJavaPsiUtil {
             return; // If @RobotKeyword isn't on the classpath, just return.
         }
         Query<PsiMethod> query = AnnotatedElementsSearch.searchPsiMethods(robotKeywordAnnotation, allScope);
-        Processor<PsiMethod> methodProcessor = new RobotKeywordJavaMethodProcessor(results, SearchType.FIND_ALL, Optional.<String>absent(), wrapPsiMethods);
+        Processor<PsiMethod> methodProcessor = new RobotJavaMethodProcessor(results, SearchType.FIND_ALL, Optional.<String>absent(), wrapPsiMethods);
         query.forEach(methodProcessor);
     }
 
@@ -61,7 +61,7 @@ public class RobotJavaPsiUtil {
             return;
         }
         Query<PsiMethod> query = AnnotatedElementsSearch.searchPsiMethods(robotKeywordAnnotation, allScope);
-        Processor<PsiMethod> methodProcessor = new RobotKeywordJavaMethodProcessor(results, SearchType.STARTS_WITH, Optional.of(startsWith), wrapPsiMethods);
+        Processor<PsiMethod> methodProcessor = new RobotJavaMethodProcessor(results, SearchType.STARTS_WITH, Optional.of(startsWith), wrapPsiMethods);
         query.forEach(methodProcessor);
     }
 
@@ -106,7 +106,7 @@ public class RobotJavaPsiUtil {
         List<PsiElement> results = Lists.newArrayList();
 
         //If no results are found, attempt to search the words index by the method name (since it is case insensitive, we might get results that we didn't get above.)
-        RobotJavaKeywordProcessor processor = new RobotJavaKeywordProcessor(results, SearchType.EXACT_MATCH, Optional.of(methodName), wrapPsiMethods);
+        RobotJavaFileProcessor processor = new RobotJavaFileProcessor(results, SearchType.FIRST_EXACT_MATCH, Optional.of(normalizedName), wrapPsiMethods);
         PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWord(methodName, javaFilesInProject, processor, false);
         if (results.size() > 0) {
             return Optional.of((PsiMethod)results.get(0));
@@ -114,13 +114,68 @@ public class RobotJavaPsiUtil {
 
         //If still no results are found, assume the Java method has the "underscore" style and search with words index again
         final String underscoreMethod = RobotPsiUtil.robotKeywordToUnderscoreStyleMethod(robotKeywordName);
-        RobotJavaKeywordProcessor underscoreProcessor = new RobotJavaKeywordProcessor(results, SearchType.EXACT_MATCH, Optional.of(underscoreMethod), wrapPsiMethods);
-        PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWord(underscoreMethod, javaFilesInProject, underscoreProcessor, false);
-        if (results.size() > 0) {
-            return Optional.of((PsiMethod)results.get(0));
+        if (!underscoreMethod.equals(normalizedName)) {
+            RobotJavaFileProcessor underscoreProcessor = new RobotJavaFileProcessor(results, SearchType.FIRST_EXACT_MATCH, Optional.of(underscoreMethod), wrapPsiMethods);
+            PsiSearchHelper.SERVICE.getInstance(project).processAllFilesWithWord(underscoreMethod, javaFilesInProject, underscoreProcessor, false);
+            if (results.size() > 0) {
+                return Optional.of((PsiMethod) results.get(0));
+            }
         }
 
         return Optional.absent();
+    }
+
+    @NotNull
+    public static List<PsiMethod> findJavaKeywordsForRobotKeyword(Project project, String robotKeywordName, boolean wrapPsiMethods) {
+        //First attempt to find the Java method with the exact name using the Method stub index:
+        final String normalizedName = RobotPsiUtil.normalizeKeywordForIndex(robotKeywordName);
+        final String methodName = RobotPsiUtil.robotKeywordToMethodFast(robotKeywordName);
+
+        List<PsiElement> results = Lists.newArrayList();
+
+        Collection<PsiMethod> methods = StubIndex.getElements(JavaStubIndexKeys.METHODS, methodName, project, GlobalSearchScope.allScope(project), PsiMethod.class);
+
+        for (PsiMethod method : methods) {
+            if (!isPsiMethodRobotKeyword(method)) {
+                continue;
+            }
+            String methodNameLower = method.getName().toLowerCase();
+            if (methodNameLower.equals(normalizedName)) {
+                results.add(method);
+            }
+        }
+
+        GlobalSearchScope javaFilesInProject = GlobalSearchScope.getScopeRestrictedByFileTypes(GlobalSearchScope.allScope(project), JavaFileType.INSTANCE);
+
+        List<PsiElement> wordIndexResults = Lists.newArrayList();
+        //Search the words index by the normalized name (since it is case insensitive, we might get results that we didn't get above.)
+        RobotJavaMethodTextOccurrenceProcessor processor = new RobotJavaMethodTextOccurrenceProcessor(wordIndexResults, SearchType.FIND_ALL_EXACT_MATCHES, Optional.of(normalizedName), wrapPsiMethods);
+        PsiSearchHelper.SERVICE.getInstance(project).processElementsWithWord(processor, javaFilesInProject, normalizedName, UsageSearchContext.IN_CODE, false);
+
+        //If still no results are found, assume the Java method has the "underscore" style and search with words index again
+        final String underscoreMethod = RobotPsiUtil.robotKeywordToUnderscoreStyleMethod(robotKeywordName);
+        if (!underscoreMethod.equals(normalizedName)) {
+            RobotJavaMethodTextOccurrenceProcessor underscoreProcessor = new RobotJavaMethodTextOccurrenceProcessor(wordIndexResults, SearchType.FIND_ALL_EXACT_MATCHES, Optional.of(underscoreMethod), wrapPsiMethods);
+            PsiSearchHelper.SERVICE.getInstance(project).processElementsWithWord(underscoreProcessor, javaFilesInProject, underscoreMethod, UsageSearchContext.IN_CODE, false);
+        }
+
+        List<PsiMethod> methodResults = Lists.newArrayList();
+        // Add the results from using the PsiStubIndex for Java methods to the final results set
+        for (PsiElement result: results) {
+            if (result instanceof PsiMethod) {
+                methodResults.add((PsiMethod)result);
+            }
+        }
+        // Add the results from the word index to the final results set
+        for (PsiElement result: wordIndexResults) {
+            if (!(result instanceof PsiMethod)) {
+                continue;
+            }
+            if (!containsEquivalentPsiElement(result, methodResults)) {
+                methodResults.add((PsiMethod) result);
+            }
+        }
+        return methodResults;
     }
 
 
@@ -132,5 +187,18 @@ public class RobotJavaPsiUtil {
             return new PsiMethodWithRobotName(method.getNode());
         }
         return method;
+    }
+
+    private static <T extends PsiElement> boolean containsEquivalentPsiElement(PsiElement toAdd, Collection<T> els) {
+        if (toAdd == null || toAdd.getManager() == null) {
+            return false;
+        }
+        final PsiManager manager = toAdd.getManager();
+        for (T el: els) {
+            if (manager.areElementsEquivalent(toAdd, el)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

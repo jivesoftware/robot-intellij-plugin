@@ -10,14 +10,14 @@ import java.util.List;
 /**
  * Created by charles.capps on 6/24/14.
  */
-public class RobotKeywordJavaMethodProcessor implements Processor<PsiMethod> {
+public class RobotJavaMethodProcessor implements Processor<PsiMethod> {
     private final List<PsiElement> results;
     private final SearchType searchType;
     private final Optional<String> searchTerm;
     private final boolean wrapPsiMethods;
     private String normalizedSearchTerm;
 
-    public RobotKeywordJavaMethodProcessor(List<PsiElement> results, SearchType searchType, Optional<String> searchTerm, boolean wrapPsiMethods) {
+    public RobotJavaMethodProcessor(List<PsiElement> results, SearchType searchType, Optional<String> searchTerm, boolean wrapPsiMethods) {
         this.results = results;
         this.searchType = searchType;
         this.searchTerm = searchTerm;
@@ -37,7 +37,8 @@ public class RobotKeywordJavaMethodProcessor implements Processor<PsiMethod> {
     }
 
     private boolean doContinue() {
-        return searchType == SearchType.FIND_ALL || searchType == SearchType.STARTS_WITH || results.isEmpty();
+        return searchType == SearchType.FIND_ALL || searchType == SearchType.FIND_ALL_EXACT_MATCHES ||
+               searchType == SearchType.STARTS_WITH || results.isEmpty();
     }
 
     private boolean include(PsiMethod method) {
@@ -45,7 +46,7 @@ public class RobotKeywordJavaMethodProcessor implements Processor<PsiMethod> {
             return true;
         }
         final String normalizedMethodName = method.getName().toLowerCase();
-        if (searchType == SearchType.EXACT_MATCH) {
+        if (searchType == SearchType.FIRST_EXACT_MATCH || searchType == SearchType.FIND_ALL_EXACT_MATCHES) {
             return normalizedSearchTerm.equals(normalizedMethodName);
         } else if (searchType == SearchType.STARTS_WITH) {
             return normalizedMethodName.startsWith(normalizedSearchTerm);

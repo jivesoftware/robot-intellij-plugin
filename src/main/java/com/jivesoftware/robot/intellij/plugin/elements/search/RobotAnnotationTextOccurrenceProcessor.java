@@ -56,7 +56,7 @@ public class RobotAnnotationTextOccurrenceProcessor implements TextOccurenceProc
             return true;
         }
         final String normalizedMethodName = method.getName().toLowerCase();
-        if (searchType == SearchType.EXACT_MATCH) {
+        if (searchType == SearchType.FIRST_EXACT_MATCH) {
             return normalizedSearchTerm.equals(normalizedMethodName);
         } else if (searchType == SearchType.STARTS_WITH) {
             return normalizedMethodName.startsWith(normalizedSearchTerm);

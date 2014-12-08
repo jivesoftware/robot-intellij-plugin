@@ -6,6 +6,7 @@ import com.intellij.lang.annotation.AnnotationHolder;
 import com.intellij.lang.annotation.Annotator;
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveResult;
 import com.jivesoftware.robot.intellij.plugin.elements.RobotBuiltInKeywords;
 import com.jivesoftware.robot.intellij.plugin.elements.options.RobotErrorOptionsProvider;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotKeywordReference;
@@ -26,8 +27,8 @@ public class RobotAnnotator implements Annotator {
         if (element instanceof RobotKeyword) {
             RobotKeyword robotKeyword = (RobotKeyword) element;
             RobotKeywordReference ref = new RobotKeywordReference(robotKeyword);
-            PsiElement keywordDef = ref.resolve();
-            if (keywordDef == null) {
+            ResolveResult[] resolveResults = ref.multiResolve(false);
+            if (resolveResults.length <= 0) {
                 String normalKeywordName = RobotPsiUtil.normalizeKeywordForIndex(robotKeyword.getText());
                 if (RobotBuiltInKeywords.isBuiltInKeyword(normalKeywordName)) {
                     Annotation annotation = holder.createInfoAnnotation(robotKeyword, "Built-in Robot Keyword");

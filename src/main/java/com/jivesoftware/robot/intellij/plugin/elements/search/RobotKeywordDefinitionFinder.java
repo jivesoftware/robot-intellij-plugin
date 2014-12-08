@@ -26,7 +26,7 @@ public class RobotKeywordDefinitionFinder {
     private final boolean isSeachTextFromRobotFile;
 
     public RobotKeywordDefinitionFinder(Project project, String searchTerm, KeywordScope scope) {
-        this(project, searchTerm, scope, SearchType.EXACT_MATCH);
+        this(project, searchTerm, scope, SearchType.FIRST_EXACT_MATCH);
     }
 
     public RobotKeywordDefinitionFinder(Project project, String searchTerm, KeywordScope scope, SearchType searchType) {
@@ -57,12 +57,16 @@ public class RobotKeywordDefinitionFinder {
                 case FIND_ALL:
                     RobotJavaPsiUtil.findAllJavaRobotKeywords(project, results, wrapPsiMethods);
                     break;
-                case EXACT_MATCH:
+                case FIRST_EXACT_MATCH:
                     Optional<PsiMethod> result = RobotJavaPsiUtil.findUniqueJavaKeywordForRobotKeyword(project, searchTerm, wrapPsiMethods);
                     if (result.isPresent()) {
                         results.add(result.get());
                         return;
                     }
+                    break;
+                case FIND_ALL_EXACT_MATCHES:
+                    List<PsiMethod> javaResults = RobotJavaPsiUtil.findJavaKeywordsForRobotKeyword(project, searchTerm, wrapPsiMethods);
+                    results.addAll(javaResults);
                     break;
                 case STARTS_WITH:
                     RobotJavaPsiUtil.findAllJavaRobotKeywordsStartingWith(project, results, searchTerm, wrapPsiMethods);
@@ -79,7 +83,11 @@ public class RobotKeywordDefinitionFinder {
                 case FIND_ALL:
                     RobotPsiUtil.findAllRobotKeywordDefsInRobotFiles(project, results);
                     break;
-                case EXACT_MATCH:
+                case FIND_ALL_EXACT_MATCHES:
+                    List<RobotKeywordTitle> matchingKeywordTitles = RobotPsiUtil.findMatchingKeywordDefsByName(searchTerm, project, isSeachTextFromRobotFile);
+                    results.addAll(matchingKeywordTitles);
+                    break;
+                case FIRST_EXACT_MATCH:
                 default:
                     Optional<RobotKeywordTitle> result = RobotPsiUtil.findUniqueKeywordDefByName(searchTerm, project, isSeachTextFromRobotFile);
                     if (result.isPresent()) {
