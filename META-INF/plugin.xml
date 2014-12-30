@@ -438,7 +438,7 @@
 
         <implicitUsageProvider implementation="com.jivesoftware.robot.intellij.plugin.elements.annotators.RobotImplicitUsageProvider" />
 
-        <errorOptionsProvider instance="com.jivesoftware.robot.intellij.plugin.elements.options.RobotErrorOptionsProvider"/>
+        <projectConfigurable instance="com.jivesoftware.robot.intellij.plugin.settings.RobotConfigurable"/>
     </extensions>
 
     <application-components>
