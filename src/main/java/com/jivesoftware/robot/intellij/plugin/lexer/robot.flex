@@ -88,6 +88,7 @@ return;
             return ROBOT_FILE_TOKEN;
         }
         if (onLibrarySettingLine) {
+            onLibrarySettingLine = false;
             return JAVA_CLASS_TOKEN;
         }
         keywordToLeft = true;
@@ -107,6 +108,7 @@ return;
              return ROBOT_FILE_TOKEN;
          }
          if (onLibrarySettingLine) {
+              onLibrarySettingLine = false;
               return JAVA_CLASS_TOKEN;
           }
          return ROBOT_KEYWORD_ARG_TOKEN;

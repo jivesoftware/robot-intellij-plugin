@@ -2,6 +2,7 @@ package com.jivesoftware.robot.intellij.plugin.elements.search;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
@@ -13,11 +14,16 @@ import com.intellij.psi.stubs.StubIndex;
 import com.intellij.util.Processor;
 import com.intellij.util.Query;
 import com.jivesoftware.robot.intellij.plugin.elements.references.PsiMethodWithRobotName;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordArg;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotLibrarySetting;
+import com.jivesoftware.robot.intellij.plugin.psi.RobotSettingList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.robotframework.javalib.util.AntPathMatcher;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by charles.capps on 6/24/14.
@@ -49,6 +55,68 @@ public class RobotJavaPsiUtil {
         Query<PsiMethod> query = AnnotatedElementsSearch.searchPsiMethods(robotKeywordAnnotation, allScope);
         Processor<PsiMethod> methodProcessor = new RobotJavaMethodProcessor(results, SearchType.FIND_ALL, Optional.<String>absent(), wrapPsiMethods);
         query.forEach(methodProcessor);
+    }
+
+    public static void findAllJavaRobotKeywordsInScope(PsiElement sourceElement, List<PsiElement> results, boolean wrapPsiMethods) {
+        // First find all Library settings in scope
+        List<RobotLibrarySetting> librarySettings = RobotResourceFileUtil.findAllLibraryImportsInScope(sourceElement);
+        // Next assume the any argument could be an ant-style path
+        // Transform the ant paths into paths that match fully qualified Java class names
+        Set<String> antPathClassMatchers = Sets.newHashSet();
+        for (RobotLibrarySetting librarySetting: librarySettings) {
+            List<RobotSettingList> robotSettingLists = librarySetting.getSettingListList();
+            for (RobotSettingList robotSettingList: robotSettingLists) {
+                List<RobotKeywordArg> robotKeywordArgs = robotSettingList.getKeywordArgList();
+                for (RobotKeywordArg robotKeywordArg: robotKeywordArgs) {
+                    String antPath = robotKeywordArg.getText();
+                    antPathClassMatchers.add(transformAntPathToClassMatcher(antPath));
+                }
+            }
+        }
+
+        // Now get all Java Robot Keywords and filter based on the Ant paths
+        List<PsiElement> allJavaKeywords = Lists.newArrayList();
+        findAllJavaRobotKeywords(sourceElement.getProject(), allJavaKeywords, true);
+
+        // Filter by Java keywords that match the found ant paths
+        for (PsiElement el: allJavaKeywords) {
+            if (!(el instanceof PsiMethod)) {
+                continue;
+            }
+            if (includeJavaKeyword((PsiMethod)el, antPathClassMatchers)) {
+                results.add(el);
+            }
+        }
+
+    }
+
+    private static boolean includeJavaKeyword(PsiMethod psiMethod, Set<String> antPaths) {
+        PsiClass psiClass = psiMethod.getContainingClass();
+        if (psiClass == null) {
+            return false;
+        }
+        String qualifiedName = psiClass.getQualifiedName();
+        if (qualifiedName == null) {
+            return false;
+        }
+
+        AntPathMatcher a = new AntPathMatcher();
+        a.setPathSeparator(".");
+
+        // If any path matches, return true
+        for (String antPath: antPaths) {
+            if (a.match(antPath, qualifiedName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static String transformAntPathToClassMatcher(String antPath) {
+        if (antPath.endsWith("*.class")) {
+            antPath = antPath.substring(0, antPath.length() - ".class".length());
+        }
+        return antPath.replace("/", ".");
     }
 
     public static void findAllJavaRobotKeywordsStartingWith(Project project, List<PsiElement> results, String startsWith, boolean wrapPsiMethods) {

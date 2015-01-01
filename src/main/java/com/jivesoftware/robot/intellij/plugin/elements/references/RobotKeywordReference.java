@@ -53,7 +53,7 @@ public class RobotKeywordReference extends PsiPolyVariantReferenceBase<PsiElemen
         Project project = myElement.getProject();
 
         RobotKeywordDefinitionFinder robotKeywordDefinitionFinder =
-                new RobotKeywordDefinitionFinder(project, getCanonicalText(), KeywordScope.ROBOT_AND_JAVA_KEYWORDS,
+                new RobotKeywordDefinitionFinder(myElement, getCanonicalText(), KeywordScope.ROBOT_AND_JAVA_KEYWORDS,
                         SearchType.FIND_ALL_EXACT_MATCHES);
         robotKeywordDefinitionFinder.process();
         List<PsiElement> results = robotKeywordDefinitionFinder.getResults();

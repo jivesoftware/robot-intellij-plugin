@@ -15,6 +15,7 @@ import com.jivesoftware.robot.intellij.plugin.elements.search.RobotKeywordDefini
 import com.jivesoftware.robot.intellij.plugin.elements.search.SearchType;
 import com.jivesoftware.robot.intellij.plugin.icons.RobotIcons;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotKeywordTitle;
+import com.jivesoftware.robot.intellij.plugin.settings.RobotConfigurable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -33,19 +34,23 @@ public class RobotKeywordCompletionHelper implements RobotCompletionHelper {
 
     @Override
     public void handleCompletions(LeafPsiElement leaf, CompletionParameters parameters, @NotNull CompletionResultSet result, String text) {
-        Set<LookupElement> keywordCompletions = getKeywordCompletions(leaf.getProject(), parameters, text);
+        Set<LookupElement> keywordCompletions = getKeywordCompletions(leaf, parameters, text);
         result.addAllElements(keywordCompletions);
     }
 
-    private Set<LookupElement> getKeywordCompletions(Project project, CompletionParameters parameters, String text) {
+    private Set<LookupElement> getKeywordCompletions(LeafPsiElement leaf, CompletionParameters parameters, String text) {
         Set<LookupElement> myKeywordCompletions = Sets.newHashSet();
-        populateKeywords(project, myKeywordCompletions, text);
+        populateKeywords(leaf, myKeywordCompletions, text);
         return myKeywordCompletions;
     }
 
-    private void populateKeywords(Project project, Collection<LookupElement> populateMe, String text) {
+    private void populateKeywords(LeafPsiElement leaf, Collection<LookupElement> populateMe, String text) {
+        Project project = leaf.getProject();
+        final SearchType SEARCH_TYPE = RobotConfigurable.isAutocompleteKeywordsStrict(project) ?
+                SearchType.FIND_ALL_IN_SCOPE :
+                SearchType.FIND_ALL;
         RobotKeywordDefinitionFinder robotKeywordDefinitionFinder =
-                new RobotKeywordDefinitionFinder(project, text, KeywordScope.ROBOT_AND_JAVA_KEYWORDS, SearchType.FIND_ALL, true);
+                new RobotKeywordDefinitionFinder(leaf, text, KeywordScope.ROBOT_AND_JAVA_KEYWORDS, SEARCH_TYPE, true);
         robotKeywordDefinitionFinder.process();
         List<PsiElement> results = robotKeywordDefinitionFinder.getResults();
         Set<String> includedNames = Sets.newHashSet();

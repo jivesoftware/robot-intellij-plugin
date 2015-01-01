@@ -1,6 +1,7 @@
 package com.jivesoftware.robot.intellij.plugin.elements.search;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -13,18 +14,17 @@ import com.intellij.util.indexing.FileBasedIndex;
 import com.jivesoftware.robot.intellij.plugin.elements.references.RobotFileReference;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotFileType;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotResourceFile;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotSettingsTable;
-import com.jivesoftware.robot.intellij.plugin.psi.RobotTable;
+import com.jivesoftware.robot.intellij.plugin.psi.*;
 
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by charles.capps on 7/25/14.
  */
-public class RobotPsiFileUtil {
+public class RobotResourceFileUtil {
     /**
      * Find all the ResourceFile imports that refer to this RobotPsiFile.
      * However, don't take into account variable substitution, because we don't want to change
@@ -63,6 +63,82 @@ public class RobotPsiFileUtil {
                 if (isReferenceToFileWithoutVariableSubs(source, resourceFile)) {
                     results.add(resourceFile);
                 }
+            }
+        }
+    }
+
+    public static List<RobotLibrarySetting> findAllLibraryImportsInScope(PsiElement sourceElement) {
+        PsiFile containingFile = sourceElement.getContainingFile();
+        if (!(containingFile instanceof RobotPsiFile)) {
+            return Lists.newArrayList();
+        }
+
+        List<RobotLibrarySetting> results = Lists.newArrayList();
+        Set<String> searchedFiles = Sets.newHashSet(); // to handle loops in resource file imports
+
+        findLibraryImportsRecursive((RobotPsiFile)containingFile, results, searchedFiles);
+        return results;
+    }
+
+    // ----------------------- Private -------------------------
+
+    private static void findLibraryImportsRecursive(RobotPsiFile currentFile, List<RobotLibrarySetting> results, Set<String> searchedFiles) {
+        // This shouldn't happen for ordinary files. Return to avoid infinite loops.
+        if (currentFile == null || currentFile.getVirtualFile() == null) {
+            return;
+        }
+        // If we've already searched this file OR there's no valid file associated with this virtual file
+        final String file = currentFile.getVirtualFile().getCanonicalPath();
+        if (file == null || searchedFiles.contains(file)) {
+            return;
+        }
+        searchedFiles.add(file);
+
+        // Now do the actual work to find the Library settings
+
+        // First find the RobotSettingsTable in the current file.
+        RobotTable[] tables = currentFile.findChildrenByClass(RobotTable.class);
+        RobotSettingsTable settingsTable = null;
+        for (RobotTable table: tables) {
+            if (table.getSettingsTable() != null) {
+                settingsTable = table.getSettingsTable();
+                break;
+            }
+        }
+        if (settingsTable == null) {
+            return;
+        }
+
+        List<RobotResourceFile> followResources = Lists.newArrayList();
+
+        for (RobotSettingsLine settingsLine: settingsTable.getSettingsLineList()) {
+            RobotSetting setting = settingsLine.getSetting();
+            if (setting == null) {
+                continue;
+            }
+            // Add the RobotLibrarySetting to the results if present
+            RobotLibrarySetting librarySetting = setting.getLibrarySetting();
+            if (librarySetting != null) {
+                results.add(librarySetting);
+                continue;
+            }
+
+            // Add the RobotResourceFile if present so we can recursively search other robot files.
+            RobotResourceSetting resourceSetting = setting.getResourceSetting();
+            if (resourceSetting != null) {
+                RobotResourceFile resourceFile = resourceSetting.getResourceFile();
+                if (resourceFile != null) {
+                    followResources.add(resourceFile);
+                }
+            }
+        }
+
+        // Recursively search Robot files included as Resources
+        for (RobotResourceFile resourceFile: followResources) {
+            RobotFileReference fileReference = new RobotFileReference(resourceFile);
+            PsiElement resolvesTo = fileReference.resolve();
+            if (resolvesTo instanceof RobotPsiFile) {
+                findLibraryImportsRecursive((RobotPsiFile)resolvesTo, results, searchedFiles);
             }
         }
     }

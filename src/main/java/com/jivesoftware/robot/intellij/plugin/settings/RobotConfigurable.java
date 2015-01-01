@@ -1,6 +1,8 @@
 package com.jivesoftware.robot.intellij.plugin.settings;
 
+import com.intellij.ide.DataManager;
 import com.intellij.ide.util.PropertiesComponent;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.options.Configurable;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.project.Project;
@@ -21,6 +23,11 @@ public class RobotConfigurable implements Configurable {
     private JPanel robotPanel;
     private JCheckBox myHighlightInvalidKeywords;
     private JCheckBox myAutocompleteRobotKeywordsStrict;
+    private final Project myProject;
+
+    public RobotConfigurable(Project project) {
+        myProject = project;
+    }
 
     public static boolean isHighlightInvalidKeywords(Project project) {
         PropertiesComponent pc = PropertiesComponent.getInstance(project);
@@ -90,7 +97,6 @@ public class RobotConfigurable implements Configurable {
 
     // ------------ Private -------------
     private PropertiesComponent getPropertiesComponentForProject() {
-        Project project = ProjectUtil.guessCurrentProject(robotPanel);
-        return PropertiesComponent.getInstance(project);
+        return PropertiesComponent.getInstance(myProject);
     }
 }

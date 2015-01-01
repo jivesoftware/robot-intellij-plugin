@@ -8,7 +8,7 @@ import com.intellij.psi.search.FilenameIndex;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.refactoring.rename.RenamePsiElementProcessor;
 import com.intellij.util.containers.MultiMap;
-import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiFileUtil;
+import com.jivesoftware.robot.intellij.plugin.elements.search.RobotResourceFileUtil;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotFileType;
 import com.jivesoftware.robot.intellij.plugin.lang.RobotPsiFile;
 import com.jivesoftware.robot.intellij.plugin.psi.RobotResourceFile;
@@ -34,7 +34,7 @@ public class RenameRobotPsiFileProcessor extends RenamePsiElementProcessor {
         if (!(element instanceof RobotPsiFile)) {
             return;
         }
-        Collection<RobotResourceFile> resourceFiles = RobotPsiFileUtil.findAllReferencesToFileBeforeVariableSubstitution((RobotPsiFile) element);
+        Collection<RobotResourceFile> resourceFiles = RobotResourceFileUtil.findAllReferencesToFileBeforeVariableSubstitution((RobotPsiFile) element);
         for (RobotResourceFile resourceFile: resourceFiles) {
             allRenames.put(resourceFile, newName);
         }

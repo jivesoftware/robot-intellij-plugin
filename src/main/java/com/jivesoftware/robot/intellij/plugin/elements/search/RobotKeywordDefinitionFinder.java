@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class RobotKeywordDefinitionFinder {
 
-    private final Project project;
+    private final PsiElement sourceElement;
     private final String searchTerm;
     private final String methodText;
     private final String normalizedText;
@@ -25,21 +25,21 @@ public class RobotKeywordDefinitionFinder {
     private final boolean wrapPsiMethods;
     private final boolean isSeachTextFromRobotFile;
 
-    public RobotKeywordDefinitionFinder(Project project, String searchTerm, KeywordScope scope) {
-        this(project, searchTerm, scope, SearchType.FIRST_EXACT_MATCH);
+    public RobotKeywordDefinitionFinder(PsiElement sourceElement, String searchTerm, KeywordScope scope) {
+        this(sourceElement, searchTerm, scope, SearchType.FIRST_EXACT_MATCH);
     }
 
-    public RobotKeywordDefinitionFinder(Project project, String searchTerm, KeywordScope scope, SearchType searchType) {
-        this(project, searchTerm, scope, searchType, false);
+    public RobotKeywordDefinitionFinder(PsiElement sourceElement, String searchTerm, KeywordScope scope, SearchType searchType) {
+        this(sourceElement, searchTerm, scope, searchType, false);
     }
 
-    public RobotKeywordDefinitionFinder(Project project, String searchTerm, KeywordScope scope, SearchType searchType, boolean wrapPsiMethods) {
-        this(project, searchTerm, scope, searchType, wrapPsiMethods, true);
+    public RobotKeywordDefinitionFinder(PsiElement sourceElement, String searchTerm, KeywordScope scope, SearchType searchType, boolean wrapPsiMethods) {
+        this(sourceElement, searchTerm, scope, searchType, wrapPsiMethods, true);
     }
 
-    public RobotKeywordDefinitionFinder(Project project, String searchTerm, KeywordScope scope, SearchType searchType, boolean wrapPsiMethods,
+    public RobotKeywordDefinitionFinder(PsiElement sourceElement, String searchTerm, KeywordScope scope, SearchType searchType, boolean wrapPsiMethods,
                                         boolean isSearchTextFromRobotFile) {
-        this.project = project;
+        this.sourceElement = sourceElement;
         this.searchTerm = searchTerm;
         this.methodText = RobotPsiUtil.robotKeywordToMethodFast(searchTerm);
         this.normalizedText = methodText.toLowerCase();
@@ -51,11 +51,15 @@ public class RobotKeywordDefinitionFinder {
     }
 
     public void process() {
+        final Project project = sourceElement.getProject();
         // Find Java methods for the keyword
         if (scope.includesJavaFiles()) {
             switch (searchType) {
                 case FIND_ALL:
                     RobotJavaPsiUtil.findAllJavaRobotKeywords(project, results, wrapPsiMethods);
+                    break;
+                case FIND_ALL_IN_SCOPE:
+                    RobotJavaPsiUtil.findAllJavaRobotKeywordsInScope(sourceElement, results, wrapPsiMethods);
                     break;
                 case FIRST_EXACT_MATCH:
                     Optional<PsiMethod> result = RobotJavaPsiUtil.findUniqueJavaKeywordForRobotKeyword(project, searchTerm, wrapPsiMethods);

@@ -59,6 +59,11 @@ public class SettingsTableTests extends RobotParserTest {
             "...             More documentation\n" +
             "Test Setup      Foo Robot Setup";
 
+    private static final String LIBRARY_SETTING_WITH_CLASSPATH =
+            "*** Settings ***\n" +
+            "Library       com.jivesoftware.foo.test.FooLibrary      com/jivesoftware/foo/test/shared/robot/keywords/**/*.class\n" +
+            "Library       com.jivesoftware.foo.test.BarLibrary      com/jivesoftware/bar/*";
+
     @Test
     public void testSetupSettings() {
         RobotPsiFile file = doTestParseSucceeds(TEST_SETUP_SETTINGS);
@@ -102,5 +107,13 @@ public class SettingsTableTests extends RobotParserTest {
         assertFileHasPsiElements(file, RobotDocumentationSetting.class, 1);
         assertFileHasPsiElements(file, RobotEllipses.class, 2);
         assertFileHasPsiElements(file, RobotTestSetupSetting.class, 1);
+    }
+
+    @Test
+    public void testLibraryWithClasspathArguments() {
+        RobotPsiFile file = doTestParseSucceeds(LIBRARY_SETTING_WITH_CLASSPATH);
+        assertFileHasPsiElements(file, RobotLibrarySetting.class, 2);
+        assertFileHasPsiElements(file, RobotJavaClassReference.class, 2);
+        assertFileHasPsiElements(file, RobotKeywordArg.class, 2);
     }
 }
