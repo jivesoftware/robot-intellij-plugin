@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.jivesoftware.robot.intellij.plugin</id>
     <name>Robot Plugin</name>
-    <version>1.6.4</version>
+    <version>1.6.5</version>
     <vendor email="charles.capps@jivesoftware.com" url="http://www.jiveosftware.com">Jive Software</vendor>
 
     <description><![CDATA[
@@ -29,6 +29,14 @@
     ]]></description>
 
     <change-notes><![CDATA[
+
+    <h3>Version 1.6.5</h3>
+    <ul>
+        <li>Added a Robot Settings page under Project settings.</li>
+        <li>Added a Robot setting to only autocomplete/resolve keywords that are in scope (off by default).</li>
+        <li>Fix a bug where arguments to Library setting constructor is considered invalid syntax.</li>
+        <li>Fix a bug where in certain situations keywords could resolve to the same java method twice.</li>
+    </ul>
 
     <h3>Version 1.6.3</h3>
     <ul>

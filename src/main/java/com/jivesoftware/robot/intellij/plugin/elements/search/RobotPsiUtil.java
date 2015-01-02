@@ -205,6 +205,11 @@ public class RobotPsiUtil {
         }
     }
 
+    public static void findAllRobotKeywordDefsInRobotFilesInScope(PsiElement sourceElement, List<PsiElement> results) {
+        List<RobotKeywordTitle> keywordsInScope = RobotResourceFileUtil.findAllRobotKeywordDefinitionsInScope(sourceElement, false);
+        results.addAll(keywordsInScope);
+    }
+
     public static void findAllRobotKeywordDefsInRobotFilesStartingWith(Project project, List<PsiElement> results, String startsWith) {
         final StubIndex STUB_INDEX = StubIndex.getInstance();
         final String normalizedStartsWith = RobotPsiUtil.normalizeRobotDefinedKeywordForIndex(startsWith);
@@ -272,6 +277,11 @@ public class RobotPsiUtil {
             }
         }
         return keywordTitleResults;
+    }
+
+    public static void findMatchingKeywordDefsByNameInScope(PsiElement sourceElement, List<PsiElement> results) {
+        List<RobotKeywordTitle> keywordsInScope = RobotResourceFileUtil.findAllRobotKeywordDefinitionsInScope(sourceElement, true);
+        results.addAll(keywordsInScope);
     }
 
     private static Optional<RobotKeywordTitle> findFirstMatchInEmbeddedArgsIndex(String name, Project project) {

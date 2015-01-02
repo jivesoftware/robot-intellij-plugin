@@ -55,7 +55,7 @@ public class RobotJavaFileProcessor implements Processor<PsiFile> {
 
     private PsiMethod wrap(PsiMethod method) {
         if (wrapPsiMethods) {
-            return new PsiMethodWithRobotName(method.getNode());
+            return new PsiMethodWithRobotName(method.getNode(), method);
         }
         return method;
     }

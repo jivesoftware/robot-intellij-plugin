@@ -33,24 +33,24 @@ public class RobotKeywordCompletionHelper implements RobotCompletionHelper {
     }
 
     @Override
-    public void handleCompletions(LeafPsiElement leaf, CompletionParameters parameters, @NotNull CompletionResultSet result, String text) {
-        Set<LookupElement> keywordCompletions = getKeywordCompletions(leaf, parameters, text);
+    public void handleCompletions(LeafPsiElement leaf, CompletionParameters parameters, @NotNull CompletionResultSet result) {
+        Set<LookupElement> keywordCompletions = getKeywordCompletions(leaf, parameters);
         result.addAllElements(keywordCompletions);
     }
 
-    private Set<LookupElement> getKeywordCompletions(LeafPsiElement leaf, CompletionParameters parameters, String text) {
+    private Set<LookupElement> getKeywordCompletions(LeafPsiElement leaf, CompletionParameters parameters) {
         Set<LookupElement> myKeywordCompletions = Sets.newHashSet();
-        populateKeywords(leaf, myKeywordCompletions, text);
+        populateKeywords(leaf, myKeywordCompletions);
         return myKeywordCompletions;
     }
 
-    private void populateKeywords(LeafPsiElement leaf, Collection<LookupElement> populateMe, String text) {
+    private void populateKeywords(LeafPsiElement leaf, Collection<LookupElement> populateMe) {
         Project project = leaf.getProject();
         final SearchType SEARCH_TYPE = RobotConfigurable.isAutocompleteKeywordsStrict(project) ?
                 SearchType.FIND_ALL_IN_SCOPE :
                 SearchType.FIND_ALL;
         RobotKeywordDefinitionFinder robotKeywordDefinitionFinder =
-                new RobotKeywordDefinitionFinder(leaf, text, KeywordScope.ROBOT_AND_JAVA_KEYWORDS, SEARCH_TYPE, true);
+                new RobotKeywordDefinitionFinder(leaf, KeywordScope.ROBOT_AND_JAVA_KEYWORDS, SEARCH_TYPE, true);
         robotKeywordDefinitionFinder.process();
         List<PsiElement> results = robotKeywordDefinitionFinder.getResults();
         Set<String> includedNames = Sets.newHashSet();

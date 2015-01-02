@@ -58,8 +58,18 @@ public class RobotJavaPsiUtil {
     }
 
     public static void findAllJavaRobotKeywordsInScope(PsiElement sourceElement, List<PsiElement> results, boolean wrapPsiMethods) {
+        // Get all Java keywords in the project
+        List<PsiElement> allJavaKeywords = Lists.newArrayList();
+        findAllJavaRobotKeywords(sourceElement.getProject(), allJavaKeywords, true);
+
+        // Filter by only those keywords that are in scope of sourceElement.
+        List<PsiMethod> keywordsInScope = filterJavaKeywordsByScope(sourceElement, allJavaKeywords);
+        results.addAll(keywordsInScope);
+    }
+
+    private static List<PsiMethod> filterJavaKeywordsByScope(PsiElement inScopeOf, List<? extends PsiElement> psiMethods) {
         // First find all Library settings in scope
-        List<RobotLibrarySetting> librarySettings = RobotResourceFileUtil.findAllLibraryImportsInScope(sourceElement);
+        List<RobotLibrarySetting> librarySettings = RobotResourceFileUtil.findAllLibraryImportsInScope(inScopeOf);
         // Next assume the any argument could be an ant-style path
         // Transform the ant paths into paths that match fully qualified Java class names
         Set<String> antPathClassMatchers = Sets.newHashSet();
@@ -74,20 +84,19 @@ public class RobotJavaPsiUtil {
             }
         }
 
-        // Now get all Java Robot Keywords and filter based on the Ant paths
-        List<PsiElement> allJavaKeywords = Lists.newArrayList();
-        findAllJavaRobotKeywords(sourceElement.getProject(), allJavaKeywords, true);
+        List<PsiMethod> filteredList = Lists.newArrayList();
 
         // Filter by Java keywords that match the found ant paths
-        for (PsiElement el: allJavaKeywords) {
+        for (PsiElement el: psiMethods) {
             if (!(el instanceof PsiMethod)) {
                 continue;
             }
             if (includeJavaKeyword((PsiMethod)el, antPathClassMatchers)) {
-                results.add(el);
+                filteredList.add((PsiMethod)el);
             }
         }
 
+        return filteredList;
     }
 
     private static boolean includeJavaKeyword(PsiMethod psiMethod, Set<String> antPaths) {
@@ -246,27 +255,48 @@ public class RobotJavaPsiUtil {
         return methodResults;
     }
 
+    @NotNull
+    public static void findJavaKeywordsForRobotKeywordInScope(PsiElement sourceElement, List<PsiElement> results, boolean wrapPsiMethods) {
+        // First find all Java keywords with names matching the given robot keyword name
+        String keywordName = sourceElement.getText();
+        List<PsiMethod> allExactMatches = findJavaKeywordsForRobotKeyword(sourceElement.getProject(), keywordName, wrapPsiMethods);
+
+        // Filter by keywords in scope of sourceElement
+        List<PsiMethod> javaRobotKeywordsInScope = filterJavaKeywordsByScope(sourceElement, allExactMatches);
+        results.addAll(javaRobotKeywordsInScope);
+    }
+
 
     public static PsiMethod wrap(PsiMethod method, boolean wrapPsiMethods) {
         if (wrapPsiMethods) {
             if (method instanceof ClsMethodImpl) {
-                return new PsiMethodWithRobotName(((ClsMethodImpl) method).getStub());
+                return new PsiMethodWithRobotName(((ClsMethodImpl) method).getStub(), method);
             }
-            return new PsiMethodWithRobotName(method.getNode());
+            return new PsiMethodWithRobotName(method.getNode(), method);
         }
         return method;
     }
 
     private static <T extends PsiElement> boolean containsEquivalentPsiElement(PsiElement toAdd, Collection<T> els) {
+        if (toAdd instanceof PsiMethodWithRobotName) {
+            toAdd = ((PsiMethodWithRobotName)toAdd).unwrap();
+        }
         if (toAdd == null || toAdd.getManager() == null) {
             return false;
         }
         final PsiManager manager = toAdd.getManager();
         for (T el: els) {
-            if (manager.areElementsEquivalent(toAdd, el)) {
+            PsiElement unwrapped;
+            if (el instanceof PsiMethodWithRobotName) {
+                unwrapped = ((PsiMethodWithRobotName)el).unwrap();
+            } else {
+                unwrapped = el;
+            }
+            if (manager.areElementsEquivalent(toAdd, unwrapped)) {
                 return true;
             }
         }
         return false;
     }
+
 }

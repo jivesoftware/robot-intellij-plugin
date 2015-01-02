@@ -7,6 +7,7 @@ import com.jivesoftware.robot.intellij.plugin.elements.search.KeywordScope;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotKeywordDefinitionFinder;
 import com.jivesoftware.robot.intellij.plugin.elements.search.RobotPsiUtil;
 import com.jivesoftware.robot.intellij.plugin.elements.search.SearchType;
+import com.jivesoftware.robot.intellij.plugin.settings.RobotConfigurable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,10 +52,13 @@ public class RobotKeywordReference extends PsiPolyVariantReferenceBase<PsiElemen
     @Override
     public ResolveResult[] multiResolve(boolean incompleteCode) {
         Project project = myElement.getProject();
+        // If the setting to only use keywords in scope is enabled, then get matching keywords only in scope
+        final SearchType SEARCH_TYPE = RobotConfigurable.isAutocompleteKeywordsStrict(project) ?
+                SearchType.FIND_ALL_EXACT_MATCHES_IN_SCOPE :
+                SearchType.FIND_ALL_EXACT_MATCHES;
 
         RobotKeywordDefinitionFinder robotKeywordDefinitionFinder =
-                new RobotKeywordDefinitionFinder(myElement, getCanonicalText(), KeywordScope.ROBOT_AND_JAVA_KEYWORDS,
-                        SearchType.FIND_ALL_EXACT_MATCHES);
+                new RobotKeywordDefinitionFinder(myElement, KeywordScope.ROBOT_AND_JAVA_KEYWORDS, SEARCH_TYPE);
         robotKeywordDefinitionFinder.process();
         List<PsiElement> results = robotKeywordDefinitionFinder.getResults();
         ResolveResult[] resolveResults = new ResolveResult[results.size()];

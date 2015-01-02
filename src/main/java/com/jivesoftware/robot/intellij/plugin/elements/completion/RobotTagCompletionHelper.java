@@ -23,7 +23,7 @@ public class RobotTagCompletionHelper implements RobotCompletionHelper {
     private RobotTagCompletionHelper() {
     }
 
-    public void handleCompletions(LeafPsiElement leaf, @NotNull CompletionParameters parameters, @NotNull CompletionResultSet result, String text) {
+    public void handleCompletions(LeafPsiElement leaf, @NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
         Set<LookupElement> tagCompletions = getTagCompletions(leaf.getProject(), parameters, leaf.getText());
         result.addAllElements(tagCompletions);
     }

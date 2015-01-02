@@ -11,6 +11,15 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.6.5</h3>
+<ul>
+    <li>Added a Robot Settings page under Project settings, and moved the option 'Highlight invalid Robot keywords?'
+    to this project settings page.</li>
+    <li>Added a Robot setting to only autocomplete/resolve keywords that are in scope (off by default).</li>
+    <li>Fix a bug where arguments to Library setting constructor is considered invalid syntax.</li>
+    <li>Fix a bug where in certain situations keywords could resolve to the same java method twice.</li>
+</ul>
+
 <h3>Version 1.6.3</h3>
 <ul>
     <li>Minor hotfix for a bug with resolving references to Java methods with underscores.</li>

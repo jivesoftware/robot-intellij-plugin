@@ -29,16 +29,15 @@ public class RobotCompletionProvider extends CompletionProvider<CompletionParame
             return;
         }
         LeafPsiElement leaf = (LeafPsiElement) element;
-        String text = leaf.getText();
         if (leaf.getElementType() == RobotTypes.TAG_TOKEN) {
-            RobotTagCompletionHelper.INSTANCE.handleCompletions(leaf, parameters, result, text);
+            RobotTagCompletionHelper.INSTANCE.handleCompletions(leaf, parameters, result);
         } else if (leaf.getElementType() == RobotTypes.ROBOT_KEYWORD_TOKEN) {
-            RobotKeywordCompletionHelper.INSTANCE.handleCompletions(leaf, parameters, result, text);
-            RobotVariableCompletionHelper.INSTANCE.handleCompletions(leaf, parameters, result, text);
+            RobotKeywordCompletionHelper.INSTANCE.handleCompletions(leaf, parameters, result);
+            RobotVariableCompletionHelper.INSTANCE.handleCompletions(leaf, parameters, result);
         } else if (leaf.getElementType() == RobotTypes.ROBOT_KEYWORD_ARG_TOKEN) {
-            RobotVariableCompletionHelper.INSTANCE.handleCompletions(leaf, parameters, result, text);
+            RobotVariableCompletionHelper.INSTANCE.handleCompletions(leaf, parameters, result);
         } else if (leaf.getElementType() == RobotTypes.VARIABLE_TOKEN || leaf.getElementType() == RobotTypes.ASSIGNMENT_TOKEN){
-            RobotVariableCompletionHelper.INSTANCE.handleCompletions(leaf, parameters, result, text);
+            RobotVariableCompletionHelper.INSTANCE.handleCompletions(leaf, parameters, result);
         }
     }
 

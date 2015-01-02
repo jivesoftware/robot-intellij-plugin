@@ -30,7 +30,8 @@ public class RobotVariableCompletionHelper implements RobotCompletionHelper {
     }
 
     @Override
-    public void handleCompletions(LeafPsiElement leaf, CompletionParameters parameters, @NotNull CompletionResultSet result, String text) {
+    public void handleCompletions(LeafPsiElement leaf, CompletionParameters parameters, @NotNull CompletionResultSet result) {
+        final String text = leaf.getText();
         if (text.startsWith("${")) {
             handleScalarVariableAutocomplete(leaf, parameters, result, text);
         }

@@ -1,5 +1,6 @@
 package com.jivesoftware.robot.intellij.plugin.elements.search;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.intellij.openapi.project.Project;
@@ -80,6 +81,23 @@ public class RobotResourceFileUtil {
         return results;
     }
 
+    public static List<RobotKeywordTitle> findAllRobotKeywordDefinitionsInScope(PsiElement sourceElement, boolean matchName) {
+        PsiFile containingFile = sourceElement.getContainingFile();
+        if (!(containingFile instanceof RobotPsiFile)) {
+            return Lists.newArrayList();
+        }
+
+        List<RobotKeywordTitle> results = Lists.newArrayList();
+        Set<String> searchedFiles = Sets.newHashSet(); // to handle loops in resource file imports
+
+        Optional<String> normalizedSearchTerm = matchName ?
+                Optional.of(RobotPsiUtil.normalizeRobotDefinedKeywordForIndex(sourceElement.getText())) :
+                Optional.<String>absent();
+
+        findKeywordTitlesRecursive((RobotPsiFile) containingFile, results, searchedFiles, normalizedSearchTerm);
+        return results;
+    }
+
     // ----------------------- Private -------------------------
 
     private static void findLibraryImportsRecursive(RobotPsiFile currentFile, List<RobotLibrarySetting> results, Set<String> searchedFiles) {
@@ -96,21 +114,28 @@ public class RobotResourceFileUtil {
 
         // Now do the actual work to find the Library settings
 
-        // First find the RobotSettingsTable in the current file.
+        // First find the RobotSettingsTable's in the current file.
         RobotTable[] tables = currentFile.findChildrenByClass(RobotTable.class);
-        RobotSettingsTable settingsTable = null;
-        for (RobotTable table: tables) {
-            if (table.getSettingsTable() != null) {
-                settingsTable = table.getSettingsTable();
-                break;
-            }
-        }
-        if (settingsTable == null) {
-            return;
-        }
-
         List<RobotResourceFile> followResources = Lists.newArrayList();
 
+        for (RobotTable table: tables) {
+            if (table.getSettingsTable() != null) {
+                RobotSettingsTable settingsTable = table.getSettingsTable();
+                extractLibrarySettingsAndResourceFiles(settingsTable, results, followResources);
+            }
+        }
+
+        // Recursively search Robot files included as Resources
+        for (RobotResourceFile resourceFile: followResources) {
+            RobotFileReference fileReference = new RobotFileReference(resourceFile);
+            PsiElement resolvesTo = fileReference.resolve();
+            if (resolvesTo instanceof RobotPsiFile) {
+                findLibraryImportsRecursive((RobotPsiFile)resolvesTo, results, searchedFiles);
+            }
+        }
+    }
+
+    private static void extractLibrarySettingsAndResourceFiles(RobotSettingsTable settingsTable, List<RobotLibrarySetting> results, List<RobotResourceFile> resourceFiles) {
         for (RobotSettingsLine settingsLine: settingsTable.getSettingsLineList()) {
             RobotSetting setting = settingsLine.getSetting();
             if (setting == null) {
@@ -128,8 +153,69 @@ public class RobotResourceFileUtil {
             if (resourceSetting != null) {
                 RobotResourceFile resourceFile = resourceSetting.getResourceFile();
                 if (resourceFile != null) {
-                    followResources.add(resourceFile);
+                    resourceFiles.add(resourceFile);
                 }
+            }
+        }
+    }
+
+    private static void extractResourceFiles(RobotSettingsTable settingsTable, List<RobotResourceFile> resourceFiles) {
+        for (RobotSettingsLine settingsLine: settingsTable.getSettingsLineList()) {
+            RobotSetting setting = settingsLine.getSetting();
+            if (setting == null) {
+                continue;
+            }
+
+            // Add the RobotResourceFile if present so we can recursively search other robot files.
+            RobotResourceSetting resourceSetting = setting.getResourceSetting();
+            if (resourceSetting != null) {
+                RobotResourceFile resourceFile = resourceSetting.getResourceFile();
+                if (resourceFile != null) {
+                    resourceFiles.add(resourceFile);
+                }
+            }
+        }
+    }
+
+    private static void extractKeywordTitles(RobotKeywordsTable keywordsTable, List<RobotKeywordTitle> robotKeywordTitles, Optional<String> normalizedSearchTerm) {
+        for (RobotKeywordDefinition keywordDef: keywordsTable.getKeywordDefinitionList()) {
+            RobotKeywordTitle title = keywordDef.getKeywordTitle();
+            if (normalizedSearchTerm.isPresent()) {
+                String normalizedTitle = RobotPsiUtil.normalizeRobotDefinedKeywordForIndex(title.getName());
+                if (normalizedTitle.equals(normalizedSearchTerm.get())) {
+                    robotKeywordTitles.add(title);
+                }
+            } else {
+                robotKeywordTitles.add(title);
+            }
+        }
+    }
+
+    private static void findKeywordTitlesRecursive(RobotPsiFile currentFile, List<RobotKeywordTitle> results, Set<String> searchedFiles, Optional<String> normalizedKeywordName) {
+        // This shouldn't happen for ordinary files. Return to avoid infinite loops.
+        if (currentFile == null || currentFile.getVirtualFile() == null) {
+            return;
+        }
+        // If we've already searched this file OR there's no valid file associated with this virtual file
+        final String file = currentFile.getVirtualFile().getCanonicalPath();
+        if (file == null || searchedFiles.contains(file)) {
+            return;
+        }
+        searchedFiles.add(file);
+
+        // Now do the actual work to find the Library settings
+
+        // First find the RobotSettingsTable's in the current file.
+        RobotTable[] tables = currentFile.findChildrenByClass(RobotTable.class);
+        List<RobotResourceFile> followResources = Lists.newArrayList();
+
+        for (RobotTable table: tables) {
+            if (table.getSettingsTable() != null) {
+                RobotSettingsTable settingsTable = table.getSettingsTable();
+                extractResourceFiles(settingsTable, followResources);
+            }
+            if (table.getKeywordsTable() != null) {
+                extractKeywordTitles(table.getKeywordsTable(), results, normalizedKeywordName);
             }
         }
 
@@ -138,7 +224,7 @@ public class RobotResourceFileUtil {
             RobotFileReference fileReference = new RobotFileReference(resourceFile);
             PsiElement resolvesTo = fileReference.resolve();
             if (resolvesTo instanceof RobotPsiFile) {
-                findLibraryImportsRecursive((RobotPsiFile)resolvesTo, results, searchedFiles);
+                findKeywordTitlesRecursive((RobotPsiFile) resolvesTo, results, searchedFiles, normalizedKeywordName);
             }
         }
     }

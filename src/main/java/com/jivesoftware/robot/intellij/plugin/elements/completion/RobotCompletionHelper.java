@@ -10,6 +10,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface RobotCompletionHelper {
 
-    void handleCompletions(LeafPsiElement leaf, CompletionParameters parameters, @NotNull CompletionResultSet result, String text);
+    void handleCompletions(LeafPsiElement leaf, CompletionParameters parameters, @NotNull CompletionResultSet result);
 
 }
