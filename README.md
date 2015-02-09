@@ -11,6 +11,15 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.7.0</h3>
+<ul>
+    <li>Underline in red any Java Robot Keyword in a class that isn't annotated with @RobotKeywords.</li>
+    <li>Underline in red any Java Robot Keyword that isn't public.</li>
+    <li>Underline in red any Java class annotated with @RobotKeywords that isn't public.</li>
+    <li>Don't resolve references or find usages of Java robot keywords that aren't public or
+        aren't in a class annotated with @RobotKeywords.</li>
+</ul>
+
 <h3>Version 1.6.5</h3>
 <ul>
     <li>Added a Robot Settings page under Project settings, and moved the option 'Highlight invalid Robot keywords?'
