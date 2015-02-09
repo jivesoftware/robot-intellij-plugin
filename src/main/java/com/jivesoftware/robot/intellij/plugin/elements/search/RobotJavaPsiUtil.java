@@ -3,14 +3,19 @@ package com.jivesoftware.robot.intellij.plugin.elements.search;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import com.intellij.psi.impl.PsiClassImplUtil;
+import com.intellij.psi.impl.PsiImplUtil;
 import com.intellij.psi.impl.compiled.ClsMethodImpl;
 import com.intellij.psi.impl.java.stubs.index.JavaStubIndexKeys;
 import com.intellij.psi.search.*;
 import com.intellij.psi.search.searches.AnnotatedElementsSearch;
 import com.intellij.psi.stubs.StubIndex;
+import com.intellij.psi.util.PsiClassUtil;
+import com.intellij.psi.util.PsiUtilBase;
 import com.intellij.util.Processor;
 import com.intellij.util.Query;
 import com.jivesoftware.robot.intellij.plugin.elements.references.PsiMethodWithRobotName;
@@ -31,13 +36,28 @@ import java.util.Set;
 public class RobotJavaPsiUtil {
     public static final String ROBOT_KEYWORD_ANNOTATION_SHORT = "RobotKeyword";
     public static final String ROBOT_KEYWORD_ANNOTATION_LONG = "org.robotframework.javalib.annotation.RobotKeyword";
+    public static final String ROBOT_KEYWORDS_ANNOTATION_LONG = "org.robotframework.javalib.annotation.RobotKeywords";
 
     public static boolean isJavaRobotKeyword(PsiElement element) {
         if (!(element instanceof PsiMethod)) {
             return false;
         }
-        PsiModifierList psiModifierList = ((PsiMethod) element).getModifierList();
-        return psiModifierList.findAnnotation(ROBOT_KEYWORD_ANNOTATION_LONG) != null;
+        PsiMethod psiMethod = (PsiMethod) element;
+        PsiModifierList psiModifierList = psiMethod.getModifierList();
+        if (psiModifierList.findAnnotation(ROBOT_KEYWORD_ANNOTATION_LONG) == null) {
+            return false; // Must be annotated with @RobotKeyword
+        }
+        if (!psiModifierList.hasModifierProperty(PsiModifier.PUBLIC)) {
+            return false; // RobotKeywords must be public!
+        }
+        PsiClass psiClass = psiMethod.getContainingClass();
+        if (psiClass == null) {
+            return false; // Must be in a class
+        }
+        PsiModifierList classModifierList = psiClass.getModifierList();
+        // RobotKeywords must be in a class annotated with @RobotKeywords
+        return classModifierList != null &&
+               classModifierList.findAnnotation(ROBOT_KEYWORDS_ANNOTATION_LONG) != null;
     }
 
     public static boolean isPsiMethodRobotKeyword(PsiMethod element) {

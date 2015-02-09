@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.jivesoftware.robot.intellij.plugin</id>
     <name>Robot Plugin</name>
-    <version>1.6.5</version>
+    <version>1.7.0</version>
     <vendor email="charles.capps@jivesoftware.com" url="http://www.jiveosftware.com">Jive Software</vendor>
 
     <description><![CDATA[
@@ -29,6 +29,15 @@
     ]]></description>
 
     <change-notes><![CDATA[
+
+    <h3>Version 1.7.0</h3>
+    <ul>
+        <li>Underline in red any Java Robot Keyword in a class that isn't annotated with @RobotKeywords.</li>
+        <li>Underline in red any Java Robot Keyword that isn't public.</li>
+        <li>Underline in red any Java class annotated with @RobotKeywords that isn't public.</li>
+        <li>Don't resolve references or find usages of Java robot keywords that aren't public or
+            aren't in a class annotated with @RobotKeywords.</li>
+    </ul>
 
     <h3>Version 1.6.5</h3>
     <ul>
@@ -443,6 +452,7 @@
         <stubIndex implementation="com.jivesoftware.robot.intellij.plugin.elements.stubindex.indexes.RobotTestCaseNormalizedNameIndex"/>
 
         <annotator language="RobotTestFile" implementationClass="com.jivesoftware.robot.intellij.plugin.elements.annotators.RobotAnnotator" />
+        <annotator language="JAVA" implementationClass="com.jivesoftware.robot.intellij.plugin.elements.annotators.RobotJavaAnnotator" />
 
         <implicitUsageProvider implementation="com.jivesoftware.robot.intellij.plugin.elements.annotators.RobotImplicitUsageProvider" />
 
