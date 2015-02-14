@@ -305,7 +305,7 @@ In = "IN"
      {Variable}          { return next(VARIABLE_TOKEN); }
      {ArrayVariable}     { return next(ARRAY_VARIABLE_TOKEN); }
      {ArrayVariableAccess}     { return next(ARRAY_VARIABLE_ACCESS_TOKEN); }
-     {TimeoutValue}      { if (onTimeoutLine) { return next(TIMEOUT_VALUE_TOKEN); } return next(ROBOT_KEYWORD_ARG_TOKEN); }
+     {TimeoutValue}      { if (onTimeoutLine) { return next(TIMEOUT_VALUE_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
      {ForceTags}         { if (startLine) {return next(FORCE_TAGS_SETTING_KEYWORD_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
      {ResourceSetting}     { if (startLine) {return next(RESOURCE_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
      {TestSetupSetting}     { if (startLine) {return next(TEST_SETUP_SETTING_TOKEN); } return next(ROBOT_KEYWORD_TOKEN); }
@@ -368,7 +368,7 @@ In = "IN"
      {Variable}          { return next(VARIABLE_TOKEN); }
      {ArrayVariable}     { return next(ARRAY_VARIABLE_TOKEN); }
      {ArrayVariableAccess}     { return next(ARRAY_VARIABLE_ACCESS_TOKEN); }
-     {TimeoutValue}      { if (onTimeoutLine) { return next(TIMEOUT_VALUE_TOKEN);} return next(ROBOT_KEYWORD_ARG_TOKEN); }
+     {TimeoutValue}      { if (onTimeoutLine) { return next(TIMEOUT_VALUE_TOKEN);} return next(ROBOT_KEYWORD_TOKEN); }
      {DecIntegerLiteral}          {
                                     if (startLine) { return next(TEST_CASE_HEADER_TOKEN); }
                                     else if (firstRobotCell) { return next(ROBOT_KEYWORD_TOKEN); }
@@ -407,7 +407,7 @@ In = "IN"
      {ReturnMeta}        { return next(RETURN_SETTING_TOKEN); }
      {TimeoutValue}      { if (startLine) { return next(ROBOT_KEYWORD_TITLE_TOKEN); }
                            if (onTimeoutLine) { return next(TIMEOUT_VALUE_TOKEN); }
-                           return next(ROBOT_KEYWORD_ARG_TOKEN); }
+                           return next(ROBOT_KEYWORD_TOKEN); }
      {EmptyCell}                  { return next(EMPTY_CELL_TOKEN); }
      {ForLoopStart}               { return next(FOR_LOOP_START_TOKEN); }
      {InRange}                    { return next(IN_RANGE_TOKEN); }

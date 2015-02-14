@@ -36,12 +36,10 @@ public class RobotKeywordArgImpl extends StubBasedPsiElementBase<RobotKeywordArg
     return findChildByClass(RobotVariable.class);
   }
 
-  @Nullable
   public PsiReference getReference() {
     return RobotImplUtil.getReference(this);
   }
 
-  @NotNull
   public PsiReference[] getReferences() {
     return RobotImplUtil.getReferences(this);
   }

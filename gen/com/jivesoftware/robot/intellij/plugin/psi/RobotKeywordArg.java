@@ -14,10 +14,8 @@ public interface RobotKeywordArg extends RobotNamedElement, StubBasedPsiElement<
   @Nullable
   RobotVariable getVariable();
 
-  @Nullable
   PsiReference getReference();
 
-  @NotNull
   PsiReference[] getReferences();
 
   @Nullable

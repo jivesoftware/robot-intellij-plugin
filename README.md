@@ -11,6 +11,13 @@ IntelliJ Plugin to enable syntax highlighting and other features in Robot text f
 See http://plugins.jetbrains.com/plugin/7430?pr=idea for the newest version or download it from within IntelliJ!
 </p>
 
+<h3>Version 1.7.1 (2/13/2015)</h3>
+<ul>
+    <li>Fix a minor bug where if you used a Robot timeout value in another context, it could be considered an error.
+        For example, if you used "None" or "5h 3minutes" as an argument to Test Setup, it is incorrectly underlined in red as invalid syntax.
+    </li>
+</ul>
+
 <h3>Version 1.7.0</h3>
 <ul>
     <li>Underline in red any Java Robot Keyword in a class that isn't annotated with @RobotKeywords.</li>

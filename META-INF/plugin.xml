@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.jivesoftware.robot.intellij.plugin</id>
     <name>Robot Plugin</name>
-    <version>1.7.0</version>
+    <version>1.7.1</version>
     <vendor email="charles.capps@jivesoftware.com" url="http://www.jiveosftware.com">Jive Software</vendor>
 
     <description><![CDATA[
@@ -29,6 +29,13 @@
     ]]></description>
 
     <change-notes><![CDATA[
+
+    <h3>Version 1.7.1 (2/13/2015)</h3>
+    <ul>
+        <li>Just fix a minor bug where if you used a Robot timeout value in another context, it could be considered an error.
+            For example, if you used "None" or "5h 3minutes" as an argument to Test Setup.
+        </li>
+    </ul>
 
     <h3>Version 1.7.0</h3>
     <ul>
